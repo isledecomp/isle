@@ -109,16 +109,39 @@ def codeview_stream(register_numbers=(23, 24)):
     return bytes(records)
 
 
+SYMBOL_SHAPE = (
+    (".text", True), (".file", True), (TARGET_SYMBOL, True), (".bf", True),
+    (".ef", True), (".debug$F", True), (".debug$S", True),
+    ("<local>", False), (".text", True), (OTHER_SYMBOL, True),
+    (".bf", True), (".ef", True), (".drectve", True),
+)
+
+
+def symbols_preview():
+    """The aux-expanded symbol shape, so an index can be computed up front."""
+    return [(name, None, None, None, None, aux) for name, aux in SYMBOL_SHAPE]
+
+
 def make_coff(*, body=BODY, relocations=RELOCATIONS,
-              debug_stream=None, extra_relocations=()):
+              debug_stream=None, extra_relocations=(),
+              local_symbol=None):
     """One classic-i386 COFF with an ordinary FPO COMDAT closure."""
     debug_s = debug_stream if debug_stream is not None else codeview_stream()
+    nil_symbol = local_symbol if local_symbol is not None else NIL_SYMBOL
     fpo = struct.pack("<IIIHBB", 0, len(body), 2, 1, 2, 0x10)
     target_index = 4
     nil_index = 10
     lines = bytearray(struct.pack("<IH", target_index, 0))
     lines.extend(struct.pack("<IH", 3, 11))
     lines.extend(struct.pack("<IH", 19, 12))
+    if local_symbol is not None:
+        # point the code relocations at the object-local symbol itself, so a
+        # donor compiled with a different serial produces a real $L/$T rename
+        nil_index = 0
+        for name, _value, _section, _stype, _storage, aux in symbols_preview():
+            if name == "<local>":
+                break
+            nil_index += 2 if aux else 1
     reloc_rows = [(offset, nil_index, 0x0006) for offset in relocations]
     reloc_rows.extend(extra_relocations)
     section_inputs = [
@@ -167,7 +190,7 @@ def make_coff(*, body=BODY, relocations=RELOCATIONS,
          _section_aux(len(fpo), 0, 0, 5, associated=1)),
         (".debug$S", 0, 3, 0, 3,
          _section_aux(len(debug_s), 0, 0, 5, associated=1)),
-        (NIL_SYMBOL, 0, 0, 0x00, 2, None),
+        (nil_symbol, 0, 0, 0x00, 2, None),
         (".text", 0, 4, 0, 3, _section_aux(8, 0, 2, 2, checksum=0x1234)),
         (OTHER_SYMBOL, 0, 4, 0x20, 2,
          _function_aux(8, sections[3]["line_offset"])),
@@ -534,3 +557,412 @@ class RegisterBijectionCompositionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------------------------------------------------------------------------
+# The callee-argument model, the widened semantic table and the external
+# tail-jump.  A `call` CLOBBERS EAX/ECX/EDX; whether it READS one of them is
+# the callee's calling convention, and the model DERIVES that from the
+# callee's own decoration through a closed table.  Every test below is about
+# the direction that matters: the refinement may never make a register that a
+# callee really reads look dead.
+# ---------------------------------------------------------------------------
+
+CDECL_SYMBOL = "?CreateCursorSurface@MxDisplaySurface@@SAPAUIFixture@@XZ"
+THISCALL_SYMBOL = "?PlaceActor@LegoWorld@@QAEJPAVLegoPathActor@@@Z"
+FASTCALL_SYMBOL = "?Fast@Scope@@QAIXH@Z"
+STDCALL_SYMBOL = "?Api@@YGXH@Z"
+UNMANGLED_SYMBOL = "__ftol"
+THUNK_SYMBOL = "?Tickle@Base@@W3AEJXZ"
+
+# 0:  53              push ebx
+# 1:  8b 0d <D32>     mov ecx, [_Nil]     <- region starts here
+# 7:  8b 01           mov eax, [ecx]
+# 9:  e8 <REL32>      call <callee>       <- region ends here (9)
+# 14: 5b              pop ebx
+# 15: c3              ret
+CALL_BODY = bytes.fromhex("53" "8b0d00000000" "8b01" "e800000000" "5b" "c3")
+CALL_REGION = (1, 9)
+CALL_SIGMA = {"eax": "ecx", "ecx": "eax"}
+CALL_RELOCATION_OFFSETS = frozenset(
+    offset + byte for offset in (3, 10) for byte in range(4))
+
+
+def call_relocations(callee, *, extra=()):
+    rows = {3: {"width": 4, "target": NIL_SYMBOL},
+            10: {"width": 4, "target": callee}}
+    rows.update(extra)
+    return rows
+
+
+class CallArgumentModelTests(unittest.TestCase):
+    """Obligation 7's call model: derived, never assumed, and fail-closed."""
+
+    def test_decoration_table_reads_the_conventions_it_knows(self):
+        for symbol, expected in (
+            (CDECL_SYMBOL, frozenset()),
+            ("?MVideoManager@@YAPAVMxVideoManager@@XZ", frozenset()),
+            (STDCALL_SYMBOL, frozenset()),
+            (THISCALL_SYMBOL, frozenset({"ecx"})),
+            ("?Insert@Act3List@@QAEXHW4Mode@Element@@@Z", frozenset({"ecx"})),
+            (FASTCALL_SYMBOL, frozenset({"ecx", "edx"})),
+        ):
+            self.assertEqual(
+                byte_identity.msvc_call_argument_registers(symbol), expected,
+                symbol)
+
+    def test_decoration_table_fails_closed(self):
+        """Anything the closed table does not recognise reads everything."""
+        for symbol in (UNMANGLED_SYMBOL, "_chkstk", "___CxxFrameHandler",
+                       "__imp__CreateWindowExA@48", THUNK_SYMBOL,
+                       "?_Nil@?$_Tree@PAVFixture@@@@1PAU_Node@1@A",
+                       # An operator decoration terminates its (empty) scope
+                       # list with a single `@`, so the table's `@@` scan
+                       # never reaches it.  That is the safe direction: the
+                       # call simply stays fully conservative.
+                       "??3@YAXPAX@Z",
+                       "", "?", None, 17):
+            self.assertIsNone(
+                byte_identity.msvc_call_argument_registers(symbol),
+                repr(symbol))
+
+    def test_a_cdecl_callee_lets_the_region_prove(self):
+        """The control: EAX/ECX are clobbered by the call and read by nobody."""
+        image, proof = byte_identity.apply_register_bijection(
+            CALL_BODY, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+            "cdecl", call_relocations(CDECL_SYMBOL))
+        self.assertEqual(proof["rewritten_offsets"], [2, 8])
+        self.assertEqual(image[1:3], bytes.fromhex("8b05"))
+        self.assertEqual(image[7:9], bytes.fromhex("8b08"))
+
+    def test_a_thiscall_callee_keeps_ecx_live_and_refuses(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                CALL_BODY, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                "thiscall", call_relocations(THISCALL_SYMBOL))
+        self.assertIn("['ecx'] is live on an edge leaving the region",
+                      str(caught.exception))
+
+    def test_a_fastcall_callee_keeps_edx_live_and_refuses(self):
+        # EDX is not touched anywhere in the body, so only a callee that
+        # reads it as an argument can make this mapping unsound.
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                CALL_BODY, {"eax": "edx", "edx": "eax"}, CALL_REGION,
+                CALL_RELOCATION_OFFSETS, "fastcall",
+                call_relocations(FASTCALL_SYMBOL))
+        # EDX is live both on entry and on the exit edge here, and for the
+        # same single reason: the callee reads it.
+        self.assertIn("['edx'] is live", str(caught.exception))
+        # ... and the same mapping proves against a __cdecl callee.
+        byte_identity.apply_register_bijection(
+            CALL_BODY, {"eax": "edx", "edx": "eax"}, CALL_REGION,
+            CALL_RELOCATION_OFFSETS, "fastcall",
+            call_relocations(CDECL_SYMBOL))
+
+    def test_an_unrecognised_decoration_stays_conservative(self):
+        for callee in (UNMANGLED_SYMBOL, THUNK_SYMBOL):
+            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+                byte_identity.apply_register_bijection(
+                    CALL_BODY, CALL_SIGMA, CALL_REGION,
+                    CALL_RELOCATION_OFFSETS, callee,
+                    call_relocations(callee))
+            self.assertIn("is live on an edge leaving the region",
+                          str(caught.exception))
+
+    def test_an_indirect_call_can_never_be_named_and_stays_conservative(self):
+        """`call [_Nil]` has no callee name, so the whole clobber set is read."""
+        body = bytes.fromhex("53" "8b0d00000000" "8b01"
+                             "ff1500000000" "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                "indirect",
+                {3: {"width": 4, "target": NIL_SYMBOL},
+                 11: {"width": 4, "target": CDECL_SYMBOL}})
+        self.assertIn("is live on an edge leaving the region",
+                      str(caught.exception))
+
+    def test_an_unrelocated_call_stays_conservative(self):
+        """Without a relocation the callee is unknown, so nothing is assumed."""
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                CALL_BODY, CALL_SIGMA, CALL_REGION,
+                CALL_RELOCATION_OFFSETS, "no-relocations")
+        self.assertIn("is live on an edge leaving the region",
+                      str(caught.exception))
+
+    def test_a_call_result_that_is_read_stays_live(self):
+        """The clobber set may never hide a return value from liveness."""
+        body = bytes.fromhex("53" "e800000000" "8bc8" "8b19" "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, (6, 8),
+                frozenset(range(2, 6)), "result",
+                {2: {"width": 4, "target": CDECL_SYMBOL}})
+        self.assertIn("['eax'] is live on entry", str(caught.exception))
+
+    def test_an_indirect_jump_is_still_refused(self):
+        """`FF /4` would break the control-flow graph and is not admitted."""
+        body = bytes.fromhex("53" "8b0d00000000" "8b01" "ffe0" "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, CALL_REGION, frozenset(range(3, 7)),
+                "indirect-jump", {3: {"width": 4, "target": NIL_SYMBOL}})
+        self.assertIn("outside the register-bijection table",
+                      str(caught.exception))
+
+
+class WidenedSemanticTableTests(unittest.TestCase):
+    """The table additions each carry their own reads/writes and refusal."""
+
+    def test_an_x87_memory_form_rewrites_only_its_address_register(self):
+        """The FPU stack is invisible to a general-register bijection."""
+        body = bytes.fromhex("53" "8b0d00000000" "d901" "d919"
+                             "e800000000" "5b" "c3")
+        image, proof = byte_identity.apply_register_bijection(
+            body, {"ecx": "edx", "edx": "ecx"}, (1, 11),
+            frozenset(offset + byte for offset in (3, 12)
+                      for byte in range(4)),
+            "x87", {3: {"width": 4, "target": NIL_SYMBOL},
+                    12: {"width": 4, "target": CDECL_SYMBOL}})
+        self.assertEqual(proof["rewritten_offsets"], [2, 8, 10])
+        self.assertEqual(image[1:3], bytes.fromhex("8b15"))
+        self.assertEqual(image[7:9], bytes.fromhex("d902"))
+        self.assertEqual(image[9:11], bytes.fromhex("d91a"))
+
+    def test_refuses_a_sub_register_field_sigma_cannot_rewrite(self):
+        """AL..BH number the low AND high bytes of only four registers.
+
+        A byte field naming a register in sigma's support cannot carry the
+        32-bit permutation, so it is refused rather than left unrewritten.
+        """
+        body = bytes.fromhex("53" "8b0d00000000" "8a01" "e800000000"
+                             "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                "byte", call_relocations(CDECL_SYMBOL))
+        self.assertIn("is named by a sub-register field",
+                      str(caught.exception))
+
+    def test_a_byte_write_does_not_kill_its_parent(self):
+        """`mov al, [ecx]` writes part of EAX, so EAX stays live through it."""
+        decoded = byte_identity.decode_ia32_bijection_instruction(
+            bytes.fromhex("8a01"), 0, "byte-mov")
+        self.assertIn("eax", decoded["reads"])
+        self.assertNotIn("eax", decoded["writes"])
+        self.assertEqual(decoded["frozen"], frozenset({"eax"}))
+        # the frozen AL field is not offered; the 32-bit memory BASE is
+        self.assertEqual(decoded["fields"], [(1, 0)])
+
+    def test_refuses_an_implicit_operand_form_inside_a_widened_group(self):
+        """F6 /4 MUL reads and writes EDX:EAX implicitly and stays refused."""
+        for encoding in (b"\xf6\xe1", b"\xf7\xf1"):
+            body = (bytes.fromhex("53" "8b0d00000000") + encoding
+                    + bytes.fromhex("e800000000" "5b" "c3"))
+            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+                byte_identity.apply_register_bijection(
+                    body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                    "group3", call_relocations(CDECL_SYMBOL))
+            self.assertIn("outside the register-bijection table",
+                          str(caught.exception))
+
+    def test_refuses_an_operand_size_prefix_on_an_unadmitted_form(self):
+        body = bytes.fromhex("53" "8b0d00000000" "668b01" "e800000000"
+                             "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                "osize", call_relocations(CDECL_SYMBOL))
+        self.assertIn("operand-size prefix is outside",
+                      str(caught.exception))
+
+    def test_a_sixteen_bit_test_is_rewritable_and_does_not_kill(self):
+        """`66 85 /r` numbers the same eight registers, so sigma applies."""
+        decoded = byte_identity.decode_ia32_bijection_instruction(
+            bytes.fromhex("668591d0000000"), 0, "test16")
+        self.assertEqual(decoded["reads"], frozenset({"ecx", "edx"}))
+        self.assertEqual(decoded["writes"], frozenset())
+        self.assertEqual(decoded["frozen"], frozenset())
+        self.assertEqual(sorted(decoded["fields"]), [(2, 0), (2, 3)])
+
+
+class ExternalTailJumpTests(unittest.TestCase):
+    """A relocated unconditional branch leaves the COMDAT."""
+
+    # ... a `ret`, then an EH funclet that tail-jumps to an external symbol.
+    FUNCLET_BODY = bytes.fromhex(
+        "53" "8b0d00000000" "8b01" "e800000000" "5b" "c3" "e900000000")
+
+    def test_a_relocated_tail_jump_is_an_exit_that_reads_everything(self):
+        relocations = call_relocations(
+            CDECL_SYMBOL, extra={17: {"width": 4, "target": OTHER_SYMBOL}})
+        decoded = byte_identity.decode_ia32_bijection_body(
+            self.FUNCLET_BODY, "funclet", relocations)
+        tail = decoded[-1]
+        self.assertEqual(tail["flow"], "exit")
+        self.assertIsNone(tail["target"])
+        self.assertEqual(
+            tail["reads"],
+            frozenset(byte_identity.IA32_GENERAL_REGISTER_NAMES))
+        image, proof = byte_identity.apply_register_bijection(
+            self.FUNCLET_BODY, CALL_SIGMA, CALL_REGION,
+            CALL_RELOCATION_OFFSETS | frozenset(range(17, 21)),
+            "funclet", relocations)
+        self.assertEqual(proof["rewritten_offsets"], [2, 8])
+
+    def test_an_unrelocated_branch_off_the_body_is_still_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.decode_ia32_bijection_body(
+                self.FUNCLET_BODY, "funclet",
+                call_relocations(CDECL_SYMBOL))
+        self.assertIn("does not target an instruction boundary",
+                      str(caught.exception))
+
+    def test_an_external_tail_jump_inside_the_region_is_refused(self):
+        relocations = call_relocations(
+            CDECL_SYMBOL, extra={17: {"width": 4, "target": OTHER_SYMBOL}})
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                self.FUNCLET_BODY, CALL_SIGMA, (1, 21),
+                CALL_RELOCATION_OFFSETS | frozenset(range(17, 21)),
+                "funclet", relocations)
+        self.assertIn("live at the region's return", str(caught.exception))
+
+
+# ---------------------------------------------------------------------------
+# Obligation 10: the installation delegate is chosen FROM THE PINS.
+#
+# `expected_closure` and `expected_code_renames` were validated and pinned by
+# this class from the day it was written, and then handed to a delegate that
+# required them to be the FPO pair and empty -- so they were dead pins.  They
+# now name the delegate.  These tests fix that the choice is a function of the
+# manifest alone, that a pin disagreeing with the objects refuses, and that a
+# rename outside the pinned set refuses.
+# ---------------------------------------------------------------------------
+
+LOCAL_SYMBOL_SEED = "$T64752"
+LOCAL_SYMBOL_DONOR = "$T64763"
+
+
+class DelegateSelectionTests(unittest.TestCase):
+    """The delegate is a pure function of the pins, never of the objects."""
+
+    def test_the_pins_alone_name_the_delegate(self):
+        fpo = byte_identity.REGISTER_BIJECTION_FPO_CLOSURE
+        eh = byte_identity.REGISTER_BIJECTION_EH_CLOSURE
+        choose = byte_identity.register_bijection_delegate
+        # the shape every row landed on this class so far keeps the strict one
+        self.assertEqual(choose(fpo, []), "equal_body_strict")
+        # a declared rename, or the EH closure, names the structural class
+        self.assertEqual(choose(fpo, [[163, "T"]]),
+                         "equal_body_eh_structural_local")
+        self.assertEqual(choose(eh, []), "equal_body_eh_structural_local")
+        self.assertEqual(choose(eh, [[12, "L"]]),
+                         "equal_body_eh_structural_local")
+
+    def test_refuses_a_closure_pin_that_disagrees_with_the_objects(self):
+        """The pin is checked against BOTH objects before it selects."""
+        seed = make_coff()
+        donor = make_coff()
+        image = sigma_image()
+        function = function_record(
+            seed, donor, image,
+            expected_closure=byte_identity.REGISTER_BIJECTION_EH_CLOSURE,
+            expected_xdata_rename_offsets=[],
+        )
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_register_bijection(
+                seed, donor, function, retail_body_for(image))
+        self.assertIn("target closure changed", str(caught.exception))
+
+    def test_refuses_a_closure_pin_no_delegate_would_accept(self):
+        """A shape neither delegate admits never reaches the selector.
+
+        The objects-versus-pin check runs first, which is the stronger
+        refusal: the pin is rejected for disagreeing with what the seed and
+        the donor actually carry, before any delegate is named.
+        """
+        seed = make_coff()
+        donor = make_coff()
+        image = sigma_image()
+        function = function_record(
+            seed, donor, image, expected_closure=[".debug$S"])
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_register_bijection(
+                seed, donor, function, retail_body_for(image))
+        self.assertIn("target closure changed", str(caught.exception))
+
+
+class PinnedRenameTests(unittest.TestCase):
+    """A rename outside the pinned set refuses; the pinned one composes."""
+
+    def setUp(self):
+        self.seed = make_coff(local_symbol=LOCAL_SYMBOL_SEED)
+        self.donor = make_coff(local_symbol=LOCAL_SYMBOL_DONOR)
+        self.image = sigma_image()
+        self.retail = retail_body_for(self.image)
+        self.renames = [[offset, "T"] for offset in RELOCATIONS]
+        self.symbols = [[offset, LOCAL_SYMBOL_SEED, LOCAL_SYMBOL_DONOR]
+                        for offset in RELOCATIONS]
+
+    def _record(self, **overrides):
+        return function_record(
+            self.seed, self.donor, self.image, **overrides)
+
+    def test_a_declared_object_local_rename_composes(self):
+        """FPO closure + a declared $T rename -> the structural delegate."""
+        function = self._record(
+            expected_code_renames=self.renames,
+            expected_code_rename_symbols=self.symbols,
+            expected_xdata_rename_offsets=[],
+        )
+        composed, detail = (
+            byte_identity.compose_retail_exact_register_bijection(
+                self.seed, self.donor, function, self.retail))
+        coff = byte_identity.CoffObject(composed)
+        primary = coff.function_section(TARGET_SYMBOL)
+        self.assertEqual(byte_identity.coff_body(coff, primary), self.image)
+        self.assertTrue(detail["retail_exact"])
+        # the installed object keeps the SEED's own symbol, not the donor's
+        self.assertEqual(
+            {row["target"] for row in byte_identity.detailed_relocations(
+                coff, primary)},
+            {LOCAL_SYMBOL_SEED})
+
+    def test_refuses_a_rename_the_pin_does_not_declare(self):
+        function = self._record(
+            expected_code_renames=[], expected_xdata_rename_offsets=[])
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_register_bijection(
+                self.seed, self.donor, function, self.retail)
+        self.assertIn("code rename set changed", str(caught.exception))
+
+    def test_refuses_a_pinned_rename_that_is_not_there(self):
+        """A donor with no rename may not carry a pin that declares one."""
+        function = function_record(
+            self.seed, self.seed, self.image,
+            expected_code_renames=[self.renames[0]],
+            expected_code_rename_symbols=[self.symbols[0]],
+            expected_xdata_rename_offsets=[],
+        )
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_register_bijection(
+                self.seed, self.seed, function, self.retail)
+        self.assertIn("code rename set changed", str(caught.exception))
+
+    def test_refuses_a_rename_whose_symbol_pair_is_wrong(self):
+        """The pin names the EXACT pair, not a count and not a wildcard."""
+        function = self._record(
+            expected_code_renames=self.renames,
+            expected_code_rename_symbols=[
+                [offset, LOCAL_SYMBOL_SEED, "$T99999"]
+                for offset in RELOCATIONS],
+            expected_xdata_rename_offsets=[],
+        )
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.compose_retail_exact_register_bijection(
+                self.seed, self.donor, function, self.retail)
+        self.assertIn("code rename symbol pair changed",
+                      str(caught.exception))

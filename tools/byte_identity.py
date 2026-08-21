@@ -14300,6 +14300,18 @@ def validate_manifest(
                         "expected_closure", "retail_oracle",
                         "retail_relocations", "register_bijection",
                     }
+                    # The closure PIN names the installation delegate, so the
+                    # keys that delegate needs are required exactly when the
+                    # pin names it -- and forbidden otherwise.
+                    if register_bijection_delegate(
+                            function.get("expected_closure") or [],
+                            function.get("expected_code_renames"),
+                    ) != "equal_body_strict":
+                        bijection_keys = bijection_keys | {
+                            "expected_xdata_rename_offsets"}
+                    if function.get("expected_code_renames"):
+                        bijection_keys = bijection_keys | {
+                            "expected_code_rename_symbols"}
                     exact_keys(function, bijection_keys, function_context)
                     for name in (
                         "expected_section_number", "expected_section_count",
@@ -14359,11 +14371,46 @@ def validate_manifest(
                         f"{function_context}.expected_code_renames "
                         "is invalid",
                     )
+                    # Two closure shapes, each naming one PRE-EXISTING
+                    # equal-body delegate whose obligations already carry
+                    # landed rows.  Anything else is refused.
                     require(
                         function.get("expected_closure")
-                        == [".debug$F", ".debug$S"],
+                        in (REGISTER_BIJECTION_FPO_CLOSURE,
+                            REGISTER_BIJECTION_EH_CLOSURE),
                         f"{function_context}.expected_closure differs",
                     )
+                    if register_bijection_delegate(
+                            function["expected_closure"], renames,
+                    ) != "equal_body_strict":
+                        xdata = function.get(
+                            "expected_xdata_rename_offsets")
+                        require(
+                            isinstance(xdata, list)
+                            and xdata == sorted(set(xdata))
+                            and all(type(offset) is int and offset >= 0
+                                    for offset in xdata),
+                            f"{function_context}"
+                            ".expected_xdata_rename_offsets is invalid",
+                        )
+                    if renames:
+                        # Obligation: each declared rename pins the EXACT
+                        # symbol pair, not a count and not a wildcard.
+                        pairs = function.get("expected_code_rename_symbols")
+                        require(
+                            isinstance(pairs, list)
+                            and len(pairs) == len(renames)
+                            and all(isinstance(item, list) and len(item) == 3
+                                    and type(item[0]) is int
+                                    and isinstance(item[1], str) and item[1]
+                                    and isinstance(item[2], str) and item[2]
+                                    and item[1] != item[2]
+                                    for item in pairs)
+                            and [item[0] for item in pairs]
+                            == [item[0] for item in renames],
+                            f"{function_context}"
+                            ".expected_code_rename_symbols is invalid",
+                        )
                     retail = function.get("retail_oracle")
                     require(isinstance(retail, dict),
                             f"{function_context}.retail_oracle must be an "
@@ -26998,8 +27045,20 @@ def validate_complete_reccmp_report(data: bytes, image_gate: dict) -> dict:
 #                      relocation table is the seed's own, unmoved
 #  7  liveness         every register in sigma's support is dead on entry to
 #                      the region and dead on every edge leaving it, proved by
-#                      a backward liveness fixpoint over the body's own CFG
-#                      with an ABI-conservative call and return model
+#                      a backward liveness fixpoint over the body's own CFG.
+#                      A call CLOBBERS eax/ecx/edx unconditionally; whether it
+#                      READS one of them is the callee's calling convention,
+#                      DERIVED from the callee's own decoration through a
+#                      closed table and never assumed.  The derivation tries
+#                      every `@@` in the name as the scope terminator and
+#                      demands EXACTLY ONE distinct reading: the true scope
+#                      terminator is always one of those positions, so a
+#                      single reading necessarily agrees with the truth and
+#                      anything else -- an unmangled C symbol, a CRT helper,
+#                      an import or adjustor thunk, an indirect call, a call
+#                      with no relocation -- falls back to reading the whole
+#                      caller-saved set.  That is the ONLY safe direction and
+#                      it is the detail the soundness rests on.
 #  8  retail equality  the image must equal the retail oracle exactly under
 #                      the relocation mask, or the composition is refused
 #  9  debug fidelity   the CodeView S_REGISTER records that name which
@@ -27008,13 +27067,60 @@ def validate_complete_reccmp_report(data: bytes, image_gate: dict) -> dict:
 #                      unchanged record identity/size list
 # 10  scope            one named COMDAT, one sigma, one pinned oracle, and the
 #                      ordinary output-conservation proof of the equal-body
-#                      primitive, which this class delegates to unchanged
+#                      primitive, which this class delegates to unchanged.
+#                      WHICH primitive is read off the manifest's own
+#                      `expected_closure` pin -- never off the objects -- and
+#                      the objects' closure is required to equal that pin
+#                      first, so a pin that disagrees refuses before any
+#                      delegate is chosen.  `(.debug$F, .debug$S)` names
+#                      `equal_body_strict`; `(.debug$S, .xdata$x)`, the shape
+#                      a C++ EH function carries, names
+#                      `equal_body_eh_structural_local`, which additionally
+#                      requires byte-identical xdata and proves each declared
+#                      object-local $L/$T rename structurally.  Both are
+#                      pre-existing classes with landed rows; this class adds
+#                      no installation proof of its own, it selects one, and
+#                      it pins the EXACT symbol pair of every rename it
+#                      declares.
 
 
 REGISTER_BIJECTION_CLASS = "retail_exact_register_bijection"
 
 
 REGISTER_BIJECTION_KIND = "callee_saved_register_bijection_v1"
+
+
+# The two COMDAT closure shapes this certificate installs through, and the
+# PRE-EXISTING equal-body delegate each one names.  The delegate is chosen
+# from the manifest PIN, never from the objects: the composer requires the
+# objects' own closure to equal the pin first, so a pin that disagrees with
+# what the seed and donor carry refuses before any delegate is selected.
+# Both delegates are ordinary, independently proved classes of this module
+# that already carry landed rows; this certificate adds no installation
+# proof of its own, it selects one.
+REGISTER_BIJECTION_FPO_CLOSURE = [".debug$F", ".debug$S"]
+REGISTER_BIJECTION_EH_CLOSURE = [".debug$S", ".xdata$x"]
+
+
+def register_bijection_delegate(
+    expected_closure: object, expected_code_renames: object,
+) -> str:
+    """Name the installation delegate from the PINS alone.
+
+    Both inputs are manifest declarations, never measurements of the objects
+    -- the composer requires the objects' own closure and rename set to equal
+    these pins first, so a pin that disagrees refuses before this is reached.
+    `equal_body_strict` is kept wherever the pins allow it (the FPO closure
+    with no declared rename), which is exactly the shape every row landed on
+    this class so far.  Otherwise the delegate is
+    `equal_body_eh_structural_local`, the pre-existing class that admits both
+    closure shapes, requires byte-identical xdata, and proves each declared
+    object-local $L/$T rename structurally.
+    """
+    if (list(expected_closure) == REGISTER_BIJECTION_FPO_CLOSURE
+            and not expected_code_renames):
+        return "equal_body_strict"
+    return "equal_body_eh_structural_local"
 
 
 IA32_GENERAL_REGISTER_NAMES = (
@@ -27063,16 +27169,25 @@ def _bijection_form(
     reg_read: bool = False, reg_write: bool = False,
     rm_read: bool = False, rm_write: bool = False,
     ext_no_write: frozenset = frozenset(),
+    ext_allowed: frozenset | None = None,
     opreg: str | None = None,
     reads: frozenset = frozenset(), writes: frozenset = frozenset(),
     flow: str = "fall", displacement: int = 0,
+    width: int = 32, x87: bool = False, size16_ok: bool = False,
 ) -> dict:
     return {
         "modrm": modrm, "reg": reg, "reg_read": reg_read,
         "reg_write": reg_write, "rm_read": rm_read, "rm_write": rm_write,
-        "ext_no_write": ext_no_write, "opreg": opreg,
+        "ext_no_write": ext_no_write, "ext_allowed": ext_allowed,
+        "opreg": opreg,
         "reads": reads, "writes": writes, "flow": flow,
         "displacement": displacement,
+        # `width` is the width of the form's REGISTER operands, not of its
+        # address registers -- a memory operand's base and index are always
+        # 32-bit and are always remappable.  `x87` marks a form whose ModRM
+        # reg field is an opcode extension and whose mod == 3 operand is an
+        # FPU stack register, i.e. not a general register at all.
+        "width": width, "x87": x87, "size16_ok": size16_ok,
     }
 
 
@@ -27082,7 +27197,8 @@ def _ia32_bijection_table() -> dict:
     An opcode is admitted only when its register fields and its *complete*
     implicit-operand set are known exactly.  Everything outside the table --
     including every form with an implicit general-register operand, every
-    prefixed form and every indirect branch -- is refused rather than guessed.
+    unadmitted prefix and every indirect *jump* -- is refused rather than
+    guessed.
     """
     table = {}
     stack = frozenset({"esp"})
@@ -27097,50 +27213,242 @@ def _ia32_bijection_table() -> dict:
     table[0x3B] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
                                   rm_read=True)
     table[0x85] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
-                                  rm_read=True)
+                                  rm_read=True, size16_ok=True)
+    # 2B /r SUB r32, r/m32 ; 03 /r ADD r32, r/m32 ; 1B /r SBB r32, r/m32
+    for opcode in (0x03, 0x0B, 0x1B, 0x23, 0x2B):
+        table[opcode] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                        reg_write=True, rm_read=True)
     # 89 /r MOV r/m32, r32 ; 8B /r MOV r32, r/m32 ; 8D /r LEA r32, m
     table[0x89] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
                                   rm_write=True)
     table[0x8B] = _bijection_form(modrm=True, reg="gpr", reg_write=True,
                                   rm_read=True)
     table[0x8D] = _bijection_form(modrm=True, reg="gpr", reg_write=True)
-    # 83 /n group 1 with imm8: every member reads r/m and writes it except
-    # /7 CMP, which only reads.
+    # 83 /n group 1 with imm8, 81 /n group 1 with imm32: every member reads
+    # r/m and writes it except /7 CMP, which only reads.
     table[0x83] = _bijection_form(modrm=True, reg="ext", rm_read=True,
                                   rm_write=True, ext_no_write=frozenset({7}))
-    # 50+r PUSH r32 ; 58+r POP r32
+    table[0x81] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                  rm_write=True, ext_no_write=frozenset({7}))
+    # C7 /0 MOV r/m32, imm32 -- a pure definition of its r/m operand
+    table[0xC7] = _bijection_form(modrm=True, reg="ext",
+                                  ext_allowed=frozenset({0}), rm_write=True)
+    # --- byte-operand forms.  The 3-bit register fields of these name AL..BH,
+    # where 4..7 are the HIGH bytes of EAX..EBX, so the 32-bit sigma's
+    # permutation of the field is NOT the right rewriting.  The decoder marks
+    # such fields FROZEN: it reports the parent register they touch (so
+    # liveness stays exact) but never offers them for rewriting, and
+    # apply_register_bijection refuses if a frozen register is in sigma's
+    # support inside the region.  A byte write is a PARTIAL write and is
+    # therefore reported as a read only -- it must not kill the parent.
+    table[0x38] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_read=True, width=8)
+    table[0x3A] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_read=True, width=8)
+    table[0x84] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_read=True, width=8)
+    table[0x88] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  rm_write=True, width=8)
+    table[0x8A] = _bijection_form(modrm=True, reg="gpr", reg_write=True,
+                                  rm_read=True, width=8)
+    table[0x1A] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  reg_write=True, rm_read=True, width=8)
+    table[0x80] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                  rm_write=True, ext_no_write=frozenset({7}),
+                                  width=8)
+    table[0xC6] = _bijection_form(modrm=True, reg="ext",
+                                  ext_allowed=frozenset({0}), rm_write=True,
+                                  width=8)
+    # F6 /0 TEST r/m8, imm8 (read only), /2 NOT, /3 NEG.  /4 MUL, /5 IMUL,
+    # /6 DIV and /7 IDIV carry implicit EAX/EDX operands and stay refused.
+    table[0xF6] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                  rm_write=True,
+                                  ext_no_write=frozenset({0}),
+                                  ext_allowed=frozenset({0, 2, 3}), width=8)
+    # 40+r INC r32 ; 48+r DEC r32 ; 50+r PUSH r32 ; 58+r POP r32
+    # B8+r MOV r32, imm32
     for index in range(8):
+        table[0x40 + index] = _bijection_form(opreg="readwrite")
+        table[0x48 + index] = _bijection_form(opreg="readwrite")
         table[0x50 + index] = _bijection_form(
             opreg="read", reads=stack, writes=stack)
         table[0x58 + index] = _bijection_form(
             opreg="write", reads=stack, writes=stack)
-    # 74/75 Jcc rel8, EB JMP rel8, E9 JMP rel32, E8 CALL rel32
-    table[0x74] = _bijection_form(flow="jcc", displacement=1)
-    table[0x75] = _bijection_form(flow="jcc", displacement=1)
+        table[0xB8 + index] = _bijection_form(opreg="write")
+    # 05 ADD eax, imm32 -- the accumulator form names EAX implicitly and has
+    # no register field to rewrite, so it is admitted with EAX pinned.
+    table[0x05] = _bijection_form(reads=frozenset({"eax"}),
+                                  writes=frozenset({"eax"}))
+    # A1 MOV eax, moffs32 ; A3 MOV moffs32, eax -- no ModRM, no rewritable
+    # field; the moffs is an absolute address, optionally segment-prefixed.
+    table[0xA1] = _bijection_form(writes=frozenset({"eax"}))
+    table[0xA3] = _bijection_form(reads=frozenset({"eax"}))
+    # 68 PUSH imm32 ; 6A PUSH imm8
+    table[0x68] = _bijection_form(reads=stack, writes=stack)
+    table[0x6A] = _bijection_form(reads=stack, writes=stack)
+    # 70..7F Jcc rel8, EB JMP rel8, E9 JMP rel32, E8 CALL rel32
+    for opcode in range(0x70, 0x80):
+        table[opcode] = _bijection_form(flow="jcc", displacement=1)
     table[0xEB] = _bijection_form(flow="jmp", displacement=1)
     table[0xE9] = _bijection_form(flow="jmp", displacement=4)
+    # The call's ARGUMENT read set is decided by the decoder: fully
+    # conservative unless the callee is resolved through a relocation to a
+    # name the closed decoration table recognises.  The CLOBBER set is
+    # unconditional -- a clobber kills liveness, it never creates it.
     table[0xE8] = _bijection_form(
-        flow="call", displacement=4,
-        reads=_IA32_CALL_CLOBBERED | stack,
+        flow="call", displacement=4, reads=stack,
         writes=_IA32_CALL_CLOBBERED)
+    # FF /2 CALL r/m32 -- an indirect call.  It does not disturb the control
+    # -flow graph (it falls through), and its callee can never be named, so
+    # it stays fully conservative.  FF /4 and /5 are indirect JUMPS, which
+    # would break the graph, and stay refused with every other extension.
+    table[0xFF] = _bijection_form(
+        modrm=True, reg="ext", ext_allowed=frozenset({2}), rm_read=True,
+        flow="call", reads=stack, writes=_IA32_CALL_CLOBBERED)
     # C2 iw / C3 RET
     table[0xC2] = _bijection_form(flow="ret", reads=_IA32_RETURN_LIVE)
     table[0xC3] = _bijection_form(flow="ret", reads=_IA32_RETURN_LIVE)
+    # D8..DF x87.  The ModRM reg field is an opcode extension and a mod == 3
+    # operand is an FPU stack register, so no x87 form has a general-register
+    # operand at all; a memory form reads its address registers and nothing
+    # else.  The FPU stack is invisible to a general-register bijection.
+    for opcode in range(0xD8, 0xE0):
+        table[opcode] = _bijection_form(modrm=True, reg="ext", x87=True)
+    return table
+
+
+def _ia32_bijection_two_byte_table() -> dict:
+    """The 0F escape forms this class admits: the near Jcc family only."""
+    table = {}
+    for opcode in range(0x80, 0x90):
+        table[opcode] = _bijection_form(flow="jcc", displacement=4)
     return table
 
 
 IA32_BIJECTION_FORMS = _ia32_bijection_table()
+IA32_BIJECTION_TWO_BYTE_FORMS = _ia32_bijection_two_byte_table()
+
+
+# Segment overrides are inert for a general-register bijection: they select
+# the segment a memory operand is resolved in and touch no register field.
+_IA32_INERT_SEGMENT_PREFIXES = frozenset({0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65})
+_IA32_OPERAND_SIZE_PREFIX = 0x66
+
+
+# An unconditional branch whose displacement is entirely covered by a
+# relocation leaves this COMDAT (a tail-jump into another symbol).  It is
+# modelled as a function exit that reads EVERY general register -- strictly
+# more conservative than `ret`, which reads only the ABI's live-out set.
+_IA32_EXTERNAL_TRANSFER_LIVE = frozenset(IA32_GENERAL_REGISTER_NAMES)
+
+
+def _bijection_form_for(opcode: int) -> dict | None:
+    """Look one decoded opcode key up in the closed table."""
+    if opcode & 0xFF00 == 0x0F00:
+        return IA32_BIJECTION_TWO_BYTE_FORMS.get(opcode & 0xFF)
+    return IA32_BIJECTION_FORMS.get(opcode)
+
+
+# ---------------------------------------------------------------------------
+# The callee-argument model (obligation 7)
+#
+# `call` CLOBBERS EAX/ECX/EDX on this ABI; whether it READS one of them is a
+# different fact, and it is decided by the callee's calling convention.
+# Modelling every call as reading all three conflates the two and makes a
+# caller-scratch register look live when the callee cannot possibly read it.
+# This table DERIVES the fact from the callee's own decoration and FAILS
+# CLOSED: any name it does not recognise -- an unmangled C symbol, a CRT
+# helper, an import thunk, an adjustor thunk, or a decoration whose readings
+# disagree -- returns None and the call stays fully conservative.  An indirect
+# call can never be named and is therefore always conservative.
+# ---------------------------------------------------------------------------
+
+# MSVC function-class letters.  Non-static members carry a CV letter before
+# the calling convention; statics and globals do not.  G/H/O/P/W/X are
+# adjustor-thunk classes and are deliberately absent: a thunk is refused.
+_MSVC_MEMBER_FUNCTION_CLASSES = frozenset("ABEFIJMNQRUV")
+_MSVC_STATIC_FUNCTION_CLASSES = frozenset("CDKLST")
+_MSVC_GLOBAL_FUNCTION_CLASSES = frozenset("YZ")
+_MSVC_THUNK_FUNCTION_CLASSES = frozenset("GHOPWX")
+_MSVC_CV_LETTERS = frozenset("ABCD")
+
+# Calling-convention letters -> the general registers that carry ARGUMENTS.
+_MSVC_CALL_ARGUMENT_REGISTERS = {
+    "A": frozenset(), "B": frozenset(),                      # __cdecl
+    "C": frozenset(), "D": frozenset(),                      # __pascal
+    "E": frozenset({"ecx"}), "F": frozenset({"ecx"}),        # __thiscall
+    "G": frozenset(), "H": frozenset(),                      # __stdcall
+    "I": frozenset({"ecx", "edx"}),                          # __fastcall
+    "J": frozenset({"ecx", "edx"}),                          # __fastcall
+}
+
+
+def msvc_call_argument_registers(symbol: object) -> frozenset | None:
+    """Which general registers a callee reads as arguments, or None.
+
+    Closed decode of an MSVC 4.2 decorated name.  Every `@@` in the name is
+    tried as the scope terminator; a position is a *reading* only if the
+    letters after it form a complete (function class, [CV], calling
+    convention) triple.  The true scope terminator is always one such
+    position, so requiring **exactly one distinct reading** means the answer
+    agrees with the truth or is refused.  Adjustor thunks, undecorated names
+    and anything else return None, which the caller must treat as "read the
+    whole caller-saved set".
+    """
+    if not isinstance(symbol, str) or not symbol.startswith("?"):
+        return None
+    if not symbol.endswith("Z"):        # data decorations are not callees
+        return None
+    readings = set()
+    for index in range(len(symbol) - 1):
+        if symbol[index:index + 2] != "@@":
+            continue
+        cursor = index + 2
+        if cursor >= len(symbol):
+            continue
+        letter = symbol[cursor]
+        cursor += 1
+        if letter in _MSVC_THUNK_FUNCTION_CLASSES:
+            # A strict thunk decoration is class + displacement digit + CV +
+            # convention.  If one is present anywhere, refuse the whole name:
+            # a thunk's own convention is not this table's to guess.
+            if (cursor + 2 < len(symbol) and symbol[cursor].isdigit()
+                    and symbol[cursor + 1] in _MSVC_CV_LETTERS
+                    and symbol[cursor + 2] in _MSVC_CALL_ARGUMENT_REGISTERS):
+                return None
+            continue
+        if letter in _MSVC_MEMBER_FUNCTION_CLASSES:
+            if cursor >= len(symbol) or symbol[cursor] not in _MSVC_CV_LETTERS:
+                continue
+            cursor += 1
+        elif letter not in (_MSVC_STATIC_FUNCTION_CLASSES
+                            | _MSVC_GLOBAL_FUNCTION_CLASSES):
+            continue
+        if cursor >= len(symbol):
+            continue
+        registers = _MSVC_CALL_ARGUMENT_REGISTERS.get(symbol[cursor])
+        if registers is None:
+            continue
+        readings.add(registers)
+    if len(readings) != 1:
+        return None
+    return next(iter(readings))
 
 
 def decode_ia32_bijection_instruction(
     body: bytes, offset: int, context: str,
+    relocations: dict | None = None,
 ) -> dict:
     """Decode one instruction into register fields, operands and control flow.
 
     Returns the encoding's general-register fields as `(byte, shift)` pairs so
     a bijection can rewrite them in place, together with the exact set of
     general registers the instruction reads and writes -- explicit operands
-    and the table's implicit ones alike.
+    and the table's implicit ones alike.  `frozen` names the general registers
+    an instruction touches through a field that cannot be rewritten (a
+    sub-register encoding); `relocations`, when given, maps a relocation's
+    offset to `{"width": int, "target": str}` and is what lets a direct call's
+    callee be named.
     """
     require(0 <= offset < len(body), f"{context}: instruction offset is out "
             "of range")
@@ -27149,57 +27457,109 @@ def decode_ia32_bijection_instruction(
     encoded = body[offset:offset + length]
     require(len(encoded) == length,
             f"{context}: instruction is truncated")
-    require(encoded[0] not in _IA32_PREFIXES,
-            f"{context}: prefixed instructions are outside the "
-            "register-bijection table")
-    opcode = encoded[0]
-    form = IA32_BIJECTION_FORMS.get(opcode)
+    cursor = 0
+    segment_prefix = False
+    operand_size_16 = False
+    while encoded[cursor] in _IA32_PREFIXES:
+        prefix = encoded[cursor]
+        if prefix in _IA32_INERT_SEGMENT_PREFIXES:
+            require(not segment_prefix,
+                    f"{context}: repeated segment prefix")
+            segment_prefix = True
+        elif prefix == _IA32_OPERAND_SIZE_PREFIX:
+            require(not operand_size_16,
+                    f"{context}: repeated operand-size prefix")
+            operand_size_16 = True
+        else:
+            raise ByteIdentityError(
+                f"{context}: prefixed instructions are outside the "
+                "register-bijection table")
+        cursor += 1
+        require(cursor < length, f"{context}: instruction is only prefixes")
+    opcode_at = offset + cursor
+    opcode = encoded[cursor]
+    cursor += 1
+    if opcode == 0x0F:
+        require(cursor < length,
+                f"{context}: truncated two-byte opcode")
+        opcode = 0x0F00 | encoded[cursor]
+        cursor += 1
+    form = _bijection_form_for(opcode)
     require(form is not None,
             f"{context}: opcode 0x{opcode:02x} is outside the "
             "register-bijection table")
-    cursor = 1
+    width = form["width"]
+    if operand_size_16:
+        require(form["size16_ok"] and width == 32,
+                f"{context}: the operand-size prefix is outside the "
+                "register-bijection table for this opcode")
+        width = 16
     fields = []
+    frozen = set()
     reads = set(form["reads"])
     writes = set(form["writes"])
     names = IA32_GENERAL_REGISTER_NAMES
-    if form["opreg"] is not None:
-        fields.append((offset, 0))
-        name = names[opcode & 7]
-        if form["opreg"] == "read":
-            reads.add(name)
+
+    def _touch(value: int, is_read: bool, is_write: bool) -> None:
+        """Account for one register-operand field of the form's own width.
+
+        32- and 16-bit fields number the same eight registers, so they are
+        rewritable; an 8-bit field numbers AL..BH, whose 4..7 are the HIGH
+        bytes of EAX..EBX, so it is frozen.  A write narrower than 32 bits is
+        a PARTIAL write: it is reported as a read, never as a kill.
+        """
+        if width == 8:
+            name = names[value & 3]
+            frozen.add(name)
         else:
+            name = names[value]
+        if is_read or (is_write and width != 32):
+            reads.add(name)
+        if is_write and width == 32:
+            writes.add(name)
+
+    if form["opreg"] is not None:
+        fields.append((opcode_at, 0))
+        name = names[opcode & 7]
+        if form["opreg"] in ("read", "readwrite"):
+            reads.add(name)
+        if form["opreg"] in ("write", "readwrite"):
             writes.add(name)
     if form["modrm"]:
         require(cursor < length, f"{context}: instruction lacks ModRM")
         modrm_at = offset + cursor
         modrm = encoded[cursor]
         cursor += 1
+        modrm_byte = modrm
         mode = modrm >> 6
         rm = modrm & 7
         register_field = (modrm >> 3) & 7
         rm_write = form["rm_write"]
         if form["reg"] == "gpr":
-            fields.append((modrm_at, 3))
-            name = names[register_field]
-            if form["reg_read"]:
-                reads.add(name)
-            if form["reg_write"]:
-                writes.add(name)
+            if width != 8:
+                fields.append((modrm_at, 3))
+            _touch(register_field, form["reg_read"], form["reg_write"])
         else:
             require(form["reg"] == "ext",
                     f"{context}: ModRM register field role is undeclared")
+            allowed = form["ext_allowed"]
+            require(allowed is None or register_field in allowed,
+                    f"{context}: ModRM extension /{register_field} of opcode "
+                    f"0x{opcode:02x} is outside the register-bijection table")
             if register_field in form["ext_no_write"]:
                 rm_write = False
         if mode == 3:
-            fields.append((modrm_at, 0))
-            name = names[rm]
-            if form["rm_read"]:
-                reads.add(name)
-            if rm_write:
-                writes.add(name)
+            if form["x87"]:
+                # An FPU stack register: not a general register at all.
+                pass
+            else:
+                if width != 8:
+                    fields.append((modrm_at, 0))
+                _touch(rm, form["rm_read"], rm_write)
         else:
             # A memory operand: the base and index registers are read for the
-            # address computation; the memory cell itself is irrelevant to
+            # address computation and are always 32-bit, whatever the form's
+            # operand width; the memory cell itself is irrelevant to
             # general-register liveness.
             if rm == 4:
                 require(cursor < length, f"{context}: instruction lacks SIB")
@@ -27221,28 +27581,54 @@ def decode_ia32_bijection_instruction(
                                              and form["rm_write"]),
                 f"{context}: instruction form writes two operands")
     target = None
-    if form["flow"] in ("jcc", "jmp", "call"):
-        width = form["displacement"]
-        relative = int.from_bytes(
-            encoded[length - width:], "little", signed=True)
-        target = offset + length + relative
+    flow = form["flow"]
+    if flow in ("jcc", "jmp", "call") and form["displacement"]:
+        width_bytes = form["displacement"]
+        displacement_at = offset + length - width_bytes
+        row = (relocations or {}).get(displacement_at)
+        external = (row is not None and row.get("width") == width_bytes)
+        if external and flow == "jmp":
+            # A relocated unconditional branch leaves this COMDAT.
+            flow = "exit"
+            reads = set(_IA32_EXTERNAL_TRANSFER_LIVE)
+            writes = set()
+        elif external and flow == "jcc":
+            raise ByteIdentityError(
+                f"{context}: a relocated conditional branch is outside the "
+                "register-bijection table")
+        elif not external:
+            relative = int.from_bytes(
+                encoded[length - width_bytes:], "little", signed=True)
+            target = offset + length + relative
+        if flow == "call":
+            symbol = row.get("target") if row is not None else None
+            argument = (msvc_call_argument_registers(symbol)
+                        if external else None)
+            reads |= (_IA32_CALL_CLOBBERED if argument is None else argument)
+            target = None
+    elif flow == "call":
+        # An indirect call: the callee can never be named.
+        reads |= _IA32_CALL_CLOBBERED
     # The XOR-zero idiom is an exact, closed special case: `xor r, r` does not
     # read r, it defines it.  Recognising it is required for a sound liveness
     # answer, and it is recognised by the encoding, never by a heuristic.
     if opcode in (0x31, 0x33) and form["modrm"]:
-        modrm = encoded[1]
-        if modrm >> 6 == 3 and (modrm & 7) == ((modrm >> 3) & 7):
-            zeroed = names[modrm & 7]
+        if (modrm_byte >> 6 == 3
+                and (modrm_byte & 7) == ((modrm_byte >> 3) & 7)):
+            zeroed = names[modrm_byte & 7]
             reads.discard(zeroed)
             writes.add(zeroed)
     return {
         "offset": offset, "length": length, "opcode": opcode,
         "fields": fields, "reads": frozenset(reads),
-        "writes": frozenset(writes), "flow": form["flow"], "target": target,
+        "writes": frozenset(writes), "flow": flow, "target": target,
+        "frozen": frozenset(frozen),
     }
 
 
-def decode_ia32_bijection_body(body: bytes, context: str) -> list[dict]:
+def decode_ia32_bijection_body(
+    body: bytes, context: str, relocations: dict | None = None,
+) -> list[dict]:
     """Decode a whole COMDAT body to exhaustion with the closed table."""
     require(isinstance(body, (bytes, bytearray)) and body,
             f"{context}: body is empty")
@@ -27251,7 +27637,7 @@ def decode_ia32_bijection_body(body: bytes, context: str) -> list[dict]:
     offset = 0
     while offset < len(body):
         instruction = decode_ia32_bijection_instruction(
-            body, offset, f"{context} at {offset}")
+            body, offset, f"{context} at {offset}", relocations)
         instructions.append(instruction)
         offset += instruction["length"]
     require(offset == len(body),
@@ -27286,6 +27672,9 @@ def _register_bijection_live_sets(
             else:
                 require(item["flow"] != "fall",
                         f"{context}: body falls off its end")
+        # `exit` is a relocated tail-jump out of this COMDAT: like `ret` it
+        # has no successor inside the body and instead reads its live-out
+        # set, which for an external transfer is every general register.
         if item["flow"] in ("jcc", "jmp"):
             edges.append(index_of[item["target"]])
         successors.append(edges)
@@ -27311,6 +27700,7 @@ def _register_bijection_live_sets(
 def apply_register_bijection(
     body: bytes, mapping: dict, region: tuple[int, int],
     relocation_offsets: frozenset, context: str,
+    relocations: dict | None = None,
 ) -> tuple[bytes, dict]:
     """Rewrite one region's general-register fields under a proved bijection.
 
@@ -27321,7 +27711,7 @@ def apply_register_bijection(
     """
     body = bytes(body)
     start, end = region
-    instructions = decode_ia32_bijection_body(body, context)
+    instructions = decode_ia32_bijection_body(body, context, relocations)
     boundaries = {item["offset"] for item in instructions}
     boundaries.add(len(body))
     require(start in boundaries and end in boundaries and start < end,
@@ -27351,6 +27741,15 @@ def apply_register_bijection(
     require(inside[-1]["offset"] + inside[-1]["length"] == end,
             f"{context}: region does not end on an instruction boundary")
     entry = instructions.index(inside[0])
+    for item in inside:
+        # A sub-register field names a general register but cannot carry
+        # sigma's permutation (AL..BH number the low AND high bytes of only
+        # four registers), so a frozen register inside the region is refused
+        # rather than silently left unrewritten.
+        blocked = support & set(item.get("frozen", frozenset()))
+        require(not blocked,
+                f"{context}: {sorted(blocked)} is named by a sub-register "
+                f"field at {item['offset']} that sigma cannot rewrite")
     for index, item in enumerate(instructions):
         for edge in successors[index]:
             crosses_in = (not (start <= item["offset"] < end)
@@ -27372,7 +27771,7 @@ def apply_register_bijection(
             require(not leaking,
                     f"{context}: {sorted(leaking)} is live on an edge "
                     f"leaving the region at {item['offset']}")
-        if item["flow"] == "ret":
+        if item["flow"] in ("ret", "exit"):
             leaking = support & set(item["reads"])
             require(not leaking,
                     f"{context}: {sorted(leaking)} is live at the region's "
@@ -27397,7 +27796,7 @@ def apply_register_bijection(
     require(len(image) == len(body),
             f"{context}: the image changed the body length")
     image_instructions = decode_ia32_bijection_body(
-        image, f"{context} image")
+        image, f"{context} image", relocations)
     require(
         [(item["offset"], item["length"]) for item in image_instructions]
         == [(item["offset"], item["length"]) for item in instructions],
@@ -27406,8 +27805,8 @@ def apply_register_bijection(
     for left, right in zip(image_instructions, instructions):
         # `+r` forms encode their register in the opcode's low three bits, so
         # the bijection legitimately moves those three bits and nothing else.
-        opreg = IA32_BIJECTION_FORMS[right["opcode"]]["opreg"] is not None
-        mask = 0xF8 if opreg else 0xFF
+        opreg = _bijection_form_for(right["opcode"])["opreg"] is not None
+        mask = 0xF8 if opreg else 0xFFFF
         require(
             left["opcode"] & mask == right["opcode"] & mask
             and left["flow"] == right["flow"]
@@ -27643,11 +28042,17 @@ def compose_retail_exact_register_bijection(
         "register-bijection COMDAT selection changed",
     )
     expected_closure = tuple(function["expected_closure"])
+    # Obligation 10.  The pin is checked against BOTH objects first, so the
+    # delegate below is a function of the pin alone.
     require(_comdat_child_closure(seed, sp)
             == _comdat_child_closure(donor, dp)
-            == (len(expected_closure), expected_closure)
-            == (2, (".debug$F", ".debug$S")),
+            == (len(expected_closure), expected_closure),
             "register-bijection target closure changed")
+    require(list(expected_closure) in (REGISTER_BIJECTION_FPO_CLOSURE,
+                                       REGISTER_BIJECTION_EH_CLOSURE),
+            "register-bijection closure pin names no installation delegate")
+    delegate = register_bijection_delegate(
+        function["expected_closure"], function["expected_code_renames"])
     require(instruction_mosaic_metadata_sha256(seed, sp)
             == function["expected_seed_metadata_sha256"]
             and instruction_mosaic_metadata_sha256(donor, dp)
@@ -27666,18 +28071,45 @@ def compose_retail_exact_register_bijection(
             "register-bijection code rename set changed")
     seed_rows = detailed_relocations(seed, sp)
     donor_rows = detailed_relocations(donor, dp)
+    # Each declared rename pins its EXACT symbol pair.  The delegate proves
+    # the pair is object-local and structurally identical; this pins WHICH
+    # pair, so a different rename at the same offset refuses.
+    seed_targets = {row["offset"]: row["target"] for row in seed_rows}
+    donor_targets = {row["offset"]: row["target"] for row in donor_rows}
+    require([[offset, seed_targets.get(offset), donor_targets.get(offset)]
+             for offset, _ in code_renames]
+            == function.get("expected_code_rename_symbols", []),
+            "register-bijection code rename symbol pair changed")
     require([(row["offset"], row["type"], row["addend"]) for row in seed_rows]
             == [(row["offset"], row["type"], row["addend"])
                 for row in donor_rows],
             "register-bijection donor relocation layout differs from the seed")
+    # The callee-argument model and the external-tail-jump model read the
+    # SEED's relocation table, because that is the table the composition
+    # installs (`detailed_relocations(checked, cp) == seed_rows` below): the
+    # callee that will actually execute is the seed's, whatever the donor
+    # compile happened to name.  REL32 is the only type a call or branch
+    # displacement can carry, so the seed and the donor must agree there;
+    # DIR32 rows may legitimately differ in compiler-generated label
+    # numbering (`$Lnnnnn` jump-table labels), which no model reads.
+    require([(row["offset"], row["target"]) for row in seed_rows
+             if row["type"] == 0x0014]
+            == [(row["offset"], row["target"]) for row in donor_rows
+                if row["type"] == 0x0014],
+            "register-bijection donor call/branch relocation targets differ "
+            "from the seed")
     relocation_offsets = frozenset(
         row["offset"] + byte
         for row in seed_rows for byte in range(row["width"]))
+    relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in seed_rows}
 
     image, proof = apply_register_bijection(
         donor_body, spec["mapping"],
         (spec["region_start"], spec["region_end"]),
         relocation_offsets, "register-bijection image",
+        relocation_symbols,
     )
     require(proof["rewritten_offsets"] == spec["expected_rewritten_offsets"]
             and proof["region_instruction_count"]
@@ -27721,11 +28153,15 @@ def compose_retail_exact_register_bijection(
     derived = bytes(derived)
     effective = {
         "mangled": mangled,
-        "splice_class": "equal_body_strict",
+        "splice_class": delegate,
         "expected_body_length": function["expected_body_length"],
         "expected_body_sha256": function["expected_body_sha256"],
         "expected_changed_offsets": function["expected_changed_offsets"],
     }
+    if delegate == "equal_body_eh_structural_local":
+        effective["expected_code_renames"] = function["expected_code_renames"]
+        effective["expected_xdata_rename_offsets"] = function[
+            "expected_xdata_rename_offsets"]
     composed, detail = compose_equal_body_comdat(seed_bytes, derived, effective)
 
     checked = CoffObject(composed)
@@ -27755,10 +28191,14 @@ def compose_retail_exact_register_bijection(
     composed = bytes(composed)
     final = CoffObject(composed)
     fp = final.function_section(mangled)
-    require(coff_body(final, fp) == image
-            and coff_body(final, _comdat_child(final, fp, ".debug$F"))
-            == coff_body(seed, _comdat_child(seed, sp, ".debug$F")),
-            "register-bijection output changed the installed body or FPO")
+    require(coff_body(final, fp) == image,
+            "register-bijection output changed the installed body")
+    for child_name in expected_closure:
+        if child_name == ".debug$S":
+            continue        # the one child this class maps, pinned above
+        require(coff_body(final, _comdat_child(final, fp, child_name))
+                == coff_body(seed, _comdat_child(seed, sp, child_name)),
+                f"register-bijection output changed its {child_name} child")
     allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
     allowed |= set(range(debug_child["raw_offset"],
                          debug_child["raw_offset"] + debug_child["raw_size"]))

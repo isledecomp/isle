@@ -558,6 +558,427 @@
  ],
  "translation_units": [
   {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/worlds/act3.cpp",
+   "source_sha256": "07a0f6459e39fb41f915f3b04701ef940d254778be00dadde30d0077a58e0bb1",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_b891b819d0af",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 8,
+      "generated_header_sha256": "b891b819d0af1eaa864dafbeb9dbeff550f59dcea436e6b760e6cf0bbd145b9c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?Enable@Act3@@UAEXE@Z",
+     "donor": "d_b891b819d0af",
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 306,
+     "expected_section_count": 315,
+     "expected_body_length": 929,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 26,
+     "expected_seed_line_count": 56,
+     "expected_donor_line_count": 56,
+     "expected_function_count": 96,
+     "expected_comdat_count": 118,
+     "expected_seed_body_sha256": "a105c6f11822bcc2c6d3e3661a05397945bd2d93da1e6795fcbe10c3ceb7fb8e",
+     "expected_donor_body_sha256": "a105c6f11822bcc2c6d3e3661a05397945bd2d93da1e6795fcbe10c3ceb7fb8e",
+     "expected_body_sha256": "899f07f5ec4433c71c0fbe788c39a435c716e17d8a2189985b5e17622b5f57e7",
+     "expected_seed_metadata_sha256": "bf99665d7b66d150dce4502a2d1db1a1042ca1da4515e88cf6d6a4b419b49ed7",
+     "expected_donor_metadata_sha256": "51b8ca6833be0e8d91217ff2d487fde926f766559919d535276d4a8d24b8f5ea",
+     "expected_changed_offsets": [
+      676,
+      681,
+      693,
+      701,
+      705,
+      707,
+      712,
+      715,
+      723,
+      729
+     ],
+     "expected_code_renames": [
+      [
+       163,
+       "T"
+      ]
+     ],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10073a90",
+      "verdict": "MATCH",
+      "length": 929
+     },
+     "retail_relocations": [
+      {
+       "offset": 32,
+       "type": 20,
+       "addend": 0,
+       "target": "?Enable@LegoWorld@@UAEXE@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10021a70"
+      },
+      {
+       "offset": 45,
+       "type": 20,
+       "addend": 0,
+       "target": "?GameState@@YAPAVLegoGameState@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015760"
+      },
+      {
+       "offset": 61,
+       "type": 20,
+       "addend": 0,
+       "target": "?GameState@@YAPAVLegoGameState@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015760"
+      },
+      {
+       "offset": 68,
+       "type": 20,
+       "addend": 0,
+       "target": "?StopArea@LegoGameState@@QAEXW4Area@1@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1003a720"
+      },
+      {
+       "offset": 77,
+       "type": 20,
+       "addend": 0,
+       "target": "?Disable@@YAXEG@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015820"
+      },
+      {
+       "offset": 87,
+       "type": 20,
+       "addend": 0,
+       "target": "?PlayMusic@@YAXW4Script@JukeboxScript@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015910"
+      },
+      {
+       "offset": 95,
+       "type": 20,
+       "addend": 0,
+       "target": "?GameState@@YAPAVLegoGameState@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015760"
+      },
+      {
+       "offset": 120,
+       "type": 20,
+       "addend": 0,
+       "target": "?Timer@@YAPAVMxTimer@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aced0"
+      },
+      {
+       "offset": 132,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeTimerStarted@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101418"
+      },
+      {
+       "offset": 140,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeCalculated@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101414"
+      },
+      {
+       "offset": 163,
+       "type": 6,
+       "addend": 0,
+       "target": "$T80483",
+       "target_section": 3,
+       "target_value": 320,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100d9620"
+      },
+      {
+       "offset": 749,
+       "type": 20,
+       "addend": 0,
+       "target": "?PlaceActor@LegoWorld@@QAEJPAVLegoPathActor@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001fa70"
+      },
+      {
+       "offset": 767,
+       "type": 20,
+       "addend": 0,
+       "target": "?AddActor@LegoPathBoundary@@QAEJPAVLegoPathActor@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100573f0"
+      },
+      {
+       "offset": 773,
+       "type": 20,
+       "addend": 0,
+       "target": "?InputManager@@YAPAVLegoInputManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015740"
+      },
+      {
+       "offset": 780,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetWorld@LegoInputManager@@QAEXPAVLegoWorld@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1005c720"
+      },
+      {
+       "offset": 786,
+       "type": 20,
+       "addend": 0,
+       "target": "?InputManager@@YAPAVLegoInputManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015740"
+      },
+      {
+       "offset": 793,
+       "type": 20,
+       "addend": 0,
+       "target": "?Register@LegoInputManager@@QAEXPAVMxCore@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1005c470"
+      },
+      {
+       "offset": 805,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetUserActor@@YAXPAVLegoPathActor@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015880"
+      },
+      {
+       "offset": 829,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetAppCursor@@YAXW4Cursor@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1003ef40"
+      },
+      {
+       "offset": 847,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetUserActor@@YAXPAVLegoPathActor@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015880"
+      },
+      {
+       "offset": 855,
+       "type": 20,
+       "addend": 0,
+       "target": "?BackgroundAudioManager@@YAPAVMxBackgroundAudioManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015730"
+      },
+      {
+       "offset": 862,
+       "type": 20,
+       "addend": 0,
+       "target": "?Stop@MxBackgroundAudioManager@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007f470"
+      },
+      {
+       "offset": 867,
+       "type": 20,
+       "addend": 0,
+       "target": "?Timer@@YAPAVMxTimer@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aced0"
+      },
+      {
+       "offset": 879,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeTimerStarted@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101418"
+      },
+      {
+       "offset": 887,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeCalculated@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101414"
+      },
+      {
+       "offset": 909,
+       "type": 20,
+       "addend": 0,
+       "target": "?TickleManager@@YAPAVMxTickleManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100acec0"
+      }
+     ],
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "ecx": "edx",
+       "edx": "ecx"
+      },
+      "region_start": 675,
+      "region_end": 737,
+      "expected_region_instruction_count": 18,
+      "expected_instruction_count": 253,
+      "expected_rewritten_offsets": [
+       676,
+       681,
+       693,
+       701,
+       705,
+       707,
+       712,
+       715,
+       723,
+       729
+      ],
+      "debug_s_register_map": [
+       {
+        "name": "i",
+        "record_offset": 82,
+        "donor_register": "ecx",
+        "image_register": "edx"
+       }
+      ],
+      "expected_seed_debug_s_sha256": "90daa2f2e6beadbc52d799e7cedb59e0fd465d8b2762dbfbe5a292f72edf203a",
+      "expected_image_debug_s_sha256": "3abfad598f0da993b59244a2b809726331b2b2c25088bb138fd284a21e7189a8",
+      "authenticity_rationale": "A bijective renaming of general registers proved dead-on-entry and dead-on-exit for the region, applied to this donor compile of the same translation unit; the composition is refused unless the image equals the pinned retail oracle under the relocation mask."
+     },
+     "expected_code_rename_symbols": [
+      [
+       163,
+       "$T80483",
+       "$T80515"
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/worlds/act3.cpp from a register-bijection certificate over a generated declaration-only carrier state of the rendered current source.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
    "target": "config",
    "source": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
    "source_sha256": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
@@ -19589,7 +20010,7 @@
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legovideomanager.cpp",
    "source_sha256": "48815b50840e4771e3ab9392274c91496a840d808f530dea2534b5992be73a84",
-   "mode": "restore_comdat_group_order",
+   "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
      "/Zi",
@@ -19611,9 +20032,423 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Restores the retail-anchored .rdata COMDAT group order of LEGO1/lego/legoomni/src/video/legovideomanager.cpp (whole-group permutation, body-inert).",
+    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/video/legovideomanager.cpp from a register-bijection certificate over a generated declaration-only carrier state of the rendered current source, and restores the retail-anchored .rdata COMDAT group order (whole-group permutation, body-inert).",
     "may_replace_compiler_output": true
-   }
+   },
+   "donors": [
+    {
+     "id": "d_a9a90ebc7b08",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 1,
+      "generated_header_sha256": "a9a90ebc7b083a7a2f186f0bbb62530f885755a70199720658d60b430833949a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?Tickle@LegoVideoManager@@UAEJXZ",
+     "donor": "d_a9a90ebc7b08",
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 241,
+     "expected_section_count": 313,
+     "expected_body_length": 1089,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 28,
+     "expected_seed_line_count": 46,
+     "expected_donor_line_count": 46,
+     "expected_function_count": 98,
+     "expected_comdat_count": 113,
+     "expected_seed_body_sha256": "b1b0ea4e4bb84b76913a460e7a9466bda92539d136eda89ac62709e947462f8e",
+     "expected_donor_body_sha256": "b1b0ea4e4bb84b76913a460e7a9466bda92539d136eda89ac62709e947462f8e",
+     "expected_body_sha256": "58fc60080b4075b2b8c2508c0275f4cd81da508c95ff93cdfbeb4231e03a649d",
+     "expected_seed_metadata_sha256": "3c510fdc526991e40ffaf3e31419f8f80fc8f6f69f726d9ad2123e9503762584",
+     "expected_donor_metadata_sha256": "089399d0cc80412cd3af4e7884e7f5ac1ce35e7a4468a390ebda183111e84a62",
+     "expected_changed_offsets": [
+      691,
+      700
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       1072,
+       "T"
+      ]
+     ],
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x1007b770",
+      "verdict": "MATCH",
+      "length": 1089
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L64640",
+       "target_section": 241,
+       "target_value": 1071,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x1007bb9f"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 49,
+       "type": 20,
+       "addend": 0,
+       "target": "?TransitionManager@@YAPAVMxTransitionManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10015900"
+      },
+      {
+       "offset": 63,
+       "type": 6,
+       "addend": 0,
+       "target": "__imp__Sleep@4",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1010b4a0"
+      },
+      {
+       "offset": 76,
+       "type": 6,
+       "addend": 0,
+       "target": "__imp__QueryPerformanceCounter@4",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1010b4a8"
+      },
+      {
+       "offset": 205,
+       "type": 20,
+       "addend": 0,
+       "target": "?RestoreSurfaces@MxDirectDraw@@QAEHXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1009e4d0"
+      },
+      {
+       "offset": 213,
+       "type": 20,
+       "addend": 0,
+       "target": "?SortPresenterList@MxVideoManager@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100be440"
+      },
+      {
+       "offset": 228,
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$MxListCursor@PAVMxPresenter@@@@QAE@PAV?$MxList@PAVMxPresenter@@@@@Z",
+       "target_section": 246,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10020760"
+      },
+      {
+       "offset": 243,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxPtrListCursor@VMxPresenter@@@@6B@",
+       "target_section": 243,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d6530"
+      },
+      {
+       "offset": 257,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxPresenterListCursor@@6B@",
+       "target_section": 244,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d6470"
+      },
+      {
+       "offset": 391,
+       "type": 20,
+       "addend": 0,
+       "target": "?InvalidateRect@MxVideoManager@@QAEXAAVMxRect32@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100bea60"
+      },
+      {
+       "offset": 512,
+       "type": 20,
+       "addend": 0,
+       "target": "?Render@Lego3DManager@@QAENN@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100ab4b0"
+      },
+      {
+       "offset": 734,
+       "type": 20,
+       "addend": 0,
+       "target": "?CreateCursorSurface@MxDisplaySurface@@SAPAUIDirectDrawSurface@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100bc070"
+      },
+      {
+       "offset": 813,
+       "type": 20,
+       "addend": 0,
+       "target": "?DrawFPS@LegoVideoManager@@AAEXXZ",
+       "target_section": 268,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007bbc0"
+      },
+      {
+       "offset": 882,
+       "type": 20,
+       "addend": 0,
+       "target": "?UpdateRegion@MxVideoManager@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100be3e0"
+      },
+      {
+       "offset": 917,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 948,
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$MxListCursor@PAVMxPresenter@@@@QAE@PAV?$MxList@PAVMxPresenter@@@@@Z",
+       "target_section": 246,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10020760"
+      },
+      {
+       "offset": 959,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxPtrListCursor@VMxPresenter@@@@6B@",
+       "target_section": 243,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d6530"
+      },
+      {
+       "offset": 970,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxPresenterListCursor@@6B@",
+       "target_section": 244,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d6470"
+      },
+      {
+       "offset": 1035,
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxListCursor@PAVMxPresenter@@@@UAE@XZ",
+       "target_section": 262,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001f070"
+      },
+      {
+       "offset": 1043,
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxPtrListCursor@VMxPresenter@@@@UAE@XZ",
+       "target_section": 253,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001ef40"
+      },
+      {
+       "offset": 1051,
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxPresenterListCursor@@UAE@XZ",
+       "target_section": 265,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001f0c0"
+      },
+      {
+       "offset": 1059,
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxListCursor@PAVMxPresenter@@@@UAE@XZ",
+       "target_section": 262,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001f070"
+      },
+      {
+       "offset": 1067,
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxPtrListCursor@VMxPresenter@@@@UAE@XZ",
+       "target_section": 253,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001ef40"
+      },
+      {
+       "offset": 1072,
+       "type": 6,
+       "addend": 0,
+       "target": "$T64752",
+       "target_section": 242,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e70a0"
+      },
+      {
+       "offset": 1077,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 1085,
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxPresenterListCursor@@UAE@XZ",
+       "target_section": 265,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1001f0c0"
+      }
+     ],
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "eax": "ecx",
+       "ecx": "eax"
+      },
+      "region_start": 690,
+      "region_end": 704,
+      "expected_region_instruction_count": 4,
+      "expected_instruction_count": 330,
+      "expected_rewritten_offsets": [
+       691,
+       700
+      ],
+      "debug_s_register_map": [],
+      "expected_seed_debug_s_sha256": "d610fb58eb13bdecaf4f372bc4a0d2c4bcc08da5856a376e50612549e54451da",
+      "expected_image_debug_s_sha256": "d610fb58eb13bdecaf4f372bc4a0d2c4bcc08da5856a376e50612549e54451da",
+      "authenticity_rationale": "A bijective renaming of general registers proved dead-on-entry and dead-on-exit for the region, applied to this donor compile of the same translation unit; the composition is refused unless the image equals the pinned retail oracle under the relocation mask."
+     },
+     "expected_code_rename_symbols": [
+      [
+       12,
+       "$L64640",
+       "$L64651"
+      ],
+      [
+       1072,
+       "$T64752",
+       "$T64763"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76
+     ]
+    }
+   ]
   },
   {
    "target": "omni",
@@ -24645,8 +25480,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4913,
-    "accepted_row_identity_sha256": "6a1db0ef9ad2c46019923f9f402c4b436c0d79a8d3ac08ca338ec5b660ec47d7",
+    "exact_raw_1_0_count": 4915,
+    "accepted_row_identity_sha256": "1cd83d538ce195b9bc0c3d456aede44f151dba7001ca28d77fe5da39e475d379",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
