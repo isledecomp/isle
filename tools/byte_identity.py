@@ -26916,6 +26916,172 @@ def compose_comdat_selection_override(
     }
 
 
+# ---------------------------------------------------------------------------
+# Composition RE-PINNING
+# ---------------------------------------------------------------------------
+#
+# A deliberate source recovery routinely moves COMDATs the manifest already
+# composes, and every one of those units then refuses -- "target COMDAT body
+# length changed", "donor body differs from its pinned compiler output",
+# "seed/donor body delta changed".  Those messages are the framework working
+# correctly: a pin is a claim about what the compiler produced, and the
+# compiler now produces something else.  But they are also, in practice, the
+# standing blocker on source recovery, because re-deriving them by hand is
+# what makes a two-line edit cost a day.
+#
+# This is the composition analogue of `repin_overlay.py`, and it rests on
+# exactly the same argument.  Every pin it refreshes is a MEASUREMENT of our
+# own compiler's output -- a length, a digest, a byte-delta, a rename set --
+# and none of them encodes a design decision.  The decisions live in
+# `splice_class`, `donor`, `mangled`, the certificate free parameters
+# (regions, mappings, window orders) and the retail oracle, and this function
+# refuses to touch any of them.
+#
+# What makes re-pinning SAFE rather than a weakening is that nothing else
+# changes: after the pins are refreshed the entry goes through the UNCHANGED
+# composer, so every proof that class carries still runs and a refusal is
+# still a refusal; and above that, the row gate independently requires the
+# composed image to reproduce the accepted raw-1.0 set with zero losses.  A
+# re-pin that silently broke a row would be caught there, by name.
+#
+# It handles a CLOSED set of splice classes -- the equal-body family and the
+# same-slot resize, 187 of the manifest's 220 entries -- and REFUSES for any
+# other.  A certificate class is deliberately excluded: when its seed moves,
+# its free parameters may genuinely need re-deriving, and that is a decision,
+# not a measurement.
+
+
+REPINNABLE_SPLICE_CLASSES = frozenset({
+    "equal_body_strict",
+    "equal_body_eh_structural_local",
+    "equal_body_eh_reloc_layout",
+    "same_slot_resize",
+})
+
+
+# The pins each class states about the objects, and nothing else.  A key the
+# entry does not already carry is never added: re-pinning refreshes a
+# declaration, it never widens one.
+REPINNABLE_PIN_KEYS = {
+    "equal_body_strict": frozenset({
+        "expected_body_length", "expected_body_sha256",
+        "expected_changed_offsets",
+    }),
+    "equal_body_eh_structural_local": frozenset({
+        "expected_body_length", "expected_body_sha256",
+        "expected_changed_offsets", "expected_code_renames",
+        "expected_xdata_rename_offsets", "expected_donor_section_number",
+    }),
+    "equal_body_eh_reloc_layout": frozenset({
+        "expected_body_length", "expected_body_sha256",
+        "expected_changed_offsets", "expected_relocation_moves",
+        "expected_xdata_rename_offsets",
+    }),
+    "same_slot_resize": frozenset({
+        "expected_seed_length", "expected_donor_length",
+        "expected_linked_span", "expected_body_sha256",
+        "expected_seed_line_count", "expected_donor_line_count",
+    }),
+}
+
+
+def measure_composition_pins(
+    seed_bytes: bytes, donor_bytes: bytes, function: dict, context: str,
+) -> dict:
+    """Measure, from the two objects, every pin this entry states about them.
+
+    Returns only keys the entry ALREADY carries.  Raises for a splice class
+    outside the closed repinnable set.
+    """
+    splice_class = function.get("splice_class")
+    require(splice_class in REPINNABLE_SPLICE_CLASSES,
+            f"{context}: {splice_class} is outside the repinnable classes; "
+            "its free parameters are decisions, not measurements")
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    seed_primary = seed.function_section(mangled)
+    donor_primary = donor.function_section(mangled)
+    seed_body = bytes(coff_body(seed, seed_primary))
+    donor_body = bytes(coff_body(donor, donor_primary))
+    measured = {
+        "expected_body_sha256": sha256_bytes(donor_body),
+        "expected_seed_length": seed_primary["raw_size"],
+        "expected_donor_length": donor_primary["raw_size"],
+        "expected_seed_line_count": seed_primary["line_count"],
+        "expected_donor_line_count": donor_primary["line_count"],
+        "expected_linked_span": (
+            ((donor_primary["raw_size"] + 15) // 16) * 16),
+        "expected_donor_section_number": donor_primary["number"],
+    }
+    if splice_class != "same_slot_resize":
+        require(seed_primary["raw_size"] == donor_primary["raw_size"],
+                f"{context}: an equal-body entry's seed and donor bodies are "
+                "no longer the same length; the composition is not a re-pin "
+                "away from valid")
+        measured["expected_body_length"] = seed_primary["raw_size"]
+        measured["expected_changed_offsets"] = [
+            index for index, pair in enumerate(zip(seed_body, donor_body))
+            if pair[0] != pair[1]
+        ]
+    if splice_class in ("equal_body_eh_structural_local",
+                        "equal_body_eh_reloc_layout"):
+        closure = _comdat_child_closure(seed, seed_primary)
+        seat_map = None
+        if "expected_donor_section_number" in function:
+            seat_map = {donor_primary["number"]: seed_primary["number"]}
+            for child_name in (".debug$S", ".xdata$x"):
+                seat_map[_comdat_child(
+                    donor, donor_primary, child_name)["number"]] = (
+                    _comdat_child(seed, seed_primary, child_name)["number"])
+        if closure in ((2, (".debug$F", ".debug$S")), (1, (".debug$S",))):
+            measured["expected_xdata_rename_offsets"] = []
+        else:
+            measured["expected_xdata_rename_offsets"] = [
+                offset for offset, _ in _normalized_relocation_renames(
+                    seed, _comdat_child(seed, seed_primary, ".xdata$x"),
+                    donor, _comdat_child(donor, donor_primary, ".xdata$x"),
+                    "xdata", seat_map=seat_map)
+            ]
+        if splice_class == "equal_body_eh_structural_local":
+            measured["expected_code_renames"] = [
+                [offset, kind] for offset, kind
+                in _normalized_relocation_renames(
+                    seed, seed_primary, donor, donor_primary, "code",
+                    seat_map=seat_map)
+            ]
+        else:
+            left = detailed_relocations(seed, seed_primary)
+            right = detailed_relocations(donor, donor_primary)
+            require(len(left) == len(right),
+                    f"{context}: relocation counts differ, so the reloc-layout "
+                    "move set is not a re-pin away from valid")
+            measured["expected_relocation_moves"] = [
+                [a["offset"], b["offset"]] for a, b in zip(left, right)
+                if a["offset"] != b["offset"]
+            ]
+    return {key: value for key, value in measured.items()
+            if key in function and key in REPINNABLE_PIN_KEYS[splice_class]}
+
+
+def repin_composition_function(
+    seed_bytes: bytes, donor_bytes: bytes, function: dict, context: str,
+) -> tuple[dict, list[str]]:
+    """Refresh one composition entry's measured pins.
+
+    Returns the refreshed entry and the names of the pins that moved.  The
+    caller is expected to run the refreshed entry through the ordinary
+    composer: this function proves nothing on its own, it only restates what
+    the objects say, and every obligation the class carries still has to hold
+    afterwards.
+    """
+    measured = measure_composition_pins(
+        seed_bytes, donor_bytes, function, context)
+    moved = sorted(key for key, value in measured.items()
+                   if function[key] != value)
+    return {**function, **measured}, moved
+
+
 def compose_equal_body_comdat(
     seed_bytes: bytes,
     donor_bytes: bytes,

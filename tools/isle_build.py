@@ -554,6 +554,12 @@ def main() -> int:
                         default=min(4, os.cpu_count() or 4))
     parser.add_argument("--terminal", action="store_true",
                         help="require complete rows and literal retail bytes")
+    parser.add_argument(
+        "--repin-compositions", action="store_true",
+        help="refresh every composition entry's MEASURED pins against the "
+             "freshly compiled objects, then compose and gate as usual; the "
+             "manifest is rewritten only if the whole run passes",
+    )
     parser.add_argument("--md5-distance", action="store_true",
                         help="also link the no-/debug terminal images and "
                              "report byte distance to retail (no MD5 gate)")
@@ -614,9 +620,34 @@ def main() -> int:
     )
     print(f"[isle_build] build complete ({time.monotonic() - started:.1f}s)")
 
+    global REPIN_COMPOSITIONS
+    if arguments.repin_compositions:
+        REPIN_COMPOSITIONS = {}
     compose_translation_units(
         manifest, validated["source_overlay"], build, shadow, compiler,
         arguments.jobs, compile_timeout, link_timeout)
+    if REPIN_COMPOSITIONS is not None:
+        # Every unit composed cleanly, so the refreshed measurements are
+        # consistent with the proofs that were just re-run over them.  The
+        # ROW gate still has to pass below; a re-pin that broke a row shows
+        # up there by name, in the LOST list, exactly as any other change.
+        if REPIN_COMPOSITIONS:
+            raw = json.loads(arguments.manifest.read_text())
+            for unit in raw["translation_units"]:
+                for index, function in enumerate(unit.get("functions") or []):
+                    key = (unit["target"], unit["source"],
+                           function["mangled"])
+                    if key in REPIN_COMPOSITIONS:
+                        unit["functions"][index] = REPIN_COMPOSITIONS[key]
+            arguments.manifest.write_text(
+                json.dumps(raw, indent=1) + "\n")
+            print(f"[isle_build] re-pinned {len(REPIN_COMPOSITIONS)} "
+                  f"composition entr(y/ies) in {arguments.manifest}")
+            for line in REPIN_MOVED:
+                print(line)
+        else:
+            print("[isle_build] every composition pin already matched its "
+                  "objects; nothing re-pinned")
 
     verdict = {
         "status": ("BYTE_IDENTITY_COMPLETE" if arguments.terminal
@@ -727,6 +758,15 @@ def main() -> int:
     return 0
 
 
+# When a re-pin pass is active this holds {(target, source, mangled): entry}
+# for every composition entry whose MEASURED pins were refreshed against the
+# freshly compiled objects.  It is only ever populated by `--repin-compositions`
+# and is written back to the manifest after every unit has composed cleanly, so
+# a run that refuses part-way leaves the manifest untouched.
+REPIN_COMPOSITIONS: dict | None = None
+REPIN_MOVED: list[str] = []
+
+
 def compose_translation_units(manifest: dict, source_overlay: dict,
                               build: Path, shadow: Path,
                               compiler: Path, jobs: int,
@@ -793,7 +833,7 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
         unit_sha = hashlib.sha256(
             json.dumps(unit, sort_keys=True).encode()).hexdigest()
-        if marker.exists():
+        if marker.exists() and REPIN_COMPOSITIONS is None:
             state = json.loads(marker.read_text())
             if (state.get("composed_sha") == seed_sha
                     and state.get("unit_sha") == unit_sha):
@@ -1428,7 +1468,35 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     log=build.parent / f"{marker.stem}-{donor['id']}.log")
                 donor_objects[donor["id"]] = (probe / "o.obj").read_bytes()
             composed = seed_bytes
-            for function in unit["functions"]:
+            functions = unit["functions"]
+            if REPIN_COMPOSITIONS is not None:
+                # Refresh only what the entry states ABOUT THE OBJECTS, then
+                # hand the refreshed entry to the unchanged composer below --
+                # every proof the class carries still runs, and the row gate
+                # above still requires zero losses.  A class outside the
+                # closed repinnable set is left exactly as declared.
+                refreshed = []
+                for function in functions:
+                    if (function["splice_class"]
+                            not in byte_identity.REPINNABLE_SPLICE_CLASSES):
+                        refreshed.append(function)
+                        continue
+                    entry, moved = byte_identity.repin_composition_function(
+                        composed, donor_objects[function["donor"]], function,
+                        f"{unit['target']}:{unit['source']}"
+                        f":{function['mangled']}",
+                    )
+                    refreshed.append(entry)
+                    if moved:
+                        REPIN_COMPOSITIONS[
+                            (unit["target"], unit["source"],
+                             function["mangled"])] = entry
+                        REPIN_MOVED.append(
+                            f"  repinned {unit['target']}:{unit['source']}"
+                            f" {function['mangled'][:60]}"
+                            f" -> {', '.join(moved)}")
+                functions = refreshed
+            for function in functions:
                 if (function["splice_class"]
                         == byte_identity
                         .CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS):
