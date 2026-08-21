@@ -14306,9 +14306,23 @@ def validate_manifest(
                     if "retail_image_target" in function:
                         schedule_keys = schedule_keys | {
                             "retail_image_target"}
+                    # A window that declares a relocation reseat installs
+                    # through the reloc-layout delegate, so it carries that
+                    # delegate's own move pin as well.
+                    schedule_spec = function.get("instruction_schedule")
+                    schedule_reseat = (
+                        isinstance(schedule_spec, dict)
+                        and isinstance(schedule_spec.get("windows"), list)
+                        and any(isinstance(item, dict)
+                                and item.get("relocation_reseat")
+                                for item in schedule_spec["windows"]))
+                    if schedule_reseat:
+                        schedule_keys = schedule_keys | {
+                            "expected_relocation_moves"}
                     if instruction_schedule_delegate(
                             function.get("expected_closure") or [],
                             function.get("expected_code_renames"),
+                            schedule_reseat,
                     ) != "equal_body_strict":
                         schedule_keys = schedule_keys | {
                             "expected_xdata_rename_offsets"}
@@ -14364,8 +14378,24 @@ def validate_manifest(
                             INSTRUCTION_SCHEDULE_EH_CLOSURE),
                         f"{function_context}.expected_closure differs",
                     )
+                    if schedule_reseat:
+                        moves = function.get("expected_relocation_moves")
+                        require(
+                            isinstance(moves, list) and moves
+                            and all(isinstance(item, list) and len(item) == 2
+                                    and all(type(value) is int and value >= 0
+                                            for value in item)
+                                    and item[0] != item[1]
+                                    for item in moves)
+                            and [item[0] for item in moves]
+                            == sorted({item[0] for item in moves})
+                            and len({item[1] for item in moves}) == len(moves),
+                            f"{function_context}.expected_relocation_moves "
+                            "is invalid",
+                        )
                     if instruction_schedule_delegate(
                             function["expected_closure"], renames,
+                            schedule_reseat,
                     ) != "equal_body_strict":
                         xdata = function.get(
                             "expected_xdata_rename_offsets")
@@ -29017,13 +29047,22 @@ CODEVIEW_PROCEDURE_RECORD_TYPES = (0x0205, 0x0204)
 
 def instruction_schedule_delegate(
     expected_closure: object, expected_code_renames: object,
+    relocation_reseat: bool = False,
 ) -> str:
     """Name the installation delegate from the PINS alone.
 
     Identical policy to the register-bijection certificate: the composer
     requires the objects' own closure and rename set to equal these pins
     first, so a pin that disagrees refuses before this is reached.
+
+    A window that moves a relocated operand needs the one primitive that can
+    install a moved relocation record -- `equal_body_eh_reloc_layout`, which
+    already pairs the two tables by ordinal, proves type/addend/target
+    identity, and rewrites nothing but the four offset bytes.  The other two
+    delegates retain the seed table verbatim and so cannot express a reseat.
     """
+    if relocation_reseat:
+        return "equal_body_eh_reloc_layout"
     if (list(expected_closure) == INSTRUCTION_SCHEDULE_FPO_CLOSURE
             and not expected_code_renames):
         return "equal_body_strict"
@@ -29303,13 +29342,68 @@ def apply_instruction_schedule(
         require(not crossing,
                 f"{window_context}: a branch targets the window interior at "
                 f"{crossing}")
-        # Obligation 6.
+        # Obligation 6.  A window that carries no relocation still refuses
+        # to touch one, exactly as before.  A window that DECLARES a reseat
+        # must carry its relocations wholly inside single instructions, and
+        # the reseat is then derived from the permutation and required to
+        # equal the declaration -- the record moves with its own instruction
+        # and by nothing else.  Its symbol, type, width and addend are
+        # untouched (only the four offset bytes of the COFF record change),
+        # and the installation is delegated to the existing
+        # `equal_body_eh_reloc_layout` primitive, which already pairs the
+        # tables by ordinal and proves target identity.
         overlapping = sorted(offset for offset in range(start, end)
                              if offset in relocation_offsets)
-        require(not overlapping,
-                f"{window_context}: a relocation operand lies inside the "
-                f"window at {overlapping[:4]}; this class refuses to move a "
-                "relocation rather than reseat it approximately")
+        declared_reseat = window.get("relocation_reseat")
+        window_reseat = []
+        if declared_reseat is None:
+            require(not overlapping,
+                    f"{window_context}: a relocation operand lies inside the "
+                    f"window at {overlapping[:4]}; this class refuses to move "
+                    "a relocation rather than reseat it approximately")
+        else:
+            require(overlapping,
+                    f"{window_context}: a relocation reseat is declared but "
+                    "no relocation operand lies inside the window")
+            require(relocations,
+                    f"{window_context}: a relocation reseat needs the "
+                    "relocation records")
+            lengths_in = [item["length"] for item in inside]
+            starts_in = [item["offset"] for item in inside]
+            seated = {}
+            cursor = start
+            for position in window["target_order"]:
+                seated[position] = cursor
+                cursor += lengths_in[position]
+            for offset in sorted(relocations):
+                record = relocations[offset]
+                width = record["width"]
+                if offset + width <= start or offset >= end:
+                    require(
+                        not (start < offset + width and offset < end),
+                        f"{window_context}: a relocation straddles the "
+                        f"window boundary at {offset}",
+                    )
+                    continue
+                require(start <= offset and offset + width <= end,
+                        f"{window_context}: a relocation straddles the "
+                        f"window boundary at {offset}")
+                position = next(
+                    (index for index in range(len(inside))
+                     if starts_in[index] <= offset
+                     and offset + width <= starts_in[index]
+                     + lengths_in[index]),
+                    None,
+                )
+                require(position is not None,
+                        f"{window_context}: the relocation at {offset} "
+                        "straddles an instruction boundary")
+                window_reseat.append(
+                    [offset, seated[position] + (offset - starts_in[position])]
+                )
+            require(window_reseat == declared_reseat,
+                    f"{window_context}: the measured relocation reseat "
+                    f"{window_reseat} differs from its declaration")
         facts, edges = ia32_schedule_dependence_edges(inside, window_context)
         require(edges == window["expected_dependence_edges"],
                 f"{window_context}: the measured dependence DAG differs from "
@@ -29336,6 +29430,7 @@ def apply_instruction_schedule(
         image[start:end] = reordered
         detail.append({
             "start": start, "end": end,
+            "relocation_reseat": window_reseat,
             "instruction_count": len(inside),
             "source_instruction_lengths": [len(piece) for piece in pieces],
             "target_order": order,
@@ -29357,8 +29452,18 @@ def apply_instruction_schedule(
     require(len(image) == len(body),
             f"{context}: the reordering changed the body length")
     require(image != body, f"{context}: the reordering moves nothing")
+    reseat = [pair for item in detail for pair in item["relocation_reseat"]]
+    image_relocations = relocations
+    if reseat:
+        moved = dict(reseat)
+        image_relocations = {
+            moved.get(offset, offset): record
+            for offset, record in (relocations or {}).items()
+        }
+        require(len(image_relocations) == len(relocations or {}),
+                f"{context}: the reseat collides two relocation records")
     image_spans, _ = ia32_schedule_body_walk(
-        image, relocations, f"{context} image")
+        image, image_relocations, f"{context} image")
     image_instructions = [
         {"offset": start, "length": length} for start, length in image_spans]
     window_spans = [(item["start"], item["end"]) for item in windows]
@@ -29394,6 +29499,7 @@ def apply_instruction_schedule(
         "windows": detail,
         "instruction_count": len(instructions),
         "changed_offsets": changed,
+        "relocation_reseat": reseat,
     }
 
 
@@ -29540,7 +29646,8 @@ def validate_instruction_schedule(
         exact_audit_keys(window, {
             "start", "end", "source_instruction_lengths", "target_order",
             "expected_dependence_edges", "expected_line_rows",
-        }, window_context)
+            "relocation_reseat",
+        }, window_context, optional={"relocation_reseat"})
         start = require_exact_int(window.get("start"),
                                   f"{window_context}.start",
                                   minimum=0, maximum=body_length - 1)
@@ -29585,14 +29692,38 @@ def validate_instruction_schedule(
                 and [row[0] for row in line_rows]
                 == sorted({row[0] for row in line_rows}),
                 f"{window_context}.expected_line_rows is invalid")
-        normalized_windows.append({
+        # Obligation 6b (the reseat declaration).  A window that moves a
+        # relocated operand must say so, and must say exactly where every one
+        # of its relocations lands.  The pairs are (seed offset, image
+        # offset); `apply_instruction_schedule` derives the same list from the
+        # permutation itself and refuses on any disagreement, so this is a
+        # declaration the measurement has to reproduce, not a free parameter.
+        reseat = window.get("relocation_reseat")
+        normalized_reseat = None
+        if reseat is not None:
+            require(isinstance(reseat, list) and 1 <= len(reseat) <= 64
+                    and all(isinstance(pair, list) and len(pair) == 2
+                            and all(type(item) is int for item in pair)
+                            and start <= pair[0] < end
+                            and start <= pair[1] < end
+                            for pair in reseat)
+                    and [pair[0] for pair in reseat]
+                    == sorted({pair[0] for pair in reseat})
+                    and len({pair[1] for pair in reseat}) == len(reseat)
+                    and any(pair[0] != pair[1] for pair in reseat),
+                    f"{window_context}.relocation_reseat is invalid")
+            normalized_reseat = [list(pair) for pair in reseat]
+        normalized_window = {
             "start": start, "end": end,
             "source_instruction_lengths": list(lengths),
             "target_order": list(order),
             "expected_dependence_edges": [
                 [edge[0], edge[1], list(edge[2])] for edge in edges],
             "expected_line_rows": [list(row) for row in line_rows],
-        })
+        }
+        if normalized_reseat is not None:
+            normalized_window["relocation_reseat"] = normalized_reseat
+        normalized_windows.append(normalized_window)
     changed = value.get("expected_changed_offsets")
     require(isinstance(changed, list) and changed
             and changed == sorted(set(changed))
@@ -29707,8 +29838,11 @@ def compose_retail_exact_instruction_schedule(
     require(list(expected_closure) in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
                                        INSTRUCTION_SCHEDULE_EH_CLOSURE),
             "instruction-schedule closure pin names no installation delegate")
+    reseat_declared = any(window.get("relocation_reseat")
+                          for window in spec["windows"])
     delegate = instruction_schedule_delegate(
-        function["expected_closure"], function["expected_code_renames"])
+        function["expected_closure"], function["expected_code_renames"],
+        reseat_declared)
     require(instruction_mosaic_metadata_sha256(seed, sp)
             == function["expected_seed_metadata_sha256"]
             and instruction_mosaic_metadata_sha256(donor, dp)
@@ -29764,25 +29898,59 @@ def compose_retail_exact_instruction_schedule(
     require(image != donor_body,
             "instruction-schedule image does not move the donor body")
 
+    # Obligation 6b.  The reseat the permutation derives is now turned into
+    # the image's own relocation table: the same records, in the same order,
+    # with the same symbols, types, widths and addends, and with exactly the
+    # declared offsets.  The ascending-offset invariant every MSVC table has
+    # must survive, and the schedule's reseat must equal the move set the
+    # installation delegate is pinned to.
+    moved = {old_offset: new_offset
+             for old_offset, new_offset in proof["relocation_reseat"]}
+    require(bool(moved) == reseat_declared,
+            "instruction-schedule reseat declaration and measurement differ")
+    if moved:
+        require(function.get("expected_relocation_moves")
+                == [[old_offset, new_offset]
+                    for old_offset, new_offset in proof["relocation_reseat"]
+                    if old_offset != new_offset],
+                "instruction-schedule relocation move set differs from its "
+                "pin")
+    image_rows = []
+    for row in seed_rows:
+        if row["offset"] in moved:
+            row = dict(row)
+            row["offset"] = moved[row["offset"]]
+        image_rows.append(row)
+    require([row["offset"] for row in image_rows]
+            == sorted(row["offset"] for row in image_rows),
+            "instruction-schedule reseat breaks the relocation table's "
+            "ascending offset order")
+    image_relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in image_rows}
+    require(len(image_relocation_symbols) == len(image_rows),
+            "instruction-schedule reseat collides two relocation records")
+
     # Obligation 7, measured on the IMAGE with the SEED's own tables -- those
-    # are the tables the composition installs.
+    # are the tables the composition installs (with the reseated relocation
+    # offsets, which are the image's own).
     debug_detail = require_instruction_schedule_debug_fidelity(
         seed, sp, image, spec["windows"], spec, mangled,
-        "instruction-schedule debug fidelity", relocation_symbols,
+        "instruction-schedule debug fidelity", image_relocation_symbols,
     )
 
     pinned_length = function["retail_oracle"]["length"]
     require(len(retail_body) == pinned_length == len(image),
             "instruction-schedule retail length changed")
     semantic_detail = require_retail_relocation_oracle(
-        seed_rows, bytes(retail_body),
+        image_rows, bytes(retail_body),
         int(function["retail_oracle"]["address"], 16),
         function["retail_relocations"],
         "instruction-schedule retail relocation oracle",
     )
     masked_image = bytearray(image)
     masked_retail = bytearray(retail_body)
-    for row in seed_rows:
+    for row in image_rows:
         start, width = row["offset"], row["width"]
         masked_image[start:start + width] = b"\0" * width
         masked_retail[start:start + width] = b"\0" * width
@@ -29794,6 +29962,16 @@ def compose_retail_exact_instruction_schedule(
 
     derived = bytearray(donor_bytes)
     derived[dp["raw_offset"]:dp["raw_offset"] + dp["raw_size"]] = image
+    if moved:
+        # The derived object is the image AND the image's relocation table:
+        # only the four offset bytes of a moved record change, and only to
+        # the offset the permutation put its own instruction at.
+        for ordinal, row in enumerate(donor_rows):
+            if row["offset"] not in moved:
+                continue
+            record_at = dp["relocation_offset"] + ordinal * 10
+            derived[record_at:record_at + 4] = moved[row["offset"]].to_bytes(
+                4, "little")
     derived = bytes(derived)
     effective = {
         "mangled": mangled,
@@ -29806,15 +29984,27 @@ def compose_retail_exact_instruction_schedule(
         effective["expected_code_renames"] = function["expected_code_renames"]
         effective["expected_xdata_rename_offsets"] = function[
             "expected_xdata_rename_offsets"]
+    if delegate == "equal_body_eh_reloc_layout":
+        effective["expected_relocation_moves"] = function[
+            "expected_relocation_moves"]
+        effective["expected_xdata_rename_offsets"] = function[
+            "expected_xdata_rename_offsets"]
     composed, detail = compose_equal_body_comdat(seed_bytes, derived, effective)
 
     checked = CoffObject(composed)
     cp = checked.function_section(mangled)
     require(coff_body(checked, cp) == image,
             "instruction-schedule composed body differs from the image")
-    require(detailed_relocations(checked, cp) == seed_rows
+    expected_relocation_table = bytearray(
+        _coff_table_bytes(seed, sp, "relocations"))
+    for ordinal, row in enumerate(seed_rows):
+        if row["offset"] in moved:
+            record_at = ordinal * 10
+            expected_relocation_table[record_at:record_at + 4] = (
+                moved[row["offset"]].to_bytes(4, "little"))
+    require(detailed_relocations(checked, cp) == image_rows
             and _coff_table_bytes(checked, cp, "relocations")
-            == _coff_table_bytes(seed, sp, "relocations")
+            == bytes(expected_relocation_table)
             and _coff_table_bytes(checked, cp, "lines")
             == _coff_table_bytes(seed, sp, "lines"),
             "instruction-schedule output changed seed relocation/line bytes")
@@ -29823,6 +30013,11 @@ def compose_retail_exact_instruction_schedule(
                 == coff_body(seed, _comdat_child(seed, sp, child_name)),
                 f"instruction-schedule output changed its {child_name} child")
     allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
+    if moved:
+        allowed |= {
+            sp["relocation_offset"] + ordinal * 10 + byte
+            for ordinal, row in enumerate(seed_rows)
+            if row["offset"] in moved for byte in range(4)}
     require({index for index in range(len(seed_bytes))
              if seed_bytes[index] != composed[index]} <= allowed,
             "instruction-schedule changed bytes outside its own COMDAT")
@@ -29833,6 +30028,7 @@ def compose_retail_exact_instruction_schedule(
         "instruction_count": proof["instruction_count"],
         "changed_offsets": proof["changed_offsets"],
         "debug_fidelity": debug_detail,
+        "relocation_reseat": proof["relocation_reseat"],
         "retail_exact": True,
         **semantic_detail,
     }

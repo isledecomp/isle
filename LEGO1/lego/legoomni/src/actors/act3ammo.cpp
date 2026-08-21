@@ -15,6 +15,8 @@
 
 DECOMP_SIZE_ASSERT(Act3Ammo, 0x1a0)
 
+static const float g_hitAnimationDelay = 2000.0f;
+
 // Initialized at LEGO1 0x100537c0
 // GLOBAL: LEGO1 0x10104f08
 Mx3DPointFloat Act3Ammo::g_hitTranslation = Mx3DPointFloat(0.0, 5.0, 0.0);
@@ -258,7 +260,7 @@ void Act3Ammo::Animate(float p_time)
 	case c_ready:
 		break;
 	case c_hit:
-		m_rotateTimeout = p_time + 2000.0f;
+		m_rotateTimeout = g_hitAnimationDelay + p_time;
 		m_actorState = c_hitAnimation;
 		return;
 	case c_hitAnimation:
