@@ -28020,6 +28020,7 @@ def _bijection_form(
     reg_read: bool = False, reg_write: bool = False,
     rm_read: bool = False, rm_write: bool = False,
     ext_no_write: frozenset = frozenset(),
+    ext_write: frozenset = frozenset(),
     ext_allowed: frozenset | None = None,
     ext_implicit: dict | None = None,
     ext_flow: dict | None = None,
@@ -28028,11 +28029,19 @@ def _bijection_form(
     reads: frozenset = frozenset(), writes: frozenset = frozenset(),
     flow: str = "fall", displacement: int = 0,
     width: int = 32, x87: bool = False, size16_ok: bool = False,
+    size16_ext: frozenset | None = None,
+    string_memory: dict | None = None,
 ) -> dict:
     return {
         "modrm": modrm, "reg": reg, "reg_read": reg_read,
         "reg_write": reg_write, "rm_read": rm_read, "rm_write": rm_write,
-        "ext_no_write": ext_no_write, "ext_allowed": ext_allowed,
+        # `ext_no_write` and `ext_write` are the two directions of the same
+        # per-digit correction: a group whose members mostly write their r/m
+        # names the exceptions in the first, a group whose members mostly do
+        # not names the writers in the second.  Both are read off the
+        # encoding's own extension digit, never assumed.
+        "ext_no_write": ext_no_write, "ext_write": ext_write,
+        "ext_allowed": ext_allowed,
         # `ext_implicit` gives, per ModRM extension digit, the complete
         # implicit (reads, writes, frozen) triple of that member; `ext_flow`
         # lets one opcode's members differ in control flow.  `implicit_frozen`
@@ -28050,6 +28059,15 @@ def _bijection_form(
         # reg field is an opcode extension and whose mod == 3 operand is an
         # FPU stack register, i.e. not a general register at all.
         "width": width, "x87": x87, "size16_ok": size16_ok,
+        # `size16_ext` restricts the operand-size prefix to named extension
+        # digits of a group whose other members would be nonsense (or
+        # unmodelled) at 16 bits; None admits the prefix for every admitted
+        # digit.  `string_memory` marks a form whose memory operand is an
+        # implicit, UNBOUNDED span through ESI/EDI whose extent is a runtime
+        # count: it is described as unknown so that every consumer that
+        # disambiguates memory refuses it rather than reading a descriptor
+        # that does not exist.
+        "size16_ext": size16_ext, "string_memory": string_memory,
     }
 
 
@@ -28066,35 +28084,40 @@ def _ia32_bijection_table() -> dict:
     stack = frozenset({"esp"})
     # 31 /r XOR r/m32, r32 ; 33 /r XOR r32, r/m32
     table[0x31] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
-                                  rm_read=True, rm_write=True)
+                                  rm_read=True, rm_write=True, size16_ok=True)
     table[0x33] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
-                                  reg_write=True, rm_read=True)
+                                  reg_write=True, rm_read=True,
+                                  size16_ok=True)
     # 39 /r CMP r/m32, r32 ; 3B /r CMP r32, r/m32 ; 85 /r TEST r/m32, r32
     table[0x39] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
-                                  rm_read=True)
+                                  rm_read=True, size16_ok=True)
     table[0x3B] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
-                                  rm_read=True)
+                                  rm_read=True, size16_ok=True)
     table[0x85] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
                                   rm_read=True, size16_ok=True)
     # 2B /r SUB r32, r/m32 ; 03 /r ADD r32, r/m32 ; 1B /r SBB r32, r/m32
     for opcode in (0x03, 0x0B, 0x1B, 0x23, 0x2B):
         table[opcode] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
-                                        reg_write=True, rm_read=True)
+                                        reg_write=True, rm_read=True,
+                                        size16_ok=True)
     # 89 /r MOV r/m32, r32 ; 8B /r MOV r32, r/m32 ; 8D /r LEA r32, m
     table[0x89] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
-                                  rm_write=True)
+                                  rm_write=True, size16_ok=True)
     table[0x8B] = _bijection_form(modrm=True, reg="gpr", reg_write=True,
-                                  rm_read=True)
+                                  rm_read=True, size16_ok=True)
     table[0x8D] = _bijection_form(modrm=True, reg="gpr", reg_write=True)
     # 83 /n group 1 with imm8, 81 /n group 1 with imm32: every member reads
     # r/m and writes it except /7 CMP, which only reads.
     table[0x83] = _bijection_form(modrm=True, reg="ext", rm_read=True,
-                                  rm_write=True, ext_no_write=frozenset({7}))
+                                  rm_write=True, ext_no_write=frozenset({7}),
+                                  size16_ok=True)
     table[0x81] = _bijection_form(modrm=True, reg="ext", rm_read=True,
-                                  rm_write=True, ext_no_write=frozenset({7}))
+                                  rm_write=True, ext_no_write=frozenset({7}),
+                                  size16_ok=True)
     # C7 /0 MOV r/m32, imm32 -- a pure definition of its r/m operand
     table[0xC7] = _bijection_form(modrm=True, reg="ext",
-                                  ext_allowed=frozenset({0}), rm_write=True)
+                                  ext_allowed=frozenset({0}), rm_write=True,
+                                  size16_ok=True)
     # --- byte-operand forms.  The 3-bit register fields of these name AL..BH,
     # where 4..7 are the HIGH bytes of EAX..EBX, so the 32-bit sigma's
     # permutation of the field is NOT the right rewriting.  The decoder marks
@@ -28157,14 +28180,22 @@ def _ia32_bijection_table() -> dict:
         ext_implicit={4: _muldiv, 5: _muldiv, 6: _muldiv, 7: _muldiv})
     # 40+r INC r32 ; 48+r DEC r32 ; 50+r PUSH r32 ; 58+r POP r32
     # B8+r MOV r32, imm32
+    # The operand-size prefix is admitted on INC/DEC r16 and MOV r16, imm16,
+    # whose 3-bit opcode field numbers AX..DI -- the same eight registers the
+    # 32-bit field numbers, so sigma's permutation is the right rewriting and
+    # the write is a PARTIAL one that kills only the low two atoms.  It is
+    # NOT admitted on 50+r/58+r: a 16-bit push moves ESP by two, and the
+    # stack model this decoder hands its callers describes a four-byte slot.
     for index in range(8):
-        table[0x40 + index] = _bijection_form(opreg="readwrite")
-        table[0x48 + index] = _bijection_form(opreg="readwrite")
+        table[0x40 + index] = _bijection_form(opreg="readwrite",
+                                              size16_ok=True)
+        table[0x48 + index] = _bijection_form(opreg="readwrite",
+                                              size16_ok=True)
         table[0x50 + index] = _bijection_form(
             opreg="read", reads=stack, writes=stack)
         table[0x58 + index] = _bijection_form(
             opreg="write", reads=stack, writes=stack)
-        table[0xB8 + index] = _bijection_form(opreg="write")
+        table[0xB8 + index] = _bijection_form(opreg="write", size16_ok=True)
     # 05 ADD eax, imm32 -- the accumulator form names EAX implicitly and has
     # no register field to rewrite, so it is admitted with EAX pinned.
     table[0x05] = _bijection_form(reads=frozenset({"eax"}),
@@ -28202,9 +28233,19 @@ def _ia32_bijection_table() -> dict:
     # is strictly more conservative than any edge set could be.  The targets
     # it can reach are proved not to enter the region separately, from the
     # relocated in-body label set.  FF /5 is a far jump and stays refused.
+    # FF /0 INC r/m32 and FF /1 DEC r/m32 are the ordinary read-modify-write
+    # members of the group: no implicit operand, no control transfer, and
+    # they fall through.  Their write is named through `ext_write` because
+    # the group's OTHER admitted members do not write their r/m at all.
+    # The operand-size prefix is admitted for those two digits only: a
+    # 16-bit indirect CALL or computed JUMP is not this table's to model.
+    # /3 and /5 are far transfers and /6 is PUSH r/m32, whose store at
+    # [esp-4] this decoder does not describe; all three stay refused.
     table[0xFF] = _bijection_form(
-        modrm=True, reg="ext", ext_allowed=frozenset({2, 4}), rm_read=True,
-        flow="call", ext_flow={2: "call", 4: "exit"},
+        modrm=True, reg="ext", ext_allowed=frozenset({0, 1, 2, 4}),
+        rm_read=True, ext_write=frozenset({0, 1}),
+        size16_ok=True, size16_ext=frozenset({0, 1}),
+        flow="call", ext_flow={0: "fall", 1: "fall", 2: "call", 4: "exit"},
         ext_implicit={
             2: (stack, _IA32_CALL_CLOBBERED, frozenset()),
             4: (frozenset(IA32_GENERAL_REGISTER_NAMES), frozenset(),
@@ -28219,6 +28260,117 @@ def _ia32_bijection_table() -> dict:
     # else.  The FPU stack is invisible to a general-register bijection.
     for opcode in range(0xD8, 0xE0):
         table[opcode] = _bijection_form(modrm=True, reg="ext", x87=True)
+    return _ia32_bijection_table_widening(table)
+
+
+# Group 2 (shift/rotate) extension digits this table admits: ROL, ROR, SHL,
+# SHR and SAR.  /2 RCL and /3 RCR additionally rotate THROUGH CF, and /6 is an
+# undefined slot; none of the three is emitted by this compiler anywhere in
+# the build, and all three stay refused rather than guessed.
+_IA32_SHIFT_DIGITS = frozenset({0, 1, 4, 5, 7})
+
+
+def _ia32_bijection_table_widening(table: dict) -> dict:
+    """The forms this compiler emits that the first hundred did not name.
+
+    Every entry here was measured before it was written: `$W/BF-probe`
+    compiles each encoding with this project's own MSVC 4.2, runs it under
+    Wine over a register file of distinct arena pointers, perturbs one
+    liveness ATOM at a time, and refuses the entry unless
+
+      * every atom the entry does not declare READ leaves the whole final
+        state -- registers, flags and memory -- unchanged except for its own
+        preserved copy, and
+      * every atom the entry declares written and not read comes out
+        independent of its input, and
+      * every register the instruction is observed to touch is either named
+        by a rewritable field of the encoding or declared FROZEN.
+
+    The same three checks are re-run over the pre-existing entries as a
+    control.  A form whose complete effect could not be stated is left out
+    and named in the refusal tests instead.
+    """
+    # ---- 90 NOP.  It is the degenerate member of the 90+r XCHG EAX, r32
+    # family and the ONLY member admitted: 91..97 exchange two registers, one
+    # of which is named by no rewritable field.  NOP touches no register, no
+    # memory and no flag.
+    table[0x90] = _bijection_form()
+    # ---- Byte ALU, both directions.  `op r/m8, r8` reads both operands and
+    # writes r/m; `op r8, r/m8` reads both and writes reg.  Every byte write
+    # is PARTIAL, so `_touch` reports it as a read and the field is frozen.
+    # 00 ADD r/m8, r8 is deliberately absent: `00 00` is this linker's
+    # alignment filler, and refusing it is what keeps an unpinned data tail
+    # from decoding silently as code.
+    for opcode in (0x08, 0x10, 0x18, 0x20, 0x28, 0x30):
+        table[opcode] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                        rm_read=True, rm_write=True, width=8)
+    for opcode in (0x02, 0x0A, 0x12, 0x22, 0x2A, 0x32):
+        table[opcode] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                        reg_write=True, rm_read=True, width=8)
+    # ---- Dword ALU, the `op r/m32, r32` direction the first table omitted,
+    # plus ADC r32, r/m32.  ADC and SBB read CF as well; a flag is not a
+    # general register, and the flag-modelling tables are separate and
+    # fail-closed.
+    for opcode in (0x01, 0x09, 0x11, 0x19, 0x21, 0x29):
+        table[opcode] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                        rm_read=True, rm_write=True,
+                                        size16_ok=True)
+    table[0x13] = _bijection_form(modrm=True, reg="gpr", reg_read=True,
+                                  reg_write=True, rm_read=True,
+                                  size16_ok=True)
+    # ---- The accumulator forms.  AL or EAX is named by NO field, so the
+    # register is reported read and FROZEN, exactly as the pre-existing
+    # `3C CMP AL, imm8` and `05 ADD EAX, imm32` entries do.  The byte members
+    # write AL, which is a partial write and is therefore declared as a read
+    # and never as a kill; the dword members define EAX outright.  The
+    # operand-size prefix is NOT admitted on any of them: `add ax, imm16` is
+    # a partial write, and these entries have no field for `_touch` to widen.
+    for opcode in (0x04, 0x0C, 0x14, 0x1C, 0x24, 0x2C, 0x34, 0xA8):
+        table[opcode] = _bijection_form(reads=frozenset({"eax"}),
+                                        implicit_frozen=frozenset({"eax"}),
+                                        width=8)
+    for opcode in (0x0D, 0x15, 0x1D, 0x25, 0x2D, 0x35):
+        table[opcode] = _bijection_form(reads=frozenset({"eax"}),
+                                        writes=frozenset({"eax"}),
+                                        implicit_frozen=frozenset({"eax"}))
+    # CMP EAX, imm32 and TEST EAX, imm32 are the only accumulator forms that
+    # WRITE no register, so they are the only ones the operand-size prefix
+    # can safely widen: `cmp ax, imm16` reads a subset of the atoms the
+    # entry already declares read, and there is no kill to get wrong.  The
+    # read-modify-write members (05/0D/15/1D/25/2D/35) stay refused under the
+    # prefix -- their declared definition of EAX is a full 32-bit one, and at
+    # 16 bits that would be a false kill of the upper half.
+    for opcode in (0x3D, 0xA9):
+        table[opcode] = _bijection_form(reads=frozenset({"eax"}),
+                                        implicit_frozen=frozenset({"eax"}),
+                                        size16_ok=True)
+    # ---- B0+r MOV r8, imm8.  The 3-bit opcode field numbers AL..BH, whose
+    # 4..7 are the HIGH bytes of EAX..EBX, so it is a frozen field and the
+    # write is partial: it kills exactly one byte atom of one of four
+    # registers and reports the parent as read.
+    for index in range(8):
+        table[0xB0 + index] = _bijection_form(opreg="write", width=8)
+    # ---- Group 2, shift and rotate.  Every admitted member reads and writes
+    # its r/m and names no other general register, except the by-CL forms,
+    # which read CL through no field at all and therefore freeze ECX.
+    for opcode in (0xC0, 0xD0):
+        table[opcode] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                        rm_write=True, width=8,
+                                        ext_allowed=_IA32_SHIFT_DIGITS)
+    for opcode in (0xC1, 0xD1):
+        table[opcode] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                        rm_write=True, size16_ok=True,
+                                        ext_allowed=_IA32_SHIFT_DIGITS)
+    table[0xD2] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                  rm_write=True, width=8,
+                                  ext_allowed=_IA32_SHIFT_DIGITS,
+                                  reads=frozenset({"ecx"}),
+                                  implicit_frozen=frozenset({"ecx"}))
+    table[0xD3] = _bijection_form(modrm=True, reg="ext", rm_read=True,
+                                  rm_write=True, size16_ok=True,
+                                  ext_allowed=_IA32_SHIFT_DIGITS,
+                                  reads=frozenset({"ecx"}),
+                                  implicit_frozen=frozenset({"ecx"}))
     return table
 
 
@@ -28249,6 +28401,64 @@ IA32_BIJECTION_TWO_BYTE_FORMS = _ia32_bijection_two_byte_table()
 # the segment a memory operand is resolved in and touch no register field.
 _IA32_INERT_SEGMENT_PREFIXES = frozenset({0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65})
 _IA32_OPERAND_SIZE_PREFIX = 0x66
+_IA32_REPEAT_PREFIXES = frozenset({0xF2, 0xF3})
+
+
+def _ia32_string_form(reads, writes, *, memory_read, memory_write) -> dict:
+    """One repeated string operation, with its COMPLETE implicit operand set.
+
+    Every general register such a form touches -- the count in ECX, the
+    source pointer in ESI, the destination pointer in EDI, the value or
+    comparand in EAX -- is named by NO field of the encoding, so all of them
+    are FROZEN and a sigma whose support meets one is refused inside the
+    region.  A register the form defines is also a register it reads (the
+    pointers advance from their own value, and the count is read before it is
+    zeroed), so the declared write can never under-approximate liveness: the
+    read re-adds every atom the write would kill.
+
+    The MEMORY it touches is a span whose extent is the runtime value of ECX.
+    That extent is not a descriptor any disambiguation rule can compare, so
+    the form declares its memory UNKNOWN and every consumer that reasons
+    about memory refuses it outright rather than reading an address that was
+    never derived.
+    """
+    return _bijection_form(
+        reads=frozenset(reads), writes=frozenset(writes),
+        implicit_frozen=frozenset(set(reads) | set(writes)),
+        string_memory={"read": memory_read, "write": memory_write})
+
+
+# `rep movs` copies ECX elements from [ESI] to [EDI]; `rep stos` writes the
+# accumulator ECX times to [EDI]; `repe/repne scas` compares the accumulator
+# against [EDI] and `repe/repne cmps` compares [ESI] against [EDI], both
+# stopping on ZF.  All four advance their pointers, all four run the count
+# down to zero, and none of them writes a general register the encoding could
+# have named differently.  A string opcode WITHOUT a repeat prefix is not in
+# this table and stays refused; so does every other use of F2/F3, and LOCK.
+IA32_BIJECTION_REPEATED_STRING_FORMS = {
+    (prefix, opcode): _ia32_string_form(
+        ("ecx", "esi", "edi"), ("ecx", "esi", "edi"),
+        memory_read=True, memory_write=True)
+    for prefix in (0xF3,) for opcode in (0xA4, 0xA5)
+}
+IA32_BIJECTION_REPEATED_STRING_FORMS.update({
+    (0xF3, opcode): _ia32_string_form(
+        ("eax", "ecx", "edi"), ("ecx", "edi"),
+        memory_read=False, memory_write=True)
+    for opcode in (0xAA, 0xAB)
+})
+IA32_BIJECTION_REPEATED_STRING_FORMS.update({
+    (prefix, opcode): _ia32_string_form(
+        ("eax", "ecx", "edi"), ("ecx", "edi"),
+        memory_read=True, memory_write=False)
+    for prefix in (0xF2, 0xF3) for opcode in (0xAE, 0xAF)
+})
+IA32_BIJECTION_REPEATED_STRING_FORMS.update({
+    (prefix, opcode): _ia32_string_form(
+        ("ecx", "esi", "edi"), ("ecx", "esi", "edi"),
+        memory_read=True, memory_write=False)
+    for prefix in (0xF2, 0xF3) for opcode in (0xA6, 0xA7)
+})
 
 
 # An unconditional branch whose displacement is entirely covered by a
@@ -28419,6 +28629,7 @@ def decode_ia32_bijection_instruction(
     cursor = 0
     segment_prefix = False
     operand_size_16 = False
+    repeat_prefix = None
     while encoded[cursor] in _IA32_PREFIXES:
         prefix = encoded[cursor]
         if prefix in _IA32_INERT_SEGMENT_PREFIXES:
@@ -28429,6 +28640,13 @@ def decode_ia32_bijection_instruction(
             require(not operand_size_16,
                     f"{context}: repeated operand-size prefix")
             operand_size_16 = True
+        elif prefix in _IA32_REPEAT_PREFIXES:
+            # F2/F3 are admitted ONLY as the repeat prefix of a string
+            # operation named in the closed table below; every other use of
+            # them, and LOCK, is refused with the message that follows.
+            require(repeat_prefix is None,
+                    f"{context}: repeated repeat prefix")
+            repeat_prefix = prefix
         else:
             raise ByteIdentityError(
                 f"{context}: prefixed instructions are outside the "
@@ -28443,7 +28661,18 @@ def decode_ia32_bijection_instruction(
                 f"{context}: truncated two-byte opcode")
         opcode = 0x0F00 | encoded[cursor]
         cursor += 1
-    form = _bijection_form_for(opcode)
+    if repeat_prefix is not None:
+        form = IA32_BIJECTION_REPEATED_STRING_FORMS.get(
+            (repeat_prefix, opcode))
+        require(form is not None,
+                f"{context}: the repeat prefix 0x{repeat_prefix:02x} on "
+                f"opcode 0x{opcode:02x} is outside the register-bijection "
+                "table")
+        require(not operand_size_16,
+                f"{context}: an operand-size prefix on a repeated string "
+                "operation is outside the register-bijection table")
+    else:
+        form = _bijection_form_for(opcode)
     require(form is not None,
             f"{context}: opcode 0x{opcode:02x} is outside the "
             "register-bijection table")
@@ -28504,14 +28733,16 @@ def decode_ia32_bijection_instruction(
                 read_atoms.update(atoms)
 
     if form["opreg"] is not None:
-        fields.append((opcode_at, 0))
-        name = names[opcode & 7]
-        if form["opreg"] in ("read", "readwrite"):
-            reads.add(name)
-            read_atoms |= _IA32_ATOMS_OF[name]
-        if form["opreg"] in ("write", "readwrite"):
-            writes.add(name)
-            write_atoms |= _IA32_ATOMS_OF[name]
+        # The 3-bit opcode field is accounted for by exactly the same
+        # width-aware rule as a ModRM register field: at 32 bits it names one
+        # of the eight general registers and is rewritable, at 16 it names
+        # the same eight but writes only two of their atoms, and at 8 it
+        # names AL..BH and is FROZEN.  At 32 bits this is bit-for-bit what
+        # the register-granular code it replaces did.
+        if width != 8:
+            fields.append((opcode_at, 0))
+        _touch(opcode & 7, form["opreg"] in ("read", "readwrite"),
+               form["opreg"] in ("write", "readwrite"))
     if form["modrm"]:
         require(cursor < length, f"{context}: instruction lacks ModRM")
         modrm_at = offset + cursor
@@ -28533,8 +28764,15 @@ def decode_ia32_bijection_instruction(
             require(allowed is None or register_field in allowed,
                     f"{context}: ModRM extension /{register_field} of opcode "
                     f"0x{opcode:02x} is outside the register-bijection table")
+            require(width != 16 or form["size16_ext"] is None
+                    or register_field in form["size16_ext"],
+                    f"{context}: the operand-size prefix on extension "
+                    f"/{register_field} of opcode 0x{opcode:02x} is outside "
+                    "the register-bijection table")
             if register_field in form["ext_no_write"]:
                 rm_write = False
+            if register_field in form["ext_write"]:
+                rm_write = True
             implicit = form["ext_implicit"].get(register_field)
             if implicit is not None:
                 extra_reads, extra_writes, extra_frozen = implicit
@@ -28566,7 +28804,13 @@ def decode_ia32_bijection_instruction(
             # A memory operand: the base and index registers are read for the
             # address computation and are always 32-bit, whatever the form's
             # operand width; the memory cell itself is irrelevant to
-            # general-register liveness.
+            # general-register liveness.  The read is recorded in BOTH
+            # descriptions -- the register-granular `reads` and the ATOM
+            # lattice the liveness fixpoint actually runs on.  Recording it
+            # in only the first made an address register invisible to the
+            # fixpoint, which is a read a proof may never miss; the hardware
+            # probe in `$W/BF-probe` found it, and
+            # `test_semantic_decoder.py` fixes it.
             #
             # `memory` additionally describes the ADDRESS ITSELF -- base,
             # index, scale, constant displacement, access width and whether
@@ -28589,16 +28833,19 @@ def decode_ia32_bijection_instruction(
                 if not (mode == 0 and base == 5):
                     fields.append((sib_at, 0))
                     reads.add(names[base])
+                    read_atoms |= _IA32_ATOMS_OF[names[base]]
                     base_name = names[base]
                 else:
                     absolute = True
                 if index != 4:
                     fields.append((sib_at, 3))
                     reads.add(names[index])
+                    read_atoms |= _IA32_ATOMS_OF[names[index]]
                     index_name = names[index]
             elif not (mode == 0 and rm == 5):
                 fields.append((modrm_at, 0))
                 reads.add(names[rm])
+                read_atoms |= _IA32_ATOMS_OF[names[rm]]
                 base_name = names[rm]
             else:
                 absolute = True
@@ -28620,6 +28867,9 @@ def decode_ia32_bijection_instruction(
                     "width": max(width // 8, 1),
                     "read": bool(form["rm_read"]) or bool(form["x87"]),
                     "write": bool(rm_write),
+                    # A ModRM operand's address IS derived, so it is never
+                    # unknown; only a repeated string operation's is.
+                    "unknown": False,
                 }
         require(form["reg"] != "gpr" or not (form["reg_write"]
                                              and form["rm_write"]),
@@ -28662,10 +28912,24 @@ def decode_ia32_bijection_instruction(
         # An indirect call: the callee can never be named.
         reads |= _IA32_CALL_CLOBBERED
         read_atoms |= ia32_register_atoms(_IA32_CALL_CLOBBERED)
+    if form["string_memory"] is not None:
+        # The implicit span through ESI/EDI, whose extent is the runtime
+        # count.  It is declared UNKNOWN with no base, no index and no
+        # width, so any consumer that compares addresses refuses it.
+        memory = {
+            "base": None, "index": None, "scale": 1, "displacement": 0,
+            "absolute": False, "width": 0,
+            "read": form["string_memory"]["read"],
+            "write": form["string_memory"]["write"],
+            "unknown": True,
+        }
     # The XOR-zero idiom is an exact, closed special case: `xor r, r` does not
     # read r, it defines it.  Recognising it is required for a sound liveness
     # answer, and it is recognised by the encoding, never by a heuristic.
-    if opcode in (0x31, 0x33) and form["modrm"]:
+    # It is admitted at 32 bits ONLY: `xor di, di` zeroes DI and leaves the
+    # upper half of EDI exactly as it was, so it kills nothing and claiming
+    # the whole register would be a false kill.
+    if opcode in (0x31, 0x33) and form["modrm"] and width == 32:
         if (modrm_byte >> 6 == 3
                 and (modrm_byte & 7) == ((modrm_byte >> 3) & 7)):
             zeroed = names[modrm_byte & 7]
@@ -29764,6 +30028,9 @@ def ia32_schedule_instruction_facts(instruction: dict, context: str) -> dict:
             "instruction-schedule table")
     memory = instruction["memory"]
     if memory is not None:
+        require(not memory.get("unknown"),
+                f"{context}: a repeated string operation's memory span is an "
+                "unknown extent and cannot be disambiguated")
         require(not memory["absolute"],
                 f"{context}: an absolute memory operand cannot be "
                 "disambiguated")

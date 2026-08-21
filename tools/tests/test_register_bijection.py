@@ -876,7 +876,12 @@ class WidenedSemanticTableTests(unittest.TestCase):
         self.assertIn("sigma cannot rewrite", str(caught.exception))
 
     def test_refuses_an_operand_size_prefix_on_an_unadmitted_form(self):
-        body = bytes.fromhex("53" "8b0d00000000" "668b01" "e800000000"
+        # `66 f7 /3` is `neg cx`, a 16-bit member of group 3.  The group
+        # shares its opcode with MUL/DIV, whose implicit pair at 16 bits is
+        # DX:AX and not EDX:EAX, so the whole opcode is refused under the
+        # prefix.  (`66 8b`, which this test used before the table was
+        # widened, is now admitted -- see `test_semantic_decoder.py`.)
+        body = bytes.fromhex("53" "8b0d00000000" "66f7d9" "e800000000"
                              "5b" "c3")
         with self.assertRaises(byte_identity.ByteIdentityError) as caught:
             byte_identity.apply_register_bijection(
