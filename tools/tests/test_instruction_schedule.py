@@ -396,15 +396,25 @@ class DisambiguationTests(unittest.TestCase):
         self.assertIn("outside the instruction-schedule table",
                       str(caught.exception))
 
-    def test_a_base_written_inside_the_window_is_refused(self):
-        # `lea esp, [ebx+8]` would move the base every displacement is
-        # measured against
+    def test_a_base_written_inside_the_window_forces_an_edge(self):
+        # `lea esp, [ebx+8]` writes the base every displacement in this window
+        # is measured against.  This used to REFUSE the window outright.  It
+        # now carries a `memory` dependence EDGE instead, which is strictly
+        # conservative -- an unproved pair is ORDERED, never permitted -- and
+        # is precise enough not to turn away a window whose same-base operands
+        # are all reads and therefore never ask for a disjointness proof.
         body = BODY.replace(bytes.fromhex("8d5b08"),
                             bytes.fromhex("8d6308"))
+        _facts, edges = byte_identity.ia32_schedule_dependence_edges(
+            self.decode(body), "dag")
+        memory_edges = [edge for edge in edges if "memory" in edge[2]]
+        self.assertTrue(memory_edges,
+                        "a written memory base must force a memory edge")
+        # and the declared reordering is then refused as non-topological
         with self.assertRaises(byte_identity.ByteIdentityError) as caught:
-            byte_identity.ia32_schedule_dependence_edges(
-                self.decode(body), "dag")
-        self.assertIn("is written inside the window", str(caught.exception))
+            byte_identity.require_topological_instruction_order(
+                len(LENGTHS), edges, ORDER, "dag")
+        self.assertIn("dependence DAG forbids", str(caught.exception))
 
     def test_two_pushes_can_never_be_reordered(self):
         # both read AND write esp, so every pair of pushes carries an edge

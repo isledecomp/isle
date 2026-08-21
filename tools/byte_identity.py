@@ -30585,16 +30585,43 @@ def require_frame_pointer_free_frame(
     for item in instructions:
         # ESP is read IMPLICITLY by every push and pop, including the
         # prologue's `push ebp` and the epilogue's `pop ebp`, and that says
-        # nothing about frames.  What establishes a frame pointer is ESP
-        # appearing as an EXPLICIT operand of an instruction that writes EBP
-        # -- `mov ebp, esp`, `lea ebp, [esp+d]`, `add ebp, esp`.  The explicit
-        # operands are exactly the register fields the decoder hands a
-        # bijection to rewrite, so this reads them and nothing else.
+        # nothing about frames.  What establishes a frame pointer is EBP
+        # taking ESP's VALUE or an ADDRESS derived from it:
+        #
+        #     mov ebp, esp        register-direct     -> a frame pointer
+        #     add ebp, esp        register-direct     -> a frame pointer
+        #     lea ebp, [esp+d]    address computed    -> a frame pointer
+        #     mov ebp, [esp+d]    value LOADED        -> NOT a frame pointer
+        #
+        # The last one matters: reading a spilled value out of the frame into
+        # EBP leaves EBP an ordinary register holding ordinary data.  Treating
+        # every appearance of ESP as frame-establishing refused `0x10051ac0`,
+        # whose own FPO record declares FRAME_FPO and which merely does
+        # `mov ebp, [esp+0x14]`.  So look at HOW ESP is named, not whether.
         if "ebp" not in item["writes"]:
             continue
-        named = {IA32_GENERAL_REGISTER_NAMES[(body[byte_index] >> shift) & 7]
-                 for byte_index, shift in item["fields"]}
-        require("esp" not in named,
+        encoding = item["encoding"]
+        direct = set()
+        for byte_index, shift in item["fields"]:
+            name = IA32_GENERAL_REGISTER_NAMES[(body[byte_index] >> shift) & 7]
+            if encoding is None:
+                direct.add(name)
+                continue
+            memory_base = (byte_index == (encoding["sib_at"]
+                                          if encoding["sib_at"] is not None
+                                          else encoding["modrm_at"])
+                           and shift == 0 and encoding["mode"] != 3)
+            memory_index = (encoding["sib_at"] is not None
+                            and byte_index == encoding["sib_at"]
+                            and shift == 3 and encoding["mode"] != 3)
+            if memory_base or memory_index:
+                # An address operand.  It only establishes a frame pointer if
+                # the ADDRESS ITSELF is what lands in EBP, i.e. `lea`.
+                if item["opcode"] == 0x8D:
+                    direct.add(name)
+                continue
+            direct.add(name)
+        require("esp" not in direct,
                 f"{context}: the instruction at {item['offset']} derives EBP "
                 "from ESP, which establishes a frame pointer")
     return record
@@ -31664,6 +31691,115 @@ _IA32_SCHEDULE_STACK_PUSH_OPCODES = frozenset(range(0x50, 0x58))
 IA32_SCHEDULE_FLAG_EFFECTS = _ia32_schedule_flag_table()
 
 
+IA32_STACK_SLOT_BYTES = 4
+
+
+def ia32_esp_relative_displacement(body: bytes, item: dict) -> tuple | None:
+    """(byte offset, size, signed value) of an ESP-relative displacement.
+
+    ESP can only be a memory base through a SIB whose base field is 4, so this
+    reads the SIB rather than guessing from the r/m field.  It deliberately
+    covers `lea` as well as loads and stores: `lea edx, [esp+0x14]` carries an
+    ESP displacement that a moved push shifts exactly as it shifts a load's,
+    and `lea` has no memory OPERAND for the decoder to report.
+
+    Returns None when the instruction has no ESP displacement, and also when
+    it has an ESP base with NO displacement byte (mod 0), which cannot absorb
+    an adjustment without growing an encoding -- the caller refuses that.
+    """
+    encoding = item["encoding"]
+    if encoding is None or encoding["mode"] == 3 or encoding["absolute"]:
+        return None
+    if encoding["sib_at"] is None:
+        return None
+    sib = body[encoding["sib_at"]]
+    base = sib & 7
+    if base != _IA32_REGISTER_NUMBERS["esp"]:
+        return None
+    if encoding["mode"] == 0:
+        return ("no_displacement", 0, 0)
+    at, size = encoding["displacement_at"], encoding["displacement_size"]
+    if at is None or size == 0:
+        return ("no_displacement", 0, 0)
+    return (at, size, int.from_bytes(body[at:at + size], "little", signed=True))
+
+
+def ia32_esp_used_only_as_a_base(body: bytes, item: dict) -> bool:
+    """Does this instruction touch ESP ONLY through an adjusted address?
+
+    True when the instruction has a real ESP-relative displacement AND ESP
+    appears in no register-direct field.  For such an instruction the stack
+    adjustment restores the exact address it names, so a moved push changes
+    nothing it observes -- which is what lets the ESP dependence between the
+    two be discharged.  `lea edx, [esp+0x14]` qualifies: its displacement is
+    adjusted too, so the ADDRESS it computes is preserved.
+    """
+    found = ia32_esp_relative_displacement(body, item)
+    if found is None or found[0] == "no_displacement":
+        return False
+    encoding = item["encoding"]
+    for byte_index, shift in item["fields"]:
+        name = IA32_GENERAL_REGISTER_NAMES[(body[byte_index] >> shift) & 7]
+        if name != "esp":
+            continue
+        is_base = (encoding is not None and encoding["sib_at"] is not None
+                   and byte_index == encoding["sib_at"] and shift == 0)
+        if not is_base:
+            return False
+    return True
+
+
+def ia32_schedule_stack_adjustments(
+    body: bytes, inside: list[dict], order: list[int], context: str,
+) -> list[list]:
+    """Obligation 6c: what a moved PUSH does to every ESP displacement.
+
+    A `push` lowers ESP by four, so an ESP-relative operand that the
+    permutation moves from one side of a push to the other must have its
+    displacement changed by four in order to name the SAME address.  The
+    adjustment is DERIVED here from the declared permutation -- it is never a
+    free parameter -- as
+
+        delta(i) = 4 * (pushes before i in the TARGET order
+                        - pushes before i in the SOURCE order)
+
+    and it is required to be absorbable without changing the instruction's
+    encoded length, so a `disp8` that would overflow, or an ESP base with no
+    displacement byte at all, REFUSES rather than growing an encoding.
+
+    Returns `[[source index, byte offset, old value, new value], ...]`, sorted.
+    """
+    pushes = [index for index, item in enumerate(inside)
+              if item["opcode"] in _IA32_SCHEDULE_STACK_PUSH_OPCODES]
+    if not pushes:
+        return []
+    position = {source: index for index, source in enumerate(order)}
+    adjustments = []
+    for index, item in enumerate(inside):
+        found = ia32_esp_relative_displacement(body, item)
+        if found is None:
+            continue
+        before_source = sum(1 for push in pushes if push < index)
+        before_target = sum(1 for push in pushes
+                            if position[push] < position[index])
+        delta = IA32_STACK_SLOT_BYTES * (before_target - before_source)
+        if not delta:
+            continue
+        at, size, value = found
+        require(at != "no_displacement",
+                f"{context}: the instruction at {item['offset']} has an ESP "
+                "base with no displacement byte, so it cannot absorb the "
+                f"{delta:+d} a moved push forces without growing its encoding")
+        updated = value + delta
+        low, high = -(1 << (8 * size - 1)), (1 << (8 * size - 1)) - 1
+        require(low <= updated <= high,
+                f"{context}: adjusting the ESP displacement at "
+                f"{item['offset']} by {delta:+d} would overflow its "
+                f"{size}-byte field, which would change the encoding's length")
+        adjustments.append([index, at, value, updated])
+    return sorted(adjustments)
+
+
 def ia32_schedule_instruction_facts(instruction: dict, context: str) -> dict:
     """Flag effect and memory operand of one window instruction, or refuse."""
     opcode = instruction["opcode"]
@@ -31720,6 +31856,7 @@ def ia32_memory_provably_disjoint(left: dict, right: dict) -> bool:
 
 def ia32_schedule_dependence_edges(
     instructions: list[dict], context: str,
+    body: bytes | None = None, stack_adjusted: bool = False,
 ) -> tuple[list[dict], list[list]]:
     """The window's dependence DAG (obligation 4).
 
@@ -31728,6 +31865,10 @@ def ia32_schedule_dependence_edges(
     one above, and a base register written anywhere inside the window
     invalidates every displacement comparison against it, so that is refused
     outright rather than reasoned around.
+
+    `stack_adjusted` says the caller has DECLARED the ESP-displacement
+    adjustments a moved push forces (obligation 6c).  Without it a push in the
+    window is refused exactly as before, so every landed entry is unaffected.
     """
     facts = [ia32_schedule_instruction_facts(item, f"{context} at "
                                              f"{item['offset']}")
@@ -31739,30 +31880,73 @@ def ia32_schedule_dependence_edges(
         offending = sorted(
             item["offset"] for item in facts
             if item["memory"] is not None and item["memory"]["base"] == "esp")
-        require(not offending,
+        require(not offending or stack_adjusted,
                 f"{context}: a push shares the window with the esp-relative "
                 f"memory operand at {offending[:1]}, whose address the push's "
                 "own esp delta would move")
+        if stack_adjusted:
+            # The refusal was also carrying an ALIASING fact for free: a push
+            # writes the four bytes BELOW esp.  Once pushes are admitted that
+            # has to be stated.  Every ESP displacement in the window must be
+            # non-negative, so the pushed slot (at esp-4, and at every lower
+            # address a later push reaches) lies strictly below every operand
+            # the window names and can alias none of them.
+            require(body is not None,
+                    f"{context}: a stack-adjusted window needs its body")
+            for item in instructions:
+                found = ia32_esp_relative_displacement(body, item)
+                if found is None or found[0] == "no_displacement":
+                    continue
+                require(found[2] >= 0,
+                        f"{context}: the ESP displacement {found[2]} at "
+                        f"{item['offset']} is below ESP, where a push in this "
+                        "window writes, so disjointness does not hold")
+    # A base register written inside the window invalidates any DISPLACEMENT
+    # COMPARISON against it -- `[ecx+4]` and `[ecx+8]` need not be disjoint
+    # once something writes `ecx` between them.  This used to REFUSE the whole
+    # window, which was both stricter and less precise than necessary: the
+    # comparison is only ever consulted for a pair where one side WRITES
+    # memory, so a window whose same-base operands are all reads was being
+    # turned away for a proof it never asked for (`0x10051ac0`'s
+    # `mov ebp,[ecx+4]` and `mov ecx,[ecx+8]` are both loads).  The condition
+    # is now applied where it belongs -- per pair, as a dependence EDGE, which
+    # is strictly conservative: an unproved pair is ordered, never permitted.
     written = set()
     for item in facts:
         written |= set(item["writes"])
-    for item in facts:
-        memory = item["memory"]
-        if memory is None:
-            continue
-        require(memory["base"] not in written,
-                f"{context}: memory base {memory['base']} is written inside "
-                "the window, so no displacement comparison against it holds")
+    # Which instructions touch ESP only through an address the stack
+    # adjustment restores.  Only meaningful once pushes are admitted.
+    esp_compensated = [
+        stack_adjusted and body is not None
+        and ia32_esp_used_only_as_a_base(body, item)
+        for item in instructions
+    ]
+    is_stack_operation = [
+        item["opcode"] in _IA32_SCHEDULE_STACK_PUSH_OPCODES for item in facts]
     edges = []
     for left in range(len(facts)):
         for right in range(left + 1, len(facts)):
             first, second = facts[left], facts[right]
             reasons = []
-            if first["writes"] & second["reads"]:
+            # A push and an instruction whose ONLY use of ESP is an adjusted
+            # address do not depend on each other THROUGH ESP: the adjustment
+            # makes the address identical either way, and the push's own slot
+            # is below every displacement in the window (required above).
+            # Every other ESP dependence -- push against push, or anything
+            # that reads ESP as a value -- is left exactly as it was.
+            discharged = frozenset({"esp"}) if (
+                (is_stack_operation[left] and esp_compensated[right])
+                or (is_stack_operation[right] and esp_compensated[left])
+            ) else frozenset()
+            first_reads = first["reads"] - discharged
+            first_writes = first["writes"] - discharged
+            second_reads = second["reads"] - discharged
+            second_writes = second["writes"] - discharged
+            if first_writes & second_reads:
                 reasons.append("register_raw")
-            if first["reads"] & second["writes"]:
+            if first_reads & second_writes:
                 reasons.append("register_war")
-            if first["writes"] & second["writes"]:
+            if first_writes & second_writes:
                 reasons.append("register_waw")
             if first["writes_flags"] and second["reads_flags"]:
                 reasons.append("flags_raw")
@@ -31773,7 +31957,10 @@ def ia32_schedule_dependence_edges(
             one, two = first["memory"], second["memory"]
             if one is not None and two is not None and (one["write"]
                                                         or two["write"]):
-                if not ia32_memory_provably_disjoint(one, two):
+                base_is_written = (one["base"] in written
+                                   or two["base"] in written)
+                if (base_is_written
+                        or not ia32_memory_provably_disjoint(one, two)):
                     reasons.append("memory")
             if reasons:
                 edges.append([left, right, sorted(reasons)])
@@ -32045,19 +32232,57 @@ def apply_instruction_schedule(
             require(window_reseat == declared_reseat,
                     f"{window_context}: the measured relocation reseat "
                     f"{window_reseat} differs from its declaration")
-        facts, edges = ia32_schedule_dependence_edges(inside, window_context)
+        declared_stack = window.get("stack_adjustments")
+        facts, edges = ia32_schedule_dependence_edges(
+            inside, window_context, body, declared_stack is not None)
         require(edges == window["expected_dependence_edges"],
                 f"{window_context}: the measured dependence DAG differs from "
                 "its declaration")
         order = list(window["target_order"])
         require_topological_instruction_order(
             len(inside), edges, order, window_context)
-        pieces = [body[item["offset"]:item["offset"] + item["length"]]
-                  for item in inside]
-        require([len(piece) for piece in pieces]
+        original = [bytes(body[item["offset"]:item["offset"] + item["length"]])
+                    for item in inside]
+        require([len(piece) for piece in original]
                 == list(window["source_instruction_lengths"]),
                 f"{window_context}: the window's instruction partition "
                 "differs from its declaration")
+        # Obligation 6c.  A push the permutation moves past an ESP-relative
+        # operand shifts that operand's address by the push's own four bytes,
+        # so the displacement is adjusted to name the SAME address.  The
+        # adjustment set is DERIVED from the permutation and required to equal
+        # the declaration; a window that declares none must need none.
+        window_stack = ia32_schedule_stack_adjustments(
+            body, inside, order, window_context)
+        if declared_stack is None:
+            require(not window_stack,
+                    f"{window_context}: the permutation moves a push past an "
+                    "ESP-relative operand but declares no stack adjustment")
+        else:
+            require(window_stack == declared_stack,
+                    f"{window_context}: the measured stack adjustment "
+                    f"{window_stack} differs from its declaration")
+        pieces = [bytearray(piece) for piece in original]
+        adjusted_spans = {}
+        for index, at, _old_value, new_value in window_stack:
+            found = ia32_esp_relative_displacement(body, inside[index])
+            local = at - inside[index]["offset"]
+            size = found[1]
+            pieces[index][local:local + size] = new_value.to_bytes(
+                size, "little", signed=True)
+            adjusted_spans[index] = list(range(local, local + size))
+        pieces = [bytes(piece) for piece in pieces]
+        # Each piece is its ORIGINAL with only the declared displacement bytes
+        # changed -- nothing else in the window may be rewritten.
+        for index, (before_piece, after_piece) in enumerate(
+                zip(original, pieces)):
+            changed_bytes = [position
+                             for position in range(len(before_piece))
+                             if before_piece[position] != after_piece[position]]
+            require(changed_bytes == adjusted_spans.get(index, []),
+                    f"{window_context}: the instruction at "
+                    f"{inside[index]['offset']} changed outside its declared "
+                    "ESP displacement")
         reordered = b"".join(pieces[source] for source in order)
         # Obligation 3: the same bag of encoded instructions, so the same
         # total length.  Both halves are asserted, not assumed.
@@ -32072,6 +32297,8 @@ def apply_instruction_schedule(
         detail.append({
             "start": start, "end": end,
             "relocation_reseat": window_reseat,
+            "stack_adjustments": window_stack,
+            "adjusted_instructions": sorted(pieces),
             "instruction_count": len(inside),
             "source_instruction_lengths": [len(piece) for piece in pieces],
             "target_order": order,
@@ -32122,10 +32349,10 @@ def apply_instruction_schedule(
         "declared window",
     )
     for (start, end), item in zip(window_spans, detail):
-        before = sorted(body[position["offset"]:
-                             position["offset"] + position["length"]]
-                        for position in instructions
-                        if start <= position["offset"] < end)
+        # The bag the image must hold is the window's own instructions with
+        # exactly the declared ESP adjustments applied -- identical to the
+        # source bag whenever no push moved.
+        before = item["adjusted_instructions"]
         after = sorted(image[position["offset"]:
                              position["offset"] + position["length"]]
                        for position in image_instructions
@@ -32137,11 +32364,15 @@ def apply_instruction_schedule(
                      if body[index] != image[index])
     require(all(_in_window(offset) for offset in changed),
             f"{context}: the image changed a byte outside a declared window")
+    for item in detail:
+        item.pop("adjusted_instructions", None)
     return image, {
         "windows": detail,
         "instruction_count": len(instructions),
         "changed_offsets": changed,
         "relocation_reseat": reseat,
+        "stack_adjustments": [pair for item in detail
+                              for pair in item["stack_adjustments"]],
         "code_length": limit,
     }
 
@@ -32287,8 +32518,9 @@ def _validate_schedule_windows(
         exact_audit_keys(window, {
             "start", "end", "source_instruction_lengths", "target_order",
             "expected_dependence_edges", "expected_line_rows",
-            "relocation_reseat",
-        }, window_context, optional={"relocation_reseat"})
+            "relocation_reseat", "stack_adjustments",
+        }, window_context, optional={"relocation_reseat",
+                                     "stack_adjustments"})
         start = require_exact_int(window.get("start"),
                                   f"{window_context}.start",
                                   minimum=0, maximum=body_length - 1)
@@ -32346,6 +32578,27 @@ def _validate_schedule_windows(
         # offset); `apply_instruction_schedule` derives the same list from the
         # permutation itself and refuses on any disagreement, so this is a
         # declaration the measurement has to reproduce, not a free parameter.
+        # Obligation 6c (the stack declaration).  A window whose permutation
+        # moves a push past an ESP-relative operand must say, for every such
+        # operand, exactly which displacement byte changes and from what to
+        # what.  `ia32_schedule_stack_adjustments` DERIVES the same list from
+        # the permutation and refuses on any disagreement, so this is a
+        # declaration the measurement has to reproduce, not a free parameter.
+        stack = window.get("stack_adjustments")
+        normalized_stack = None
+        if stack is not None:
+            require(isinstance(stack, list) and 1 <= len(stack) <= 64
+                    and all(isinstance(row, list) and len(row) == 4
+                            and all(type(value) is int for value in row)
+                            and 0 <= row[0] < len(lengths)
+                            and start <= row[1] < end
+                            and row[2] != row[3]
+                            and abs(row[3] - row[2]) % 4 == 0
+                            for row in stack)
+                    and stack == sorted(stack)
+                    and len({row[1] for row in stack}) == len(stack),
+                    f"{window_context}.stack_adjustments is invalid")
+            normalized_stack = [list(row) for row in stack]
         reseat = window.get("relocation_reseat")
         normalized_reseat = None
         if reseat is not None:
@@ -32371,6 +32624,8 @@ def _validate_schedule_windows(
         }
         if normalized_reseat is not None:
             normalized_window["relocation_reseat"] = normalized_reseat
+        if normalized_stack is not None:
+            normalized_window["stack_adjustments"] = normalized_stack
         normalized_windows.append(normalized_window)
     return normalized_windows
 

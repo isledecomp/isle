@@ -745,3 +745,44 @@ class ManifestValidationTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FramePointerPrecisionTest(unittest.TestCase):
+    """HOW ESP is named decides it, not whether it is named.
+
+    Treating every appearance of ESP in an instruction that writes EBP as
+    frame-establishing refused `0x10051ac0`, whose own FPO record declares
+    FRAME_FPO and which merely loads a spilled value with
+    `mov ebp, [esp+0x14]`.
+    """
+
+    def _proof(self, body):
+        coff = byte_identity.CoffObject(make_coff(body=body))
+        primary = coff.function_section(TARGET_SYMBOL)
+        raw = bytes(byte_identity.coff_body(coff, primary))
+        instructions = byte_identity.decode_ia32_bijection_body(
+            raw, "fixture", relocation_map(), None)
+        return byte_identity.require_frame_pointer_free_frame(
+            coff, primary, raw, instructions, "fixture")
+
+    def test_loading_a_spilled_value_into_ebp_is_not_a_frame_pointer(self):
+        # `mov ebp, [esp+0x14]` in place of `test ebx, ebx`.
+        body = BODY[:10] + bytes.fromhex("8b6c2414") + BODY[12:]
+        self.assertEqual(self._proof(body)["cbFrame"], 0)
+
+    def test_lea_of_an_esp_address_into_ebp_IS_a_frame_pointer(self):
+        # `lea ebp, [esp+0x14]` -- the ADDRESS lands in EBP.
+        body = BODY[:10] + bytes.fromhex("8d6c2414") + BODY[12:]
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self._proof(body)
+        self.assertIn("establishes a frame pointer", str(caught.exception))
+
+    def test_mov_ebp_esp_is_still_refused(self):
+        body = BODY[:10] + bytes.fromhex("8bec") + BODY[12:]
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            self._proof(body)
+
+    def test_add_ebp_esp_is_still_refused(self):
+        body = BODY[:10] + bytes.fromhex("03ec") + BODY[12:]
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            self._proof(body)
