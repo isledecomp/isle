@@ -28484,6 +28484,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two extern-declaration runs at the translation unit's two record seats plus a declaration shape force-included. None of the three halves contributes code, data, strings, vtables or linker directives; the count lattice is 2-D, so the seats and the shape can each fix a different byte."
      }
+    },
+    {
+     "id": "d_ba68e8998543",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 3,
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives.",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "generated_header_sha256": "ba68e899854373abf86fd4f93e9c17cda6d6b11e14c19eed055a3c4a74870ca5"
+     }
     }
    ],
    "functions": [
@@ -28667,11 +28683,1618 @@
      ],
      "expected_xdata_rename_offsets": [],
      "donor": "d_43c3d39f582e"
+    },
+    {
+     "mangled": "?Read@LegoROI@@QAEJPAVOrientableROI@@PAVRenderer@Tgl@@PAVViewLODListManager@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+     "donor": "d_ba68e8998543",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 215,
+     "expected_donor_section_number": 215,
+     "expected_section_count": 436,
+     "expected_donor_section_count": 436,
+     "expected_body_length": 2058,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 60,
+     "expected_seed_line_count": 108,
+     "expected_donor_line_count": 108,
+     "expected_function_count": 130,
+     "expected_comdat_count": 174,
+     "expected_seed_body_sha256": "6682a3cdf61830c60ed1d1628a01d9cd63555d4a15649aba2669442151c22ec7",
+     "expected_donor_body_sha256": "6682a3cdf61830c60ed1d1628a01d9cd63555d4a15649aba2669442151c22ec7",
+     "expected_body_sha256": "62b0169fecc2e748902f02e480fd02d9aa2b1c9ed9efab11f9845b7ce11ca704",
+     "expected_seed_metadata_sha256": "c518caee1673a66fb7b6afa9098b9ea36374aeb498d18c547ac17f4cbb94b68d",
+     "expected_donor_metadata_sha256": "b5e1eb7ee40a86942f90a65444718b8e8894c4f8ae5bd641dbe3539e6e9f493c",
+     "expected_changed_offsets": [
+      688,
+      691,
+      785,
+      787,
+      794,
+      802,
+      827,
+      829,
+      831,
+      839,
+      870,
+      872,
+      879,
+      888,
+      904,
+      906,
+      908,
+      914,
+      1017,
+      1018,
+      1019,
+      1020,
+      1021,
+      1022,
+      1023,
+      1024,
+      1025,
+      1026,
+      1027,
+      1028,
+      1029,
+      1348,
+      1349,
+      1350,
+      1351,
+      1352,
+      1353,
+      1354,
+      1355,
+      1356,
+      1357,
+      1358,
+      1359,
+      1360,
+      1440,
+      1444,
+      1497,
+      1498,
+      1499,
+      1500,
+      1501,
+      1502,
+      1636,
+      1641,
+      1642,
+      1644,
+      1645,
+      1647,
+      1648,
+      1649,
+      1650,
+      1651,
+      1652,
+      1654,
+      1655,
+      1656,
+      1657,
+      1658,
+      1659,
+      1660,
+      1661,
+      1888,
+      1889,
+      1890,
+      1891,
+      1892,
+      1893,
+      1894,
+      1895,
+      1896,
+      1897,
+      1898,
+      1899,
+      1900,
+      1901,
+      1902,
+      1904,
+      1905,
+      1906,
+      1907,
+      1908,
+      1997,
+      2001
+     ],
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100a84a0",
+      "verdict": "MATCH",
+      "length": 2058
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L53646",
+       "target_section": 215,
+       "target_value": 2035,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x100a8c93"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 44,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoVertex@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d37b0"
+      },
+      {
+       "offset": 59,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoVertex@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d37b0"
+      },
+      {
+       "offset": 67,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoVertex@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d37b0"
+      },
+      {
+       "offset": 123,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 182,
+       "type": 20,
+       "addend": 0,
+       "target": "_strlwr",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c410"
+      },
+      {
+       "offset": 197,
+       "type": 20,
+       "addend": 0,
+       "target": "?Read@LegoSphere@@QAEJPAVLegoStorage@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d3770"
+      },
+      {
+       "offset": 270,
+       "type": 20,
+       "addend": 0,
+       "target": "?Read@LegoBox@@QAEJPAVLegoStorage@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d3740"
+      },
+      {
+       "offset": 387,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 428,
+       "type": 20,
+       "addend": 0,
+       "target": "_strlwr",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c410"
+      },
+      {
+       "offset": 537,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 587,
+       "type": 20,
+       "addend": 0,
+       "target": "?Lookup@ViewLODListManager@@QBEPAVViewLODList@@ABQBD@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a75b0"
+      },
+      {
+       "offset": 598,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 684,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_roiConfig@@3HA",
+       "target_section": 34,
+       "target_value": 440,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101368"
+      },
+      {
+       "offset": 715,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_roiConfig@@3HA",
+       "target_section": 34,
+       "target_value": 440,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101368"
+      },
+      {
+       "offset": 726,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_sharedModelsLow@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 464,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101380"
+      },
+      {
+       "offset": 733,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_sharedModelsLow@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 464,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101380"
+      },
+      {
+       "offset": 753,
+       "type": 20,
+       "addend": 0,
+       "target": "_strnicmp",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d1ed0"
+      },
+      {
+       "offset": 778,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_sharedModelsLow@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 464,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101380"
+      },
+      {
+       "offset": 788,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_sharedModelsHigh@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 448,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101370"
+      },
+      {
+       "offset": 795,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_sharedModelsHigh@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 448,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101370"
+      },
+      {
+       "offset": 815,
+       "type": 20,
+       "addend": 0,
+       "target": "_strnicmp",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d1ed0"
+      },
+      {
+       "offset": 840,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_sharedModelsHigh@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 448,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101370"
+      },
+      {
+       "offset": 855,
+       "type": 20,
+       "addend": 0,
+       "target": "?Lookup@ViewLODListManager@@QBEPAVViewLODList@@ABQBD@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a75b0"
+      },
+      {
+       "offset": 873,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_alwaysLoadNames@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 480,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101390"
+      },
+      {
+       "offset": 880,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_alwaysLoadNames@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 480,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101390"
+      },
+      {
+       "offset": 892,
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "offset": 915,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_alwaysLoadNames@@3PAPBDA",
+       "target_section": 34,
+       "target_value": 480,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101390"
+      },
+      {
+       "offset": 976,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 1007,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoLOD@@QAE@PAVRenderer@Tgl@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aa380"
+      },
+      {
+       "offset": 1035,
+       "type": 20,
+       "addend": 0,
+       "target": "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aa510"
+      },
+      {
+       "offset": 1117,
+       "type": 20,
+       "addend": 0,
+       "target": "?Destroy@ViewLODListManager@@QAEEPAVViewLODList@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a7680"
+      },
+      {
+       "offset": 1152,
+       "type": 20,
+       "addend": 0,
+       "target": "?Destroy@ViewLODListManager@@QAEEPAVViewLODList@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a7680"
+      },
+      {
+       "offset": 1172,
+       "type": 6,
+       "addend": 0,
+       "target": "??_C@_02ECBJ@t_?$AA@",
+       "target_section": 217,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x101013b4"
+      },
+      {
+       "offset": 1178,
+       "type": 20,
+       "addend": 0,
+       "target": "_strnicmp",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d1ed0"
+      },
+      {
+       "offset": 1217,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 218,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 1280,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1307,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 1338,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoLOD@@QAE@PAVRenderer@Tgl@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aa380"
+      },
+      {
+       "offset": 1366,
+       "type": 20,
+       "addend": 0,
+       "target": "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aa510"
+      },
+      {
+       "offset": 1413,
+       "type": 20,
+       "addend": 0,
+       "target": "?Create@ViewLODListManager@@QAEPAVViewLODList@@ABQBDH@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a72c0"
+      },
+      {
+       "offset": 1459,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1487,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 218,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 1601,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetTextureInfo@LegoROI@@QAEJPAVLegoTextureInfo@@@Z",
+       "target_section": 300,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a9210"
+      },
+      {
+       "offset": 1664,
+       "type": 20,
+       "addend": 0,
+       "target": "?GetRGBAColor@LegoROI@@SAEPBDAAM111@Z",
+       "target_section": 388,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a9bf0"
+      },
+      {
+       "offset": 1691,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetLodColor@LegoROI@@QAEJMMMM@Z",
+       "target_section": 297,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a9170"
+      },
+      {
+       "offset": 1729,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 1756,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 1789,
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ",
+       "target_section": 212,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10084930"
+      },
+      {
+       "offset": 1831,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 1861,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoROI@@QAE@PAVRenderer@Tgl@@@Z",
+       "target_section": 42,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a81d0"
+      },
+      {
+       "offset": 1874,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1914,
+       "type": 20,
+       "addend": 0,
+       "target": "?Read@LegoROI@@QAEJPAVOrientableROI@@PAVRenderer@Tgl@@PAVViewLODListManager@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+       "target_section": 215,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a84a0"
+      },
+      {
+       "offset": 1945,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 2022,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 2036,
+       "type": 6,
+       "addend": 0,
+       "target": "$T54118",
+       "target_section": 216,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e8e10"
+      },
+      {
+       "offset": 2041,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 2050,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ],
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "windows": [
+       {
+        "start": 1013,
+        "end": 1030,
+        "source_instruction_lengths": [
+         3,
+         3,
+         1,
+         3,
+         7
+        ],
+        "target_order": [
+         0,
+         3,
+         4,
+         2,
+         1
+        ],
+        "expected_dependence_edges": [
+         [
+          0,
+          2,
+          [
+           "register_raw"
+          ]
+         ]
+        ],
+        "expected_line_rows": []
+       },
+       {
+        "start": 1344,
+        "end": 1361,
+        "source_instruction_lengths": [
+         3,
+         3,
+         1,
+         3,
+         7
+        ],
+        "target_order": [
+         0,
+         3,
+         4,
+         2,
+         1
+        ],
+        "expected_dependence_edges": [
+         [
+          0,
+          2,
+          [
+           "register_raw"
+          ]
+         ]
+        ],
+        "expected_line_rows": []
+       },
+       {
+        "start": 1497,
+        "end": 1503,
+        "source_instruction_lengths": [
+         3,
+         3
+        ],
+        "target_order": [
+         1,
+         0
+        ],
+        "expected_dependence_edges": [],
+        "expected_line_rows": []
+       },
+       {
+        "start": 1624,
+        "end": 1662,
+        "source_instruction_lengths": [
+         5,
+         2,
+         3,
+         3,
+         3,
+         3,
+         3,
+         3,
+         3,
+         1,
+         1,
+         1,
+         3,
+         1,
+         3
+        ],
+        "target_order": [
+         0,
+         1,
+         2,
+         7,
+         4,
+         3,
+         8,
+         5,
+         9,
+         6,
+         10,
+         12,
+         11,
+         14,
+         13
+        ],
+        "expected_dependence_edges": [
+         [
+          0,
+          2,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          0,
+          5,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          0,
+          6,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          0,
+          10,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          0,
+          14,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          1,
+          3,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          1,
+          7,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          1,
+          8,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          1,
+          9,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          1,
+          12,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          1,
+          13,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          2,
+          6,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          2,
+          14,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          3,
+          8,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          3,
+          12,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          4,
+          11,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          5,
+          6,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          5,
+          14,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          6,
+          10,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          6,
+          14,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          7,
+          8,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          7,
+          12,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          8,
+          9,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          8,
+          12,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          8,
+          13,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          9,
+          10,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          9,
+          11,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          9,
+          12,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          9,
+          13,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          10,
+          11,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          10,
+          13,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          10,
+          14,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          11,
+          13,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          12,
+          13,
+          [
+           "register_raw"
+          ]
+         ]
+        ],
+        "expected_line_rows": [
+         [
+          1624,
+          193,
+          0
+         ],
+         [
+          1634,
+          194,
+          7
+         ],
+         [
+          1637,
+          195,
+          4
+         ],
+         [
+          1643,
+          196,
+          8
+         ],
+         [
+          1649,
+          197,
+          9
+         ]
+        ]
+       },
+       {
+        "start": 1884,
+        "end": 1909,
+        "source_instruction_lengths": [
+         3,
+         3,
+         1,
+         3,
+         1,
+         3,
+         1,
+         3,
+         7
+        ],
+        "target_order": [
+         0,
+         3,
+         8,
+         2,
+         1,
+         4,
+         5,
+         6,
+         7
+        ],
+        "expected_dependence_edges": [
+         [
+          0,
+          2,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          0,
+          5,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          1,
+          4,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          1,
+          7,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          2,
+          4,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          2,
+          5,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          2,
+          6,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          3,
+          6,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          4,
+          6,
+          [
+           "register_raw",
+           "register_war",
+           "register_waw"
+          ]
+         ],
+         [
+          4,
+          7,
+          [
+           "register_war"
+          ]
+         ]
+        ],
+        "expected_line_rows": []
+       }
+      ],
+      "register_bijections": [
+       {
+        "mapping": {
+         "edi": "esi",
+         "esi": "edi"
+        },
+        "region_start": 784,
+        "region_end": 844,
+        "expected_region_instruction_count": 20,
+        "expected_rewritten_offsets": [
+         785,
+         787,
+         794,
+         802,
+         827,
+         829,
+         831,
+         839
+        ],
+        "debug_s_register_map": [
+         {
+          "name": "lodList",
+          "record_offset": 341,
+          "donor_register": "edi",
+          "image_register": "esi"
+         }
+        ]
+       },
+       {
+        "mapping": {
+         "ebx": "esi",
+         "esi": "ebx"
+        },
+        "region_start": 847,
+        "region_end": 920,
+        "expected_region_instruction_count": 24,
+        "expected_rewritten_offsets": [
+         870,
+         872,
+         879,
+         888,
+         904,
+         906,
+         908,
+         914
+        ],
+        "debug_s_register_map": [
+         {
+          "name": "roiLength",
+          "record_offset": 357,
+          "donor_register": "ebx",
+          "image_register": "esi"
+         },
+         {
+          "name": "j",
+          "record_offset": 407,
+          "donor_register": "ebx",
+          "image_register": "esi"
+         }
+        ]
+       }
+      ],
+      "relational_sites": [
+       {
+        "compare_offset": 688,
+        "branch_offset": 691,
+        "seed_condition": "be",
+        "image_condition": "ae",
+        "expected_rewritten_offsets": [
+         688,
+         691
+        ]
+       },
+       {
+        "compare_offset": 1440,
+        "branch_offset": 1443,
+        "seed_condition": "b",
+        "image_condition": "a",
+        "expected_rewritten_offsets": [
+         1440,
+         1444
+        ]
+       },
+       {
+        "compare_offset": 1997,
+        "branch_offset": 2000,
+        "seed_condition": "b",
+        "image_condition": "a",
+        "expected_rewritten_offsets": [
+         1997,
+         2001
+        ]
+       }
+      ],
+      "expected_instruction_count": 670,
+      "expected_changed_offsets": [
+       688,
+       691,
+       785,
+       787,
+       794,
+       802,
+       827,
+       829,
+       831,
+       839,
+       870,
+       872,
+       879,
+       888,
+       904,
+       906,
+       908,
+       914,
+       1017,
+       1018,
+       1019,
+       1020,
+       1021,
+       1022,
+       1023,
+       1024,
+       1025,
+       1026,
+       1027,
+       1028,
+       1029,
+       1348,
+       1349,
+       1350,
+       1351,
+       1352,
+       1353,
+       1354,
+       1355,
+       1356,
+       1357,
+       1358,
+       1359,
+       1360,
+       1440,
+       1444,
+       1497,
+       1498,
+       1499,
+       1500,
+       1501,
+       1502,
+       1636,
+       1641,
+       1642,
+       1644,
+       1645,
+       1647,
+       1648,
+       1649,
+       1650,
+       1651,
+       1652,
+       1654,
+       1655,
+       1656,
+       1657,
+       1658,
+       1659,
+       1660,
+       1661,
+       1888,
+       1889,
+       1890,
+       1891,
+       1892,
+       1893,
+       1894,
+       1895,
+       1896,
+       1897,
+       1898,
+       1899,
+       1900,
+       1901,
+       1902,
+       1904,
+       1905,
+       1906,
+       1907,
+       1908,
+       1997,
+       2001
+      ],
+      "expected_procedure_range": [
+       2058,
+       43,
+       2019
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$S",
+        "$L53646",
+        2035
+       ],
+       [
+        ".debug$S",
+        "$L53646",
+        2035
+       ],
+       [
+        ".debug$S",
+        "$L53649",
+        1275
+       ],
+       [
+        ".debug$S",
+        "$L53649",
+        1275
+       ],
+       [
+        ".debug$S",
+        "$L53652",
+        1454
+       ],
+       [
+        ".debug$S",
+        "$L53652",
+        1454
+       ],
+       [
+        ".debug$S",
+        "$L53655",
+        1869
+       ],
+       [
+        ".debug$S",
+        "$L53655",
+        1869
+       ],
+       [
+        ".debug$S",
+        "$L53658",
+        2045
+       ],
+       [
+        ".debug$S",
+        "$L53658",
+        2045
+       ],
+       [
+        ".debug$S",
+        "$L53823",
+        1785
+       ],
+       [
+        ".debug$S",
+        "$L53823",
+        1785
+       ],
+       [
+        ".debug$S",
+        "$done$50717",
+        2013
+       ],
+       [
+        ".debug$S",
+        "$done$50717",
+        2013
+       ],
+       [
+        ".debug$S",
+        "?Read@LegoROI@@QAEJPAVOrientableROI@@PAVRenderer@Tgl@@PAVViewLODListManager@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?Read@LegoROI@@QAEJPAVOrientableROI@@PAVRenderer@Tgl@@PAVViewLODListManager@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+        0
+       ],
+       [
+        ".xdata$x",
+        "$L53649",
+        1275
+       ],
+       [
+        ".xdata$x",
+        "$L53652",
+        1454
+       ],
+       [
+        ".xdata$x",
+        "$L53655",
+        1869
+       ],
+       [
+        ".xdata$x",
+        "$L53658",
+        2045
+       ],
+       [
+        ".xdata$x",
+        "$L53823",
+        1785
+       ]
+      ],
+      "expected_external_entries": [
+       1275,
+       1454,
+       1785,
+       1869,
+       2013,
+       2035,
+       2045
+      ],
+      "expected_seed_debug_s_sha256": "dd0033f96396f6cbfd69814421b56934611f218c1c9e91f4c99d33b05d8b6a25",
+      "expected_image_debug_s_sha256": "f09a654b44b30eef24bedea0b79938bdc5680023ab84fd8a7164a7ec41c72e39",
+      "expected_internal_relocation_targets": [
+       0,
+       2035
+      ],
+      "authenticity_rationale": "Three certificates inside one entry, all measured on this compile of the translation unit: five closed, call-free topological window reorderings whose dependence DAG is proved on registers, flags and memory; two regional register bijections whose support is proved dead on entry to and on every edge leaving the region by the backward atom-liveness fixpoint over the body own control flow; and three mirrored relational reversals whose changed flags are proved dead at every successor and at every unwind funclet entry. No byte is installed that this compiler did not emit for this function, and the composition is refused unless it equals the pinned retail oracle under the relocation mask."
+     },
+     "retail_image_target": "lego1"
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 4 row(s) in LEGO1/lego/sources/roi/legoroi.cpp from generated declaration-only carrier states over the rendered current source.",
+    "reason": "Closes 5 row(s) in LEGO1/lego/sources/roi/legoroi.cpp from generated declaration-only carrier states over the rendered current source.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -30894,8 +32517,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4920,
-    "accepted_row_identity_sha256": "123b336585da434a3760451fcd21bfad1e045ea50abbc17de044b98d496bbc4a",
+    "exact_raw_1_0_count": 4921,
+    "accepted_row_identity_sha256": "0496e0a0715393133e4b1cabeaff4b7f60cc54c4424dfc0ba41b7e4f5a1df37e",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
