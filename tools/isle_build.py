@@ -1609,6 +1609,26 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
                 elif (function["splice_class"]
+                        == byte_identity.INSTRUCTION_SCHEDULE_CLASS):
+                    # The instruction-schedule certificate: the declared
+                    # window reordering is applied to this donor's own
+                    # compiler-produced body after being proved a topological
+                    # order of the window's dependence DAG, and the result is
+                    # refused unless it equals the pinned retail oracle.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_instruction_schedule(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif (function["splice_class"]
                         == byte_identity.REGISTER_BIJECTION_CLASS):
                     # The register-bijection certificate: sigma is applied to
                     # this donor's own compiler-produced body and the result

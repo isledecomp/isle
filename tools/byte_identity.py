@@ -14075,7 +14075,8 @@ def validate_manifest(
                                          SOURCE_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
-                                         REGISTER_BIJECTION_CLASS),
+                                         REGISTER_BIJECTION_CLASS,
+                                         INSTRUCTION_SCHEDULE_CLASS),
                         f"{function_context}: unsupported splice class")
                 if splice_class == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS:
                     source_equal_keys = {
@@ -14281,6 +14282,177 @@ def validate_manifest(
                         ),
                     )
                     normalized_functions.append(normalized_function)
+                    continue
+                if splice_class == INSTRUCTION_SCHEDULE_CLASS:
+                    schedule_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number",
+                        "expected_donor_section_number",
+                        "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_changed_offsets", "expected_code_renames",
+                        "expected_closure", "retail_oracle",
+                        "retail_relocations", "instruction_schedule",
+                    }
+                    if "retail_image_target" in function:
+                        schedule_keys = schedule_keys | {
+                            "retail_image_target"}
+                    if instruction_schedule_delegate(
+                            function.get("expected_closure") or [],
+                            function.get("expected_code_renames"),
+                    ) != "equal_body_strict":
+                        schedule_keys = schedule_keys | {
+                            "expected_xdata_rename_offsets"}
+                    if function.get("expected_code_renames"):
+                        schedule_keys = schedule_keys | {
+                            "expected_code_rename_symbols"}
+                    exact_keys(function, schedule_keys, function_context)
+                    for name in (
+                        "expected_section_number",
+                        "expected_donor_section_number",
+                        "expected_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_relocation_count",
+                    ):
+                        require_exact_int(function.get(name),
+                                          f"{function_context}.{name}",
+                                          minimum=0)
+                    for name in ("expected_seed_body_sha256",
+                                 "expected_donor_body_sha256",
+                                 "expected_body_sha256",
+                                 "expected_seed_metadata_sha256",
+                                 "expected_donor_metadata_sha256"):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    changed = function.get("expected_changed_offsets")
+                    require(
+                        isinstance(changed, list) and changed
+                        and changed == sorted(set(changed))
+                        and all(type(offset) is int
+                                and 0 <= offset
+                                < function["expected_body_length"]
+                                for offset in changed),
+                        f"{function_context}.expected_changed_offsets "
+                        "is invalid",
+                    )
+                    renames = function.get("expected_code_renames")
+                    require(
+                        isinstance(renames, list)
+                        and all(isinstance(item, list) and len(item) == 2
+                                and type(item[0]) is int
+                                and isinstance(item[1], str) and item[1]
+                                for item in renames)
+                        and renames == sorted(renames),
+                        f"{function_context}.expected_code_renames "
+                        "is invalid",
+                    )
+                    require(
+                        function.get("expected_closure")
+                        in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                            INSTRUCTION_SCHEDULE_EH_CLOSURE),
+                        f"{function_context}.expected_closure differs",
+                    )
+                    if instruction_schedule_delegate(
+                            function["expected_closure"], renames,
+                    ) != "equal_body_strict":
+                        xdata = function.get(
+                            "expected_xdata_rename_offsets")
+                        require(
+                            isinstance(xdata, list)
+                            and xdata == sorted(set(xdata))
+                            and all(type(offset) is int and offset >= 0
+                                    for offset in xdata),
+                            f"{function_context}"
+                            ".expected_xdata_rename_offsets is invalid",
+                        )
+                    if renames:
+                        pairs = function.get("expected_code_rename_symbols")
+                        require(
+                            isinstance(pairs, list)
+                            and len(pairs) == len(renames)
+                            and all(isinstance(item, list) and len(item) == 3
+                                    and type(item[0]) is int
+                                    and isinstance(item[1], str) and item[1]
+                                    and isinstance(item[2], str) and item[2]
+                                    and item[1] != item[2]
+                                    for item in pairs)
+                            and [item[0] for item in pairs]
+                            == [item[0] for item in renames],
+                            f"{function_context}"
+                            ".expected_code_rename_symbols is invalid",
+                        )
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    # A library TU is not itself an image target.  The
+                    # CLOSED pair table below names which library may bind
+                    # which image, exactly as the source-equal-body class
+                    # already names `omni -> lego1`; a pair outside it is
+                    # refused, and a wrong image would in any case make the
+                    # oracle comparison fail.
+                    retail_image_target = function.get(
+                        "retail_image_target", target)
+                    if "retail_image_target" in function:
+                        require(
+                            (target, retail_image_target)
+                            in INSTRUCTION_SCHEDULE_IMAGE_TARGETS,
+                            f"{function_context}.retail_image_target "
+                            "differs",
+                        )
+                    require_target_bound_retail_image(
+                        manifest.get("images"), retail_image_target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_body_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    schedule = validate_instruction_schedule(
+                        function.get("instruction_schedule"),
+                        f"{function_context}.instruction_schedule",
+                        function["expected_body_length"],
+                    )
+                    # Every byte the reordering moves must also be a declared
+                    # changed byte of the composition.
+                    require(
+                        set(schedule["expected_changed_offsets"])
+                        <= set(changed),
+                        f"{function_context}: the reordering changes a byte "
+                        "outside the declared changed set",
+                    )
+                    normalized_functions.append({
+                        **function, "instruction_schedule": schedule,
+                    })
                     continue
                 if splice_class == REGISTER_BIJECTION_CLASS:
                     bijection_keys = {
@@ -27496,6 +27668,7 @@ def decode_ia32_bijection_instruction(
         width = 16
     fields = []
     frozen = set()
+    memory = None
     reads = set(form["reads"])
     writes = set(form["writes"])
     names = IA32_GENERAL_REGISTER_NAMES
@@ -27561,6 +27734,17 @@ def decode_ia32_bijection_instruction(
             # address computation and are always 32-bit, whatever the form's
             # operand width; the memory cell itself is irrelevant to
             # general-register liveness.
+            #
+            # `memory` additionally describes the ADDRESS ITSELF -- base,
+            # index, scale, constant displacement, access width and whether
+            # the form reads or writes the cell.  A register bijection never
+            # reads it; the instruction-schedule certificate needs it to
+            # discharge its memory-disambiguation obligation, and deriving it
+            # here keeps one decoder authoritative for both.
+            base_name = None
+            index_name = None
+            scale = 1
+            absolute = False
             if rm == 4:
                 require(cursor < length, f"{context}: instruction lacks SIB")
                 sib_at = offset + cursor
@@ -27568,15 +27752,42 @@ def decode_ia32_bijection_instruction(
                 cursor += 1
                 base = sib & 7
                 index = (sib >> 3) & 7
+                scale = 1 << (sib >> 6)
                 if not (mode == 0 and base == 5):
                     fields.append((sib_at, 0))
                     reads.add(names[base])
+                    base_name = names[base]
+                else:
+                    absolute = True
                 if index != 4:
                     fields.append((sib_at, 3))
                     reads.add(names[index])
+                    index_name = names[index]
             elif not (mode == 0 and rm == 5):
                 fields.append((modrm_at, 0))
                 reads.add(names[rm])
+                base_name = names[rm]
+            else:
+                absolute = True
+            displacement = 0
+            if mode == 1:
+                require(cursor < length,
+                        f"{context}: instruction lacks its disp8")
+                displacement = int.from_bytes(
+                    encoded[cursor:cursor + 1], "little", signed=True)
+            elif mode == 2 or absolute:
+                require(cursor + 4 <= length,
+                        f"{context}: instruction lacks its disp32")
+                displacement = int.from_bytes(
+                    encoded[cursor:cursor + 4], "little", signed=True)
+            if form["rm_read"] or rm_write or form["x87"]:
+                memory = {
+                    "base": base_name, "index": index_name, "scale": scale,
+                    "displacement": displacement, "absolute": absolute,
+                    "width": max(width // 8, 1),
+                    "read": bool(form["rm_read"]) or bool(form["x87"]),
+                    "write": bool(rm_write),
+                }
         require(form["reg"] != "gpr" or not (form["reg_write"]
                                              and form["rm_write"]),
                 f"{context}: instruction form writes two operands")
@@ -27622,7 +27833,7 @@ def decode_ia32_bijection_instruction(
         "offset": offset, "length": length, "opcode": opcode,
         "fields": fields, "reads": frozenset(reads),
         "writes": frozenset(writes), "flow": flow, "target": target,
-        "frozen": frozenset(frozen),
+        "frozen": frozenset(frozen), "memory": memory,
     }
 
 
@@ -28214,6 +28425,943 @@ def compose_retail_exact_register_bijection(
         "region_instruction_count": proof["region_instruction_count"],
         "instruction_count": proof["instruction_count"],
         "debug_s_register_map": spec["debug_s_register_map"],
+        "retail_exact": True,
+        **semantic_detail,
+    }
+
+
+# ---------------------------------------------------------------------------
+# retail_exact_instruction_schedule: a topological-reordering CERTIFICATE
+# ---------------------------------------------------------------------------
+#
+# WHY THIS CLASS IS A CERTIFICATE AND NOT A GENERATOR
+#
+# `instruction_self_permutation` exchanges ONE adjacent pair of provably
+# independent compiler-produced instructions and is gated on retail equality.
+# This class generalises that statement from a pair to a WINDOW:
+#
+#     the target's instruction sequence over a closed window is a TOPOLOGICAL
+#     REORDERING of the same multiset of instructions under the window's own
+#     dependence DAG.
+#
+# That is strictly stronger than a pairwise-independence proof -- a pair is
+# the two-node case, where the DAG is required to be empty -- and it is
+# provable on the same terms.  Nothing is invented: every byte installed is a
+# byte the compiler emitted for this function, in a different order, and the
+# composition is REFUSED unless the result is byte-identical to the pinned
+# retail oracle under the relocation mask.
+#
+# The obligations, each a `require` in this module rather than a comment:
+#
+#  1  provenance     the pre-image is a freshly compiled, census-pinned seed
+#                    or donor COMDAT of the same mangled function; the
+#                    object-wide function/COMDAT/section/closure census is
+#                    pinned exactly as every other retail-exact class pins it
+#  2  total decode   the whole body decodes to complete instructions with the
+#                    register class's own fail-closed table, to exhaustion,
+#                    and every instruction inside a window is additionally
+#                    required to sit in the CLOSED schedule table below, which
+#                    names its complete flag effect and its memory operand.
+#                    x87, string, stack, absolute-memory, prefixed and every
+#                    control-transfer form are refused rather than analysed.
+#  3  same multiset  the window's instructions after the reordering are the
+#                    same bag of encoded byte strings as before -- a
+#                    permutation, never a rewrite -- so the window's total
+#                    length is unchanged by construction and re-verified.
+#  4  dependence     the declared order is a topological order of the window's
+#                    dependence DAG: RAW, WAR and WAW on general registers AND
+#                    on the flags, plus memory.  MEMORY IS THE HARD PART and
+#                    it is deliberately conservative: two accesses may be
+#                    reordered ONLY when both name the SAME base register with
+#                    no index, neither is absolute, that base is written by no
+#                    instruction in the window, and their [displacement,
+#                    displacement+width) spans are disjoint.  Anything else --
+#                    different base registers above all -- is a dependence
+#                    edge, so a store never crosses a load or a store this
+#                    cannot disambiguate.  The complete edge set is PINNED in
+#                    the manifest, so a body whose dependences differ from the
+#                    declaration refuses before anything moves.
+#  5  control flow   no window may contain a branch, a call or any
+#                    non-fall-through form, no branch anywhere in the body may
+#                    target the interior of a window, and windows may not
+#                    overlap.  A window may BEGIN at a branch target: that is
+#                    a basic-block entry, and the whole window then executes
+#                    from its first instruction on every path.
+#  6  relocations    no relocation operand may intersect a window.  Every
+#                    relocation therefore keeps its offset, and the output's
+#                    relocation table is required to be the seed's own bytes.
+#                    A window that would MOVE a relocation is refused: the
+#                    reseat is not expressed here rather than expressed
+#                    approximately.
+#  7  line + debug   the image is decoded again to exhaustion and EVERY COFF
+#                    line row is re-derived against it: each must still land
+#                    on an instruction boundary.  The rows lying inside a
+#                    window are PINNED, together with which source instruction
+#                    now begins at each of them, so a reordering can never
+#                    silently move a source-line boundary.  The `.debug$S`
+#                    procedure record's code length and debug range are pinned
+#                    and required to stay outside every window's interior, and
+#                    no closure-child relocation may name a code symbol whose
+#                    value falls inside one.
+#  8  retail equal   the image must equal the retail oracle under the
+#                    relocation mask, or the composition is refused.
+#  9  scope          one named COMDAT, a declared window list, one pinned
+#                    oracle, and the ordinary output-conservation proof of the
+#                    equal-body primitive, which this class delegates to
+#                    UNCHANGED.  Which primitive is read off the manifest's
+#                    `expected_closure` pin exactly as the register-bijection
+#                    certificate reads it.
+#
+# WHAT THIS CLASS DELIBERATELY DOES NOT CLAIM.  A COFF line table for
+# optimised MSVC 4.2 output is a sequence of (offset, statement) markers, not
+# a per-instruction attribution: our own unpermuted body already has hoisted
+# instructions sitting inside a previous statement's row.  Obligation 7
+# preserves every marker offset, proves each still begins an instruction, and
+# pins which instruction that now is.  It does not claim to reproduce the line
+# table retail's own compiler emitted for retail's schedule -- that table is
+# not in the shipped image and no oracle for it exists.
+
+
+INSTRUCTION_SCHEDULE_CLASS = "retail_exact_instruction_schedule"
+
+
+# Which library target may name which final image.  A CLOSED pair set,
+# not a wildcard: a static-library TU links into exactly one image and
+# says so, mirroring the `omni -> lego1` allowance the source-equal-body
+# class already carries.
+INSTRUCTION_SCHEDULE_IMAGE_TARGETS = frozenset({
+    ("roi", "lego1"),
+})
+
+
+INSTRUCTION_SCHEDULE_KIND = "topological_window_reordering_v1"
+
+
+INSTRUCTION_SCHEDULE_FPO_CLOSURE = [".debug$F", ".debug$S"]
+INSTRUCTION_SCHEDULE_EH_CLOSURE = [".debug$S", ".xdata$x"]
+
+
+CODEVIEW_PROCEDURE_RECORD_TYPES = (0x0205, 0x0204)
+
+
+def instruction_schedule_delegate(
+    expected_closure: object, expected_code_renames: object,
+) -> str:
+    """Name the installation delegate from the PINS alone.
+
+    Identical policy to the register-bijection certificate: the composer
+    requires the objects' own closure and rename set to equal these pins
+    first, so a pin that disagrees refuses before this is reached.
+    """
+    if (list(expected_closure) == INSTRUCTION_SCHEDULE_FPO_CLOSURE
+            and not expected_code_renames):
+        return "equal_body_strict"
+    return "equal_body_eh_structural_local"
+
+
+# ---------------------------------------------------------------------------
+# The CLOSED schedule table (obligation 2)
+#
+# An opcode may appear inside a window only if this table names its COMPLETE
+# effect on the flags.  Everything absent is refused, which is why the
+# control-transfer forms, the x87 forms, the stack forms (whose memory operand
+# is an implicit [esp] this module does not model), the moffs32 forms (whose
+# address is absolute and relocated) and every group-3 implicit-operand form
+# are simply not here.  `(reads_flags, writes_flags)` is deliberately
+# over-approximated wherever a form only touches some flags: over-approximating
+# can only ADD dependence edges, never remove one.
+# ---------------------------------------------------------------------------
+def _ia32_schedule_flag_table() -> dict:
+    table = {}
+    for opcode in (0x88, 0x89, 0x8A, 0x8B, 0x8D, 0xC6, 0xC7):
+        table[opcode] = (False, False)          # MOV / LEA touch no flag
+    for index in range(8):
+        table[0xB8 + index] = (False, False)    # MOV r32, imm32
+    for opcode in (0x03, 0x0B, 0x23, 0x2B, 0x31, 0x33, 0x38, 0x39, 0x3A,
+                   0x3B, 0x80, 0x81, 0x83, 0x84, 0x85):
+        table[opcode] = (False, True)           # ALU / CMP / TEST write flags
+    for index in range(8):                      # INC/DEC preserve CF; the
+        table[0x40 + index] = (False, True)     # over-approximation is safe
+        table[0x48 + index] = (False, True)
+    for opcode in (0x1A, 0x1B):
+        table[opcode] = (True, True)            # SBB reads and writes CF
+    table[0xF6] = (False, True)                 # /0 TEST, /2 NOT, /3 NEG
+    return table
+
+
+IA32_SCHEDULE_FLAG_EFFECTS = _ia32_schedule_flag_table()
+
+
+def ia32_schedule_instruction_facts(instruction: dict, context: str) -> dict:
+    """Flag effect and memory operand of one window instruction, or refuse."""
+    opcode = instruction["opcode"]
+    effect = IA32_SCHEDULE_FLAG_EFFECTS.get(opcode)
+    require(effect is not None,
+            f"{context}: opcode 0x{opcode:02x} is outside the "
+            "instruction-schedule table")
+    require(instruction["flow"] == "fall",
+            f"{context}: a control-transfer instruction is outside the "
+            "instruction-schedule table")
+    memory = instruction["memory"]
+    if memory is not None:
+        require(not memory["absolute"],
+                f"{context}: an absolute memory operand cannot be "
+                "disambiguated")
+        require(memory["index"] is None,
+                f"{context}: an indexed memory operand cannot be "
+                "disambiguated")
+        require(memory["base"] is not None,
+                f"{context}: a memory operand without a base register cannot "
+                "be disambiguated")
+    return {
+        "offset": instruction["offset"],
+        "length": instruction["length"],
+        "reads": instruction["reads"],
+        "writes": instruction["writes"],
+        "reads_flags": effect[0],
+        "writes_flags": effect[1],
+        "memory": memory,
+    }
+
+
+def ia32_memory_provably_disjoint(left: dict, right: dict) -> bool:
+    """Two memory cells that provably cannot alias.
+
+    The ONLY admitted proof: the same base register, no index on either side,
+    neither absolute, and non-overlapping [displacement, displacement+width)
+    spans.  Two different base registers are NOT a proof of anything and this
+    returns False for them, which makes the pair a dependence edge.
+    """
+    if left["absolute"] or right["absolute"]:
+        return False
+    if left["index"] is not None or right["index"] is not None:
+        return False
+    if left["base"] is None or left["base"] != right["base"]:
+        return False
+    return (left["displacement"] + left["width"] <= right["displacement"]
+            or right["displacement"] + right["width"] <= left["displacement"])
+
+
+def ia32_schedule_dependence_edges(
+    instructions: list[dict], context: str,
+) -> tuple[list[dict], list[list]]:
+    """The window's dependence DAG (obligation 4).
+
+    Every ordered pair carries an edge unless it is proved independent on
+    registers, on flags AND on memory.  The memory proof is the conservative
+    one above, and a base register written anywhere inside the window
+    invalidates every displacement comparison against it, so that is refused
+    outright rather than reasoned around.
+    """
+    facts = [ia32_schedule_instruction_facts(item, f"{context} at "
+                                             f"{item['offset']}")
+             for item in instructions]
+    written = set()
+    for item in facts:
+        written |= set(item["writes"])
+    for item in facts:
+        memory = item["memory"]
+        if memory is None:
+            continue
+        require(memory["base"] not in written,
+                f"{context}: memory base {memory['base']} is written inside "
+                "the window, so no displacement comparison against it holds")
+    edges = []
+    for left in range(len(facts)):
+        for right in range(left + 1, len(facts)):
+            first, second = facts[left], facts[right]
+            reasons = []
+            if first["writes"] & second["reads"]:
+                reasons.append("register_raw")
+            if first["reads"] & second["writes"]:
+                reasons.append("register_war")
+            if first["writes"] & second["writes"]:
+                reasons.append("register_waw")
+            if first["writes_flags"] and second["reads_flags"]:
+                reasons.append("flags_raw")
+            if first["reads_flags"] and second["writes_flags"]:
+                reasons.append("flags_war")
+            if first["writes_flags"] and second["writes_flags"]:
+                reasons.append("flags_waw")
+            one, two = first["memory"], second["memory"]
+            if one is not None and two is not None and (one["write"]
+                                                        or two["write"]):
+                if not ia32_memory_provably_disjoint(one, two):
+                    reasons.append("memory")
+            if reasons:
+                edges.append([left, right, sorted(reasons)])
+    return facts, edges
+
+
+def require_topological_instruction_order(
+    count: int, edges: list[list], order: list[int], context: str,
+) -> None:
+    """The declared order must respect every edge of the DAG."""
+    require(sorted(order) == list(range(count)),
+            f"{context}: the target order is not a permutation of the window")
+    position = {source: index for index, source in enumerate(order)}
+    for left, right, reasons in edges:
+        require(position[left] < position[right],
+                f"{context}: the target order moves instruction {right} "
+                f"before {left}, which the dependence DAG forbids "
+                f"({', '.join(reasons)})")
+    require(order != list(range(count)),
+            f"{context}: the declared order does not reorder the window")
+
+
+# The whole-body walk this class needs is WEAKER than the register-bijection
+# decoder's: outside a window only lengths and control-flow targets matter, and
+# demanding the register class's closed semantic table for every instruction of
+# a 1,700-byte function would refuse bodies whose windows are perfectly
+# analysable.  So the body is walked with the module's existing fail-closed
+# LENGTH decoder -- the same one every instruction-mosaic class already trusts
+# for boundary certification -- and the branch targets are read off a closed
+# table of relative-transfer encodings.  An INDIRECT jump is refused outright:
+# its targets are not statically knowable, so it could hide an entry into a
+# window's interior.
+_IA32_SCHEDULE_INTERIOR_PREFIXES = (
+    _IA32_INERT_SEGMENT_PREFIXES | frozenset({_IA32_OPERAND_SIZE_PREFIX})
+)
+
+
+def ia32_schedule_body_walk(
+    body: bytes, relocations: dict | None, context: str,
+) -> tuple[list[tuple[int, int]], set]:
+    """Boundaries and interior branch targets of a whole COMDAT body."""
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    relocations = relocations or {}
+    spans = []
+    targets = set()
+    offset = 0
+    while offset < len(body):
+        length = supported_ia32_instruction_length(
+            body[offset:], f"{context} at {offset}")
+        spans.append((offset, length))
+        cursor = offset
+        while body[cursor] in _IA32_SCHEDULE_INTERIOR_PREFIXES:
+            cursor += 1
+            require(cursor < offset + length,
+                    f"{context}: instruction at {offset} is only prefixes")
+        opcode = body[cursor]
+        width = 0
+        if opcode in range(0x70, 0x80) or opcode in (0xEB, 0xE0, 0xE1,
+                                                     0xE2, 0xE3):
+            width = 1
+        elif opcode in (0xE9, 0xE8):
+            width = 4
+        elif opcode == 0x0F and cursor + 1 < offset + length \
+                and 0x80 <= body[cursor + 1] <= 0x8F:
+            width = 4
+        elif opcode == 0xFF:
+            require(cursor + 1 < offset + length,
+                    f"{context}: FF form at {offset} lacks its ModRM")
+            extension = (body[cursor + 1] >> 3) & 7
+            require(extension not in (3, 4, 5),
+                    f"{context}: an indirect or far jump at {offset} makes "
+                    "the window's entry set unknowable")
+        if width:
+            displacement_at = offset + length - width
+            row = relocations.get(displacement_at)
+            if row is None or row.get("width") != width:
+                relative = int.from_bytes(
+                    body[displacement_at:offset + length],
+                    "little", signed=True)
+                targets.add(offset + length + relative)
+        offset += length
+    require(offset == len(body),
+            f"{context}: body does not decode to exhaustion")
+    starts = {start for start, _ in spans}
+    for target in targets:
+        require(target in starts,
+                f"{context}: a branch targets {target}, which is not an "
+                "instruction boundary of this body")
+    return spans, targets
+
+
+def apply_instruction_schedule(
+    body: bytes, windows: list[dict], relocation_offsets: frozenset,
+    context: str, relocations: dict | None = None,
+) -> tuple[bytes, dict]:
+    """Reorder each declared window under a proved dependence DAG.
+
+    Obligations 2 through 6 are checked here, and the result is re-decoded to
+    exhaustion so that every claim about the image is measured on the image.
+    """
+    body = bytes(body)
+    spans, targets = ia32_schedule_body_walk(body, relocations, context)
+    instructions = [
+        {"offset": start, "length": length} for start, length in spans]
+    boundaries = {start for start, _ in spans}
+    boundaries.add(len(body))
+    image = bytearray(body)
+    detail = []
+    previous_end = 0
+    for index, window in enumerate(windows):
+        window_context = f"{context} window {index}"
+        start, end = window["start"], window["end"]
+        require(start >= previous_end,
+                f"{window_context}: windows are unsorted or overlapping")
+        previous_end = end
+        require(start in boundaries and end in boundaries and start < end,
+                f"{window_context}: the window does not span whole "
+                "instructions")
+        inside = [item for item in instructions
+                  if start <= item["offset"] < end]
+        require(inside
+                and inside[-1]["offset"] + inside[-1]["length"] == end,
+                f"{window_context}: the window does not end on an "
+                "instruction boundary")
+        require(len(inside) >= 2,
+                f"{window_context}: a window needs at least two instructions")
+        # Inside a window every instruction is decoded with the register
+        # class's own closed semantic table, to exhaustion, so its complete
+        # register read/write set and its memory operand are known exactly.
+        inside = [
+            decode_ia32_bijection_instruction(
+                body, item["offset"],
+                f"{window_context} at {item['offset']}", relocations)
+            for item in inside
+        ]
+        require([item["offset"] + item["length"] for item in inside][-1] == end,
+                f"{window_context}: the decoded window does not end on the "
+                "window boundary")
+        # Obligation 5.
+        crossing = sorted(target for target in targets if start < target < end)
+        require(not crossing,
+                f"{window_context}: a branch targets the window interior at "
+                f"{crossing}")
+        # Obligation 6.
+        overlapping = sorted(offset for offset in range(start, end)
+                             if offset in relocation_offsets)
+        require(not overlapping,
+                f"{window_context}: a relocation operand lies inside the "
+                f"window at {overlapping[:4]}; this class refuses to move a "
+                "relocation rather than reseat it approximately")
+        facts, edges = ia32_schedule_dependence_edges(inside, window_context)
+        require(edges == window["expected_dependence_edges"],
+                f"{window_context}: the measured dependence DAG differs from "
+                "its declaration")
+        order = list(window["target_order"])
+        require_topological_instruction_order(
+            len(inside), edges, order, window_context)
+        pieces = [body[item["offset"]:item["offset"] + item["length"]]
+                  for item in inside]
+        require([len(piece) for piece in pieces]
+                == list(window["source_instruction_lengths"]),
+                f"{window_context}: the window's instruction partition "
+                "differs from its declaration")
+        reordered = b"".join(pieces[source] for source in order)
+        # Obligation 3: the same bag of encoded instructions, so the same
+        # total length.  Both halves are asserted, not assumed.
+        require(sorted(pieces) == sorted(
+                    reordered[offset:offset + length]
+                    for offset, length in _instruction_spans(order, pieces)),
+                f"{window_context}: the reordering is not a permutation of "
+                "the window's own instructions")
+        require(len(reordered) == end - start,
+                f"{window_context}: the reordering changed the window length")
+        image[start:end] = reordered
+        detail.append({
+            "start": start, "end": end,
+            "instruction_count": len(inside),
+            "source_instruction_lengths": [len(piece) for piece in pieces],
+            "target_order": order,
+            "dependence_edges": edges,
+            "memory_disambiguation": [
+                {
+                    "instruction": position,
+                    "base": item["memory"]["base"],
+                    "displacement": item["memory"]["displacement"],
+                    "width": item["memory"]["width"],
+                    "read": item["memory"]["read"],
+                    "write": item["memory"]["write"],
+                }
+                for position, item in enumerate(facts)
+                if item["memory"] is not None
+            ],
+        })
+    image = bytes(image)
+    require(len(image) == len(body),
+            f"{context}: the reordering changed the body length")
+    require(image != body, f"{context}: the reordering moves nothing")
+    image_spans, _ = ia32_schedule_body_walk(
+        image, relocations, f"{context} image")
+    image_instructions = [
+        {"offset": start, "length": length} for start, length in image_spans]
+    window_spans = [(item["start"], item["end"]) for item in windows]
+
+    def _in_window(offset):
+        return any(start <= offset < end for start, end in window_spans)
+
+    require(
+        [(item["offset"], item["length"]) for item in image_instructions
+         if not _in_window(item["offset"])]
+        == [(item["offset"], item["length"]) for item in instructions
+            if not _in_window(item["offset"])],
+        f"{context}: the image moved an instruction boundary outside a "
+        "declared window",
+    )
+    for (start, end), item in zip(window_spans, detail):
+        before = sorted(body[position["offset"]:
+                             position["offset"] + position["length"]]
+                        for position in instructions
+                        if start <= position["offset"] < end)
+        after = sorted(image[position["offset"]:
+                             position["offset"] + position["length"]]
+                       for position in image_instructions
+                       if start <= position["offset"] < end)
+        require(before == after,
+                f"{context}: window {start:#x} is not the same instruction "
+                "multiset in the image")
+    changed = sorted(index for index in range(len(body))
+                     if body[index] != image[index])
+    require(all(_in_window(offset) for offset in changed),
+            f"{context}: the image changed a byte outside a declared window")
+    return image, {
+        "windows": detail,
+        "instruction_count": len(instructions),
+        "changed_offsets": changed,
+    }
+
+
+def _instruction_spans(order: list[int], pieces: list[bytes]):
+    """The (offset, length) spans the reordered pieces occupy."""
+    cursor = 0
+    for source in order:
+        yield cursor, len(pieces[source])
+        cursor += len(pieces[source])
+
+
+def require_instruction_schedule_debug_fidelity(
+    coff: "CoffObject", section: dict, image: bytes, windows: list[dict],
+    spec: dict, mangled: str, context: str,
+    relocations: dict | None = None,
+) -> dict:
+    """Obligation 7: re-derive the line rows and the debug ranges.
+
+    Every COFF line row is checked against the IMAGE's own instruction
+    boundaries, the rows inside each window are pinned together with the
+    source instruction that now begins at them, the CodeView procedure
+    record's code length and debug range are pinned and required to stay
+    clear of every window interior, and no closure-child relocation may name
+    a code symbol whose value falls inside one.
+    """
+    spans, _ = ia32_schedule_body_walk(image, relocations,
+                                       f"{context} image")
+    boundaries = {start for start, _ in spans}
+    boundaries.add(len(image))
+    index_of = {start: position for position, (start, _) in enumerate(spans)}
+    line_bytes = _coff_table_bytes(coff, section, "lines")
+    require(len(line_bytes) == section["line_count"] * 6
+            and len(line_bytes) >= 12,
+            f"{context}: the compiler line table is missing")
+    marker_index, marker_line = coff_unpack(
+        "<IH", line_bytes, 0, f"{context} line sentinel")
+    function_index, _ = function_symbol(coff, mangled, section["number"])
+    require(marker_line == 0 and marker_index == function_index,
+            f"{context}: the compiler line sentinel differs")
+    rows = []
+    for position in range(1, section["line_count"]):
+        offset, line = coff_unpack(
+            "<IH", line_bytes, position * 6, f"{context} line row {position}")
+        require(line != 0 and 0 <= offset < len(image),
+                f"{context}: line row {position} is invalid")
+        require(offset in boundaries,
+                f"{context}: line row {position} at {offset:#x} is not an "
+                "instruction boundary of the image")
+        rows.append([offset, line])
+    interior = []
+    require(len(windows) == len(spec["windows"]),
+            f"{context}: the window list differs from its declaration")
+    for window, declared in zip(windows, spec["windows"]):
+        start, end = window["start"], window["end"]
+        order = list(window["target_order"])
+        # For each line row INSIDE a window, name the SOURCE instruction that
+        # now begins at it.  A reordering cannot move a source-line boundary
+        # silently: the manifest states which instruction each interior row
+        # now heads, and a different reordering changes that triple.
+        attribution = [
+            [offset, line, order[index_of[offset] - index_of[start]]]
+            for offset, line in rows if start <= offset < end
+        ]
+        require(attribution == declared["expected_line_rows"],
+                f"{context}: the line rows inside window {start:#x} differ "
+                "from their declaration")
+        interior.extend(attribution)
+    child = _comdat_child(coff, section, ".debug$S")
+    stream = coff_body(coff, child)
+    records = parse_codeview_symbol_stream(stream, f"{context} debug$S")
+    procedures = [record for record in records
+                  if record["type"] in CODEVIEW_PROCEDURE_RECORD_TYPES]
+    require(len(procedures) == 1,
+            f"{context}: the .debug$S stream does not carry exactly one "
+            "procedure record")
+    record = procedures[0]
+    code_length, debug_start, debug_end = coff_unpack(
+        "<III", stream, record["offset"] + 16, f"{context} procedure record")
+    require([code_length, debug_start, debug_end]
+            == spec["expected_procedure_range"],
+            f"{context}: the procedure record's code range differs from its "
+            "declaration")
+    require(code_length == len(image),
+            f"{context}: the procedure record's code length is not the body")
+    for name, value in (("debug_start", debug_start), ("debug_end", debug_end)):
+        require(value in boundaries,
+                f"{context}: the procedure record's {name} is not an "
+                "instruction boundary of the image")
+        require(not any(start < value < end
+                        for start, end in [(item["start"], item["end"])
+                                           for item in windows]),
+                f"{context}: the procedure record's {name} falls inside a "
+                "reordered window")
+    values = {}
+    for symbol in coff.symbols.values():
+        if symbol["section"] == section["number"]:
+            values[symbol["name"]] = symbol["value"]
+    referenced = []
+    for child_name in _comdat_child_closure(coff, section)[1]:
+        sibling = _comdat_child(coff, section, child_name)
+        for row in detailed_relocations(coff, sibling):
+            if row["target"] in values:
+                value = values[row["target"]]
+                require(not any(start < value < end
+                                for start, end in
+                                [(item["start"], item["end"])
+                                 for item in windows]),
+                        f"{context}: {child_name} names the code symbol "
+                        f"{row['target']} at {value:#x}, inside a reordered "
+                        "window")
+                referenced.append([child_name, row["target"], value])
+    require(sorted(referenced) == sorted(spec["expected_code_symbol_references"]),
+            f"{context}: the closure's code-symbol references differ from "
+            "their declaration")
+    return {
+        "line_rows": len(rows),
+        "window_line_rows": interior,
+        "procedure_range": [code_length, debug_start, debug_end],
+        "code_symbol_references": referenced,
+    }
+
+
+def validate_instruction_schedule(
+    value: object, context: str, body_length: int,
+) -> dict:
+    """Validate one instruction-schedule certificate declaration."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "windows", "expected_instruction_count",
+        "expected_changed_offsets", "expected_procedure_range",
+        "expected_code_symbol_references", "authenticity_rationale",
+    }, context)
+    require(value.get("kind") == INSTRUCTION_SCHEDULE_KIND,
+            f"{context}.kind differs")
+    windows = value.get("windows")
+    require(isinstance(windows, list) and 1 <= len(windows) <= 32,
+            f"{context}.windows must contain 1..32 windows")
+    normalized_windows = []
+    previous_end = 0
+    for index, window in enumerate(windows):
+        window_context = f"{context}.windows[{index}]"
+        require(isinstance(window, dict),
+                f"{window_context} must be an object")
+        exact_audit_keys(window, {
+            "start", "end", "source_instruction_lengths", "target_order",
+            "expected_dependence_edges", "expected_line_rows",
+        }, window_context)
+        start = require_exact_int(window.get("start"),
+                                  f"{window_context}.start",
+                                  minimum=0, maximum=body_length - 1)
+        end = require_exact_int(window.get("end"), f"{window_context}.end",
+                                minimum=1, maximum=body_length)
+        require(start >= previous_end and start < end,
+                f"{window_context}: windows are unsorted, empty or "
+                "overlapping")
+        previous_end = end
+        lengths = window.get("source_instruction_lengths")
+        require(isinstance(lengths, list) and 2 <= len(lengths) <= 64
+                and all(type(item) is int and 1 <= item <= 15
+                        for item in lengths)
+                and sum(lengths) == end - start,
+                f"{window_context}.source_instruction_lengths differs")
+        order = window.get("target_order")
+        require(isinstance(order, list)
+                and sorted(order) == list(range(len(lengths)))
+                and order != list(range(len(lengths))),
+                f"{window_context}.target_order is not a non-identity "
+                "permutation")
+        edges = window.get("expected_dependence_edges")
+        require(isinstance(edges, list)
+                and all(isinstance(edge, list) and len(edge) == 3
+                        and type(edge[0]) is int and type(edge[1]) is int
+                        and 0 <= edge[0] < edge[1] < len(lengths)
+                        and isinstance(edge[2], list) and edge[2]
+                        and edge[2] == sorted(set(edge[2]))
+                        and all(reason in INSTRUCTION_SCHEDULE_EDGE_REASONS
+                                for reason in edge[2])
+                        for edge in edges)
+                and [edge[:2] for edge in edges]
+                == sorted(edge[:2] for edge in edges),
+                f"{window_context}.expected_dependence_edges is invalid")
+        line_rows = window.get("expected_line_rows")
+        require(isinstance(line_rows, list)
+                and all(isinstance(row, list) and len(row) == 3
+                        and all(type(item) is int for item in row)
+                        and start <= row[0] < end
+                        and 0 <= row[2] < len(lengths)
+                        for row in line_rows)
+                and [row[0] for row in line_rows]
+                == sorted({row[0] for row in line_rows}),
+                f"{window_context}.expected_line_rows is invalid")
+        normalized_windows.append({
+            "start": start, "end": end,
+            "source_instruction_lengths": list(lengths),
+            "target_order": list(order),
+            "expected_dependence_edges": [
+                [edge[0], edge[1], list(edge[2])] for edge in edges],
+            "expected_line_rows": [list(row) for row in line_rows],
+        })
+    changed = value.get("expected_changed_offsets")
+    require(isinstance(changed, list) and changed
+            and changed == sorted(set(changed))
+            and all(type(offset) is int
+                    and any(item["start"] <= offset < item["end"]
+                            for item in normalized_windows)
+                    for offset in changed),
+            f"{context}.expected_changed_offsets is invalid")
+    procedure = value.get("expected_procedure_range")
+    require(isinstance(procedure, list) and len(procedure) == 3
+            and all(type(item) is int and item >= 0 for item in procedure)
+            and procedure[0] == body_length
+            and procedure[1] <= procedure[2] <= body_length,
+            f"{context}.expected_procedure_range is invalid")
+    references = value.get("expected_code_symbol_references")
+    require(isinstance(references, list)
+            and all(isinstance(item, list) and len(item) == 3
+                    and isinstance(item[0], str) and isinstance(item[1], str)
+                    and type(item[2]) is int and 0 <= item[2] <= body_length
+                    for item in references),
+            f"{context}.expected_code_symbol_references is invalid")
+    rationale = value.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 40,
+            f"{context}.authenticity_rationale is missing")
+    return {
+        "kind": INSTRUCTION_SCHEDULE_KIND,
+        "windows": normalized_windows,
+        "expected_instruction_count": require_exact_int(
+            value.get("expected_instruction_count"),
+            f"{context}.expected_instruction_count", minimum=2),
+        "expected_changed_offsets": list(changed),
+        "expected_procedure_range": list(procedure),
+        "expected_code_symbol_references": [list(item)
+                                            for item in references],
+        "authenticity_rationale": rationale,
+    }
+
+
+INSTRUCTION_SCHEDULE_EDGE_REASONS = frozenset({
+    "register_raw", "register_war", "register_waw",
+    "flags_raw", "flags_war", "flags_waw", "memory",
+})
+
+
+def compose_retail_exact_instruction_schedule(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Install a topological reordering after proving it is retail's own code.
+
+    See the class comment above: this is a certificate.  The pre-image is an
+    ordinary, census-pinned compile of the same translation unit; the
+    reordering is proved to respect the window's own dependence DAG; and the
+    result is refused unless it equals the pinned retail oracle under the
+    relocation mask.  Body installation itself is delegated, unchanged, to the
+    equal-body primitive.
+    """
+    require(function.get("splice_class") == INSTRUCTION_SCHEDULE_CLASS,
+            "splice class is not retail_exact_instruction_schedule")
+    require("target_source_refactor" not in function,
+            "instruction-schedule functions carry no source refactor")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    spec = function["instruction_schedule"]
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(sp["number"] == function["expected_section_number"]
+            and dp["number"] == function["expected_donor_section_number"],
+            "instruction-schedule target section seat changed")
+    require(len(seed.sections) == len(donor.sections)
+            == function["expected_section_count"],
+            "instruction-schedule global section count changed")
+    seed_functions = function_multiset(seed)
+    donor_functions = function_multiset(donor)
+    require(seed_functions == donor_functions
+            and sum(seed_functions.values())
+            == function["expected_function_count"],
+            "instruction-schedule donor function set differs")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    donor_comdats = comdat_primary_identity_multiset(donor)
+    require(seed_comdats == donor_comdats
+            and sum(seed_comdats.values())
+            == function["expected_comdat_count"],
+            "instruction-schedule donor COMDAT identity set differs")
+    require(
+        sp["raw_size"] == dp["raw_size"] == function["expected_body_length"]
+        and sp["relocation_count"] == dp["relocation_count"]
+        == function["expected_relocation_count"]
+        and sp["line_count"] == function["expected_seed_line_count"]
+        and dp["line_count"] == function["expected_donor_line_count"]
+        and sp["name"] == dp["name"]
+        and sp["characteristics"] == dp["characteristics"]
+        == function["expected_characteristics"],
+        "instruction-schedule target header/count pins changed",
+    )
+    require(
+        section_definitions(seed)[sp["number"]]["selection"]
+        == section_definitions(donor)[dp["number"]]["selection"]
+        == function["expected_selection"],
+        "instruction-schedule COMDAT selection changed",
+    )
+    expected_closure = tuple(function["expected_closure"])
+    require(_comdat_child_closure(seed, sp)
+            == _comdat_child_closure(donor, dp)
+            == (len(expected_closure), expected_closure),
+            "instruction-schedule target closure changed")
+    require(list(expected_closure) in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                                       INSTRUCTION_SCHEDULE_EH_CLOSURE),
+            "instruction-schedule closure pin names no installation delegate")
+    delegate = instruction_schedule_delegate(
+        function["expected_closure"], function["expected_code_renames"])
+    require(instruction_mosaic_metadata_sha256(seed, sp)
+            == function["expected_seed_metadata_sha256"]
+            and instruction_mosaic_metadata_sha256(donor, dp)
+            == function["expected_donor_metadata_sha256"],
+            "instruction-schedule metadata differs from its pin")
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+            and sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "instruction-schedule seed/donor body differs from its pin")
+    code_renames = require_instruction_mosaic_semantic_relocations(
+        seed, sp, donor, dp, "instruction-schedule code")
+    require([[offset, kind] for offset, kind in code_renames]
+            == function["expected_code_renames"],
+            "instruction-schedule code rename set changed")
+    seed_rows = detailed_relocations(seed, sp)
+    donor_rows = detailed_relocations(donor, dp)
+    seed_targets = {row["offset"]: row["target"] for row in seed_rows}
+    donor_targets = {row["offset"]: row["target"] for row in donor_rows}
+    require([[offset, seed_targets.get(offset), donor_targets.get(offset)]
+             for offset, _ in code_renames]
+            == function.get("expected_code_rename_symbols", []),
+            "instruction-schedule code rename symbol pair changed")
+    require([(row["offset"], row["type"], row["addend"]) for row in seed_rows]
+            == [(row["offset"], row["type"], row["addend"])
+                for row in donor_rows],
+            "instruction-schedule donor relocation layout differs from the "
+            "seed")
+    require([(row["offset"], row["target"]) for row in seed_rows
+             if row["type"] == 0x0014]
+            == [(row["offset"], row["target"]) for row in donor_rows
+                if row["type"] == 0x0014],
+            "instruction-schedule donor call/branch relocation targets differ "
+            "from the seed")
+    relocation_offsets = frozenset(
+        row["offset"] + byte
+        for row in seed_rows for byte in range(row["width"]))
+    relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in seed_rows}
+
+    image, proof = apply_instruction_schedule(
+        donor_body, spec["windows"], relocation_offsets,
+        "instruction-schedule image", relocation_symbols,
+    )
+    require(proof["changed_offsets"] == spec["expected_changed_offsets"]
+            and proof["instruction_count"]
+            == spec["expected_instruction_count"],
+            "instruction-schedule image differs from its declaration")
+    require(sha256_bytes(image) == function["expected_body_sha256"],
+            "instruction-schedule image differs from its pin")
+    require(image != donor_body,
+            "instruction-schedule image does not move the donor body")
+
+    # Obligation 7, measured on the IMAGE with the SEED's own tables -- those
+    # are the tables the composition installs.
+    debug_detail = require_instruction_schedule_debug_fidelity(
+        seed, sp, image, spec["windows"], spec, mangled,
+        "instruction-schedule debug fidelity", relocation_symbols,
+    )
+
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == len(image),
+            "instruction-schedule retail length changed")
+    semantic_detail = require_retail_relocation_oracle(
+        seed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "instruction-schedule retail relocation oracle",
+    )
+    masked_image = bytearray(image)
+    masked_retail = bytearray(retail_body)
+    for row in seed_rows:
+        start, width = row["offset"], row["width"]
+        masked_image[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_image, masked_retail))
+    require(differing == 0,
+            f"instruction-schedule output is not retail-exact: {differing} "
+            "byte(s) differ under the relocation mask")
+
+    derived = bytearray(donor_bytes)
+    derived[dp["raw_offset"]:dp["raw_offset"] + dp["raw_size"]] = image
+    derived = bytes(derived)
+    effective = {
+        "mangled": mangled,
+        "splice_class": delegate,
+        "expected_body_length": function["expected_body_length"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_changed_offsets": function["expected_changed_offsets"],
+    }
+    if delegate == "equal_body_eh_structural_local":
+        effective["expected_code_renames"] = function["expected_code_renames"]
+        effective["expected_xdata_rename_offsets"] = function[
+            "expected_xdata_rename_offsets"]
+    composed, detail = compose_equal_body_comdat(seed_bytes, derived, effective)
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == image,
+            "instruction-schedule composed body differs from the image")
+    require(detailed_relocations(checked, cp) == seed_rows
+            and _coff_table_bytes(checked, cp, "relocations")
+            == _coff_table_bytes(seed, sp, "relocations")
+            and _coff_table_bytes(checked, cp, "lines")
+            == _coff_table_bytes(seed, sp, "lines"),
+            "instruction-schedule output changed seed relocation/line bytes")
+    for child_name in expected_closure:
+        require(coff_body(checked, _comdat_child(checked, cp, child_name))
+                == coff_body(seed, _comdat_child(seed, sp, child_name)),
+                f"instruction-schedule output changed its {child_name} child")
+    allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
+    require({index for index in range(len(seed_bytes))
+             if seed_bytes[index] != composed[index]} <= allowed,
+            "instruction-schedule changed bytes outside its own COMDAT")
+    return composed, {
+        **detail,
+        "splice_class": INSTRUCTION_SCHEDULE_CLASS,
+        "instruction_schedule": proof["windows"],
+        "instruction_count": proof["instruction_count"],
+        "changed_offsets": proof["changed_offsets"],
+        "debug_fidelity": debug_detail,
         "retail_exact": True,
         **semantic_detail,
     }

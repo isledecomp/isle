@@ -25233,6 +25233,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_b891b819d0af",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 8,
+      "generated_header_sha256": "b891b819d0af1eaa864dafbeb9dbeff550f59dcea436e6b760e6cf0bbd145b9c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -25384,6 +25400,650 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_8ac6b4ca0987"
+    },
+    {
+     "mangled": "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+     "donor": "d_b891b819d0af",
+     "splice_class": "retail_exact_instruction_schedule",
+     "expected_section_number": 43,
+     "expected_donor_section_number": 43,
+     "expected_section_count": 68,
+     "expected_body_length": 1693,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 37,
+     "expected_seed_line_count": 110,
+     "expected_donor_line_count": 110,
+     "expected_function_count": 19,
+     "expected_comdat_count": 25,
+     "expected_seed_body_sha256": "22033515399ae512847116f7354c820a5f455f47b7d2b5d8d09b3961eb9cb147",
+     "expected_donor_body_sha256": "22033515399ae512847116f7354c820a5f455f47b7d2b5d8d09b3961eb9cb147",
+     "expected_body_sha256": "52936cff19b992e43b358e89387b694e761fc84e075df4094169f195a6bbbb94",
+     "expected_seed_metadata_sha256": "f5a3639cf4f38848adf1f5e29d2ce20321d98e11fe325829f67035bf753aad7b",
+     "expected_donor_metadata_sha256": "472888d7f91cbfa0891d41df211e901153bcb946e0be85c1280033448fbf229d",
+     "expected_changed_offsets": [
+      43,
+      44,
+      45,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      753,
+      755,
+      756,
+      757,
+      758,
+      759,
+      760,
+      761,
+      762,
+      763,
+      764
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       1062,
+       "T"
+      ],
+      [
+       1097,
+       "T"
+      ],
+      [
+       1129,
+       "T"
+      ],
+      [
+       1671,
+       "T"
+      ]
+     ],
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100aa510",
+      "verdict": "MATCH",
+      "length": 1693
+     },
+     "instruction_schedule": {
+      "kind": "topological_window_reordering_v1",
+      "windows": [
+       {
+        "start": 43,
+        "end": 55,
+        "source_instruction_lengths": [
+         3,
+         3,
+         3,
+         3
+        ],
+        "target_order": [
+         1,
+         3,
+         0,
+         2
+        ],
+        "expected_dependence_edges": [],
+        "expected_line_rows": [
+         [
+          43,
+          5,
+          1
+         ],
+         [
+          49,
+          8,
+          0
+         ]
+        ]
+       },
+       {
+        "start": 753,
+        "end": 765,
+        "source_instruction_lengths": [
+         3,
+         2,
+         7
+        ],
+        "target_order": [
+         2,
+         0,
+         1
+        ],
+        "expected_dependence_edges": [],
+        "expected_line_rows": []
+       }
+      ],
+      "expected_instruction_count": 571,
+      "expected_changed_offsets": [
+       43,
+       44,
+       45,
+       48,
+       49,
+       50,
+       51,
+       52,
+       53,
+       54,
+       753,
+       755,
+       756,
+       757,
+       758,
+       759,
+       760,
+       761,
+       762,
+       763,
+       764
+      ],
+      "expected_procedure_range": [
+       1693,
+       35,
+       1651
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$S",
+        "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?Read@LegoLOD@@QAEJPAVRenderer@Tgl@@PAVLegoTextureContainer@@PAVLegoStorage@@@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "$L53180",
+        1680
+       ],
+       [
+        ".debug$S",
+        "$L53180",
+        1680
+       ],
+       [
+        ".debug$S",
+        "$L53179",
+        1670
+       ],
+       [
+        ".debug$S",
+        "$L53179",
+        1670
+       ],
+       [
+        ".debug$S",
+        "$done$51031",
+        594
+       ],
+       [
+        ".debug$S",
+        "$done$51031",
+        594
+       ],
+       [
+        ".xdata$x",
+        "$L53180",
+        1680
+       ]
+      ],
+      "authenticity_rationale": "A topological reordering of this compile of the translation unit, over two closed call-free windows whose every memory operand is frame-relative with a disjoint constant span, proved to respect the windows own dependence DAG on registers, flags and memory; the composition is refused unless the image equals the pinned retail oracle under the relocation mask."
+     },
+     "retail_relocations": [
+      {
+       "offset": 2,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 12,
+       "type": 6,
+       "addend": 0,
+       "target": "$L53179",
+       "target_section": 43,
+       "target_value": 1670,
+       "target_type": 0,
+       "target_storage": 6,
+       "retail_target": "0x100aab96"
+      },
+      {
+       "offset": 20,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 147,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 268,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 315,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 355,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 474,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 555,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 605,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 623,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 641,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 671,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 689,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 716,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      },
+      {
+       "offset": 747,
+       "type": 20,
+       "addend": 0,
+       "target": "??0LegoMesh@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d3810"
+      },
+      {
+       "offset": 767,
+       "type": 20,
+       "addend": 0,
+       "target": "?Read@LegoMesh@@QAEJPAVLegoStorage@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100d38f0"
+      },
+      {
+       "offset": 834,
+       "type": 20,
+       "addend": 0,
+       "target": "?HasInhPrefix@LegoLOD@@SAEPBD@Z",
+       "target_section": 62,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aae20"
+      },
+      {
+       "offset": 850,
+       "type": 20,
+       "addend": 0,
+       "target": "?HasInhPrefix@LegoLOD@@SAEPBD@Z",
+       "target_section": 62,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100aae20"
+      },
+      {
+       "offset": 1019,
+       "type": 20,
+       "addend": 0,
+       "target": "?GetRGBAColor@LegoROI@@SAEPBDAAM111@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a9bf0"
+      },
+      {
+       "offset": 1062,
+       "type": 6,
+       "addend": 0,
+       "target": "$T53427",
+       "target_section": 6,
+       "target_value": 40,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100dbf00"
+      },
+      {
+       "offset": 1097,
+       "type": 6,
+       "addend": 0,
+       "target": "$T53427",
+       "target_section": 6,
+       "target_value": 40,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100dbf00"
+      },
+      {
+       "offset": 1129,
+       "type": 6,
+       "addend": 0,
+       "target": "$T53427",
+       "target_section": 6,
+       "target_value": 40,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100dbf00"
+      },
+      {
+       "offset": 1200,
+       "type": 20,
+       "addend": 0,
+       "target": "?GetPaletteEntries@LegoROI@@SAEPBDPAEK@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a9cf0"
+      },
+      {
+       "offset": 1234,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 45,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 1299,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@1PAU_Node@1@A",
+       "target_section": 45,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100f0100"
+      },
+      {
+       "offset": 1453,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetGroupTexture@LegoTextureInfo@@SAHPAVMesh@Tgl@@PAV1@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10065f60"
+      },
+      {
+       "offset": 1498,
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lodMaterial@@3PAUIDirect3DRMMaterial@@A",
+       "target_section": 5,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x101013d4"
+      },
+      {
+       "offset": 1535,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1560,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1606,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1624,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1642,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      },
+      {
+       "offset": 1658,
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "offset": 1671,
+       "type": 6,
+       "addend": 0,
+       "target": "$T53425",
+       "target_section": 44,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100e8f78"
+      },
+      {
+       "offset": 1676,
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "offset": 1685,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ],
+     "expected_code_rename_symbols": [
+      [
+       12,
+       "$L53179",
+       "$L53211"
+      ],
+      [
+       1062,
+       "$T53427",
+       "$T53459"
+      ],
+      [
+       1097,
+       "$T53427",
+       "$T53459"
+      ],
+      [
+       1129,
+       "$T53427",
+       "$T53459"
+      ],
+      [
+       1671,
+       "$T53425",
+       "$T53457"
+      ]
+     ],
+     "retail_image_target": "lego1"
     }
    ],
    "completion": {
@@ -25480,8 +26140,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4915,
-    "accepted_row_identity_sha256": "1cd83d538ce195b9bc0c3d456aede44f151dba7001ca28d77fe5da39e475d379",
+    "exact_raw_1_0_count": 4916,
+    "accepted_row_identity_sha256": "1f543da1fa5b3d0bff9e741e817520c6f31561895f1a67f71c7b1bd0bed396b6",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
