@@ -373,18 +373,59 @@ class RegisterBijectionImageTests(unittest.TestCase):
             self.assertIn("ESP or EBP", str(caught.exception))
 
     def test_refuses_an_instruction_with_an_implicit_operand(self):
-        """CDQ writes EDX and MUL reads/writes EDX:EAX implicitly.
+        """CDQ writes EDX and IDIV reads/writes EDX:EAX implicitly.
 
-        Neither can be expressed under a renaming, so both are outside the
-        closed table and the whole body is refused rather than approximated.
+        The table now admits both, with their complete implicit sets, so the
+        liveness answer around them is exact -- and it FREEZES the registers
+        neither names through a rewritable field.  A frozen register in
+        sigma's support inside the region is refused: the renaming cannot be
+        expressed there, and the refusal says so instead of skipping it.
         """
-        for encoding, name in ((b"\x99", "cdq"), (b"\xf7\xe3", "mul ebx")):
-            body = BODY[:25] + encoding + BODY[25 + len(encoding):]
+        for encoding, name in ((b"\x99", "cdq"), (b"\xf7\xf9", "idiv")):
+            body = (bytes.fromhex("53" "8b0d00000000") + encoding
+                    + bytes.fromhex("e800000000" "5b" "c3"))
+            call_at = 7 + len(encoding) + 1
             with self.assertRaises(byte_identity.ByteIdentityError) as caught:
                 byte_identity.apply_register_bijection(
-                    body, SIGMA, REGION, relocation_set(), name)
+                    body, CALL_SIGMA, (1, 7 + len(encoding)),
+                    frozenset(offset + byte for offset in (3, call_at)
+                              for byte in range(4)),
+                    name, {3: {"width": 4, "target": NIL_SYMBOL},
+                           call_at: {"width": 4, "target": CDECL_SYMBOL}})
+            self.assertIn("sigma cannot rewrite", str(caught.exception), name)
+
+    def test_an_implicit_operand_form_sigma_does_not_touch_is_admitted(self):
+        """`cdq` under sigma = {ebx, edi} is a no-op FOR SIGMA, and exact.
+
+        Freezing is not a blanket refusal: the form is refused only when the
+        renaming would have to move a register the encoding does not name.
+        Here it does not, so the instruction is admitted and its EAX read and
+        EDX write are modelled exactly.
+        """
+        instruction = byte_identity.decode_ia32_bijection_instruction(
+            b"\x99", 0, "cdq")
+        self.assertEqual(instruction["reads"], frozenset({"eax"}))
+        self.assertEqual(instruction["writes"], frozenset({"edx"}))
+        self.assertEqual(instruction["frozen"], frozenset({"eax", "edx"}))
+        body = BODY[:25] + b"\x99\x40" + BODY[27:]
+        image, proof = byte_identity.apply_register_bijection(
+            body, SIGMA, REGION, relocation_set(), "cdq")
+        self.assertEqual(proof["region_instruction_count"], 7)
+
+    def test_an_unadmitted_group_member_is_still_outside_the_table(self):
+        """Widening a group does not admit the members it did not name."""
+        for encoding, name in ((b"\xf6\xe1", "mul r/m8"),
+                               (b"\xff\xe8", "far jmp"),
+                               (b"\x0f\xb6\xc1", "movzx r32, r/m8"),
+                               (b"\xaa\x90", "stosb")):
+            body = (bytes.fromhex("53" "8b0d00000000") + encoding
+                    + bytes.fromhex("e800000000" "5b" "c3"))
+            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+                byte_identity.apply_register_bijection(
+                    body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                    name, call_relocations(CDECL_SYMBOL))
             self.assertIn("outside the register-bijection table",
-                          str(caught.exception))
+                          str(caught.exception), name)
 
     def test_refuses_a_rewrite_that_overlaps_a_relocation(self):
         """A relocated operand belongs to the linker, not to sigma."""
@@ -702,15 +743,65 @@ class CallArgumentModelTests(unittest.TestCase):
                 {2: {"width": 4, "target": CDECL_SYMBOL}})
         self.assertIn("['eax'] is live on entry", str(caught.exception))
 
-    def test_an_indirect_jump_is_still_refused(self):
-        """`FF /4` would break the control-flow graph and is not admitted."""
+    def test_an_indirect_jump_needs_the_relocated_in_body_target_set(self):
+        """`FF /4` has no decodable successor, so the graph alone is not a proof.
+
+        It is modelled as an exit that reads every general register -- the
+        maximally conservative live-in -- but that says nothing about where
+        it can LAND.  The relocated in-body label set closes that, and it must
+        be supplied: a body with a computed jump and no such set is refused.
+        """
         body = bytes.fromhex("53" "8b0d00000000" "8b01" "ffe0" "5b" "c3")
         with self.assertRaises(byte_identity.ByteIdentityError) as caught:
             byte_identity.apply_register_bijection(
                 body, CALL_SIGMA, CALL_REGION, frozenset(range(3, 7)),
                 "indirect-jump", {3: {"width": 4, "target": NIL_SYMBOL}})
-        self.assertIn("outside the register-bijection table",
+        self.assertIn("requires the relocated in-body target set",
                       str(caught.exception))
+
+    def test_an_indirect_jump_inside_the_region_is_refused(self):
+        """An exit inside the region has every register live at its return."""
+        body = bytes.fromhex("53" "8b0d00000000" "8b01" "ffe0" "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, (1, 11), frozenset(range(3, 7)),
+                "indirect-jump", {3: {"width": 4, "target": NIL_SYMBOL}},
+                None, frozenset())
+        self.assertIn("live at the region's return", str(caught.exception))
+
+    def test_a_relocated_in_body_target_inside_the_region_is_refused(self):
+        """A jump-table entry may not land in the middle of the region."""
+        body = bytes.fromhex("53" "ffe0" "8b0d00000000" "8b01"
+                             "e800000000" "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, (3, 11),
+                frozenset(offset + byte for offset in (5, 12)
+                          for byte in range(4)),
+                "table-target", {5: {"width": 4, "target": NIL_SYMBOL},
+                                 12: {"width": 4, "target": CDECL_SYMBOL}},
+                None, frozenset({9}))
+        self.assertIn("enters the region other than at its first",
+                      str(caught.exception))
+
+    def test_a_computed_jump_outside_the_region_composes(self):
+        """The positive control for the exit model, with the target set given."""
+        body = bytes.fromhex("53" "ffe0" "8b0d00000000" "8b01"
+                             "e800000000" "5b" "c3")
+        image, proof = byte_identity.apply_register_bijection(
+            body, CALL_SIGMA, (3, 11),
+            frozenset(offset + byte for offset in (5, 12)
+                      for byte in range(4)),
+            "table-target", {5: {"width": 4, "target": NIL_SYMBOL},
+                             12: {"width": 4, "target": CDECL_SYMBOL}},
+            None, frozenset({1, 14}))
+        self.assertEqual(proof["region_instruction_count"], 2)
+        jump = byte_identity.decode_ia32_bijection_instruction(body, 1, "j")
+        self.assertEqual(jump["flow"], "exit")
+        self.assertTrue(jump["indirect"])
+        self.assertEqual(jump["reads"],
+                         frozenset(byte_identity.IA32_GENERAL_REGISTER_NAMES))
+        self.assertEqual(jump["writes"], frozenset())
 
 
 class WidenedSemanticTableTests(unittest.TestCase):
@@ -757,16 +848,32 @@ class WidenedSemanticTableTests(unittest.TestCase):
         self.assertEqual(decoded["fields"], [(1, 0)])
 
     def test_refuses_an_implicit_operand_form_inside_a_widened_group(self):
-        """F6 /4 MUL reads and writes EDX:EAX implicitly and stays refused."""
-        for encoding in (b"\xf6\xe1", b"\xf7\xf1"):
-            body = (bytes.fromhex("53" "8b0d00000000") + encoding
-                    + bytes.fromhex("e800000000" "5b" "c3"))
-            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
-                byte_identity.apply_register_bijection(
-                    body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
-                    "group3", call_relocations(CDECL_SYMBOL))
-            self.assertIn("outside the register-bijection table",
-                          str(caught.exception))
+        """The byte group keeps MUL out; the 32-bit group freezes EDX:EAX.
+
+        `F6 /4` is still outside the table -- no row needs it and its byte
+        r/m would be frozen anyway.  `F7 /6 DIV` is admitted with its exact
+        implicit set, and refused here because sigma names EAX.
+        """
+        body = (bytes.fromhex("53" "8b0d00000000") + b"\xf6\xe1"
+                + bytes.fromhex("e800000000" "5b" "c3"))
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                "group3", call_relocations(CDECL_SYMBOL))
+        self.assertIn("outside the register-bijection table",
+                      str(caught.exception))
+        divide = byte_identity.decode_ia32_bijection_instruction(
+            b"\xf7\xf1", 0, "div")
+        self.assertEqual(divide["reads"], frozenset({"eax", "ecx", "edx"}))
+        self.assertEqual(divide["writes"], frozenset({"eax", "edx"}))
+        self.assertEqual(divide["frozen"], frozenset({"eax", "edx"}))
+        body = (bytes.fromhex("53" "8b0d00000000") + b"\xf7\xf1"
+                + bytes.fromhex("e800000000" "5b" "c3"))
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, CALL_REGION, CALL_RELOCATION_OFFSETS,
+                "group3", call_relocations(CDECL_SYMBOL))
+        self.assertIn("sigma cannot rewrite", str(caught.exception))
 
     def test_refuses_an_operand_size_prefix_on_an_unadmitted_form(self):
         body = bytes.fromhex("53" "8b0d00000000" "668b01" "e800000000"
@@ -966,3 +1073,270 @@ class PinnedRenameTests(unittest.TestCase):
                 self.seed, self.donor, function, self.retail)
         self.assertIn("code rename symbol pair changed",
                       str(caught.exception))
+
+
+# ---------------------------------------------------------------------------
+# The data tail, the sub-register lattice and the reloc-layout delegate.
+#
+# `Isle::Enable` forced three additions at once: a COMDAT whose body ends in
+# two compiler-emitted switch tables (data, not code), a computed jump into
+# them, and a donor that reaches a different compiler state and therefore
+# SCHEDULES its instructions differently.  The liveness lattice had to become
+# sub-register at the same time, because `fnstsw ax` genuinely defines the
+# bits `test ah, imm8` then reads and register-granular liveness cannot say so.
+# ---------------------------------------------------------------------------
+
+# 0:  53              push ebx
+# 1:  8b 0d <D32>     mov ecx, [_Nil]     <- region starts here
+# 7:  8b 01           mov eax, [ecx]
+# 9:  c3              ret                 <- region ends here (9)
+# 10: <4 bytes>       jump table entry (DATA)
+TAIL_BODY = (bytes.fromhex("53" "8b0d00000000" "8b01" "33c0" "c3")
+             + b"\x00" * 4)
+TAIL_RELOCATIONS = {3: {"width": 4, "target": NIL_SYMBOL},
+                    12: {"width": 4, "target": "$L12345"}}
+TAIL_OFFSETS = frozenset(offset + byte for offset in (3, 12)
+                         for byte in range(4))
+
+
+class DataTailTests(unittest.TestCase):
+    """A COMDAT may end in data, and the class must not decode it as code."""
+
+    def test_a_pinned_code_length_stops_the_decode_at_the_data_tail(self):
+        instructions = byte_identity.decode_ia32_bijection_body(
+            TAIL_BODY, "tail", TAIL_RELOCATIONS, 12)
+        self.assertEqual([item["offset"] for item in instructions],
+                         [0, 1, 7, 9, 11])
+        self.assertEqual(instructions[-1]["flow"], "ret")
+
+    def test_without_the_pin_the_data_tail_is_decoded_and_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.decode_ia32_bijection_body(
+                TAIL_BODY, "tail", TAIL_RELOCATIONS)
+        self.assertIn("outside the register-bijection table",
+                      str(caught.exception))
+
+    def test_refuses_code_that_falls_through_into_the_data_tail(self):
+        """The tail is proved unreachable, never assumed unreachable."""
+        body = (bytes.fromhex("53" "8b0d00000000" "8b01" "33c0" "40")
+                + b"\x00" * 4)
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.decode_ia32_bijection_body(
+                body, "tail", TAIL_RELOCATIONS, 12)
+        self.assertIn("falls through into the body's data tail",
+                      str(caught.exception))
+
+    def test_refuses_a_code_length_out_of_range(self):
+        for length in (0, len(TAIL_BODY) + 1, -1):
+            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+                byte_identity.decode_ia32_bijection_body(
+                    TAIL_BODY, "tail", TAIL_RELOCATIONS, length)
+            self.assertIn("code length is out of range", str(caught.exception))
+        # A code length that would cut an instruction in half is refused by
+        # the decode itself: the boundary must be a real one.
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.decode_ia32_bijection_body(
+                TAIL_BODY, "tail", TAIL_RELOCATIONS, 8)
+        self.assertIn("lacks ModRM", str(caught.exception))
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.decode_ia32_bijection_body(
+                TAIL_BODY, "tail", TAIL_RELOCATIONS, 4)
+        self.assertIn("truncated", str(caught.exception))
+
+    def test_refuses_a_region_that_reaches_past_the_code(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                TAIL_BODY, CALL_SIGMA, (1, 16), TAIL_OFFSETS, "tail",
+                TAIL_RELOCATIONS, 12, frozenset())
+        self.assertIn("region reaches past the body's code",
+                      str(caught.exception))
+
+    def test_the_data_tail_is_never_rewritten(self):
+        image, proof = byte_identity.apply_register_bijection(
+            TAIL_BODY, CALL_SIGMA, (1, 9), TAIL_OFFSETS, "tail",
+            TAIL_RELOCATIONS, 12, frozenset())
+        self.assertEqual(proof["code_length"], 12)
+        self.assertEqual(image[12:], TAIL_BODY[12:])
+        self.assertTrue(all(offset < 12
+                            for offset in proof["rewritten_offsets"]))
+
+
+class SubRegisterLivenessTests(unittest.TestCase):
+    """A partial definition kills exactly the bits it defines."""
+
+    def test_fnstsw_ax_defines_the_bits_test_ah_reads(self):
+        """The refinement that `Isle::Enable` needs, in eight instructions.
+
+        `mov eax, [ecx]` inside the region; `fnstsw ax` defines AX; `test
+        ah, 1` reads AH.  Register-granular liveness reports EAX live on the
+        region's exit edge because it cannot see the definition; the atom
+        lattice sees it and the sigma proves.
+        """
+        body = bytes.fromhex("53" "8b0d00000000" "8b01"
+                             "dfe0" "f6c401" "33c0" "5b" "c3")
+        relocations = {3: {"width": 4, "target": NIL_SYMBOL}}
+        image, proof = byte_identity.apply_register_bijection(
+            body, CALL_SIGMA, (1, 9), frozenset(range(3, 7)), "fnstsw",
+            relocations)
+        self.assertEqual(proof["region_instruction_count"], 2)
+        status = byte_identity.decode_ia32_bijection_instruction(
+            b"\xdf\xe0", 0, "fnstsw")
+        # At REGISTER granularity it is still only a partial write, so it
+        # neither reads nor kills EAX; the kill lives in the atom set.
+        self.assertEqual(status["reads"], frozenset())
+        self.assertEqual(status["writes"], frozenset())
+        self.assertEqual(status["write_atoms"],
+                         frozenset({"eax.l", "eax.h"}))
+        self.assertEqual(status["frozen"], frozenset({"eax"}))
+
+    def test_a_byte_definition_does_not_kill_the_other_byte(self):
+        """`mov al, [ecx]` leaves AH live; the refinement is not a blanket kill."""
+        body = bytes.fromhex("53" "8b0d00000000" "8b01"
+                             "8a03" "f6c401" "33c0" "5b" "c3")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                body, CALL_SIGMA, (1, 9), frozenset(range(3, 7)), "byte",
+                {3: {"width": 4, "target": NIL_SYMBOL}})
+        self.assertIn("is live on an edge leaving the region",
+                      str(caught.exception))
+
+    def test_a_byte_definition_kills_its_own_byte(self):
+        """The same body, with the read narrowed to the byte that was defined."""
+        body = bytes.fromhex("53" "8b0d00000000" "8b01"
+                             "8a03" "f6c001" "33c0" "5b" "c3")
+        image, proof = byte_identity.apply_register_bijection(
+            body, CALL_SIGMA, (1, 9), frozenset(range(3, 7)), "byte",
+            {3: {"width": 4, "target": NIL_SYMBOL}})
+        self.assertEqual(proof["region_instruction_count"], 2)
+
+    def test_the_atom_lattice_splits_only_the_byte_addressable_four(self):
+        self.assertEqual(sorted(byte_identity.ia32_register_atoms(["eax"])),
+                         ["eax.h", "eax.l", "eax.u"])
+        self.assertEqual(sorted(byte_identity.ia32_register_atoms(["esi"])),
+                         ["esi.w"])
+
+
+class WidenedMoveExtendTests(unittest.TestCase):
+    """MOVZX/MOVSX r32, r/m16 rewrite BOTH fields; the r/m8 forms are absent."""
+
+    def test_movsx_r32_r16_rewrites_both_register_fields(self):
+        instruction = byte_identity.decode_ia32_bijection_instruction(
+            b"\x0f\xbf\xc1", 0, "movsx")
+        self.assertEqual(instruction["reads"], frozenset({"ecx"}))
+        self.assertEqual(instruction["writes"], frozenset({"eax"}))
+        self.assertEqual(instruction["frozen"], frozenset())
+        self.assertEqual(len(instruction["fields"]), 2)
+
+    def test_a_memory_movzx_reads_only_its_address_register(self):
+        instruction = byte_identity.decode_ia32_bijection_instruction(
+            b"\x0f\xb7\x41\x02", 0, "movzx")
+        self.assertEqual(instruction["reads"], frozenset({"ecx"}))
+        self.assertEqual(instruction["writes"], frozenset({"eax"}))
+
+    def test_dec_r_m8_freezes_its_field(self):
+        instruction = byte_identity.decode_ia32_bijection_instruction(
+            b"\xfe\xc8", 0, "dec al")
+        self.assertEqual(instruction["frozen"], frozenset({"eax"}))
+        self.assertEqual(instruction["writes"], frozenset())
+        self.assertEqual(instruction["write_atoms"], frozenset({"eax.l"}))
+
+    def test_cmp_al_imm8_freezes_eax(self):
+        instruction = byte_identity.decode_ia32_bijection_instruction(
+            b"\x3c\x01", 0, "cmp al")
+        self.assertEqual(instruction["reads"], frozenset({"eax"}))
+        self.assertEqual(instruction["writes"], frozenset())
+        self.assertEqual(instruction["frozen"], frozenset({"eax"}))
+
+    def test_the_accumulator_forms_are_frozen_too(self):
+        """`add eax, imm32` names EAX through no field sigma could rewrite."""
+        for encoding in (b"\x05\x01\x00\x00\x00", b"\xa1\x00\x00\x00\x00",
+                         b"\xa3\x00\x00\x00\x00"):
+            instruction = byte_identity.decode_ia32_bijection_instruction(
+                encoding, 0, "accumulator")
+            self.assertEqual(instruction["frozen"], frozenset({"eax"}))
+
+
+class RelocLayoutDelegateTests(unittest.TestCase):
+    """A donor that reschedules moves its relocated operands."""
+
+    def test_a_non_empty_move_pin_names_the_reloc_layout_delegate(self):
+        self.assertEqual(
+            byte_identity.register_bijection_delegate(
+                byte_identity.REGISTER_BIJECTION_EH_CLOSURE, [[1, "T"]],
+                [[10, 12]]),
+            "equal_body_eh_reloc_layout")
+
+    def test_an_empty_move_pin_can_never_reach_it(self):
+        for closure, renames in (
+            (byte_identity.REGISTER_BIJECTION_FPO_CLOSURE, []),
+            (byte_identity.REGISTER_BIJECTION_EH_CLOSURE, [[1, "T"]]),
+        ):
+            self.assertNotEqual(
+                byte_identity.register_bijection_delegate(
+                    closure, renames, []),
+                "equal_body_eh_reloc_layout")
+            self.assertNotEqual(
+                byte_identity.register_bijection_delegate(closure, renames),
+                "equal_body_eh_reloc_layout")
+
+
+class CodeViewDonorStreamTests(unittest.TestCase):
+    """Obligation 9 when the donor's own allocation is what gets installed."""
+
+    def test_every_record_takes_the_donor_register(self):
+        seed = codeview_stream((23, 24))
+        donor = codeview_stream((24, 23))
+        image = byte_identity.apply_codeview_register_bijection(
+            seed, {"ebx": "edx", "edx": "ebx"}, [], "map", donor)
+        self.assertEqual(image, donor)
+
+    def test_refuses_a_donor_stream_that_differs_structurally(self):
+        seed = codeview_stream((23, 24))
+        donor = bytearray(codeview_stream((23, 24)))
+        donor[16] = (donor[16] + 1) & 0xFF     # inside the S_LPROC32 payload
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_codeview_register_bijection(
+                seed, SIGMA, [], "map", bytes(donor))
+        self.assertIn("differs outside its S_REGISTER fields",
+                      str(caught.exception))
+
+    def test_refuses_a_donor_stream_whose_record_list_differs(self):
+        seed = codeview_stream((23, 24))
+        donor = codeview_stream((23, 24, 20))
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_codeview_register_bijection(
+                seed, SIGMA, [], "map", donor)
+        self.assertIn("record list differs", str(caught.exception))
+
+    def test_refuses_a_declaration_that_names_no_such_record(self):
+        seed = codeview_stream((23, 24))
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_codeview_register_bijection(
+                seed, SIGMA, [{"name": "nope", "record_offset": 3,
+                               "donor_register": "ebx",
+                               "image_register": "edi"}],
+                "map", seed)
+        self.assertIn("names no such record", str(caught.exception))
+
+    def test_refuses_a_declaration_whose_donor_register_is_wrong(self):
+        seed = codeview_stream((23, 24))
+        records = byte_identity.parse_codeview_symbol_stream(seed, "map")
+        register = next(item for item in records
+                        if item["type"]
+                        == byte_identity.CODEVIEW_REGISTER_RECORD_TYPE)
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_codeview_register_bijection(
+                seed, SIGMA, [{"name": register["name"],
+                               "record_offset": register["offset"],
+                               "donor_register": "ebx",
+                               "image_register": "edi"}],
+                "map", seed)
+        self.assertIn("differs from its declaration", str(caught.exception))
+
+    def test_the_closed_record_table_parses_s_ldata32(self):
+        """`Isle::Enable`'s stream carries two empty-named S_LDATA32 records."""
+        record = bytes([11, 0, 0x01, 0x02]) + bytes(9)
+        parsed = byte_identity.parse_codeview_symbol_stream(record, "ldata")
+        self.assertEqual(len(parsed), 1)
+        self.assertEqual(parsed[0]["type"], 0x0201)
+        self.assertEqual(parsed[0]["name"], "")
