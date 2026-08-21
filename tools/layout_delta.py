@@ -20,7 +20,12 @@ REPORT = Path("/Users/foxtacles/Projects/isle-build-lean/LEGO1-report.json")
 # directory at the head of .rdata; the terminal (no-/debug) image does not.
 # Every .rdata row therefore reads 88 bytes high here and must be corrected,
 # or the alignment count is wrong by the whole .rdata population.
-RDATA_BASE = 0x100d0000
+#
+# This threshold is retail's .rdata VA and nothing else.  It read 0x100d0000
+# until 2026-08-20, which wrongly corrected the 46 .text rows in
+# [0x100d052c, 0x100d2270] -- the Smack/CRT tail of .text, which runs to
+# 0x100d3d66 -- and under-reported the aligned count by exactly those 46.
+RDATA_BASE = 0x100d4000
 # The /debug link's .rdata head carries an 88-byte debug directory.  That shifts
 # lego1's own .rdata by 88, but only by 80 from the CRT block onward: the
 # 16-byte section alignment absorbs 8 of it.  Using a blanket 88 under-reports

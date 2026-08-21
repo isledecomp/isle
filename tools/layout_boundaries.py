@@ -17,7 +17,7 @@ HERE = Path(__file__).resolve().parent
 # The reccmp report scores the /debug link, whose .rdata starts 88 bytes later
 # than the terminal image's (an 88-byte debug directory sits at its head), so
 # every .rdata displacement read straight from the report is 88 bytes high.
-RDATA_BASE = 0x100d0000
+RDATA_BASE = 0x100d4000
 # The /debug link's .rdata head carries an 88-byte debug directory.  That shifts
 # lego1's own .rdata by 88, but only by 80 from the CRT block onward: the
 # 16-byte section alignment absorbs 8 of it.  Using a blanket 88 under-reports
