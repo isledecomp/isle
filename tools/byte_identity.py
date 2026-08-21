@@ -14122,6 +14122,7 @@ def validate_manifest(
                                          SAME_TU_INSTRUCTION_HYBRID_RESIZE_CLASS,
                                          CROSS_TU_COMPLETE_TARGET_RESIZE_CLASS,
                                          REGISTER_BIJECTION_CLASS,
+                                         REGISTER_BIJECTION_REENCODING_CLASS,
                                          WEB_RECOLOUR_CLASS,
                                          RELATIONAL_FORM_CLASS,
                                          COMPOSED_REWRITING_CLASS,
@@ -15129,6 +15130,134 @@ def validate_manifest(
                     )
                     normalized_functions.append({
                         **function, "register_bijection": bijection,
+                    })
+                    continue
+                if splice_class == REGISTER_BIJECTION_REENCODING_CLASS:
+                    reencoding_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number", "expected_section_count",
+                        "expected_seed_length", "expected_preimage_length",
+                        "expected_body_length", "expected_donor_length",
+                        "expected_linked_span",
+                        "expected_characteristics", "expected_selection",
+                        "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_closure", "retail_oracle",
+                        "retail_relocations",
+                        "register_bijection_reencoding",
+                    }
+                    if "retail_image_target" in function:
+                        reencoding_keys = reencoding_keys | {
+                            "retail_image_target"}
+                    exact_keys(function, reencoding_keys, function_context)
+                    for name in (
+                        "expected_section_number", "expected_section_count",
+                        "expected_seed_length", "expected_preimage_length",
+                        "expected_body_length", "expected_donor_length",
+                        "expected_linked_span", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                    ):
+                        require(type(function.get(name)) is int
+                                and function[name] > 0,
+                                f"{function_context}.{name} is invalid")
+                    require(type(function.get("expected_relocation_count"))
+                            is int
+                            and function["expected_relocation_count"] >= 0,
+                            f"{function_context}.expected_relocation_count "
+                            "is invalid")
+                    for name in (
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                    ):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    # The image is what the installation primitive receives,
+                    # so the delegate's donor length IS the image length; the
+                    # compiler-produced pre-image is pinned separately and
+                    # must differ from it, or this is an equal-body splice
+                    # wearing a resize class's name.
+                    require(function["expected_donor_length"]
+                            == function["expected_body_length"]
+                            != function["expected_preimage_length"],
+                            f"{function_context}: the image length pins are "
+                            "inconsistent with the pre-image")
+                    require(((function["expected_body_length"] + 15) // 16)
+                            * 16 == function["expected_linked_span"],
+                            f"{function_context}.expected_linked_span "
+                            "differs from the image's 16-byte span")
+                    require(
+                        function["expected_body_sha256"]
+                        != function["expected_donor_body_sha256"]
+                        and function["expected_body_sha256"]
+                        != function["expected_seed_body_sha256"],
+                        f"{function_context}: the image pin does not move "
+                        "the donor body",
+                    )
+                    # This class installs through the FPO closure only: the
+                    # frame proof it rests on IS the `.debug$F` record, and a
+                    # C++ EH function does not carry one.
+                    require(function.get("expected_closure")
+                            == REGISTER_BIJECTION_FPO_CLOSURE,
+                            f"{function_context}.expected_closure must be "
+                            "the FPO debug pair")
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict), f"{function_context}"
+                            ".retail_oracle must be an object")
+                    exact_keys(retail, {"image", "address", "verdict",
+                                        "length"},
+                               f"{function_context}.retail_oracle")
+                    retail_image_target = function.get(
+                        "retail_image_target", target)
+                    if "retail_image_target" in function:
+                        require(
+                            (target, retail_image_target)
+                            in REGISTER_BIJECTION_REENCODING_IMAGE_TARGETS,
+                            f"{function_context}.retail_image_target "
+                            "differs",
+                        )
+                    require_target_bound_retail_image(
+                        manifest.get("images"), retail_image_target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_body_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    reencoding = validate_register_bijection_reencoding(
+                        function.get("register_bijection_reencoding"),
+                        f"{function_context}.register_bijection_reencoding",
+                        function["expected_preimage_length"],
+                        function["expected_body_length"],
+                    )
+                    normalized_functions.append({
+                        **function,
+                        "register_bijection_reencoding": reencoding,
                     })
                     continue
                 if (splice_class
@@ -28825,6 +28954,12 @@ def decode_ia32_bijection_instruction(
                 "register-bijection table for this opcode")
         width = 16
     fields = []
+    # The ModRM/SIB LAYOUT of this instruction, or None when it has none.
+    # A register bijection never reads it; the re-encoding bijection needs it
+    # to change a ModRM `mod` field structurally rather than by
+    # re-disassembling its own output, and deriving it here keeps ONE decoder
+    # authoritative for every consumer.
+    encoding = None
     flow_override = None
     frozen = set(form["implicit_frozen"])
     memory = None
@@ -28895,6 +29030,10 @@ def decode_ia32_bijection_instruction(
         rm = modrm & 7
         register_field = (modrm >> 3) & 7
         rm_write = form["rm_write"]
+        sib_at = None
+        displacement_at = None
+        displacement_size = 0
+        absolute_operand = False
         if form["reg"] == "gpr":
             if width != 8:
                 fields.append((modrm_at, 3))
@@ -28992,14 +29131,19 @@ def decode_ia32_bijection_instruction(
             else:
                 absolute = True
             displacement = 0
+            absolute_operand = absolute
             if mode == 1:
                 require(cursor < length,
                         f"{context}: instruction lacks its disp8")
+                displacement_at = offset + cursor
+                displacement_size = 1
                 displacement = int.from_bytes(
                     encoded[cursor:cursor + 1], "little", signed=True)
             elif mode == 2 or absolute:
                 require(cursor + 4 <= length,
                         f"{context}: instruction lacks its disp32")
+                displacement_at = offset + cursor
+                displacement_size = 4
                 displacement = int.from_bytes(
                     encoded[cursor:cursor + 4], "little", signed=True)
             if form["rm_read"] or rm_write or form["x87"]:
@@ -29016,6 +29160,16 @@ def decode_ia32_bijection_instruction(
         require(form["reg"] != "gpr" or not (form["reg_write"]
                                              and form["rm_write"]),
                 f"{context}: instruction form writes two operands")
+        encoding = {
+            "modrm_at": modrm_at,
+            "mode": mode,
+            "rm": rm,
+            "reg": register_field,
+            "sib_at": sib_at,
+            "displacement_at": displacement_at,
+            "displacement_size": displacement_size,
+            "absolute": absolute_operand,
+        }
     target = None
     flow = form["flow"] if flow_override is None else flow_override
     if flow == "exit" and form["modrm"]:
@@ -29084,6 +29238,7 @@ def decode_ia32_bijection_instruction(
         "fields": fields, "reads": frozenset(reads),
         "writes": frozenset(writes), "flow": flow, "target": target,
         "frozen": frozenset(frozen), "memory": memory,
+        "encoding": encoding,
         "indirect": indirect,
         "read_atoms": frozenset(read_atoms),
         "write_atoms": frozenset(write_atoms),
@@ -29505,6 +29660,167 @@ def apply_codeview_register_bijection(
         f"{context}: the mapped stream is not the same record list",
     )
     return image
+
+
+def validate_register_bijection_reencoding(
+    value: object, context: str, preimage_length: int, image_length: int,
+) -> dict:
+    """Validate one re-encoding register-bijection declaration.
+
+    Every quantity the composer will MEASURE is declared here first, so a
+    manifest that disagrees with the objects refuses before anything is
+    installed.  The regions are the only free parameters; growth, branch
+    repairs, reseats and the boundary-derived debug ranges are consequences,
+    and pinning them is what makes a silent change to the primitive visible.
+    """
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "regions", "expected_fpo_record", "expected_growth",
+        "expected_branch_repairs", "expected_relocation_reseat",
+        "expected_rewritten_field_offsets",
+        "expected_region_instruction_counts", "expected_instruction_count",
+        "expected_image_code_length", "expected_procedure_range",
+        "expected_carried_code_symbols", "authenticity_rationale",
+        "expected_code_length", "expected_internal_relocation_targets",
+    }, context, optional={"expected_code_length",
+                          "expected_internal_relocation_targets"})
+    require(value.get("kind") == REGISTER_BIJECTION_REENCODING_KIND,
+            f"{context}.kind differs")
+    regions = value.get("regions")
+    require(isinstance(regions, list) and 1 <= len(regions) <= 8,
+            f"{context}.regions is invalid")
+    normalized = []
+    previous_end = 0
+    names_ebp = False
+    for index, item in enumerate(regions):
+        item_context = f"{context}.regions[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_keys(item, {"start", "end", "mapping"}, item_context)
+        start = require_exact_int(item.get("start"),
+                                  f"{item_context}.start",
+                                  minimum=1, maximum=preimage_length - 1)
+        end = require_exact_int(item.get("end"), f"{item_context}.end",
+                                minimum=2, maximum=preimage_length - 1)
+        require(start >= previous_end and start < end,
+                f"{item_context}: regions are unsorted, empty or overlapping")
+        previous_end = end
+        mapping = item.get("mapping")
+        require(isinstance(mapping, dict) and 2 <= len(mapping) <= 8
+                and all(isinstance(key, str) and isinstance(entry, str)
+                        and key in _IA32_REGISTER_NUMBERS
+                        and entry in _IA32_REGISTER_NUMBERS
+                        for key, entry in mapping.items()),
+                f"{item_context}.mapping is invalid")
+        require(set(mapping) == set(mapping.values())
+                and len(set(mapping.values())) == len(mapping)
+                and all(key != entry for key, entry in mapping.items()),
+                f"{item_context}.mapping is not a fixed-point-free bijection")
+        # EBP is the whole point of this class and is admitted only against
+        # the FPO record proved below; ESP is refused here as it is in the
+        # parent, because a rename to or from it is not an encoding change.
+        require("esp" not in set(mapping) | set(mapping.values()),
+                f"{item_context}.mapping touches ESP")
+        if "ebp" in set(mapping) | set(mapping.values()):
+            names_ebp = True
+        normalized.append({"start": start, "end": end,
+                           "mapping": dict(sorted(mapping.items()))})
+    require(names_ebp,
+            f"{context}: no region names EBP, so this is an ordinary "
+            f"{REGISTER_BIJECTION_CLASS} and must be declared as one")
+    record = value.get("expected_fpo_record")
+    require(isinstance(record, dict)
+            and set(record) == FPO_RECORD_KEYS - {"raw_sha256"},
+            f"{context}.expected_fpo_record is invalid")
+    require(record.get("cbFrame") == FPO_FRAME_KIND_FPO
+            and record.get("fHasSEH") == 0,
+            f"{context}.expected_fpo_record does not declare a "
+            "frame-pointer-free, SEH-free frame")
+    growth = value.get("expected_growth")
+    require(isinstance(growth, list) and growth and len(growth) <= 64
+            and all(isinstance(row, list) and len(row) == 4
+                    and all(type(entry) is int for entry in row)
+                    and 0 <= row[0] < preimage_length
+                    and 0 <= row[1] < image_length
+                    and 1 <= row[2] <= 15 and 1 <= row[3] <= 15
+                    and abs(row[3] - row[2]) == 1
+                    for row in growth)
+            and [row[0] for row in growth] == sorted({row[0]
+                                                      for row in growth}),
+            f"{context}.expected_growth is invalid")
+    require(image_length - preimage_length
+            == sum(row[3] - row[2] for row in growth),
+            f"{context}.expected_growth does not account for the image's "
+            "length change")
+    repairs = value.get("expected_branch_repairs")
+    require(isinstance(repairs, list) and len(repairs) <= 256
+            and repairs == sorted(set(repairs))
+            and all(type(entry) is int and 0 <= entry < image_length
+                    for entry in repairs),
+            f"{context}.expected_branch_repairs is invalid")
+    reseat = value.get("expected_relocation_reseat")
+    require(isinstance(reseat, list) and len(reseat) <= 256
+            and all(isinstance(pair, list) and len(pair) == 2
+                    and all(type(entry) is int for entry in pair)
+                    and 0 <= pair[0] < preimage_length
+                    and 0 <= pair[1] < image_length
+                    and pair[0] != pair[1]
+                    for pair in reseat)
+            and [pair[0] for pair in reseat]
+            == sorted({pair[0] for pair in reseat})
+            and len({pair[1] for pair in reseat}) == len(reseat),
+            f"{context}.expected_relocation_reseat is invalid")
+    fields = value.get("expected_rewritten_field_offsets")
+    require(isinstance(fields, list) and fields
+            and fields == sorted(set(fields))
+            and all(type(entry) is int
+                    and any(item["start"] <= entry < item["end"]
+                            for item in normalized)
+                    for entry in fields),
+            f"{context}.expected_rewritten_field_offsets is invalid")
+    counts = value.get("expected_region_instruction_counts")
+    total = require_exact_int(value.get("expected_instruction_count"),
+                              f"{context}.expected_instruction_count",
+                              minimum=2)
+    require(isinstance(counts, list) and len(counts) == len(normalized)
+            and all(type(entry) is int and entry >= 1 for entry in counts)
+            and sum(counts) <= total,
+            f"{context}.expected_region_instruction_counts is invalid")
+    require(require_exact_int(value.get("expected_image_code_length"),
+                              f"{context}.expected_image_code_length",
+                              minimum=1) <= image_length,
+            f"{context}.expected_image_code_length exceeds the image")
+    procedure = value.get("expected_procedure_range")
+    require(isinstance(procedure, list) and len(procedure) == 3
+            and all(type(entry) is int for entry in procedure)
+            and procedure[0] == image_length
+            and 0 <= procedure[1] <= procedure[2] < image_length,
+            f"{context}.expected_procedure_range is invalid")
+    carried = value.get("expected_carried_code_symbols")
+    require(isinstance(carried, list) and len(carried) <= 64
+            and all(isinstance(row, list) and len(row) == 3
+                    and isinstance(row[0], str) and row[0]
+                    and type(row[1]) is int and type(row[2]) is int
+                    and 0 <= row[1] < preimage_length
+                    and 0 <= row[2] < image_length
+                    for row in carried),
+            f"{context}.expected_carried_code_symbols is invalid")
+    targets = value.get("expected_internal_relocation_targets")
+    if targets is not None:
+        require(isinstance(targets, list)
+                and targets == sorted(set(targets))
+                and all(type(entry) is int and 0 <= entry < preimage_length
+                        for entry in targets),
+                f"{context}.expected_internal_relocation_targets is invalid")
+    code_length = value.get("expected_code_length")
+    if code_length is not None:
+        require_exact_int(code_length, f"{context}.expected_code_length",
+                          minimum=1, maximum=preimage_length)
+    normalized_value = {
+        **value,
+        "regions": normalized,
+        "expected_fpo_record": dict(sorted(record.items())),
+    }
+    return normalized_value
 
 
 def validate_register_bijection(
@@ -29969,6 +30285,1025 @@ def compose_retail_exact_register_bijection(
         "region_instruction_count": proof["region_instruction_count"],
         "instruction_count": proof["instruction_count"],
         "debug_s_register_map": spec["debug_s_register_map"],
+        "retail_exact": True,
+        **semantic_detail,
+    }
+
+
+# ---------------------------------------------------------------------------
+# retail_exact_register_bijection_reencoding: the FPO re-encoding CERTIFICATE
+# ---------------------------------------------------------------------------
+#
+# WHY THIS CLASS EXISTS, AND WHY IT IS STILL A CERTIFICATE
+#
+# `retail_exact_register_bijection` structurally excludes EBP from sigma's
+# support for ONE stated reason: `[ebp]` has no mod=00 encoding, so a memory
+# BASE that becomes EBP must grow a zero disp8 and one that stops being EBP
+# may shrink.  That reason is entirely about LENGTH, and a rewriting that
+# re-encodes the ModRM `mod` field and then repairs every dependent offset
+# discharges it.  ESP stays excluded for a different and irreducible reason:
+# ESP cannot be a ModRM r/m base at all (r/m 4 introduces a SIB) and cannot be
+# a SIB index, so a rename to or from it is not an encoding question but a
+# change of what the operand MEANS.
+#
+# EBP is only an ordinary callee-saved general register when the function does
+# not use it as a frame pointer.  This class therefore refuses to admit EBP
+# unless the COMDAT's own compiler-emitted FPO record says so -- `cbFrame`
+# equal to FRAME_FPO -- AND no instruction in the body derives EBP from ESP.
+# Those two facts together are what make the renaming a renaming rather than a
+# reinterpretation of the frame.
+#
+# Everything else is the parent class, unchanged in kind: the pre-image is a
+# census-pinned, compiler-produced COMDAT; the renaming is proved sound by a
+# backward liveness fixpoint over the body's own CFG; and the composition is
+# REFUSED unless the image is byte-identical to the pinned retail oracle under
+# the (reseated) relocation mask.  It can only ever install retail's own code.
+#
+# The obligations this class adds to the parent's ten, each a `require` here:
+#
+# 11  frame proof     the closure's `.debug$F` record parses, describes this
+#                     body, declares FRAME_FPO, and declares no SEH; and no
+#                     instruction reads ESP while writing EBP.  Without this
+#                     proof EBP is refused exactly as the parent refuses it.
+# 12  minimal re-encoding
+#                     an instruction may change length ONLY because its
+#                     memory operand's BASE register crossed EBP, and only by
+#                     the one byte the `mod` field forces: mod 00 -> mod 01
+#                     with a zero disp8 when the base becomes EBP, and mod 01
+#                     with a zero disp8 -> mod 00 when it stops being EBP.
+#                     Register-direct forms, absolute forms, `+r` opcode
+#                     fields and SIB INDEX fields never change length.  Every
+#                     instruction is classified into exactly one of
+#                     unchanged / field-rewrite / field-rewrite-and-re-encode
+#                     / branch-repair, and the image is required to be the
+#                     concatenation of those classified pieces.
+# 13  branch fixpoint every relative branch's displacement is re-derived from
+#                     the new layout and iterated to a fixpoint; no branch may
+#                     change its own encoding length, so a short branch that
+#                     would need widening REFUSES the composition rather than
+#                     inventing a wider encoding.  A relocated branch operand
+#                     is never touched.
+# 14  reseat          every relocation lies wholly inside one instruction; its
+#                     new offset is that instruction's new start plus its
+#                     position within the instruction plus that instruction's
+#                     own growth; no two collide; symbol, type, width and
+#                     addend are untouched.
+# 15  line fidelity   every COFF line row's offset is an instruction boundary
+#                     of the PRE-image and is carried to the corresponding
+#                     boundary of the image; the row count, the sentinel and
+#                     every line NUMBER are unchanged.
+# 16  debug ranges    the CodeView procedure record's code length becomes the
+#                     image length and its debug start/end are carried through
+#                     the same boundary map and required to stay boundaries;
+#                     the FPO record's `cbProcSize` follows, and every other
+#                     FPO field is byte-identical.
+# 17  installation    the proved image is installed through the PRE-EXISTING
+#                     `compose_same_slot_resize` primitive in its
+#                     `retail_exact_reloc_divergent` mode -- the same code
+#                     path a dozen landed rows already use to seat a
+#                     different-length body in the same 16-byte contribution
+#                     slot.  This class adds no installation proof of its own.
+
+
+REGISTER_BIJECTION_REENCODING_CLASS = (
+    "retail_exact_register_bijection_reencoding"
+)
+
+
+REGISTER_BIJECTION_REENCODING_KIND = (
+    "frame_pointer_free_register_bijection_v1"
+)
+
+
+# A static-library translation unit links into exactly one image and must say
+# which.  This is a CLOSED set of (TU target, image target) pairs, each a fact
+# about the link graph in `CMakeLists.txt`: `viewmanager` is listed once, in
+# the LEGO1 DLL's own `target_link_libraries`, exactly as `roi` is for the
+# instruction-schedule certificate.  A pair outside the set is refused -- and
+# a wrong image would in any case make the retail comparison fail.
+REGISTER_BIJECTION_REENCODING_IMAGE_TARGETS = frozenset({
+    ("viewmanager", "lego1"),
+})
+
+
+# The one frame kind in which EBP is an ordinary general register.
+FPO_FRAME_KIND_FPO = 0
+
+
+def require_frame_pointer_free_frame(
+    coff: "CoffObject", section: dict, body: bytes,
+    instructions: list[dict], context: str,
+) -> dict:
+    """Obligation 11: prove EBP is not this body's frame pointer.
+
+    Two independent facts are required, and BOTH come from the object itself:
+    the compiler's own FPO record for this COMDAT declares FRAME_FPO with no
+    structured exception handling, and no instruction in the decoded body
+    derives EBP from ESP.  The first is the compiler's statement that the
+    function has no EBP frame; the second is a structural check on the code
+    that no `mov ebp, esp` / `lea ebp, [esp+d]` establishes one anyway.
+    """
+    closure = _comdat_child_closure(coff, section)
+    require(closure == (2, (".debug$F", ".debug$S")),
+            f"{context}: a frame-pointer-free proof needs the FPO closure")
+    record = parse_fpo_data(
+        bytes(coff_body(coff, _comdat_child(coff, section, ".debug$F"))),
+        expected_proc_size=section["raw_size"],
+    )
+    require(record["cbFrame"] == FPO_FRAME_KIND_FPO,
+            f"{context}: the FPO record does not declare FRAME_FPO, so EBP "
+            "may be this body's frame pointer")
+    require(record["fHasSEH"] == 0,
+            f"{context}: the FPO record declares structured exception "
+            "handling, whose unwind may read EBP")
+    for item in instructions:
+        # ESP is read IMPLICITLY by every push and pop, including the
+        # prologue's `push ebp` and the epilogue's `pop ebp`, and that says
+        # nothing about frames.  What establishes a frame pointer is ESP
+        # appearing as an EXPLICIT operand of an instruction that writes EBP
+        # -- `mov ebp, esp`, `lea ebp, [esp+d]`, `add ebp, esp`.  The explicit
+        # operands are exactly the register fields the decoder hands a
+        # bijection to rewrite, so this reads them and nothing else.
+        if "ebp" not in item["writes"]:
+            continue
+        named = {IA32_GENERAL_REGISTER_NAMES[(body[byte_index] >> shift) & 7]
+                 for byte_index, shift in item["fields"]}
+        require("esp" not in named,
+                f"{context}: the instruction at {item['offset']} derives EBP "
+                "from ESP, which establishes a frame pointer")
+    return record
+
+
+def _reencoding_region_for(regions: list[dict], offset: int) -> dict | None:
+    """The declared region covering one instruction, or None."""
+    for region in regions:
+        if region["start"] <= offset < region["end"]:
+            return region
+    return None
+
+
+def _reencoded_instruction(
+    body: bytes, item: dict, mapping: dict, numbers: dict,
+    relocation_offsets: frozenset, context: str,
+) -> tuple[bytes, str, list[int]]:
+    """Rewrite ONE instruction's register fields, re-encoding if EBP forces it.
+
+    Obligation 12.  Returns the new encoding, the class of change and the
+    pre-image byte offsets whose value the rewrite changed:
+    `"field"` when only register fields moved, `"reencode"` when the ModRM
+    `mod` field additionally had to change because the memory BASE crossed
+    EBP.  The re-encoding is derived from the decoder's own layout
+    description, never by re-disassembling this function's own output.
+    """
+    start, length = item["offset"], item["length"]
+    raw = bytearray(body[start:start + length])
+    encoding = item["encoding"]
+    base_field = None
+    if (encoding is not None and encoding["mode"] != 3
+            and not encoding["absolute"]):
+        # The BASE register's field: the SIB base when a SIB is present, the
+        # ModRM r/m field otherwise.  The decoder emits exactly one such
+        # field, at shift 0 of that byte.
+        base_field = (encoding["sib_at"] if encoding["sib_at"] is not None
+                      else encoding["modrm_at"])
+    base_before = None
+    base_after = None
+    touched = []
+    for byte_index, shift in item["fields"]:
+        value = (raw[byte_index - start] >> shift) & 7
+        if byte_index == base_field and shift == 0:
+            base_before = value
+        if value not in numbers:
+            if byte_index == base_field and shift == 0:
+                base_after = value
+            continue
+        require(byte_index not in relocation_offsets,
+                f"{context}: a rewritten byte at {byte_index} overlaps a "
+                "relocation")
+        raw[byte_index - start] = (
+            (raw[byte_index - start] & ~(7 << shift))
+            | (numbers[value] << shift)
+        ) & 0xFF
+        if raw[byte_index - start] != body[byte_index]:
+            touched.append(byte_index)
+        if byte_index == base_field and shift == 0:
+            base_after = numbers[value]
+    touched = sorted(set(touched))
+    if base_field is None or base_before is None or base_before == base_after:
+        return bytes(raw), "field", touched
+    ebp = _IA32_REGISTER_NUMBERS["ebp"]
+    modrm_local = encoding["modrm_at"] - start
+    mode = encoding["mode"]
+    if base_after == ebp:
+        require(mode in (0, 1, 2),
+                f"{context}: unexpected ModRM mode at {start}")
+        if mode != 0:
+            return bytes(raw), "field", touched
+        # mod 00 with base EBP would mean "no base": grow the zero disp8 the
+        # encoding forces.  The inserted byte goes immediately after the SIB
+        # when one is present, and after the ModRM byte otherwise -- i.e.
+        # exactly where the decoder said the displacement would start.
+        insert_at = (encoding["sib_at"] - start + 1
+                     if encoding["sib_at"] is not None else modrm_local + 1)
+        require(encoding["displacement_size"] == 0,
+                f"{context}: a mod-00 operand at {start} already carries a "
+                "displacement")
+        raw[modrm_local] = (raw[modrm_local] & 0x3F) | 0x40
+        raw = raw[:insert_at] + bytearray(b"\x00") + raw[insert_at:]
+        return bytes(raw), "reencode", touched
+    if base_before == ebp:
+        if mode != 1:
+            return bytes(raw), "field", touched
+        require(encoding["displacement_size"] == 1
+                and encoding["displacement_at"] is not None,
+                f"{context}: a mod-01 operand at {start} has no disp8")
+        displacement_local = encoding["displacement_at"] - start
+        if raw[displacement_local] != 0:
+            # A non-zero disp8 is legal for every base: nothing to re-encode.
+            return bytes(raw), "field", touched
+        raw[modrm_local] = raw[modrm_local] & 0x3F
+        del raw[displacement_local]
+        return bytes(raw), "reencode", touched
+    return bytes(raw), "field", touched
+
+
+# The relative-branch encodings this class is willing to repair.  Each names
+# the width of the displacement field and its offset from the END of the
+# instruction, so a repair writes exactly those bytes and nothing else.  A
+# branch outside this table, or one whose displacement is relocated, is never
+# touched -- and if the layout moved it, the fixpoint's own re-decode refuses.
+IA32_REPAIRABLE_BRANCH_WIDTHS = (1, 4)
+
+
+REGISTER_BIJECTION_REENCODING_FIXPOINT_ROUNDS = 64
+
+
+def apply_register_bijection_reencoding(
+    body: bytes, regions: list[dict], relocation_offsets: frozenset,
+    context: str,
+    relocations: dict | None = None,
+    code_length: int | None = None,
+    internal_targets: frozenset | None = None,
+    frame_pointer_free: bool = False,
+) -> tuple[bytes, dict]:
+    """Rewrite several regions under proved bijections, re-encoding for EBP.
+
+    This is `apply_register_bijection` generalised on two axes: sigma may name
+    EBP when the caller has discharged obligation 11, and an instruction may
+    change length when -- and only when -- the ModRM `mod` field forces it.
+    Every obligation of the parent still holds, and obligations 12 to 14 are
+    checked here.  The result is re-decoded to exhaustion so that every claim
+    about the image is measured ON the image.
+    """
+    body = bytes(body)
+    instructions = decode_ia32_bijection_body(
+        body, context, relocations, code_length)
+    limit = len(body) if code_length is None else code_length
+    boundaries = {item["offset"] for item in instructions}
+    boundaries.add(limit)
+    index_of = {item["offset"]: index
+                for index, item in enumerate(instructions)}
+
+    require(regions, f"{context}: no region is declared")
+    previous_end = 0
+    for position, region in enumerate(regions):
+        region_context = f"{context} region {position}"
+        start, end = region["start"], region["end"]
+        require(start >= previous_end and start < end,
+                f"{region_context}: regions are unsorted, empty or "
+                "overlapping")
+        previous_end = end
+        require(end <= limit,
+                f"{region_context}: region reaches past the body's code")
+        require(start in boundaries and end in boundaries,
+                f"{region_context}: region does not span whole instructions")
+        mapping = region["mapping"]
+        require(set(mapping.values()) == set(mapping)
+                and all(source != destination
+                        for source, destination in mapping.items()),
+                f"{region_context}: mapping is not a bijection of one "
+                "register set")
+        for name in set(mapping) | set(mapping.values()):
+            require(name in _IA32_REGISTER_NUMBERS,
+                    f"{region_context}: mapping names an unknown register")
+        support = set(mapping) | set(mapping.values())
+        require("esp" not in support,
+                f"{region_context}: ESP cannot be a ModRM base or a SIB "
+                "index, so a rename to or from it is not an encoding change")
+        require(frame_pointer_free or "ebp" not in support,
+                f"{region_context}: EBP is refused without a "
+                "frame-pointer-free proof for this body")
+
+    # A computed jump has no decodable successors, so the "control enters the
+    # region only at its head" obligation cannot be discharged from the
+    # decoded graph alone.  Exactly as in the parent class, the relocated
+    # in-body label set must be SUPPLIED for such a body or it is refused.
+    if any(item["indirect"] for item in instructions):
+        require(internal_targets is not None,
+                f"{context}: a computed jump requires the relocated in-body "
+                "target set")
+        for position, region in enumerate(regions):
+            entered = sorted(target for target in internal_targets
+                             if region["start"] < target < region["end"])
+            require(not entered,
+                    f"{context} region {position}: a relocated in-body "
+                    f"target at {entered[:1]} enters the region other than "
+                    "at its first instruction")
+
+    live, successors = _register_bijection_live_sets(instructions, context)
+    for position, region in enumerate(regions):
+        region_context = f"{context} region {position}"
+        start, end = region["start"], region["end"]
+        mapping = region["mapping"]
+        support = set(mapping) | set(mapping.values())
+        inside = [item for item in instructions
+                  if start <= item["offset"] < end]
+        require(inside, f"{region_context}: region contains no instruction")
+        require(inside[-1]["offset"] + inside[-1]["length"] == end,
+                f"{region_context}: region does not end on an instruction "
+                "boundary")
+        entry = index_of[inside[0]["offset"]]
+        for item in inside:
+            blocked = support & set(item.get("frozen", frozenset()))
+            require(not blocked,
+                    f"{region_context}: {sorted(blocked)} is named by a "
+                    f"sub-register field at {item['offset']} that sigma "
+                    "cannot rewrite")
+        for index, item in enumerate(instructions):
+            for edge in successors[index]:
+                if (not (start <= item["offset"] < end)
+                        and start <= instructions[edge]["offset"] < end):
+                    require(edge == entry,
+                            f"{region_context}: control enters the region "
+                            "other than at its first instruction")
+        support_atoms = ia32_register_atoms(support)
+        dead_in = support_atoms & set(live[entry])
+        require(not dead_in,
+                f"{region_context}: {_ia32_atom_registers(dead_in)} is live "
+                "on entry to the region")
+        for index, item in enumerate(instructions):
+            if not (start <= item["offset"] < end):
+                continue
+            for edge in successors[index]:
+                if start <= instructions[edge]["offset"] < end:
+                    continue
+                leaking = support_atoms & set(live[edge])
+                require(not leaking,
+                        f"{region_context}: "
+                        f"{_ia32_atom_registers(leaking)} is live on an edge "
+                        f"leaving the region at {item['offset']}")
+            if item["flow"] in ("ret", "exit"):
+                leaking = support_atoms & set(item["read_atoms"])
+                require(not leaking,
+                        f"{region_context}: "
+                        f"{_ia32_atom_registers(leaking)} is live at the "
+                        "region's return")
+
+    # --- obligation 12: rewrite each instruction, classified ---------------
+    pieces = []
+    classes = []
+    rewritten_fields = []
+    for item in instructions:
+        region = _reencoding_region_for(regions, item["offset"])
+        if region is None:
+            pieces.append(body[item["offset"]:item["offset"] + item["length"]])
+            classes.append("unchanged")
+            continue
+        numbers = {_IA32_REGISTER_NUMBERS[source]:
+                   _IA32_REGISTER_NUMBERS[destination]
+                   for source, destination in region["mapping"].items()}
+        raw, kind, touched = _reencoded_instruction(
+            body, item, region["mapping"], numbers, relocation_offsets,
+            context)
+        rewritten_fields.extend(touched)
+        require(len(raw) - item["length"] in (-1, 0, 1),
+                f"{context}: the re-encoding at {item['offset']} changed the "
+                "length by more than the one byte a mod field forces")
+        require(kind == "reencode" or len(raw) == item["length"],
+                f"{context}: the instruction at {item['offset']} changed "
+                "length without a mod re-encoding")
+        pieces.append(raw)
+        classes.append(kind)
+    tail = body[limit:]
+
+    def _starts(current: list[bytes]) -> list[int]:
+        cursor, out = 0, []
+        for raw in current:
+            out.append(cursor)
+            cursor += len(raw)
+        return out
+
+    # --- obligation 13: the branch-displacement fixpoint -------------------
+    repaired = set()
+    for _round in range(REGISTER_BIJECTION_REENCODING_FIXPOINT_ROUNDS):
+        starts = _starts(pieces)
+        changed = False
+        for index, item in enumerate(instructions):
+            if item["flow"] not in ("jcc", "jmp") or item["target"] is None:
+                continue
+            raw = bytearray(pieces[index])
+            width = _reencoding_branch_width(item, raw, context)
+            destination = starts[index_of[item["target"]]]
+            delta = destination - (starts[index] + len(raw))
+            require(-(1 << (8 * width - 1)) <= delta < (1 << (8 * width - 1)),
+                    f"{context}: the branch at {item['offset']} no longer "
+                    f"reaches its target in {width} displacement byte(s); "
+                    "widening it would be a code change, not a renaming")
+            encoded = delta.to_bytes(width, "little", signed=True)
+            if bytes(raw[len(raw) - width:]) != encoded:
+                raw[len(raw) - width:] = encoded
+                pieces[index] = bytes(raw)
+                repaired.add(item["offset"])
+                changed = True
+        if not changed:
+            break
+    else:
+        raise ByteIdentityError(
+            f"{context}: the branch-displacement fixpoint did not converge")
+
+    starts = _starts(pieces)
+    image = b"".join(pieces) + tail
+    offset_map = {item["offset"]: starts[index]
+                  for index, item in enumerate(instructions)}
+    image_limit = starts[-1] + len(pieces[-1]) if pieces else 0
+    offset_map[limit] = image_limit
+    require(len(image) == image_limit + len(tail),
+            f"{context}: the image is not the concatenation of its pieces")
+
+    # Every changed piece is accounted for by its class, and by nothing else.
+    for index, item in enumerate(instructions):
+        original = body[item["offset"]:item["offset"] + item["length"]]
+        if pieces[index] == original:
+            continue
+        require(classes[index] in ("field", "reencode")
+                or item["offset"] in repaired,
+                f"{context}: the instruction at {item['offset']} changed "
+                "outside a declared region and is not a branch repair")
+
+    # --- obligation 14: where every relocation lands ----------------------
+    reseat = []
+    for offset in sorted(relocations or {}):
+        record = (relocations or {})[offset]
+        width = record["width"]
+        owner = None
+        for index, item in enumerate(instructions):
+            if (item["offset"] <= offset
+                    and offset + width <= item["offset"] + item["length"]):
+                owner = index
+                break
+        require(owner is not None,
+                f"{context}: the relocation at {offset} does not lie wholly "
+                "inside one decoded instruction")
+        item = instructions[owner]
+        growth = len(pieces[owner]) - item["length"]
+        # The re-encoding inserts (or removes) its byte immediately after the
+        # ModRM/SIB pair, so every trailing field keeps its distance from the
+        # END of the instruction.  That invariant is the reseat, and it is
+        # required rather than assumed: a relocation that is NOT strictly
+        # after the ModRM/SIB of a re-encoded instruction refuses.
+        from_end = item["offset"] + item["length"] - offset
+        new_offset = starts[owner] + len(pieces[owner]) - from_end
+        if growth:
+            encoding = item["encoding"]
+            require(encoding is not None,
+                    f"{context}: a re-encoded instruction at {item['offset']} "
+                    "has no ModRM layout")
+            fixed_end = (encoding["sib_at"] if encoding["sib_at"] is not None
+                         else encoding["modrm_at"]) + 1
+            require(offset >= fixed_end,
+                    f"{context}: the relocation at {offset} overlaps the "
+                    "ModRM/SIB bytes the re-encoding changed")
+            require(new_offset == offset + (starts[owner] - item["offset"])
+                    + growth,
+                    f"{context}: the reseat of {offset} is inconsistent")
+        require(starts[owner] <= new_offset
+                and new_offset + width <= starts[owner] + len(pieces[owner]),
+                f"{context}: the reseat of {offset} leaves its instruction")
+        reseat.append([offset, new_offset])
+    require(len({pair[1] for pair in reseat}) == len(reseat),
+            f"{context}: the reseat collides two relocation records")
+    image_relocations = None
+    if relocations is not None:
+        moved = dict(reseat)
+        image_relocations = {moved[offset]: record
+                             for offset, record in relocations.items()}
+    image_internal = None
+    if internal_targets is not None:
+        for target in internal_targets:
+            require(target in offset_map,
+                    f"{context}: a relocated in-body target at {target} is "
+                    "not an instruction boundary")
+        image_internal = frozenset(offset_map[target]
+                                   for target in internal_targets)
+
+    # --- the image is re-decoded and every claim measured ON it -----------
+    image_instructions = decode_ia32_bijection_body(
+        image, f"{context} image", image_relocations,
+        None if code_length is None else image_limit)
+    require(len(image_instructions) == len(instructions),
+            f"{context}: the image has a different instruction count")
+    for left, right, raw in zip(image_instructions, instructions, pieces):
+        require(left["offset"] == offset_map[right["offset"]]
+                and left["length"] == len(raw),
+                f"{context}: the image's instruction at "
+                f"{right['offset']} did not land where the layout says")
+        form = _bijection_form_for(right["opcode"])
+        opreg = form is not None and form["opreg"] is not None
+        mask = 0xF8 if opreg else 0xFFFF
+        require(left["opcode"] & mask == right["opcode"] & mask
+                and left["flow"] == right["flow"],
+                f"{context}: the image changed an opcode or a control flow "
+                f"at {right['offset']}")
+        require(left["target"] == (None if right["target"] is None
+                                   else offset_map[right["target"]]),
+                f"{context}: the image changed a branch target at "
+                f"{right['offset']}")
+        region = _reencoding_region_for(regions, right["offset"])
+        mapping = {} if region is None else region["mapping"]
+        require(left["reads"] == frozenset(mapping.get(name, name)
+                                           for name in right["reads"])
+                and left["writes"] == frozenset(mapping.get(name, name)
+                                                for name in right["writes"]),
+                f"{context}: the image's operand set at {right['offset']} is "
+                "not the bijection's image")
+    require(image[image_limit:] == tail,
+            f"{context}: the image changed the body's data tail")
+
+    growth_detail = [
+        [item["offset"], starts[index], item["length"], len(pieces[index])]
+        for index, item in enumerate(instructions)
+        if len(pieces[index]) != item["length"]
+    ]
+    rewritten = sorted(set(rewritten_fields))
+    require(rewritten, f"{context}: the bijection rewrites no register field")
+    require(image != body or growth_detail,
+            f"{context}: the bijection moves nothing")
+    return image, {
+        "offset_map": {str(key): value
+                       for key, value in sorted(offset_map.items())},
+        "growth": growth_detail,
+        "branch_repairs": sorted(offset_map[offset] for offset in repaired),
+        "relocation_reseat": [pair for pair in reseat if pair[0] != pair[1]],
+        "region_instruction_counts": [
+            sum(1 for item in instructions
+                if region["start"] <= item["offset"] < region["end"])
+            for region in regions
+        ],
+        "rewritten_field_offsets": rewritten,
+        "instruction_count": len(instructions),
+        "code_length": limit,
+        "image_code_length": image_limit,
+    }
+
+
+def _reencoding_branch_width(item: dict, raw: bytes, context: str) -> int:
+    """The displacement width of one repairable relative branch.
+
+    Read off the module's own closed form table, never guessed, and refused
+    for any encoding whose displacement this class will not repair.
+    """
+    form = _bijection_form_for(item["opcode"])
+    require(form is not None
+            and form["displacement"] in IA32_REPAIRABLE_BRANCH_WIDTHS,
+            f"{context}: the branch at {item['offset']} has no repairable "
+            "displacement field")
+    require(len(raw) == item["length"],
+            f"{context}: the branch at {item['offset']} changed its own "
+            "encoding length")
+    return form["displacement"]
+
+
+def _reencoded_donor_object(
+    donor_bytes: bytes, mangled: str, image: bytes, proof: dict, context: str,
+) -> bytes:
+    """Re-seat one COMDAT's dependent COFF records around a resized body.
+
+    Obligations 14 to 16.  The donor is an authentic compiler object; this
+    produces the same object with the proved image in place of the target
+    body and every record that states a code offset carried through the
+    bijection's own boundary map.  Nothing outside the target COMDAT's own
+    data, tables and closure children is touched, and the result is re-parsed
+    and re-checked before it is handed to the installation primitive.
+    """
+    donor = CoffObject(donor_bytes)
+    primary = donor.function_section(mangled)
+    offset_map = {int(key): value for key, value in proof["offset_map"].items()}
+    body_length = len(image)
+    require(offset_map[primary["raw_size"]] == body_length
+            if primary["raw_size"] in offset_map else True,
+            f"{context}: the boundary map does not end at the image length")
+
+    # The COFF line table: the sentinel keeps the donor's function symbol
+    # index, and every row keeps its LINE NUMBER and moves only by the map.
+    line_bytes = _coff_table_bytes(donor, primary, "lines")
+    require(len(line_bytes) == primary["line_count"] * 6
+            and primary["line_count"] >= 1,
+            f"{context}: the donor line table is missing")
+    rebuilt_lines = bytearray(line_bytes[:6])
+    require(coff_unpack("<IH", line_bytes, 0,
+                        f"{context} line sentinel")[1] == 0,
+            f"{context}: the donor line sentinel is invalid")
+    for position in range(1, primary["line_count"]):
+        offset, line = coff_unpack("<IH", line_bytes, position * 6,
+                                   f"{context} line row {position}")
+        require(line != 0,
+                f"{context}: line row {position} has no line number")
+        require(offset in offset_map,
+                f"{context}: line row {position} at {offset} is not an "
+                "instruction boundary of the pre-image")
+        rebuilt_lines += offset_map[offset].to_bytes(4, "little")
+        rebuilt_lines += line.to_bytes(2, "little")
+    require(len(rebuilt_lines) == len(line_bytes),
+            f"{context}: the rebuilt line table changed size")
+
+    # The relocation table: only the four offset bytes of a moved record.
+    relocation_bytes = _coff_table_bytes(donor, primary, "relocations")
+    moved = dict(proof["relocation_reseat"])
+    rebuilt_relocations = bytearray(relocation_bytes)
+    for ordinal in range(primary["relocation_count"]):
+        at = ordinal * 10
+        offset = int.from_bytes(relocation_bytes[at:at + 4], "little")
+        rebuilt_relocations[at:at + 4] = moved.get(
+            offset, offset).to_bytes(4, "little")
+    require(len(rebuilt_relocations) == len(relocation_bytes),
+            f"{context}: the rebuilt relocation table changed size")
+
+    # The CodeView procedure record: its code length becomes the image's and
+    # its debug range is carried through the same map.
+    debug_child = _comdat_child(donor, primary, ".debug$S")
+    debug_raw = bytes(coff_body(donor, debug_child))
+    require(len(debug_raw) >= 28 and debug_raw[2:4] == b"\x05\x02",
+            f"{context}: the donor debug$S is not an S_LPROC32 record")
+    code_length, debug_start, debug_end = coff_unpack(
+        "<III", debug_raw, 16, f"{context} debug range")
+    require(code_length == primary["raw_size"]
+            and 0 <= debug_start <= debug_end < code_length,
+            f"{context}: the donor debug procedure range is stale")
+    require(debug_start in offset_map and debug_end in offset_map,
+            f"{context}: the debug range is not on instruction boundaries")
+    rebuilt_debug = bytearray(debug_raw)
+    rebuilt_debug[16:28] = (
+        body_length.to_bytes(4, "little")
+        + offset_map[debug_start].to_bytes(4, "little")
+        + offset_map[debug_end].to_bytes(4, "little"))
+
+    # The FPO record: only cbProcSize moves; every other field is identical.
+    fpo_child = _comdat_child(donor, primary, ".debug$F")
+    fpo_raw = bytes(coff_body(donor, fpo_child))
+    parse_fpo_data(fpo_raw, expected_proc_size=primary["raw_size"])
+    rebuilt_fpo = bytearray(fpo_raw)
+    rebuilt_fpo[4:8] = body_length.to_bytes(4, "little")
+    parse_fpo_data(bytes(rebuilt_fpo), expected_proc_size=body_length)
+    require(rebuilt_fpo[:4] == fpo_raw[:4] and rebuilt_fpo[8:] == fpo_raw[8:],
+            f"{context}: the rebuilt FPO record changed a field other than "
+            "cbProcSize")
+
+    replacements = [
+        (primary["raw_offset"], primary["raw_offset"] + primary["raw_size"],
+         bytes(image)),
+        (primary["line_offset"],
+         primary["line_offset"] + primary["line_count"] * 6,
+         bytes(rebuilt_lines)),
+        (primary["relocation_offset"],
+         primary["relocation_offset"] + primary["relocation_count"] * 10,
+         bytes(rebuilt_relocations)),
+        (debug_child["raw_offset"],
+         debug_child["raw_offset"] + debug_child["raw_size"],
+         bytes(rebuilt_debug)),
+        (fpo_child["raw_offset"],
+         fpo_child["raw_offset"] + fpo_child["raw_size"],
+         bytes(rebuilt_fpo)),
+    ]
+    output = bytearray(apply_replacements(donor_bytes, replacements))
+
+    def shifted(pointer: int) -> int:
+        return shifted_pointer(pointer, replacements)
+
+    new_symbol_offset = shifted(donor.symbol_offset)
+    output[8:12] = new_symbol_offset.to_bytes(4, "little")
+    for section in donor.sections:
+        header = 20 + (section["number"] - 1) * 40
+        if section["number"] == primary["number"]:
+            output[header + 16:header + 20] = body_length.to_bytes(
+                4, "little")
+        for field, relative in (("raw_offset", 20),
+                                ("relocation_offset", 24),
+                                ("line_offset", 28)):
+            pointer = shifted(section[field])
+            if pointer != section[field]:
+                output[header + relative:header + relative + 4] = (
+                    pointer.to_bytes(4, "little"))
+    for symbol_index, item in donor.symbols.items():
+        if item["type"] == 0x20 and item["aux_count"] >= 1:
+            auxiliary = coff_auxiliary(donor, symbol_index, item)
+            line_pointer = int.from_bytes(auxiliary[8:12], "little")
+            mapped = shifted(line_pointer) if line_pointer else line_pointer
+            if mapped != line_pointer:
+                at = new_symbol_offset + (symbol_index + 1) * 18
+                output[at + 8:at + 12] = mapped.to_bytes(4, "little")
+
+    function_index, function_symbol_record = function_symbol(
+        donor, mangled, primary["number"])
+    function_aux = coff_auxiliary(donor, function_index,
+                                  function_symbol_record)
+    require(int.from_bytes(function_aux[4:8], "little")
+            == primary["raw_size"],
+            f"{context}: the donor Function Definition TotalSize is stale")
+    at = new_symbol_offset + (function_index + 1) * 18
+    output[at + 4:at + 8] = body_length.to_bytes(4, "little")
+
+    section_index, section_symbol_record = _coff_section_symbol(donor, primary)
+    aux_at = new_symbol_offset + (section_index + 1) * 18
+    require(int.from_bytes(
+        coff_auxiliary(donor, section_index, section_symbol_record)[0:4],
+        "little") == primary["raw_size"],
+        f"{context}: the donor COMDAT auxiliary Length is stale")
+    output[aux_at:aux_at + 4] = body_length.to_bytes(4, "little")
+
+    end_index, end_symbol = _coff_marker(donor, ".ef", primary["number"])
+    require(end_symbol["value"] == primary["raw_size"],
+            f"{context}: the donor .ef marker is stale")
+    output[new_symbol_offset + end_index * 18 + 8:
+           new_symbol_offset + end_index * 18 + 12] = body_length.to_bytes(
+        4, "little")
+
+    # Every OTHER symbol seated in this section states a code offset and is
+    # carried through the same map; one that is not a boundary refuses.
+    carried = []
+    for symbol_index, item in donor.symbols.items():
+        if item["section"] != primary["number"]:
+            continue
+        if symbol_index in (function_index, section_index, end_index):
+            continue
+        if item["name"] in (".bf", ".lf"):
+            continue
+        require(item["value"] in offset_map,
+                f"{context}: the symbol {item['name']} at {item['value']} is "
+                "not an instruction boundary of the pre-image")
+        mapped = offset_map[item["value"]]
+        if mapped != item["value"]:
+            at = new_symbol_offset + symbol_index * 18
+            output[at + 8:at + 12] = mapped.to_bytes(4, "little")
+            carried.append([item["name"], item["value"], mapped])
+
+    derived = bytes(output)
+    checked = CoffObject(derived)
+    checked_primary = checked.function_section(mangled)
+    require(coff_body(checked, checked_primary) == bytes(image),
+            f"{context}: the derived donor body is not the image")
+    require(checked_primary["raw_size"] == body_length
+            and checked_primary["line_count"] == primary["line_count"]
+            and checked_primary["relocation_count"]
+            == primary["relocation_count"]
+            and checked_primary["number"] == primary["number"]
+            and checked_primary["characteristics"]
+            == primary["characteristics"],
+            f"{context}: the derived donor target header is inconsistent")
+    require(function_multiset(checked) == function_multiset(donor)
+            and comdat_primary_identity_multiset(checked)
+            == comdat_primary_identity_multiset(donor)
+            and len(checked.sections) == len(donor.sections),
+            f"{context}: the derived donor changed the object's topology")
+    require(_comdat_child_closure(checked, checked_primary)
+            == _comdat_child_closure(donor, primary),
+            f"{context}: the derived donor changed the target closure")
+    require([row["target"] for row in detailed_relocations(
+                checked, checked_primary)]
+            == [row["target"] for row in detailed_relocations(donor, primary)],
+            f"{context}: the derived donor changed a relocation target")
+    require([row["offset"] for row in detailed_relocations(
+                checked, checked_primary)]
+            == [moved.get(row["offset"], row["offset"])
+                for row in detailed_relocations(donor, primary)],
+            f"{context}: the derived donor relocation offsets are not the "
+            "proved reseat")
+    return derived, {"carried_code_symbols": carried,
+                     "line_rows": primary["line_count"],
+                     "procedure_range": [body_length,
+                                         offset_map[debug_start],
+                                         offset_map[debug_end]]}
+
+
+def compose_retail_exact_register_bijection_reencoding(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Install sigma(donor body) after proving it is retail's own code.
+
+    The parent class with EBP admitted: see the class comment above for the
+    seven obligations that admission costs.  The pre-image is an ordinary,
+    census-pinned carrier compile of the same translation unit; the renaming
+    is proved sound against the body's own control flow AND against the
+    compiler's own frame declaration; the resized image is re-seated through
+    the bijection's own boundary map; and the composition is refused unless
+    the result equals the pinned retail oracle under the reseated relocation
+    mask.  Installation is delegated, unchanged, to `compose_same_slot_resize`
+    in the mode a dozen landed rows already use.
+    """
+    require(function.get("splice_class")
+            == REGISTER_BIJECTION_REENCODING_CLASS,
+            "splice class is not retail_exact_register_bijection_reencoding")
+    require("target_source_refactor" not in function,
+            "register-bijection functions carry no source refactor")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    spec = function["register_bijection_reencoding"]
+    require(spec["kind"] == REGISTER_BIJECTION_REENCODING_KIND,
+            "re-encoding bijection kind differs")
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+
+    # --- obligation 1: provenance, pinned exactly as the parent pins it ---
+    require(sp["number"] == dp["number"]
+            == function["expected_section_number"],
+            "re-encoding target section seat changed")
+    require(len(seed.sections) == len(donor.sections)
+            == function["expected_section_count"],
+            "re-encoding global section count changed")
+    seed_functions = function_multiset(seed)
+    require(seed_functions == function_multiset(donor)
+            and sum(seed_functions.values())
+            == function["expected_function_count"],
+            "re-encoding donor function set differs")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    require(seed_comdats == comdat_primary_identity_multiset(donor)
+            and sum(seed_comdats.values())
+            == function["expected_comdat_count"],
+            "re-encoding donor COMDAT identity set differs")
+    require(sp["raw_size"] == function["expected_seed_length"]
+            and dp["raw_size"] == function["expected_preimage_length"]
+            and sp["relocation_count"] == dp["relocation_count"]
+            == function["expected_relocation_count"]
+            and sp["line_count"] == function["expected_seed_line_count"]
+            and dp["line_count"] == function["expected_donor_line_count"]
+            and sp["name"] == dp["name"]
+            and sp["characteristics"] == dp["characteristics"]
+            == function["expected_characteristics"],
+            "re-encoding target header/count pins changed")
+    require(section_definitions(seed)[sp["number"]]["selection"]
+            == section_definitions(donor)[dp["number"]]["selection"]
+            == function["expected_selection"],
+            "re-encoding COMDAT selection changed")
+    expected_closure = tuple(function["expected_closure"])
+    require(_comdat_child_closure(seed, sp)
+            == _comdat_child_closure(donor, dp)
+            == (len(expected_closure), expected_closure)
+            and list(expected_closure) == REGISTER_BIJECTION_FPO_CLOSURE,
+            "re-encoding target closure is not the FPO debug pair")
+    require(instruction_mosaic_metadata_sha256(seed, sp)
+            == function["expected_seed_metadata_sha256"]
+            and instruction_mosaic_metadata_sha256(donor, dp)
+            == function["expected_donor_metadata_sha256"],
+            "re-encoding metadata differs from its pin")
+    seed_body = coff_body(seed, sp)
+    donor_body = bytes(coff_body(donor, dp))
+    require(sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+            and sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "re-encoding seed/donor body differs from its pin")
+
+    donor_rows = detailed_relocations(donor, dp)
+    require([row["target"] for row in donor_rows]
+            == [row["target"] for row in detailed_relocations(seed, sp)],
+            "re-encoding donor relocation targets differ from the seed")
+    relocation_offsets = frozenset(
+        row["offset"] + byte
+        for row in donor_rows for byte in range(row["width"]))
+    relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in donor_rows}
+    internal_targets = frozenset(
+        row["target_value"] for row in donor_rows
+        if row["target_section"] == dp["number"])
+    declared_targets = spec.get("expected_internal_relocation_targets")
+    if declared_targets is not None:
+        require(sorted(internal_targets) == declared_targets,
+                "re-encoding in-body relocated target set changed")
+
+    # --- obligation 11: EBP is not this body's frame pointer --------------
+    instructions = decode_ia32_bijection_body(
+        donor_body, "re-encoding frame proof", relocation_symbols,
+        spec.get("expected_code_length"))
+    fpo_record = require_frame_pointer_free_frame(
+        donor, dp, donor_body, instructions, "re-encoding frame proof")
+    measured_fpo = {key: value for key, value in fpo_record.items()
+                    if key != "raw_sha256"}
+    require(measured_fpo == spec["expected_fpo_record"],
+            "re-encoding FPO record differs from its declaration")
+
+    regions = [
+        {"start": item["start"], "end": item["end"],
+         "mapping": dict(item["mapping"])}
+        for item in spec["regions"]
+    ]
+    image, proof = apply_register_bijection_reencoding(
+        donor_body, regions, relocation_offsets, "re-encoding image",
+        relocation_symbols, spec.get("expected_code_length"),
+        internal_targets or None, True,
+    )
+    require(proof["code_length"]
+            == (spec.get("expected_code_length") or len(donor_body)),
+            "re-encoding code length differs from its pin")
+    require(proof["growth"] == spec["expected_growth"]
+            and proof["branch_repairs"] == spec["expected_branch_repairs"]
+            and proof["relocation_reseat"]
+            == spec["expected_relocation_reseat"]
+            and proof["rewritten_field_offsets"]
+            == spec["expected_rewritten_field_offsets"]
+            and proof["region_instruction_counts"]
+            == spec["expected_region_instruction_counts"]
+            and proof["instruction_count"]
+            == spec["expected_instruction_count"]
+            and proof["image_code_length"]
+            == spec["expected_image_code_length"],
+            "re-encoding image differs from its declaration")
+    require(sha256_bytes(image) == function["expected_body_sha256"],
+            "re-encoding image differs from its pin")
+    require(len(image) == function["expected_body_length"]
+            == function["expected_donor_length"],
+            "re-encoding image length differs from its pin")
+    require(image != donor_body,
+            "re-encoding image does not move the donor body")
+
+    # --- obligation 8: the image is retail's own code ---------------------
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == len(image),
+            "re-encoding retail length changed")
+    moved = dict(proof["relocation_reseat"])
+    installed_rows = [{**row, "offset": moved.get(row["offset"],
+                                                  row["offset"])}
+                      for row in donor_rows]
+    semantic_detail = require_retail_relocation_oracle(
+        installed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "re-encoding retail relocation oracle",
+    )
+    masked_image = bytearray(image)
+    masked_retail = bytearray(retail_body)
+    for row in installed_rows:
+        start, width = row["offset"], row["width"]
+        masked_image[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_image, masked_retail))
+    require(differing == 0,
+            f"re-encoding output is not retail-exact: {differing} byte(s) "
+            "differ under the relocation mask")
+
+    # --- obligations 14 to 17: re-seat, then delegate ---------------------
+    derived, derived_detail = _reencoded_donor_object(
+        donor_bytes, mangled, image, proof, "re-encoding derived donor")
+    require(derived_detail["procedure_range"]
+            == spec["expected_procedure_range"]
+            and derived_detail["carried_code_symbols"]
+            == spec["expected_carried_code_symbols"],
+            "re-encoding derived donor differs from its declaration")
+    effective = {
+        "mangled": mangled,
+        "splice_class": "retail_exact_reloc_divergent",
+        "expected_seed_length": function["expected_seed_length"],
+        "expected_donor_length": function["expected_donor_length"],
+        "expected_linked_span": function["expected_linked_span"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_seed_line_count": function["expected_seed_line_count"],
+        "expected_donor_line_count": function["expected_donor_line_count"],
+        "retail_oracle": function["retail_oracle"],
+        "retail_relocations": function["retail_relocations"],
+    }
+    composed, detail = compose_same_slot_resize(
+        seed_bytes, derived, effective, retail_body=bytes(retail_body))
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == image,
+            "re-encoding composed body differs from the image")
+    require([row["offset"] for row in detailed_relocations(checked, cp)]
+            == [row["offset"] for row in installed_rows]
+            and [row["target"] for row in detailed_relocations(checked, cp)]
+            == [row["target"] for row in installed_rows],
+            "re-encoding composed relocation table is not the proved reseat")
+    return composed, {
+        **detail,
+        "splice_class": REGISTER_BIJECTION_REENCODING_CLASS,
+        "register_bijection_reencoding": [
+            {"start": item["start"], "end": item["end"],
+             "mapping": dict(sorted(item["mapping"].items()))}
+            for item in regions
+        ],
+        "fpo_record": measured_fpo,
+        "growth": proof["growth"],
+        "branch_repairs": proof["branch_repairs"],
+        "relocation_reseat": proof["relocation_reseat"],
+        "rewritten_field_offsets": proof["rewritten_field_offsets"],
+        "instruction_count": proof["instruction_count"],
+        "carried_code_symbols": derived_detail["carried_code_symbols"],
+        "procedure_range": derived_detail["procedure_range"],
         "retail_exact": True,
         **semantic_detail,
     }

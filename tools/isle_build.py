@@ -1775,6 +1775,29 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         ))
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
+                elif (function["splice_class"]
+                        == byte_identity
+                        .REGISTER_BIJECTION_REENCODING_CLASS):
+                    # The re-encoding register-bijection certificate: sigma
+                    # may name EBP because this COMDAT's own FPO record says
+                    # the body has no EBP frame, the ModRM `mod` field is
+                    # re-encoded where that forces a length change, and every
+                    # dependent COFF record is re-seated through the
+                    # bijection's own boundary map.  The result is refused
+                    # unless it equals the pinned retail oracle.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_register_bijection_reencoding(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
                 elif function["splice_class"] == "same_slot_resize":
                     composed, detail = byte_identity.compose_same_slot_resize(
                         composed, donor_objects[function["donor"]], function

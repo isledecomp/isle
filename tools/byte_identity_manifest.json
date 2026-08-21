@@ -31871,6 +31871,24 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_9a9237af6ead",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVB",
+      "count": 21,
+      "width": 3,
+      "generated_header_sha256": "9a9237af6ead32d8f53f1a819f540e4b9856280840751e0b0496d8dc933d5e8f",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated forward-declaration run seated immediately after the translation unit's last #include; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -31907,11 +31925,343 @@
      "expected_donor_length": 398,
      "expected_linked_span": 400,
      "donor": "d_a9709b0b6698"
+    },
+    {
+     "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@1@V21@@Z",
+     "donor": "d_9a9237af6ead",
+     "splice_class": "retail_exact_register_bijection_reencoding",
+     "expected_section_number": 19,
+     "expected_section_count": 71,
+     "expected_seed_length": 1101,
+     "expected_preimage_length": 1098,
+     "expected_body_length": 1100,
+     "expected_donor_length": 1100,
+     "expected_linked_span": 1104,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_relocation_count": 16,
+     "expected_seed_line_count": 80,
+     "expected_donor_line_count": 80,
+     "expected_function_count": 20,
+     "expected_comdat_count": 26,
+     "expected_seed_body_sha256": "d264935c3e26ad362c95e994708f17220354d517aa8ea32fe450689c0509f654",
+     "expected_donor_body_sha256": "6e5334ac7dd100c79b19583274b449c51a3cc21bb067c5ea4fd6fd87b96fdb9f",
+     "expected_body_sha256": "fe97c21bf4bd14b00d4f2baaea9fa2a2b0858b8c82ab68f67033d588d4336ebe",
+     "expected_seed_metadata_sha256": "53a39c677154b18e71f8aaec90c00cfe3daba64997899f280f7c1531daea00d6",
+     "expected_donor_metadata_sha256": "5ca9bce481495d2feaa0b7facf512e84c0f6ed1021aa1d550edc68780f3cdc38",
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100a7960",
+      "verdict": "MATCH",
+      "length": 1100
+     },
+     "retail_image_target": "lego1",
+     "retail_relocations": [
+      {
+       "offset": 22,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 32,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 97,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 110,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 120,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 207,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 221,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 264,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 279,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 480,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 594,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 732,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 827,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 924,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 1013,
+       "type": 6,
+       "addend": 0,
+       "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@1PAU_Node@1@A",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x10101068"
+      },
+      {
+       "offset": 1070,
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086260"
+      }
+     ],
+     "register_bijection_reencoding": {
+      "kind": "frame_pointer_free_register_bijection_v1",
+      "regions": [
+       {
+        "start": 215,
+        "end": 233,
+        "mapping": {
+         "eax": "edi",
+         "edi": "eax"
+        }
+       },
+       {
+        "start": 578,
+        "end": 638,
+        "mapping": {
+         "ebp": "edi",
+         "edi": "ebp"
+        }
+       }
+      ],
+      "expected_fpo_record": {
+       "cbFrame": 0,
+       "cbProcSize": 1098,
+       "cbProlog": 17,
+       "cbRegs": 4,
+       "cdwLocals": 1,
+       "cdwParams": 2,
+       "fHasSEH": 0,
+       "fUseBP": 1,
+       "reserved": 0,
+       "ulOffStart": 0
+      },
+      "expected_growth": [
+       [
+        580,
+        580,
+        2,
+        3
+       ],
+       [
+        585,
+        586,
+        2,
+        3
+       ]
+      ],
+      "expected_branch_repairs": [
+       402,
+       414,
+       424,
+       535,
+       548,
+       554,
+       560,
+       684
+      ],
+      "expected_relocation_reseat": [
+       [
+        592,
+        594
+       ],
+       [
+        730,
+        732
+       ],
+       [
+        825,
+        827
+       ],
+       [
+        922,
+        924
+       ],
+       [
+        1011,
+        1013
+       ],
+       [
+        1068,
+        1070
+       ]
+      ],
+      "expected_rewritten_field_offsets": [
+       216,
+       218,
+       220,
+       228,
+       232,
+       579,
+       581,
+       583,
+       586,
+       588,
+       599,
+       602,
+       605,
+       614,
+       618,
+       624,
+       628,
+       631,
+       633,
+       636
+      ],
+      "expected_region_instruction_counts": [
+       7,
+       22
+      ],
+      "expected_instruction_count": 369,
+      "expected_image_code_length": 1100,
+      "expected_internal_relocation_targets": [],
+      "expected_procedure_range": [
+       1100,
+       17,
+       1090
+      ],
+      "expected_carried_code_symbols": [],
+      "authenticity_rationale": "The pre-image is the census-pinned carrier compile of this translation unit; the two regional renamings are proved sound by a backward liveness fixpoint over the body own control flow and by this COMDAT own FPO record, which declares FRAME_FPO -- so EBP is an ordinary callee-saved general register here and the only obstacle to renaming it is the zero disp8 a mod-00 base cannot carry. The re-encoded image is refused unless it equals retail own code under the reseated relocation mask."
+     }
     }
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state.",
+    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT\u2019s own FPO record declares FRAME_FPO.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -32517,8 +32867,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4921,
-    "accepted_row_identity_sha256": "0496e0a0715393133e4b1cabeaff4b7f60cc54c4424dfc0ba41b7e4f5a1df37e",
+    "exact_raw_1_0_count": 4922,
+    "accepted_row_identity_sha256": "94f1e6cf6e6b121fc28d8b7c9edd3bee104a02a308d6517c9c5f348afaf470f5",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
