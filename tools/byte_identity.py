@@ -14124,6 +14124,7 @@ def validate_manifest(
                                          REGISTER_BIJECTION_CLASS,
                                          WEB_RECOLOUR_CLASS,
                                          RELATIONAL_FORM_CLASS,
+                                         COMPOSED_REWRITING_CLASS,
                                          INSTRUCTION_SCHEDULE_CLASS),
                         f"{function_context}: unsupported splice class")
                 if splice_class == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS:
@@ -14783,6 +14784,147 @@ def validate_manifest(
                     )
                     normalized_functions.append({
                         **function, "relational_form": relational,
+                    })
+                    continue
+                if splice_class == COMPOSED_REWRITING_CLASS:
+                    # Three certificates inside one entry.  Its pins are the
+                    # union of the ones the three single-statement classes
+                    # carry, minus everything that only makes sense for a
+                    # donor whose BODY is installed: this class installs the
+                    # seed's own body, so the witness carries no rename.
+                    composed_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number",
+                        "expected_donor_section_number",
+                        "expected_section_count",
+                        "expected_donor_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_changed_offsets", "expected_closure",
+                        "expected_code_renames",
+                        "expected_xdata_rename_offsets",
+                        "retail_oracle", "retail_relocations",
+                        "composed_rewriting",
+                    }
+                    if "retail_image_target" in function:
+                        composed_keys.add("retail_image_target")
+                    exact_keys(function, composed_keys, function_context)
+                    for name in (
+                        "expected_section_number",
+                        "expected_donor_section_number",
+                        "expected_section_count",
+                        "expected_donor_section_count",
+                        "expected_body_length", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_relocation_count",
+                    ):
+                        require_exact_int(function.get(name),
+                                          f"{function_context}.{name}",
+                                          minimum=0)
+                    for name in ("expected_seed_body_sha256",
+                                 "expected_donor_body_sha256",
+                                 "expected_body_sha256",
+                                 "expected_seed_metadata_sha256",
+                                 "expected_donor_metadata_sha256"):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    # C4.  The pre-image is the seed's own body, so the two
+                    # body pins are required to be the SAME hash here, before
+                    # the composer measures the objects; and the installed
+                    # image must move it.
+                    require(function["expected_seed_body_sha256"]
+                            == function["expected_donor_body_sha256"],
+                            f"{function_context}: the composed-rewriting "
+                            "witness must reproduce the seed's body")
+                    require(function["expected_body_sha256"]
+                            != function["expected_seed_body_sha256"],
+                            f"{function_context}: the image pin does not "
+                            "move the seed body")
+                    changed = function.get("expected_changed_offsets")
+                    require(
+                        isinstance(changed, list) and changed
+                        and changed == sorted(set(changed))
+                        and all(type(offset) is int
+                                and 0 <= offset
+                                < function["expected_body_length"]
+                                for offset in changed),
+                        f"{function_context}.expected_changed_offsets "
+                        "is invalid",
+                    )
+                    require(
+                        function.get("expected_closure")
+                        in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                            INSTRUCTION_SCHEDULE_EH_CLOSURE),
+                        f"{function_context}.expected_closure differs",
+                    )
+                    require(function.get("expected_code_renames") == []
+                            and function.get(
+                                "expected_xdata_rename_offsets") == [],
+                            f"{function_context}: this class installs the "
+                            "seed's own tables and can declare no rename")
+                    retail = function.get("retail_oracle")
+                    require(isinstance(retail, dict),
+                            f"{function_context}.retail_oracle must be an "
+                            "object")
+                    exact_keys(retail, {
+                        "image", "address", "verdict", "length",
+                    }, f"{function_context}.retail_oracle")
+                    # A static-library TU links into exactly one image and
+                    # says so, through the SAME closed pair set the
+                    # instruction-schedule certificate carries.
+                    composed_image_target = function.get(
+                        "retail_image_target", target)
+                    if "retail_image_target" in function:
+                        require(
+                            (target, composed_image_target)
+                            in INSTRUCTION_SCHEDULE_IMAGE_TARGETS,
+                            f"{function_context}.retail_image_target "
+                            "differs",
+                        )
+                    require_target_bound_retail_image(
+                        manifest.get("images"), composed_image_target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_body_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_body_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    composed_spec = validate_composed_rewriting(
+                        function.get("composed_rewriting"),
+                        f"{function_context}.composed_rewriting",
+                        function["expected_body_length"],
+                    )
+                    require(
+                        composed_spec["expected_changed_offsets"] == changed,
+                        f"{function_context}: the composition's changed set "
+                        "differs from the entry's",
+                    )
+                    normalized_functions.append({
+                        **function, "composed_rewriting": composed_spec,
                     })
                     continue
                 if splice_class == REGISTER_BIJECTION_CLASS:
@@ -29194,7 +29336,12 @@ def apply_register_bijection(
     for left, right in zip(image_instructions, instructions):
         # `+r` forms encode their register in the opcode's low three bits, so
         # the bijection legitimately moves those three bits and nothing else.
-        opreg = _bijection_form_for(right["opcode"])["opreg"] is not None
+        # A form the ONE-BYTE table does not name -- a repeated string
+        # operation, whose opcode lives in its own prefixed table -- has no
+        # `+r` field at all, so it takes the STRICTER full-opcode mask.  It
+        # must never index a missing entry: that is a crash, not a proof.
+        form = _bijection_form_for(right["opcode"])
+        opreg = form is not None and form["opreg"] is not None
         mask = 0xF8 if opreg else 0xFFFF
         require(
             left["opcode"] & mask == right["opcode"] & mask
@@ -31505,7 +31652,11 @@ def apply_web_recolour(
             f"{web_context}: the image changed an instruction boundary")
         mapping = {source: target}
         for left, right in zip(image_instructions, instructions):
-            opreg = _bijection_form_for(right["opcode"])["opreg"] is not None
+            # See `apply_register_bijection`: a form outside the one-byte
+            # table (a repeated string operation) has no `+r` field and takes
+            # the stricter full-opcode mask rather than crashing.
+            form = _bijection_form_for(right["opcode"])
+            opreg = form is not None and form["opreg"] is not None
             mask = 0xF8 if opreg else 0xFFFF
             require(left["opcode"] & mask == right["opcode"] & mask
                     and left["flow"] == right["flow"]
@@ -32874,6 +33025,667 @@ def compose_retail_exact_relational_form(
         "external_entries": proof["external_entries"],
         "preserved_flags": proof["preserved_flags"],
         "changed_flags": proof["changed_flags"],
+        "retail_exact": True,
+        **semantic_detail,
+    }
+
+
+# ---------------------------------------------------------------------------
+# retail_exact_composed_rewriting: THREE CERTIFICATES INSIDE ONE ENTRY
+# ---------------------------------------------------------------------------
+#
+# WHY THIS CLASS EXISTS
+#
+# Four certificate classes already state, each on its own terms, that some
+# part of a compiled body is retail's own code rearranged: the topological
+# window reordering, the regional register bijection, the web recolour and
+# the mirrored relational form.  Each ends with `differing == 0` against the
+# pinned retail oracle, and the manifest admits exactly one entry per mangled
+# name.  Together those two facts mean a class can only ever be handed a
+# function it finishes ALONE -- there is no seam at which one certificate
+# could hand a partially corrected body to the next.
+#
+# A real compiled function is not so tidy.  `LegoROI::Read` differs from
+# retail in five reordered windows, two regionally renamed spans and three
+# reversed comparisons, and no one of those statements is true of the whole
+# body.  This class is the seam: it applies the three primitives IN ONE
+# ENTRY, in the one order that is sound, and proves the composition.
+#
+# It invents no new licence.  Every byte it installs is a byte this compiler
+# emitted for this function; every obligation is the obligation the
+# corresponding single-statement class already discharges, checked by the
+# very same `apply_*` primitive, unchanged; and the result is refused unless
+# it equals the pinned retail oracle under the relocation mask.  What is new
+# is the composition, and the composition carries four obligations of its
+# own:
+#
+#  C1  ORDER.  A reordering moves instruction boundaries; a bijection and a
+#      relational reversal are byte-local and rewrite fields of instructions
+#      identified BY those boundaries.  So every declared window is applied
+#      first, and the byte-local certificates are then measured on the
+#      reordered image -- which is where their declared offsets live.  A
+#      bijection and a relational reversal commute exactly (disjoint byte
+#      sets, each proof invariant under the other), so their relative order
+#      is free and is fixed here as declared.
+#
+#  C2  DISJOINTNESS.  The bijection regions are required to be sorted and
+#      non-overlapping, the relational sites to be sorted, and the three
+#      rewritten byte sets to be pairwise disjoint.  A byte rewritten twice
+#      would make the second proof's pre-image something no certificate
+#      described.
+#
+#  C3  SEPARATE DEBUG CLAIMS.  A regional bijection maps the `.debug$S`
+#      S_REGISTER records naming a register in its support.  Two bijections
+#      applied one after the other would map the same record twice -- the
+#      second one reading the first one's output as if it were the compiler's
+#      allocation -- and the result would name a register no region uses.
+#      So every bijection's record set is measured on the SEED's stream, the
+#      sets are required to be PAIRWISE DISJOINT, and each is then applied
+#      once.  A record two regions both claim is refused.
+#
+#  C4  PROVENANCE.  The pre-image is the SEED's own compiler-produced body:
+#      no donor bytes are installed.  The donor the manifest names is a
+#      WITNESS -- an independent compiler state of the same translation unit
+#      that emits this same body -- and is required to reproduce it exactly,
+#      which is what makes the pin it carries mean anything.
+#
+# Everything else is the existing machinery: obligation 7 of the schedule
+# class (`require_instruction_schedule_debug_fidelity`) re-derives every COFF
+# line row against the image, obligation 5 of the relational class derives
+# the external entry set from the object's own relocations, the retail
+# relocation oracle binds every masked operand to the symbol it resolves to,
+# and installation is delegated UNCHANGED to `compose_equal_body_comdat`.
+
+
+COMPOSED_REWRITING_CLASS = "retail_exact_composed_rewriting"
+
+
+COMPOSED_REWRITING_KIND = "schedule_bijection_relational_v1"
+
+
+def composed_rewriting_delegate(expected_closure: object) -> str:
+    """Name the installation delegate from the closure pin alone.
+
+    The installed object is the SEED with its own body replaced, so there is
+    no donor rename to express and no relocation to move: the FPO closure
+    takes the strict primitive and the EH closure takes the structural-local
+    one, whose rename and xdata-rename sets are then required to be empty.
+    """
+    if list(expected_closure) == INSTRUCTION_SCHEDULE_FPO_CLOSURE:
+        return "equal_body_strict"
+    return "equal_body_eh_structural_local"
+
+
+def validate_composed_rewriting(
+    value: object, context: str, body_length: int,
+) -> dict:
+    """Validate one composed-rewriting certificate declaration."""
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "kind", "windows", "register_bijections", "relational_sites",
+        "expected_instruction_count", "expected_changed_offsets",
+        "expected_procedure_range", "expected_code_symbol_references",
+        "expected_external_entries", "expected_seed_debug_s_sha256",
+        "expected_image_debug_s_sha256", "expected_code_length",
+        "expected_internal_relocation_targets", "authenticity_rationale",
+    }, context, optional={"windows", "register_bijections",
+                          "relational_sites", "expected_code_length",
+                          "expected_internal_relocation_targets"})
+    require(value.get("kind") == COMPOSED_REWRITING_KIND,
+            f"{context}.kind differs")
+    code_length = value.get("expected_code_length")
+    if code_length is not None:
+        code_length = require_exact_int(
+            code_length, f"{context}.expected_code_length",
+            minimum=2, maximum=body_length)
+    targets = value.get("expected_internal_relocation_targets")
+    if targets is not None:
+        require(isinstance(targets, list)
+                and targets == sorted(set(targets))
+                and all(type(item) is int and 0 <= item < body_length
+                        for item in targets),
+                f"{context}.expected_internal_relocation_targets is invalid")
+    normalized_windows = []
+    if value.get("windows") is not None:
+        windows = value["windows"]
+        require(isinstance(windows, list) and 1 <= len(windows) <= 32,
+                f"{context}.windows must contain 1..32 windows")
+        normalized_windows = _validate_schedule_windows(
+            windows, context, body_length, code_length, targets)
+        require(not any(window.get("relocation_reseat")
+                        for window in normalized_windows),
+                f"{context}: this class refuses to move a relocation")
+    # The bijections.  Each is exactly the declaration the single-statement
+    # certificate validates, minus the pins that belong to the composition as
+    # a whole (the instruction count and the two debug$S digests).
+    normalized_bijections = []
+    bijection_bytes = []
+    previous_end = 0
+    for index, item in enumerate(value.get("register_bijections") or []):
+        item_context = f"{context}.register_bijections[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "mapping", "region_start", "region_end",
+            "expected_region_instruction_count",
+            "expected_rewritten_offsets", "debug_s_register_map",
+        }, item_context)
+        mapping = item.get("mapping")
+        require(isinstance(mapping, dict) and 2 <= len(mapping) <= 8
+                and all(isinstance(key, str) and isinstance(name, str)
+                        and key in _IA32_REGISTER_NUMBERS
+                        and name in _IA32_REGISTER_NUMBERS
+                        for key, name in mapping.items()),
+                f"{item_context}.mapping is invalid")
+        require(set(mapping) == set(mapping.values())
+                and len(set(mapping.values())) == len(mapping)
+                and all(key != name for key, name in mapping.items()),
+                f"{item_context}.mapping is not a fixed-point-free bijection")
+        require(not (set(mapping) & _IA32_STRUCTURAL_REGISTERS),
+                f"{item_context}.mapping touches ESP or EBP")
+        start = require_exact_int(item.get("region_start"),
+                                  f"{item_context}.region_start",
+                                  minimum=1, maximum=body_length - 1)
+        end = require_exact_int(item.get("region_end"),
+                                f"{item_context}.region_end",
+                                minimum=2, maximum=body_length - 1)
+        # C2: sorted and non-overlapping.
+        require(previous_end <= start < end,
+                f"{item_context}: regions are unsorted or overlapping")
+        previous_end = end
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and start <= offset < end
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        bijection_bytes.extend(offsets)
+        declared = item.get("debug_s_register_map")
+        require(isinstance(declared, list) and len(declared) <= 8,
+                f"{item_context}.debug_s_register_map is invalid")
+        normalized_map = []
+        for position, record in enumerate(declared):
+            record_context = f"{item_context}.debug_s_register_map[{position}]"
+            require(isinstance(record, dict),
+                    f"{record_context} must be an object")
+            exact_audit_keys(record, {
+                "name", "record_offset", "donor_register", "image_register",
+            }, record_context)
+            require(isinstance(record.get("name"), str) and record["name"],
+                    f"{record_context}.name is invalid")
+            require(record.get("donor_register") in mapping
+                    and mapping[record["donor_register"]]
+                    == record.get("image_register"),
+                    f"{record_context} is not the declared mapping")
+            normalized_map.append({
+                "name": record["name"],
+                "record_offset": require_exact_int(
+                    record.get("record_offset"),
+                    f"{record_context}.record_offset", minimum=0),
+                "donor_register": record["donor_register"],
+                "image_register": record["image_register"],
+            })
+        normalized_bijections.append({
+            "mapping": dict(sorted(mapping.items())),
+            "region_start": start, "region_end": end,
+            "expected_region_instruction_count": require_exact_int(
+                item.get("expected_region_instruction_count"),
+                f"{item_context}.expected_region_instruction_count",
+                minimum=1),
+            "expected_rewritten_offsets": list(offsets),
+            "debug_s_register_map": normalized_map,
+        })
+    # The relational sites, validated exactly as the single-statement class
+    # validates them.
+    normalized_sites = []
+    relational_bytes = []
+    previous = -1
+    for index, site in enumerate(value.get("relational_sites") or []):
+        site_context = f"{context}.relational_sites[{index}]"
+        require(isinstance(site, dict), f"{site_context} must be an object")
+        exact_audit_keys(site, {
+            "compare_offset", "branch_offset", "seed_condition",
+            "image_condition", "expected_rewritten_offsets",
+        }, site_context)
+        compare_at = require_exact_int(
+            site.get("compare_offset"), f"{site_context}.compare_offset",
+            minimum=0, maximum=body_length - 2)
+        branch_at = require_exact_int(
+            site.get("branch_offset"), f"{site_context}.branch_offset",
+            minimum=1, maximum=body_length - 1)
+        require(compare_at > previous,
+                f"{site_context}: sites are unsorted or overlapping")
+        require(compare_at < branch_at,
+                f"{site_context}: the branch does not follow the compare")
+        previous = branch_at
+        seed_condition = site.get("seed_condition")
+        require(seed_condition in IA32_RELATIONAL_MIRROR,
+                f"{site_context}.seed_condition has no mirror in the closed "
+                "table")
+        require(site.get("image_condition")
+                == IA32_RELATIONAL_MIRROR[seed_condition],
+                f"{site_context}.image_condition is not the closed table's "
+                "mirror")
+        offsets = site.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and len(offsets) == 2
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and 0 <= offset < body_length
+                        for offset in offsets),
+                f"{site_context}.expected_rewritten_offsets is invalid")
+        relational_bytes.extend(offsets)
+        normalized_sites.append({
+            "compare_offset": compare_at, "branch_offset": branch_at,
+            "seed_condition": seed_condition,
+            "image_condition": IA32_RELATIONAL_MIRROR[seed_condition],
+            "expected_rewritten_offsets": list(offsets),
+        })
+    require(normalized_windows or normalized_bijections or normalized_sites,
+            f"{context} declares no certificate")
+    require(len(normalized_windows) + len(normalized_bijections)
+            + len(normalized_sites) >= 2,
+            f"{context} composes nothing: a single statement belongs to its "
+            "own class")
+    # C2, the byte-level half.
+    window_bytes = {offset for window in normalized_windows
+                    for offset in range(window["start"], window["end"])}
+    require(len(set(bijection_bytes)) == len(bijection_bytes),
+            f"{context}: two bijections rewrite the same byte")
+    require(len(set(relational_bytes)) == len(relational_bytes),
+            f"{context}: two relational sites rewrite the same byte")
+    require(not (set(bijection_bytes) & set(relational_bytes)),
+            f"{context}: a bijection and a relational reversal rewrite the "
+            "same byte")
+    require(not (window_bytes & (set(bijection_bytes)
+                                 | set(relational_bytes))),
+            f"{context}: a byte-local certificate rewrites a byte inside a "
+            "reordered window")
+    changed = value.get("expected_changed_offsets")
+    require(isinstance(changed, list) and changed
+            and changed == sorted(set(changed))
+            and all(type(offset) is int and 0 <= offset < body_length
+                    for offset in changed),
+            f"{context}.expected_changed_offsets is invalid")
+    require(set(bijection_bytes) | set(relational_bytes) <= set(changed),
+            f"{context}.expected_changed_offsets omits a rewritten byte")
+    require(all(offset in window_bytes
+                or offset in set(bijection_bytes) | set(relational_bytes)
+                for offset in changed),
+            f"{context}.expected_changed_offsets names a byte no declared "
+            "certificate can move")
+    procedure = value.get("expected_procedure_range")
+    require(isinstance(procedure, list) and len(procedure) == 3
+            and all(type(item) is int and item >= 0 for item in procedure)
+            and procedure[0] == body_length
+            and procedure[1] <= procedure[2] <= body_length,
+            f"{context}.expected_procedure_range is invalid")
+    references = value.get("expected_code_symbol_references")
+    require(isinstance(references, list)
+            and all(isinstance(item, list) and len(item) == 3
+                    and isinstance(item[0], str) and isinstance(item[1], str)
+                    and type(item[2]) is int and 0 <= item[2] <= body_length
+                    for item in references),
+            f"{context}.expected_code_symbol_references is invalid")
+    external = value.get("expected_external_entries")
+    require(isinstance(external, list)
+            and external == sorted(set(external))
+            and all(type(item) is int and 0 < item < body_length
+                    for item in external),
+            f"{context}.expected_external_entries is invalid")
+    rationale = value.get("authenticity_rationale")
+    require(isinstance(rationale, str) and len(rationale) >= 40,
+            f"{context}.authenticity_rationale is missing")
+    normalized = {
+        "kind": COMPOSED_REWRITING_KIND,
+        "expected_instruction_count": require_exact_int(
+            value.get("expected_instruction_count"),
+            f"{context}.expected_instruction_count", minimum=2),
+        "expected_changed_offsets": list(changed),
+        "expected_procedure_range": list(procedure),
+        "expected_code_symbol_references": [list(item)
+                                            for item in references],
+        "expected_external_entries": list(external),
+        "expected_seed_debug_s_sha256": require_sha(
+            value.get("expected_seed_debug_s_sha256"),
+            f"{context}.expected_seed_debug_s_sha256"),
+        "expected_image_debug_s_sha256": require_sha(
+            value.get("expected_image_debug_s_sha256"),
+            f"{context}.expected_image_debug_s_sha256"),
+        "authenticity_rationale": rationale,
+    }
+    normalized["windows"] = normalized_windows
+    normalized["register_bijections"] = normalized_bijections
+    normalized["relational_sites"] = normalized_sites
+    if code_length is not None:
+        normalized["expected_code_length"] = code_length
+    if targets is not None:
+        normalized["expected_internal_relocation_targets"] = list(targets)
+    return normalized
+
+
+def compose_retail_exact_composed_rewriting(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Apply a reordering, then regional bijections, then reversed compares.
+
+    See the class comment above.  Each primitive is the LANDED one, called
+    unchanged; C1 fixes the order, C2 the disjointness, C3 the debug$S
+    claims and C4 the provenance; and the result is refused unless it equals
+    the pinned retail oracle under the relocation mask.
+    """
+    require(function.get("splice_class") == COMPOSED_REWRITING_CLASS,
+            "splice class is not retail_exact_composed_rewriting")
+    require("target_source_refactor" not in function,
+            "composed-rewriting functions carry no source refactor")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    spec = function["composed_rewriting"]
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(sp["number"] == function["expected_section_number"]
+            and dp["number"] == function["expected_donor_section_number"],
+            "composed-rewriting target section seat changed: seed "
+            f"{sp['number']} donor {dp['number']}")
+    require(len(seed.sections) == function["expected_section_count"]
+            and len(donor.sections)
+            == function["expected_donor_section_count"],
+            "composed-rewriting global section count changed: seed "
+            f"{len(seed.sections)} donor {len(donor.sections)}")
+    seed_functions = function_multiset(seed)
+    require(seed_functions == function_multiset(donor)
+            and sum(seed_functions.values())
+            == function["expected_function_count"],
+            "composed-rewriting witness function set differs: "
+            f"{sum(seed_functions.values())} vs "
+            f"{sum(function_multiset(donor).values())}")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    require(seed_comdats == comdat_primary_identity_multiset(donor)
+            and sum(seed_comdats.values())
+            == function["expected_comdat_count"],
+            "composed-rewriting witness COMDAT identity set differs: "
+            f"{sum(seed_comdats.values())} vs "
+            f"{sum(comdat_primary_identity_multiset(donor).values())}")
+    require(
+        sp["raw_size"] == dp["raw_size"] == function["expected_body_length"]
+        and sp["relocation_count"] == dp["relocation_count"]
+        == function["expected_relocation_count"]
+        and sp["line_count"] == function["expected_seed_line_count"]
+        and dp["line_count"] == function["expected_donor_line_count"]
+        and sp["name"] == dp["name"]
+        and sp["characteristics"] == dp["characteristics"]
+        == function["expected_characteristics"],
+        "composed-rewriting target header/count pins changed: raw "
+        f"{sp['raw_size']}/{dp['raw_size']} relocations "
+        f"{sp['relocation_count']}/{dp['relocation_count']} lines "
+        f"{sp['line_count']}/{dp['line_count']} characteristics "
+        f"{sp['characteristics']}/{dp['characteristics']}",
+    )
+    require(
+        section_definitions(seed)[sp["number"]]["selection"]
+        == section_definitions(donor)[dp["number"]]["selection"]
+        == function["expected_selection"],
+        "composed-rewriting COMDAT selection changed: "
+        f"{section_definitions(seed)[sp['number']]['selection']}",
+    )
+    expected_closure = tuple(function["expected_closure"])
+    require(_comdat_child_closure(seed, sp)
+            == _comdat_child_closure(donor, dp)
+            == (len(expected_closure), expected_closure),
+            "composed-rewriting target closure changed: seed "
+            f"{_comdat_child_closure(seed, sp)} donor "
+            f"{_comdat_child_closure(donor, dp)}")
+    require(list(expected_closure) in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                                       INSTRUCTION_SCHEDULE_EH_CLOSURE),
+            "composed-rewriting closure pin names no installation delegate")
+    delegate = composed_rewriting_delegate(function["expected_closure"])
+    require(instruction_mosaic_metadata_sha256(seed, sp)
+            == function["expected_seed_metadata_sha256"]
+            and instruction_mosaic_metadata_sha256(donor, dp)
+            == function["expected_donor_metadata_sha256"],
+            "composed-rewriting metadata differs from its pin: seed "
+            f"{instruction_mosaic_metadata_sha256(seed, sp)} donor "
+            f"{instruction_mosaic_metadata_sha256(donor, dp)}")
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+            and sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "composed-rewriting seed/witness body differs from its pin: "
+            f"seed {sha256_bytes(seed_body)} witness "
+            f"{sha256_bytes(donor_body)}")
+    # C4.  The donor is a provenance WITNESS: an independent compiler state
+    # that emits this same body.  It is never installed, so it must reproduce
+    # the seed's body exactly or the pin it carries means nothing.
+    require(donor_body == seed_body,
+            "composed-rewriting witness does not reproduce the seed's body")
+
+    seed_rows = detailed_relocations(seed, sp)
+    relocation_offsets = frozenset(
+        row["offset"] + byte
+        for row in seed_rows for byte in range(row["width"]))
+    relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in seed_rows}
+    internal_targets = frozenset(
+        row["target_value"] for row in seed_rows
+        if row["target_section"] == sp["number"])
+    declared_targets = spec.get("expected_internal_relocation_targets")
+    if declared_targets is not None:
+        require(sorted(internal_targets) == declared_targets,
+                "composed-rewriting in-body relocated target set changed")
+    code_length = spec.get("expected_code_length")
+
+    # C1, first half: every reordering, applied to the seed's own body.
+    image = seed_body
+    schedule_detail = []
+    windows = spec["windows"]
+    if windows:
+        image, schedule_proof = apply_instruction_schedule(
+            image, windows, relocation_offsets,
+            "composed-rewriting schedule", relocation_symbols, code_length,
+            internal_targets)
+        require(not schedule_proof["relocation_reseat"],
+                "composed-rewriting refuses to move a relocation")
+        schedule_detail = schedule_proof["windows"]
+    # C1, second half: the byte-local certificates, measured on the image the
+    # reordering produced.
+    bijection_detail = []
+    for index, item in enumerate(spec["register_bijections"]):
+        image, proof = apply_register_bijection(
+            image, item["mapping"],
+            (item["region_start"], item["region_end"]),
+            relocation_offsets, f"composed-rewriting bijection {index}",
+            relocation_symbols, code_length, internal_targets)
+        require(proof["rewritten_offsets"]
+                == item["expected_rewritten_offsets"],
+                f"composed-rewriting bijection {index} rewrote a different "
+                "byte set from its declaration")
+        require(proof["region_instruction_count"]
+                == item["expected_region_instruction_count"],
+                f"composed-rewriting bijection {index} region instruction "
+                "count differs from its declaration")
+        bijection_detail.append({
+            "mapping": dict(sorted(item["mapping"].items())),
+            "region": [item["region_start"], item["region_end"]],
+            "rewritten_offsets": proof["rewritten_offsets"],
+            "region_instruction_count": proof["region_instruction_count"],
+        })
+    external_entries = relational_form_external_entries(
+        seed, sp, "composed-rewriting external entries")
+    require(sorted(external_entries) == spec["expected_external_entries"],
+            "composed-rewriting external entry set differs from its "
+            "declaration")
+    relational_detail = []
+    if spec["relational_sites"]:
+        sites = [{key: item[key] for key in ("compare_offset",
+                                             "branch_offset",
+                                             "seed_condition",
+                                             "image_condition")}
+                 for item in spec["relational_sites"]]
+        image, proof = apply_relational_form(
+            image, sites, relocation_offsets,
+            "composed-rewriting relational", relocation_symbols,
+            code_length, external_entries)
+        require(proof["rewritten_offsets"]
+                == sorted(offset for item in spec["relational_sites"]
+                          for offset in item["expected_rewritten_offsets"]),
+                "composed-rewriting relational rewrite set differs from its "
+                "declaration")
+        relational_detail = proof["sites"]
+    require(image != seed_body,
+            "composed-rewriting image does not move the seed body")
+    image_instructions = decode_ia32_bijection_body(
+        image, "composed-rewriting image", relocation_symbols, code_length)
+    require(len(image_instructions) == spec["expected_instruction_count"],
+            "composed-rewriting instruction count differs from its "
+            "declaration")
+    changed = sorted(index for index in range(len(seed_body))
+                     if seed_body[index] != image[index])
+    require(changed == spec["expected_changed_offsets"],
+            "composed-rewriting image differs from its declaration")
+    require(sha256_bytes(image) == function["expected_body_sha256"],
+            "composed-rewriting image differs from its pin")
+    require(changed == function["expected_changed_offsets"],
+            "composed-rewriting changed offsets differ from their pin")
+
+    # Obligation 7 of the schedule class, measured on the IMAGE with the
+    # SEED's own tables -- which are the tables this composition installs.
+    debug_detail = require_instruction_schedule_debug_fidelity(
+        seed, sp, image, windows, spec, mangled,
+        "composed-rewriting debug fidelity", relocation_symbols,
+        code_length, internal_targets,
+    )
+
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == len(image),
+            "composed-rewriting retail length changed")
+    semantic_detail = require_retail_relocation_oracle(
+        seed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "composed-rewriting retail relocation oracle",
+    )
+    masked_image = bytearray(image)
+    masked_retail = bytearray(retail_body)
+    for row in seed_rows:
+        start, width = row["offset"], row["width"]
+        masked_image[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_image, masked_retail))
+    require(differing == 0,
+            f"composed-rewriting output is not retail-exact: {differing} "
+            "byte(s) differ under the relocation mask")
+
+    derived = bytearray(seed_bytes)
+    derived[sp["raw_offset"]:sp["raw_offset"] + sp["raw_size"]] = image
+    effective = {
+        "mangled": mangled,
+        "splice_class": delegate,
+        "expected_body_length": function["expected_body_length"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_changed_offsets": function["expected_changed_offsets"],
+    }
+    # The installed object is the seed with its own body replaced, so there
+    # is nothing to rename -- whichever delegate the closure selects.  The
+    # pins must say so, and the primitive then measures it.
+    require(function["expected_code_renames"] == []
+            and function["expected_xdata_rename_offsets"] == [],
+            "composed-rewriting installs the seed's own tables and can "
+            "declare no rename")
+    if delegate == "equal_body_eh_structural_local":
+        effective["expected_code_renames"] = []
+        effective["expected_xdata_rename_offsets"] = []
+    composed, detail = compose_equal_body_comdat(
+        seed_bytes, bytes(derived), effective)
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == image,
+            "composed-rewriting composed body differs from the image")
+    require(detailed_relocations(checked, cp) == seed_rows
+            and _coff_table_bytes(checked, cp, "relocations")
+            == _coff_table_bytes(seed, sp, "relocations")
+            and _coff_table_bytes(checked, cp, "lines")
+            == _coff_table_bytes(seed, sp, "lines"),
+            "composed-rewriting output changed seed relocation/line bytes")
+
+    # C3.  Every bijection's S_REGISTER record set is measured on the SEED's
+    # stream, the sets are required to be pairwise disjoint, and each map is
+    # then applied once -- so no record is ever read back as if the previous
+    # bijection's output were the compiler's own allocation.
+    debug_child = _comdat_child(checked, cp, ".debug$S")
+    debug_stream = coff_body(checked, debug_child)
+    require(sha256_bytes(debug_stream)
+            == spec["expected_seed_debug_s_sha256"],
+            "composed-rewriting debug$S differs from its pin")
+    claimed = {}
+    for index, item in enumerate(spec["register_bijections"]):
+        for record in parse_codeview_symbol_stream(
+                debug_stream, "composed-rewriting debug$S"):
+            if record["type"] != CODEVIEW_REGISTER_RECORD_TYPE:
+                continue
+            field_at = _codeview_register_field(
+                record, "composed-rewriting debug$S")
+            name = _codeview_register_name(
+                debug_stream, field_at, "composed-rewriting debug$S")
+            if name not in item["mapping"]:
+                continue
+            require(record["offset"] not in claimed,
+                    f"composed-rewriting bijections {claimed.get(record['offset'])} "
+                    f"and {index} both name the S_REGISTER record "
+                    f"{record['name']!r}")
+            claimed[record["offset"]] = index
+    debug_image = debug_stream
+    debug_maps = []
+    for index, item in enumerate(spec["register_bijections"]):
+        mapped = apply_codeview_register_bijection(
+            debug_stream, item["mapping"], item["debug_s_register_map"],
+            f"composed-rewriting debug$S bijection {index}")
+        moved = bytearray(debug_image)
+        for position in range(len(debug_stream)):
+            if mapped[position] != debug_stream[position]:
+                moved[position] = mapped[position]
+        debug_image = bytes(moved)
+        debug_maps.append(item["debug_s_register_map"])
+    require(sha256_bytes(debug_image)
+            == spec["expected_image_debug_s_sha256"],
+            "composed-rewriting mapped debug$S differs from its pin")
+    composed = bytearray(composed)
+    composed[debug_child["raw_offset"]:
+             debug_child["raw_offset"] + debug_child["raw_size"]] = debug_image
+    composed = bytes(composed)
+    final = CoffObject(composed)
+    fp = final.function_section(mangled)
+    require(coff_body(final, fp) == image,
+            "composed-rewriting output changed the installed body")
+    for child_name in expected_closure:
+        if child_name == ".debug$S":
+            continue        # the one child this class maps, pinned above
+        require(coff_body(final, _comdat_child(final, fp, child_name))
+                == coff_body(seed, _comdat_child(seed, sp, child_name)),
+                f"composed-rewriting output changed its {child_name} child")
+    allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
+    allowed |= set(range(debug_child["raw_offset"],
+                         debug_child["raw_offset"] + debug_child["raw_size"]))
+    require({index for index in range(len(seed_bytes))
+             if seed_bytes[index] != composed[index]} <= allowed,
+            "composed-rewriting changed bytes outside its own COMDAT")
+    return composed, {
+        **detail,
+        "splice_class": COMPOSED_REWRITING_CLASS,
+        "instruction_schedule": schedule_detail,
+        "register_bijections": bijection_detail,
+        "relational_form": relational_detail,
+        "instruction_count": len(image_instructions),
+        "changed_offsets": changed,
+        "debug_fidelity": debug_detail,
+        "debug_s_register_maps": debug_maps,
+        "external_entries": sorted(external_entries),
         "retail_exact": True,
         **semantic_detail,
     }

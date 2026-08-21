@@ -26847,7 +26847,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/video/mxvideopresenter.cpp",
-   "source_sha256": "02fcf61ff1eeb3f08e9d6ffa8e08be3585204685159eb0957f3d0fa2144c7c90",
+   "source_sha256": "8090c765eeba095b615bf0a31461aa595e202dedc7921d1e198c454a1a8c19e5",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -27037,9 +27037,9 @@
        "width": 2,
        "generated_declarations_sha256": "e5f44f6a786e0263062f9b409b3c2263b22cfff0bc7c9b8df5d51f2b2e1bce76"
       },
-      "clean_source_sha256": "5a2bdc427311e9686aaaa810c4b26057dbbfc63b32eeea67fe2adf10ac5dbb1b",
-      "effective_source_sha256": "02fcf61ff1eeb3f08e9d6ffa8e08be3585204685159eb0957f3d0fa2144c7c90",
-      "rendered_source_sha256": "398e9963339423a7c530ffa73bac1cc18c2645928bbbbbf6354506dd7dc71083",
+      "clean_source_sha256": "e3f1630791908b84c51645269fcc88dbb25efb6ef402ad53d1d631c64e423864",
+      "effective_source_sha256": "8090c765eeba095b615bf0a31461aa595e202dedc7921d1e198c454a1a8c19e5",
+      "rendered_source_sha256": "c0e6b4d3ee9f4294c4a9ba46dea17b124ace1b51f5a10451ce0ef74c5885ac6c",
       "rendered_source_size": 12776,
       "function_range_sha256": "d24dce710c2cb222c06bc8765053825283307e9841bd461f20dd3f92531964a6",
       "function_range_size": 244,
@@ -53019,8 +53019,8 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxvideopresenter.cpp",
-    "clean": "5a2bdc427311e9686aaaa810c4b26057dbbfc63b32eeea67fe2adf10ac5dbb1b",
-    "effective": "02fcf61ff1eeb3f08e9d6ffa8e08be3585204685159eb0957f3d0fa2144c7c90",
+    "clean": "e3f1630791908b84c51645269fcc88dbb25efb6ef402ad53d1d631c64e423864",
+    "effective": "8090c765eeba095b615bf0a31461aa595e202dedc7921d1e198c454a1a8c19e5",
     "size": 12452,
     "ops": [
      {
