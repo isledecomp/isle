@@ -155,3 +155,41 @@ class VerdictTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReEncodeVersusTranspositionTest(unittest.TestCase):
+    """A length difference is only an EBP re-encoding when EBP forces it.
+
+    Found on 0x100b2a70: three inlined `PrepareRects` `sub` transpositions
+    change a step's length, and classifying every length change as `reencode`
+    hid them from the `other == 0` screen -- a FALSE PASS on a row that does
+    not close.
+    """
+
+    def test_an_ebp_base_growing_a_disp8_is_a_reencoding(self):
+        ours = bytes.fromhex("8b2fc3")        # mov ebp, [edi]     2 bytes
+        theirs = bytes.fromhex("8b7d00c3")    # mov edi, [ebp+0]   3 bytes
+        result = scan(ours, theirs)
+        self.assertIsNone(result["error"])
+        self.assertEqual(kinds(result), ["reencode"])
+
+    def test_a_transposition_that_changes_length_is_STRUCTURAL(self):
+        # `sub eax, [ebp-0x38]` (3 B) against `sub eax, ecx` (2 B): same
+        # opcode, but no EBP base crossing -- one side has a register operand.
+        ours = bytes.fromhex("2b45c8c3")
+        theirs = bytes.fromhex("2bc1c3")
+        result = scan(ours, theirs)
+        self.assertEqual(kinds(result), ["other"])
+
+    def test_a_length_change_with_no_ebp_on_either_side_is_structural(self):
+        ours = bytes.fromhex("8b08c3")        # mov ecx, [eax]     2 bytes
+        theirs = bytes.fromhex("8b4800c3")    # mov ecx, [eax+0]   3 bytes
+        result = scan(ours, theirs)
+        self.assertEqual(kinds(result), ["other"])
+
+    def test_a_length_change_with_a_different_opcode_is_structural(self):
+        ours = bytes.fromhex("8b2fc3")        # mov ebp, [edi]
+        theirs = bytes.fromhex("037d00c3")    # add edi, [ebp+0]
+        result = scan(ours, theirs)
+        self.assertIn(kinds(result), (["other"], []))
+        self.assertNotEqual(kinds(result), ["reencode"])

@@ -44,8 +44,13 @@ classified, because only one of the four is a real obstacle:
 
   branch    a relative branch whose only differing bytes are its displacement
             field -- repaired by the re-encoding certificate's own fixpoint
-  reencode  the two encodings differ in LENGTH, which is what an EBP-base
-            re-encoding IS
+  reencode  an EBP-base re-encoding: the SAME opcode and a memory operand
+            whose base register is EBP on exactly one side, differing by the
+            one byte the `mod` field forces.  A length difference that is NOT
+            that is `other` -- a schedule transposition can also change a
+            step's length, and calling it `reencode` made `other == 0` a FALSE
+            PASS.  That defect was found on 0x100b2a70, whose three inlined
+            `PrepareRects` `sub` transpositions were being hidden by it.
   accform   an accumulator short form against its ModRM equivalent
   dirform   the two operand-direction encodings of one operation
   other     a genuine structural difference
@@ -143,6 +148,36 @@ def _direction_key(item: dict):
     return None
 
 
+EBP_REGISTER_NUMBER = 5
+
+
+def _is_ebp_reencoding(left: dict, right: dict) -> bool:
+    """Is this length difference the one an EBP memory base forces?"""
+    if abs(left["length"] - right["length"]) != 1:
+        return False
+    if left["opcode"] != right["opcode"]:
+        return False
+    left_encoding, right_encoding = left["encoding"], right["encoding"]
+    if left_encoding is None or right_encoding is None:
+        return False
+    if left_encoding["mode"] == 3 or right_encoding["mode"] == 3:
+        return False
+    if left_encoding["absolute"] or right_encoding["absolute"]:
+        return False
+
+    def base(encoding, body_is_left):
+        # The base register lives in the SIB when one is present, in the
+        # ModRM r/m field otherwise.
+        return encoding["rm"] if encoding["sib_at"] is None else None
+
+    left_base = base(left_encoding, True)
+    right_base = base(right_encoding, False)
+    if left_base is None or right_base is None:
+        return False
+    return ((left_base == EBP_REGISTER_NUMBER)
+            != (right_base == EBP_REGISTER_NUMBER))
+
+
 def _register_numbers(body: bytes, item: dict) -> list:
     return [(body[byte_index] >> shift) & 7
             for byte_index, shift in item["fields"]]
@@ -217,7 +252,14 @@ def scan(ours: bytes, theirs: bytes, masked: frozenset,
         elif accumulator:
             kind = "accform"
         elif residue is None:
-            kind = "reencode"
+            # The lengths differ.  That is an EBP-base re-encoding ONLY if the
+            # opcode is the same, both sides carry a memory operand, exactly
+            # one of the two bases is EBP, and the difference is the single
+            # byte the `mod` field forces.  Anything else -- most importantly
+            # a schedule transposition, which also moves lengths -- is a
+            # STRUCTURAL difference and must be reported as one.
+            kind = ("reencode"
+                    if _is_ebp_reencoding(left, right) else "other")
         elif residue:
             width = form["displacement"] if form else 0
             kind = ("branch"
