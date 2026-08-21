@@ -207,7 +207,7 @@ MxResult Infocenter::Create(MxDSAction& p_dsAction)
 
 		for (i = 0; i < count; i++) {
 			if (m_state->GetNameLetter(i)) {
-				m_state->GetNameLetter(i)->Enable(TRUE);
+				m_state->m_letters[i]->Enable(TRUE);
 				m_state->GetNameLetter(i)->SetTickleState(MxPresenter::e_repeating);
 				m_state->GetNameLetter(i)->SetPosition(((7 - count) / 2 + i) * 29 + 223, 45);
 			}
@@ -1588,10 +1588,10 @@ InfocenterState::~InfocenterState()
 {
 	MxS16 i = 0;
 	do {
-		if (GetNameLetter(i) != NULL) {
-			delete GetNameLetter(i)->GetAction();
-			delete GetNameLetter(i);
+		if (m_letters[i] != NULL) {
+			delete m_letters[i]->GetAction();
+			delete m_letters[i];
 		}
 		i++;
-	} while (i < GetMaxNameLength());
+	} while (i < (MxS16) sizeOfArray(m_letters));
 }
