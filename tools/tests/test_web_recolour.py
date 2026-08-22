@@ -759,5 +759,59 @@ class TrailingWindowSchemaTests(unittest.TestCase):
         self.assertIn("overlaps a leading one", str(caught.exception))
 
 
+# A read-modify-write chain: `mov ecx,[esp+8]` defines, `sub` and `inc` each
+# consume the web's value and produce its next one through the SAME register
+# field, and `push ecx` uses it.  The two middle instructions are ONE node of
+# the web apiece, declared in both roles.
+RMW = (bytes.fromhex("53") + bytes.fromhex("8b4c2408")     # mov ecx,[esp+8]
+       + bytes.fromhex("2b4c240c")                         # sub ecx,[esp+0xc]
+       + bytes.fromhex("41")                               # inc ecx
+       + bytes.fromhex("51")                               # push ecx
+       + bytes.fromhex("5b") + bytes.fromhex("c3"))
+
+
+class ReadModifyWriteWebTests(unittest.TestCase):
+    """One web may flow THROUGH an instruction that reads and writes it."""
+
+    def apply(self, definitions, uses, rewritten=None):
+        web = web_declaration(source_register="ecx", image_register="edx",
+                              definitions=definitions, uses=uses,
+                              expected_rewritten_offsets=rewritten or [])
+        return byte_identity.apply_web_recolour(
+            RMW, [web], frozenset(), "web")
+
+    def test_the_whole_chain_recolours_as_one_web(self):
+        image, proof = self.apply([1, 5, 9], [5, 9, 10], [2, 6, 9, 10])
+        # mov edx,[esp+8] ; sub edx,[esp+0xc] ; inc edx ; push edx
+        self.assertEqual(image.hex(), "538b5424082b54240c42525bc3")
+        self.assertEqual(proof["webs"][0]["rewritten_offsets"], [2, 6, 9, 10])
+
+    def test_a_through_node_is_rewritten_exactly_once(self):
+        _, proof = self.apply([1, 5, 9], [5, 9, 10], [2, 6, 9, 10])
+        rewritten = proof["webs"][0]["rewritten_offsets"]
+        self.assertEqual(len(rewritten), len(set(rewritten)))
+
+    def test_skipping_the_through_nodes_is_still_refused(self):
+        # W3 is unchanged: the `sub` reads the web, so it IS a use.
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply([1], [10], [2, 10])
+        self.assertIn("which is not the declared use set", str(caught.exception))
+
+    def test_a_node_that_does_not_read_and_write_is_refused(self):
+        # `pop ebx` at 11 writes but never reads, so it is not a through node.
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply([1, 5, 9, 11], [5, 9, 10, 11])
+        self.assertIn("does not read and write the whole register",
+                      str(caught.exception))
+
+    def test_a_through_node_cannot_also_be_field_scoped(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.validate_web_recolour(
+                recolour_spec(webs=[web_declaration(
+                    definitions=[[3, 0]], uses=[3, 12])]),
+                "recolour", SIZE)
+        self.assertIn("cannot also be field-scoped", str(caught.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

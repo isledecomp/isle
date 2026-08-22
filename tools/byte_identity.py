@@ -32782,10 +32782,16 @@ def validate_web_recolour(
                         f"{web_context} scopes {offset} twice")
                 field_scopes[offset] = ordinal
             role_offsets[role] = offsets
-        require(not (set(role_offsets["definitions"])
-                     & set(role_offsets["uses"])),
-                f"{web_context}: an instruction is both a definition and a "
-                "use")
+        # An offset in BOTH lists is a read-modify-write node of the web --
+        # see `apply_web_recolour`, which proves it reads and writes the whole
+        # register.  It cannot also be field-scoped: the scope splits one
+        # instruction between two webs, and a through node belongs wholly to
+        # this one.
+        for offset in (set(role_offsets["definitions"])
+                       & set(role_offsets["uses"])):
+            require(offset not in field_scopes,
+                    f"{web_context}: {offset} is a read-modify-write node and "
+                    "cannot also be field-scoped")
         offsets = web.get("expected_rewritten_offsets")
         require(isinstance(offsets, list) and offsets
                 and offsets == sorted(set(offsets))
@@ -33482,9 +33488,26 @@ def apply_web_recolour(
                         "an instruction boundary of this body")
         definitions = [index_of[offset] for offset in definition_offsets]
         uses = [index_of[offset] for offset in use_offsets]
-        require(not (set(definitions) & set(uses)),
-                f"{web_context}: an instruction is both a definition and a "
-                "use of the web")
+        # A read-modify-write instruction -- `sub eax,[esp+8]`, `inc eax` --
+        # is ONE node of the web, not two: it consumes the web's value and
+        # produces the web's next value through the SAME register field.  It
+        # is declared in both lists, and both closure directions already
+        # handle it (the forward walk records the read before the write kills
+        # propagation, and the backward walk stops at the write), so nothing
+        # about W3 moves.  What it must not be is a node that reads or writes
+        # only PART of the register, which the closures refuse on their own.
+        through = set(definitions) & set(uses)
+        for index in sorted(through):
+            item = instructions[index]
+            require(source_atoms <= item["read_atoms"]
+                    and source_atoms <= item["write_atoms"],
+                    f"{web_context}: the instruction at {item['offset']} is "
+                    "declared as both a definition and a use but does not "
+                    "read and write the whole register")
+            require(item["offset"] not in field_scopes,
+                    f"{web_context}: the read-modify-write node at "
+                    f"{item['offset']} carries the whole web, so it cannot "
+                    "also be field-scoped")
         for index in definitions:
             item = instructions[index]
             require(source_atoms <= item["write_atoms"],
@@ -33496,7 +33519,7 @@ def apply_web_recolour(
             # computes -- unless the entry says which field is the definition,
             # in which case the read is another web's use and stays put.
             require(not (source_atoms & item["read_atoms"])
-                    or item["offset"] in field_scopes,
+                    or item["offset"] in field_scopes or index in through,
                     f"{web_context}: the declared definition at "
                     f"{item['offset']} also reads the source register")
             require(target not in item["writes"],
@@ -33509,7 +33532,8 @@ def apply_web_recolour(
             # entry says so.  The read obligation itself never relaxes.
             require(source_atoms <= item["read_atoms"]
                     and (not (source_atoms & item["write_atoms"])
-                         or item["offset"] in field_scopes),
+                         or item["offset"] in field_scopes
+                         or index in through),
                     f"{web_context}: the declared use at {item['offset']} "
                     "does not read the whole register without defining it")
             # A use that already names the image register would, after the
@@ -33572,7 +33596,9 @@ def apply_web_recolour(
         # W2 (encoding) and W6.
         buffer = bytearray(image)
         rewritten = []
-        for index in sorted(definitions + uses):
+        # A through node appears in both lists and carries ONE field: rewrite
+        # it once.
+        for index in sorted(set(definitions) | set(uses)):
             item = instructions[index]
             blocked = {source, target} & set(item.get("frozen", frozenset()))
             require(not blocked,
