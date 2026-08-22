@@ -4619,6 +4619,92 @@ class SourceTargetClosureTests(unittest.TestCase):
                 source, source,
             )
 
+    def _unit_rendering(self, recipe):
+        return next(item for item in recipe["renderings"]
+                    if item["path"] == self.SOURCE)
+
+    def test_source_target_policy_admits_declaration_only_unit_carrier(self):
+        """The donor's own TU may seat non-emitting declarations, and only those."""
+        recipe = self.live_recipe()
+        unit = self._unit_rendering(recipe)
+        clean = (ROOT / self.SOURCE).read_bytes()
+        tokens = [token for token, _, _ in
+                  byte_identity.source_overlay_tokens(clean)]
+        anchor = {
+            "ctx": byte_identity.source_overlay_token_sha256(
+                ["<SEAT>"] + tokens[:32]),
+            "b": 0, "at": "start",
+        }
+        unit["operations"] = [{
+            "op": "insert", "anchor": anchor,
+            "gen": {"k": "seq", "lines": 2, "items": [
+                {"k": "fwd_run", "stem": "MxUnkRecPolicyProbe", "first": 0,
+                 "count": 2, "line": 1, "width": 3},
+            ]},
+        }]
+        rendered = byte_identity.render_donor_source_overlay(
+            recipe, ROOT, repin=True)
+        for item in recipe["renderings"]:
+            item["rendered_sha256"] = hashlib.sha256(
+                rendered[item["path"]]).hexdigest()
+        detail = byte_identity.require_source_target_closure_recipe_policy(
+            recipe, ROOT, self.SOURCE, "fixture")
+        self.assertEqual(detail["source_permutation_count"], 2)
+        self.assertGreater(detail["unit_declaration_generator_count"], 0)
+        # The carrier is declaration-only: it adds forward declarations and
+        # nothing else, and the checked-in file is untouched.
+        self.assertEqual(rendered[self.SOURCE].count(b"class MxUnkRecPolicyProbe"), 2)
+        self.assertNotIn(b"MxUnkRecPolicyProbe", clean)
+        self.assertEqual((ROOT / self.SOURCE).read_bytes(), clean)
+
+    def test_source_target_policy_rejects_emitting_unit_operations(self):
+        """A compiler-state generator in the donor's TU is still refused."""
+        recipe = self.live_recipe()
+        unit = self._unit_rendering(recipe)
+        clean = (ROOT / self.SOURCE).read_bytes()
+        tokens = [token for token, _, _ in
+                  byte_identity.source_overlay_tokens(clean)]
+        anchor = {
+            "ctx": byte_identity.source_overlay_token_sha256(
+                ["<SEAT>"] + tokens[:32]),
+            "b": 0, "at": "start",
+        }
+        # `noop_assign` is classified `compiler_state_only`, not a
+        # declaration, so it must be refused inside the donor's own TU even
+        # though its seat resolves and it emits no instructions.
+        unit["operations"] = [{
+            "op": "insert", "anchor": anchor,
+            "gen": {"k": "seq", "lines": 2, "items": [
+                {"k": "noop_assign", "assignment_target": "probe",
+                 "repeat": 1, "lines": 1, "at": [1], "line": 1},
+            ]},
+        }]
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "declaration-only"):
+            byte_identity.require_source_target_closure_recipe_policy(
+                recipe, ROOT, self.SOURCE, "fixture")
+
+    def test_source_target_policy_admits_a_single_permutation_header(self):
+        """One header carrying one closed permutation is enough."""
+        recipe = self.live_recipe()
+        keep = next(item for item in recipe["renderings"]
+                    if item["path"] != self.SOURCE
+                    and item["operations"][0]["gen"]["k"] == "dead_updates")
+        recipe["renderings"] = [self._unit_rendering(recipe), keep]
+        detail = byte_identity.require_source_target_closure_recipe_policy(
+            recipe, ROOT, self.SOURCE, "fixture")
+        self.assertEqual(detail["source_permutation_count"], 1)
+        self.assertEqual(detail["source_permutation_kinds"],
+                         ["dead_local_linear_updates_v1"])
+
+    def test_source_target_policy_still_bounds_the_rendering_count(self):
+        recipe = self.live_recipe()
+        recipe["renderings"] = [self._unit_rendering(recipe)]
+        with self.assertRaisesRegex(byte_identity.ByteIdentityError,
+                                    "one or two headers"):
+            byte_identity.require_source_target_closure_recipe_policy(
+                recipe, ROOT, self.SOURCE, "fixture")
+
     def test_source_target_policy_requires_private_source_projection(self):
         recipe = self.live_recipe()
         recipe["compile_lane"].pop("include_projection")

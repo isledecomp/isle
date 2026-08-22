@@ -5305,10 +5305,37 @@ SOURCE_TARGET_PERMUTATION_KINDS = frozenset({
 })
 
 
+# Which emission classes a target donor may seat in its OWN translation unit.
+# Read from `SOURCE_OVERLAY_KIND_POLICIES`, the module's own per-generator
+# classification, so this list cannot drift from what those generators
+# actually emit.  `composed` is the sequence container itself, which carries
+# no payload of its own -- every item inside it is classified separately by
+# the same walk.
+SOURCE_TARGET_CLOSURE_UNIT_EMISSION_CLASSES = frozenset({
+    "non_emitting_declaration", "source_layout_only", "composed",
+})
+
+
 def require_source_target_closure_recipe_policy(
     recipe: dict, root, unit_source: str, context: str,
 ) -> dict:
-    """Confine a target donor to two bounded dead-local header changes."""
+    """Confine a target donor to bounded dead-local header changes.
+
+    The donor renders its own translation unit and one or two headers.  Each
+    header carries exactly one operation from the closed
+    ``SOURCE_TARGET_PERMUTATION_KINDS`` pair, on a fresh dead local.
+
+    The translation unit itself may carry DECLARATION-ONLY operations and
+    nothing else.  The invariant being protected is that a target donor
+    invents no code, data, strings, vtables or linker directives in its own
+    TU -- not that its TU text is literally the checked-in file.  A
+    declaration carrier satisfies that invariant by construction; it is the
+    same non-emitting mechanism every ordinary donor recipe seats, and it
+    lets the donor's view of its TU match the SHIPPED overlay's view instead
+    of a text the build never compiles.  Membership is decided by the
+    module's own generator emission classification, walked recursively so a
+    sequence cannot smuggle an emitting item inside itself.
+    """
     validated = validate_donor_source_overlay_recipe(recipe, root)
     require(
         validated["compile_lane"].get("include_projection")
@@ -5317,12 +5344,19 @@ def require_source_target_closure_recipe_policy(
         "source-root projection",
     )
     renderings = validated["renderings"]
-    require(len(renderings) == 3
+    require(2 <= len(renderings) <= 3
             and sum(item["path"] == unit_source for item in renderings) == 1,
-            f"{context}: donor must render its TU and exactly two headers")
+            f"{context}: donor must render its TU and one or two headers")
     unit = next(item for item in renderings if item["path"] == unit_source)
-    require(not unit["operations"],
-            f"{context}: donor translation unit text must remain checked-in")
+    unit_generators = list(_source_overlay_generators(unit["operations"]))
+    for generator in unit_generators:
+        policy = SOURCE_OVERLAY_KIND_POLICIES.get(generator["kind"])
+        require(
+            policy is not None
+            and policy[0] in SOURCE_TARGET_CLOSURE_UNIT_EMISSION_CLASSES,
+            f"{context}: donor translation-unit operations must be "
+            f"declaration-only, not {generator['kind']}",
+        )
     root = Path(root).resolve(strict=True)
     fresh_locals = set()
     kinds = set()
@@ -5372,12 +5406,13 @@ def require_source_target_closure_recipe_policy(
                 and tokens[index + 1] == identifier
                 for index in range(len(tokens) - 1)
             ) == 1, f"{context}: constructor class is absent or ambiguous")
-    require(kinds == SOURCE_TARGET_PERMUTATION_KINDS,
-            f"{context}: both closed source permutations are required")
+    require(kinds and kinds <= SOURCE_TARGET_PERMUTATION_KINDS,
+            f"{context}: a closed source permutation is required")
     return {
         "source_permutation_count": len(kinds),
         "fresh_dead_local_count": len(fresh_locals),
         "source_permutation_kinds": sorted(kinds),
+        "unit_declaration_generator_count": len(unit_generators),
     }
 
 
