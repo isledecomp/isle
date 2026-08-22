@@ -15014,7 +15014,8 @@ def validate_manifest(
                             f"{function_context}: the image pin does not "
                             "move the donor body")
                     require(function.get("expected_closure")
-                            == REGISTER_BIJECTION_FPO_CLOSURE,
+                            in (REGISTER_BIJECTION_FPO_CLOSURE,
+                                INSTRUCTION_SCHEDULE_EH_CLOSURE),
                             f"{function_context}.expected_closure differs")
                     retail = function.get("retail_oracle")
                     require(isinstance(retail, dict),
@@ -36505,8 +36506,10 @@ def compose_retail_exact_donor_rewriting(
     require(_comdat_child_closure(seed, sp)
             == _comdat_child_closure(donor, dp)
             == (len(expected_closure), expected_closure)
-            and list(expected_closure) == REGISTER_BIJECTION_FPO_CLOSURE,
-            "donor-rewriting target closure is not the FPO debug pair")
+            and list(expected_closure) in (REGISTER_BIJECTION_FPO_CLOSURE,
+                                           INSTRUCTION_SCHEDULE_EH_CLOSURE),
+            "donor-rewriting target closure is neither the FPO debug pair "
+            "nor the EH pair")
     require(instruction_mosaic_metadata_sha256(seed, sp)
             == function["expected_seed_metadata_sha256"]
             and instruction_mosaic_metadata_sha256(donor, dp)
