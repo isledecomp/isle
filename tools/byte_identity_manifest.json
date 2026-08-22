@@ -29357,22 +29357,6 @@
      }
     },
     {
-     "id": "d_fb130bb22785",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 5,
-      "functions": 27,
-      "generated_header_sha256": "fb130bb227858523e9a663fe9534a38721758a0299915d7aae4cd08f95f86c08",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
      "id": "d_4c77c6181155",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
@@ -29449,6 +29433,22 @@
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering leaves the target translation unit unchanged and applies two bounded, typed compiler-state source permutations in checked-in headers. The explicit default-constructor form is treated as an authenticated donor-only permutation, not a generally logic-neutral shipped-source change. Target-only extraction retains the seed object shell and admits only the retail-exact same-name target closure."
      }
+    },
+    {
+     "id": "d_79d0e6236e28",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 8,
+      "functions": 20,
+      "generated_header_sha256": "79d0e6236e28e693706f392fab5d0a5dab252f848d6b20af967693f58d14e4a8",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -29463,12 +29463,460 @@
     },
     {
      "mangled": "?UpdateTransformationRelativeToParent@OrientableROI@@QAEXABVMatrix4@@@Z",
-     "expected_body_sha256": "bb72cdd5c7052c3e8362dbc9021986445217478a5a00073be9a3f38a71276b29",
-     "splice_class": "same_slot_resize",
+     "donor": "d_79d0e6236e28",
+     "splice_class": "retail_exact_donor_rewriting",
+     "expected_section_number": 226,
+     "expected_section_count": 271,
      "expected_seed_length": 2473,
      "expected_donor_length": 2515,
      "expected_linked_span": 2528,
-     "donor": "d_fb130bb22785"
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 2,
+     "expected_seed_line_count": 13,
+     "expected_donor_line_count": 13,
+     "expected_function_count": 87,
+     "expected_comdat_count": 93,
+     "expected_seed_body_sha256": "cf0dbe538e73593fe5e31ffcdcc9e5610f8da4730a127e1488a502a5f70ee884",
+     "expected_donor_body_sha256": "bb72cdd5c7052c3e8362dbc9021986445217478a5a00073be9a3f38a71276b29",
+     "expected_body_sha256": "447b52a765e9f0ab7677f35787764298daebcf4abdaf8eaa217190a39b924927",
+     "expected_seed_metadata_sha256": "79c479f59fade11132283c3ce14233d0a156339b8b77247ea1089a56436591db",
+     "expected_donor_metadata_sha256": "54c28516c7d6b76913ac096120374e2ebc2795cd30d50d03d837de9dd71b704b",
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100a46b0",
+      "verdict": "MATCH",
+      "length": 2515
+     },
+     "retail_relocations": [
+      {
+       "offset": 40,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 8,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "offset": 453,
+       "type": 6,
+       "addend": 0,
+       "target": "$T41673",
+       "target_section": 3,
+       "target_value": 32,
+       "target_type": 0,
+       "target_storage": 3,
+       "retail_target": "0x100dbbf8"
+      }
+     ],
+     "retail_image_target": "lego1",
+     "donor_rewriting": {
+      "kind": "donor_fp_bijection_rewriting_v1",
+      "fp_sum_rotations": [
+       {
+        "chain_start": 1379,
+        "chain_end": 1441,
+        "order": [
+         2,
+         0,
+         1,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         1382,
+         1389,
+         1396,
+         1403,
+         1412,
+         1419
+        ]
+       },
+       {
+        "chain_start": 1445,
+        "chain_end": 1507,
+        "order": [
+         2,
+         1,
+         0,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         1448,
+         1455,
+         1478,
+         1485
+        ]
+       },
+       {
+        "chain_start": 1511,
+        "chain_end": 1573,
+        "order": [
+         2,
+         0,
+         1,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         1514,
+         1521,
+         1528,
+         1535,
+         1544,
+         1551
+        ]
+       },
+       {
+        "chain_start": 1577,
+        "chain_end": 1639,
+        "order": [
+         2,
+         0,
+         1,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         1580,
+         1587,
+         1594,
+         1601,
+         1610,
+         1617
+        ]
+       },
+       {
+        "chain_start": 1643,
+        "chain_end": 1705,
+        "order": [
+         1,
+         0,
+         2,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         1646,
+         1653,
+         1660,
+         1667
+        ]
+       },
+       {
+        "chain_start": 1709,
+        "chain_end": 1771,
+        "order": [
+         3,
+         2,
+         1,
+         0
+        ],
+        "expected_rewritten_offsets": [
+         1712,
+         1719,
+         1726,
+         1733,
+         1742,
+         1749,
+         1758,
+         1765
+        ]
+       },
+       {
+        "chain_start": 1775,
+        "chain_end": 1837,
+        "order": [
+         2,
+         1,
+         0,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         1778,
+         1785,
+         1808,
+         1815
+        ]
+       },
+       {
+        "chain_start": 1841,
+        "chain_end": 1903,
+        "order": [
+         0,
+         3,
+         1,
+         2
+        ],
+        "expected_rewritten_offsets": [
+         1858,
+         1865,
+         1874,
+         1881,
+         1890,
+         1897
+        ]
+       },
+       {
+        "chain_start": 1907,
+        "chain_end": 1969,
+        "order": [
+         2,
+         0,
+         1,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         1910,
+         1911,
+         1917,
+         1924,
+         1931,
+         1940,
+         1941,
+         1947
+        ]
+       },
+       {
+        "chain_start": 1973,
+        "chain_end": 2035,
+        "order": [
+         3,
+         0,
+         2,
+         1
+        ],
+        "expected_rewritten_offsets": [
+         1976,
+         1983,
+         1990,
+         1991,
+         1997,
+         2022,
+         2023,
+         2029
+        ]
+       },
+       {
+        "chain_start": 2039,
+        "chain_end": 2101,
+        "order": [
+         2,
+         0,
+         3,
+         1
+        ],
+        "expected_rewritten_offsets": [
+         2042,
+         2043,
+         2049,
+         2056,
+         2063,
+         2072,
+         2079,
+         2088,
+         2089,
+         2095
+        ]
+       },
+       {
+        "chain_start": 2105,
+        "chain_end": 2167,
+        "order": [
+         1,
+         0,
+         3,
+         2
+        ],
+        "expected_rewritten_offsets": [
+         2108,
+         2115,
+         2122,
+         2129,
+         2138,
+         2145,
+         2154,
+         2161
+        ]
+       },
+       {
+        "chain_start": 2171,
+        "chain_end": 2233,
+        "order": [
+         1,
+         0,
+         2,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         2174,
+         2181,
+         2188,
+         2195
+        ]
+       },
+       {
+        "chain_start": 2237,
+        "chain_end": 2299,
+        "order": [
+         2,
+         0,
+         1,
+         3
+        ],
+        "expected_rewritten_offsets": [
+         2240,
+         2247,
+         2254,
+         2261,
+         2270,
+         2277
+        ]
+       },
+       {
+        "chain_start": 2375,
+        "chain_end": 2419,
+        "order": [
+         1,
+         0,
+         2
+        ],
+        "expected_rewritten_offsets": [
+         2378,
+         2385,
+         2392,
+         2399
+        ]
+       }
+      ],
+      "register_bijections": [
+       {
+        "mapping": {
+         "ebx": "edx",
+         "edx": "ebx"
+        },
+        "region_start": 15,
+        "region_end": 128,
+        "expected_region_instruction_count": 27,
+        "expected_rewritten_offsets": [
+         16,
+         45,
+         52,
+         67,
+         73,
+         83,
+         113
+        ]
+       }
+      ],
+      "expected_instruction_count": 537,
+      "expected_changed_offsets": [
+       16,
+       45,
+       52,
+       67,
+       73,
+       83,
+       113,
+       1382,
+       1389,
+       1396,
+       1403,
+       1412,
+       1419,
+       1448,
+       1455,
+       1478,
+       1485,
+       1514,
+       1521,
+       1528,
+       1535,
+       1544,
+       1551,
+       1580,
+       1587,
+       1594,
+       1601,
+       1610,
+       1617,
+       1646,
+       1653,
+       1660,
+       1667,
+       1712,
+       1719,
+       1726,
+       1733,
+       1742,
+       1749,
+       1758,
+       1765,
+       1778,
+       1785,
+       1808,
+       1815,
+       1858,
+       1865,
+       1874,
+       1881,
+       1890,
+       1897,
+       1910,
+       1911,
+       1917,
+       1924,
+       1931,
+       1940,
+       1941,
+       1947,
+       1976,
+       1983,
+       1990,
+       1991,
+       1997,
+       2022,
+       2023,
+       2029,
+       2042,
+       2043,
+       2049,
+       2056,
+       2063,
+       2072,
+       2079,
+       2088,
+       2089,
+       2095,
+       2108,
+       2115,
+       2122,
+       2129,
+       2138,
+       2145,
+       2154,
+       2161,
+       2174,
+       2181,
+       2188,
+       2195,
+       2240,
+       2247,
+       2254,
+       2261,
+       2270,
+       2277,
+       2378,
+       2385,
+       2392,
+       2399
+      ],
+      "expected_external_entries": [],
+      "authenticity_rationale": "The pre-image is a census-pinned declaration-only donor state of this translation unit whose body reproduces retail's frame. Fifteen faddp summation chains from the vec.h _DOTcol4 macro are rotated within themselves -- the reassociation licence MSVC 4.2 itself exercises: the body renders the same macro's sums in several pair orders, and nine of the fifteen retail orders are byte-witnessed in sibling donor states of this same source. One {ebx,edx} regional bijection recolours the copy loop's two counters."
+     }
     },
     {
      "mangled": "??0OrientableROI@@QAE@XZ",
@@ -35117,8 +35565,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4928,
-    "accepted_row_identity_sha256": "1dfc0f034e137c1042fb3f92d2c5985f964d848e86314792b39a46ad1e64dd0c",
+    "exact_raw_1_0_count": 4929,
+    "accepted_row_identity_sha256": "734fdadf230bda21348d4cfdf2be6c0faf2a7d7f0afa4ca02277e1272428f752",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
