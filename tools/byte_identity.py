@@ -4995,7 +4995,9 @@ def require_target_source_refactor_recipe_policy(
             continue
 
         if operation["id"] in canonical_by_id:
-            require(operation == canonical_by_id[operation["id"]]
+            untagged = {key: value for key, value in operation.items()
+                        if key != "canonical_replay"}
+            require(untagged == canonical_by_id[operation["id"]]
                     and operation["id"] not in canonical_seen,
                     f"{context}: canonical source operation differs")
             require(operation["action"] in {"insert", "whole_file_append"},
@@ -6530,8 +6532,11 @@ def _validate_dead_local_update_params(
         minimum=-(1 << 31), maximum=(1 << 31) - 1,
     )
     repeat = require_exact_int(
-        params.get("repeat"), context + ".repeat", minimum=1, maximum=64,
+        params.get("repeat"), context + ".repeat", minimum=0, maximum=64,
     )
+    # repeat 0 renders the bare dead local `{ int _n = 0; }` -- one declared
+    # initialisation and no update; it is the smallest budget step the
+    # generator can pay and is exactly as non-emitting as any other count.
     require(increment != 0, f"{context}.increment must move compiler state")
     final = initial + increment * repeat
     require(-(1 << 31) <= final <= (1 << 31) - 1,
@@ -14971,6 +14976,9 @@ def validate_manifest(
                     donor_rewriting_keys = {
                         "mangled", "donor", "splice_class",
                         "expected_section_number", "expected_section_count",
+                        "expected_donor_section_count",
+                        "expected_donor_extra_functions",
+                        "expected_relocation_divergences",
                         "expected_seed_length", "expected_donor_length",
                         "expected_linked_span", "expected_characteristics",
                         "expected_selection", "expected_relocation_count",
@@ -14988,8 +14996,39 @@ def validate_manifest(
                     }
                     if "retail_image_target" in function:
                         donor_rewriting_keys.add("retail_image_target")
-                    exact_keys(function, donor_rewriting_keys,
+                    optional_rewriting_keys = {
+                        "expected_donor_section_count",
+                        "expected_donor_extra_functions",
+                        "expected_relocation_divergences",
+                    }
+                    exact_keys(function,
+                               donor_rewriting_keys
+                               - (optional_rewriting_keys
+                                  - set(function)),
                                function_context)
+                    if "expected_relocation_divergences" in function:
+                        div_value = function[
+                            "expected_relocation_divergences"]
+                        require(isinstance(div_value, list) and div_value
+                                and all(isinstance(item, list)
+                                        and len(item) == 3
+                                        and type(item[0]) is int
+                                        and item[0] >= 0
+                                        and all(isinstance(x, str) and x
+                                                for x in item[1:])
+                                        for item in div_value),
+                                f"{function_context}."
+                                "expected_relocation_divergences is invalid")
+                    if "expected_donor_extra_functions" in function:
+                        extras_value = function[
+                            "expected_donor_extra_functions"]
+                        require(isinstance(extras_value, list)
+                                and extras_value
+                                == sorted(set(extras_value))
+                                and all(isinstance(name, str) and name
+                                        for name in extras_value),
+                                f"{function_context}."
+                                "expected_donor_extra_functions is invalid")
                     for name in (
                         "expected_section_number", "expected_section_count",
                         "expected_seed_length", "expected_donor_length",
@@ -23481,6 +23520,7 @@ def compose_same_slot_resize(
     retail_body: bytes | None = None,
     target_closure_extract: bool = False,
     source_target_extract: bool = False,
+    declared_donor_extras: list | None = None,
 ) -> tuple[bytes, dict]:
     """Install a donor code body of a different size that occupies the same
     16-byte linked contribution slot, repairing every dependent COFF record.
@@ -23541,6 +23581,22 @@ def compose_same_slot_resize(
         topology_detail = require_target_closure_extraction_topology(
             seed, donor, function, "target-closure extraction"
         )
+    elif declared_donor_extras:
+        # The caller (retail_exact_donor_rewriting) has already proved the
+        # donor's emission delta is exactly this closed name list; the same
+        # statement is re-measured here rather than trusted.
+        seed_fns = function_multiset(seed)
+        donor_fns = function_multiset(donor)
+        measured = []
+        for name in set(seed_fns) | set(donor_fns):
+            left, right = seed_fns.get(name, 0), donor_fns.get(name, 0)
+            if right == left:
+                continue
+            require(right == left + 1,
+                    f"donor function census diverges at {name}")
+            measured.append(name)
+        require(sorted(measured) == sorted(declared_donor_extras),
+                "donor function set differs from its declared extras")
     else:
         require(len(seed.sections) == len(donor.sections),
                 "global section count differs")
@@ -24459,9 +24515,12 @@ def validate_donor_source_overlay_recipe(
                 if generator.get("kind") == "member_signature_v1":
                     pending_signatures.append((op_context, generator))
             validated_ops.append(validated)
-        if canonical_replay is not None:
-            require(index == 0 and len(renderings) == 1,
-                    "canonical-overlay replay requires one source rendering")
+        if canonical_replay is not None and index == 0:
+            # The replay attaches to the FIRST rendering and is self-checking:
+            # the shipped ops' anchors are token-context digests of the owning
+            # translation unit's clean source, so they resolve only against
+            # that file.  Further renderings (a header the donor privately
+            # rewrites) carry their own ordinary typed ops.
             replay_ids = [item.get("id") for item in canonical_operations]
             require(all(isinstance(item, dict) and isinstance(item.get("id"), str)
                         for item in canonical_operations)
@@ -24478,7 +24537,9 @@ def validate_donor_source_overlay_recipe(
                             f"canonical replay {operation['id']}.{role}",
                             logical_path=path,
                         )
-            validated_ops = list(canonical_operations) + validated_ops
+            validated_ops = [{**operation, "canonical_replay": True}
+                             for operation in canonical_operations] \
+                + validated_ops
         clean_inputs.append(data)
         normalized.append({
             "path": path, "clean_sha256": clean,
@@ -24727,13 +24788,18 @@ def render_donor_source_overlay(
                             f"relocation dependency is duplicated: {key}")
                     relocation_ranges[key] = removed
                 if action == "delete":
-                    # A delete removes; its generator exists only to declare
-                    # the relocation producer identity, exactly as the
-                    # shipped overlay uses it (vector3d.inl.h keeps none of
-                    # the moved range).
+                    # A DONOR-AUTHORED delete removes; its generator exists
+                    # only to declare the relocation producer identity,
+                    # exactly as the shipped overlay uses it.  A REPLAYED
+                    # canonical delete is the shipped overlay's own op,
+                    # already validated under the shipped grammar, and
+                    # renders here exactly as the shipped renderer renders
+                    # it.
                     require(
-                        generator["kind"] == "source_range_relocation_v1"
-                        and "byte_destination" in generator["params"],
+                        operation.get("canonical_replay") is True
+                        or (generator["kind"]
+                            == "source_range_relocation_v1"
+                            and "byte_destination" in generator["params"]),
                         f"{path} {operation['id']}: a donor delete must "
                         f"declare a relocation producer",
                     )
@@ -35610,6 +35676,75 @@ def validate_composed_rewriting(
         })
     # The relational sites, validated exactly as the single-statement class
     # validates them.
+    normalized_rewrites = []
+    rewrite_bytes = []
+    rewrite_regions = set()
+    previous_rewrite_end = 0
+    for index, item in enumerate(
+            value.get("simulated_region_rewrites") or []):
+        item_context = f"{context}.simulated_region_rewrites[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "region_start", "region_end", "target_order", "field_rewrites",
+            "dead_registers", "dead_slots", "relocation_reseat",
+            "expected_rewritten_offsets",
+        }, item_context, optional={"field_rewrites", "dead_registers",
+                                   "dead_slots", "relocation_reseat"})
+        start = require_exact_int(item.get("region_start"),
+                                  f"{item_context}.region_start",
+                                  minimum=1, maximum=body_length - 1)
+        end = require_exact_int(item.get("region_end"),
+                                f"{item_context}.region_end",
+                                minimum=2, maximum=body_length)
+        require(previous_rewrite_end <= start < end,
+                f"{item_context}: regions are unsorted or overlapping")
+        previous_rewrite_end = end
+        order = item.get("target_order")
+        require(isinstance(order, list) and len(order) >= 2
+                and sorted(order) == list(range(len(order))),
+                f"{item_context}.target_order is not a permutation")
+        for rewrite in item.get("field_rewrites") or []:
+            require(isinstance(rewrite, list) and len(rewrite) == 3
+                    and type(rewrite[0]) is int and type(rewrite[1]) is int
+                    and rewrite[2] in _IA32_REGISTER_NUMBERS
+                    and rewrite[2] not in ("esp", "ebp"),
+                    f"{item_context}: field rewrite {rewrite} is invalid")
+        dead = item.get("dead_registers") or []
+        require(isinstance(dead, list) and dead == sorted(set(dead))
+                and all(name in _IA32_REGISTER_NUMBERS for name in dead)
+                and not (set(dead) & _IA32_STRUCTURAL_REGISTERS),
+                f"{item_context}.dead_registers is invalid")
+        slots_dead = item.get("dead_slots") or []
+        require(isinstance(slots_dead, list)
+                and slots_dead == sorted(set(slots_dead))
+                and all(type(d) is int and -body_length < d < 0
+                        for d in slots_dead),
+                f"{item_context}.dead_slots is invalid")
+        reseat = item.get("relocation_reseat") or []
+        require(isinstance(reseat, list)
+                and all(isinstance(pair, list) and len(pair) == 2
+                        and all(type(x) is int and start <= x < end
+                                for x in pair)
+                        for pair in reseat),
+                f"{item_context}.relocation_reseat is invalid")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and start <= offset < end
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        rewrite_bytes.extend(offsets)
+        rewrite_regions.update(range(start, end))
+        normalized_rewrites.append({
+            "region_start": start, "region_end": end,
+            "target_order": list(order),
+            "field_rewrites": [list(r) for r in
+                               item.get("field_rewrites") or []],
+            "dead_registers": list(dead),
+            "dead_slots": list(slots_dead),
+            "relocation_reseat": [list(p) for p in reseat],
+            "expected_rewritten_offsets": list(offsets),
+        })
     normalized_sites = []
     relational_bytes = []
     previous = -1
@@ -36139,14 +36274,16 @@ def validate_donor_rewriting(
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(value, {
         "kind", "windows", "fp_sum_rotations", "register_bijections",
-        "fp_pointer_exchanges", "relational_sites",
+        "fp_pointer_exchanges", "simulated_region_rewrites",
+        "relational_sites",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_code_length",
         "expected_internal_relocation_targets", "authenticity_rationale",
     }, context, optional={"windows", "fp_sum_rotations",
                           "register_bijections", "fp_pointer_exchanges",
-                          "relational_sites", "expected_code_length",
+                          "simulated_region_rewrites", "relational_sites",
+                          "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == DONOR_REWRITING_KIND,
             f"{context}.kind differs")
@@ -36309,6 +36446,75 @@ def validate_donor_rewriting(
             "dead_registers": list(dead),
             "expected_rewritten_offsets": list(offsets),
         })
+    normalized_rewrites = []
+    rewrite_bytes = []
+    rewrite_regions = set()
+    previous_rewrite_end = 0
+    for index, item in enumerate(
+            value.get("simulated_region_rewrites") or []):
+        item_context = f"{context}.simulated_region_rewrites[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "region_start", "region_end", "target_order", "field_rewrites",
+            "dead_registers", "dead_slots", "relocation_reseat",
+            "expected_rewritten_offsets",
+        }, item_context, optional={"field_rewrites", "dead_registers",
+                                   "dead_slots", "relocation_reseat"})
+        start = require_exact_int(item.get("region_start"),
+                                  f"{item_context}.region_start",
+                                  minimum=1, maximum=body_length - 1)
+        end = require_exact_int(item.get("region_end"),
+                                f"{item_context}.region_end",
+                                minimum=2, maximum=body_length)
+        require(previous_rewrite_end <= start < end,
+                f"{item_context}: regions are unsorted or overlapping")
+        previous_rewrite_end = end
+        order = item.get("target_order")
+        require(isinstance(order, list) and len(order) >= 2
+                and sorted(order) == list(range(len(order))),
+                f"{item_context}.target_order is not a permutation")
+        for rewrite in item.get("field_rewrites") or []:
+            require(isinstance(rewrite, list) and len(rewrite) == 3
+                    and type(rewrite[0]) is int and type(rewrite[1]) is int
+                    and rewrite[2] in _IA32_REGISTER_NUMBERS
+                    and rewrite[2] not in ("esp", "ebp"),
+                    f"{item_context}: field rewrite {rewrite} is invalid")
+        dead = item.get("dead_registers") or []
+        require(isinstance(dead, list) and dead == sorted(set(dead))
+                and all(name in _IA32_REGISTER_NUMBERS for name in dead)
+                and not (set(dead) & _IA32_STRUCTURAL_REGISTERS),
+                f"{item_context}.dead_registers is invalid")
+        slots_dead = item.get("dead_slots") or []
+        require(isinstance(slots_dead, list)
+                and slots_dead == sorted(set(slots_dead))
+                and all(type(d) is int and -body_length < d < 0
+                        for d in slots_dead),
+                f"{item_context}.dead_slots is invalid")
+        reseat = item.get("relocation_reseat") or []
+        require(isinstance(reseat, list)
+                and all(isinstance(pair, list) and len(pair) == 2
+                        and all(type(x) is int and start <= x < end
+                                for x in pair)
+                        for pair in reseat),
+                f"{item_context}.relocation_reseat is invalid")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and start <= offset < end
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        rewrite_bytes.extend(offsets)
+        rewrite_regions.update(range(start, end))
+        normalized_rewrites.append({
+            "region_start": start, "region_end": end,
+            "target_order": list(order),
+            "field_rewrites": [list(r) for r in
+                               item.get("field_rewrites") or []],
+            "dead_registers": list(dead),
+            "dead_slots": list(slots_dead),
+            "relocation_reseat": [list(p) for p in reseat],
+            "expected_rewritten_offsets": list(offsets),
+        })
     normalized_sites = []
     relational_bytes = []
     previous = -1
@@ -36353,7 +36559,7 @@ def validate_donor_rewriting(
         })
     require(normalized_windows or normalized_rotations
             or normalized_bijections or normalized_exchanges
-            or normalized_sites,
+            or normalized_rewrites or normalized_sites,
             f"{context} declares no certificate")
     window_bytes = {offset for window in normalized_windows
                     for offset in range(window["start"], window["end"])}
@@ -36368,8 +36574,14 @@ def validate_donor_rewriting(
     require(not (rotation_regions & (set(bijection_bytes)
                                      | set(exchange_bytes)
                                      | set(relational_bytes)
-                                     | window_bytes)),
+                                     | window_bytes
+                                     | rewrite_regions)),
             f"{context}: another certificate reaches inside an fp-sum chain")
+    require(not (rewrite_regions & (set(exchange_bytes)
+                                    | set(relational_bytes)
+                                    | window_bytes)),
+            f"{context}: another certificate reaches inside a simulated "
+            "region rewrite")
     require(not (window_bytes & set(relational_bytes)),
             f"{context}: a relational reversal rewrites a byte inside a "
             "reordered window")
@@ -36379,10 +36591,20 @@ def validate_donor_rewriting(
             and all(type(offset) is int and 0 <= offset < body_length
                     for offset in changed),
             f"{context}.expected_changed_offsets is invalid")
+    # A self-mirrored equality site rewrites its branch byte to itself, so
+    # that byte legitimately never lands in the changed set.
+    identity_relational = {offset
+                           for site in normalized_sites
+                           if site["seed_condition"]
+                           == site["image_condition"]
+                           for offset in site["expected_rewritten_offsets"]}
     require(set(rotation_bytes) | set(bijection_bytes)
-            | set(exchange_bytes) | set(relational_bytes) <= set(changed),
+            | set(exchange_bytes) | set(rewrite_bytes)
+            | (set(relational_bytes) - identity_relational)
+            <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in rotation_regions or offset in window_bytes
+                or offset in rewrite_regions
                 or offset in set(bijection_bytes) | set(exchange_bytes)
                 | set(relational_bytes)
                 for offset in changed),
@@ -36425,6 +36647,7 @@ def validate_donor_rewriting(
         "fp_sum_rotations": normalized_rotations,
         "register_bijections": normalized_bijections,
         "fp_pointer_exchanges": normalized_exchanges,
+        "simulated_region_rewrites": normalized_rewrites,
         "relational_sites": normalized_sites,
     }
     if code_length is not None:
@@ -36475,19 +36698,49 @@ def compose_retail_exact_donor_rewriting(
     require(sp["number"] == dp["number"]
             == function["expected_section_number"],
             "donor-rewriting target section seat changed")
-    require(len(seed.sections) == len(donor.sections)
-            == function["expected_section_count"],
+    require(len(seed.sections) == function["expected_section_count"]
+            and len(donor.sections)
+            == function.get("expected_donor_section_count",
+                            function["expected_section_count"]),
             "donor-rewriting global section count changed")
+    # A donor_source_overlay pre-image may emit COMDATs the seed inlines
+    # away (an inline budget the donor pays un-inlines a helper); each such
+    # emission is a CLOSED, declared name, the linker's COMDAT selection
+    # discards the duplicate, and everything the seed emits must appear in
+    # the donor unchanged.
+    extras = sorted(function.get("expected_donor_extra_functions") or [])
     seed_functions = function_multiset(seed)
-    require(seed_functions == function_multiset(donor)
+    donor_functions = function_multiset(donor)
+    measured_extra = []
+    for name in set(seed_functions) | set(donor_functions):
+        left = seed_functions.get(name, 0)
+        right = donor_functions.get(name, 0)
+        if right == left:
+            continue
+        require(right == left + 1,
+                f"donor-rewriting donor function census diverges at {name}")
+        measured_extra.append(name)
+    require(sorted(measured_extra) == extras
             and sum(seed_functions.values())
             == function["expected_function_count"],
-            "donor-rewriting donor function set differs")
+            "donor-rewriting donor function set differs from its declared "
+            "extras")
     seed_comdats = comdat_primary_identity_multiset(seed)
-    require(seed_comdats == comdat_primary_identity_multiset(donor)
+    donor_comdats = comdat_primary_identity_multiset(donor)
+    extra_heads = []
+    for key in set(seed_comdats) | set(donor_comdats):
+        left = seed_comdats.get(key, 0)
+        right = donor_comdats.get(key, 0)
+        if right == left:
+            continue
+        require(right == left + 1,
+                f"donor-rewriting donor COMDAT census diverges at {key}")
+        extra_heads.append(key[0])
+    require(sorted(extra_heads) == extras
             and sum(seed_comdats.values())
             == function["expected_comdat_count"],
-            "donor-rewriting donor COMDAT identity set differs")
+            "donor-rewriting donor COMDAT identity set differs from its "
+            "declared extras")
     require(sp["raw_size"] == function["expected_seed_length"]
             and dp["raw_size"] == function["expected_donor_length"]
             and sp["relocation_count"] == dp["relocation_count"]
@@ -36527,16 +36780,36 @@ def compose_retail_exact_donor_rewriting(
     # is its location -- the number restarts with the donor's extra
     # declarations, the seat does not.
     def _relocation_identity(row: dict) -> tuple:
-        if row["target_storage"] == 3:
-            return ("static", row["offset"], row["type"], row["addend"],
+        # A compiler-numbered local ($T constant, $L label) is its LOCATION:
+        # the number restarts with the donor's extra declarations, the seat
+        # and content do not.  Storage class 3 is a section-local static,
+        # 6 a label; anything else is identified by name.
+        if row["target_storage"] in (3, 6) \
+                and row["target"].startswith("$"):
+            return ("static", row["type"], row["addend"],
                     row["target_section"], row["target_value"],
                     row["target_type"])
-        return ("named", row["offset"], row["type"], row["addend"],
+        return ("named", row["type"], row["addend"],
                 row["target"], row["target_type"], row["target_storage"])
-    require([_relocation_identity(row) for row in donor_rows]
-            == [_relocation_identity(row)
-                for row in detailed_relocations(seed, sp)],
-            "donor-rewriting donor relocation targets differ from the seed")
+    seed_rows_d1 = detailed_relocations(seed, sp)
+    divergences = {tuple(item[:1])[0]: (item[1], item[2])
+                   for item in function.get(
+                       "expected_relocation_divergences") or []}
+    require(len(donor_rows) == len(seed_rows_d1),
+            "donor-rewriting relocation count differs from the seed")
+    for ordinal, (donor_row, seed_row) in enumerate(
+            zip(donor_rows, seed_rows_d1)):
+        if ordinal in divergences:
+            expected_seed, expected_donor = divergences[ordinal]
+            require(seed_row["target"] == expected_seed
+                    and donor_row["target"] == expected_donor,
+                    f"donor-rewriting declared divergence {ordinal} differs "
+                    f"({seed_row['target']} -> {donor_row['target']})")
+            continue
+        require(_relocation_identity(donor_row)
+                == _relocation_identity(seed_row),
+                f"donor-rewriting donor relocation target {ordinal} "
+                "differs from the seed")
     relocation_offsets = frozenset(
         row["offset"] + byte
         for row in donor_rows for byte in range(row["width"]))
@@ -36610,6 +36883,28 @@ def compose_retail_exact_donor_rewriting(
                     f"donor-rewriting fp-exchange {index} rewrote a "
                     "different byte set from its declaration")
         exchange_detail = exchange_proof["exchanges"]
+    rewrite_detail = []
+    relocation_moves = {}
+    if spec.get("simulated_region_rewrites"):
+        image, rewrite_proof = apply_simulated_region_rewrite(
+            image, spec["simulated_region_rewrites"], relocation_offsets,
+            "donor-rewriting simulated rewrite", relocation_symbols,
+            code_length, frozenset(external_entries), internal_targets)
+        for index, (item, region) in enumerate(
+                zip(spec["simulated_region_rewrites"],
+                    rewrite_proof["regions"])):
+            require(region["rewritten_offsets"]
+                    == item["expected_rewritten_offsets"],
+                    f"donor-rewriting simulated rewrite {index} rewrote a "
+                    "different byte set from its declaration")
+            require([list(pair) for pair in region["relocation_reseat"]]
+                    == [list(pair) for pair
+                        in item.get("relocation_reseat") or []],
+                    f"donor-rewriting simulated rewrite {index} reseated a "
+                    "different relocation set from its declaration")
+        rewrite_detail = rewrite_proof["regions"]
+        relocation_moves = dict(
+            (old, new) for old, new in rewrite_proof["relocation_reseat"])
     schedule_detail = []
     windows = spec.get("windows") or []
     if windows:
@@ -36618,7 +36913,8 @@ def compose_retail_exact_donor_rewriting(
             "donor-rewriting schedule", relocation_symbols, code_length,
             internal_targets)
         require(not schedule_proof["relocation_reseat"],
-                "donor-rewriting refuses to move a relocation")
+                "donor-rewriting refuses to move a relocation inside a "
+                "window")
         schedule_detail = schedule_proof["windows"]
     relational_detail = []
     if spec.get("relational_sites"):
@@ -36652,15 +36948,57 @@ def compose_retail_exact_donor_rewriting(
             "declaration")
     window_bytes = {offset for window in windows
                     for offset in range(window["start"], window["end"])}
+    for item in spec.get("simulated_region_rewrites") or []:
+        window_bytes |= set(range(item["region_start"],
+                                  item["region_end"]))
     require(all(left["offset"] == right["offset"]
                 and left["length"] == right["length"]
                 for left, right in zip(donor_instructions,
                                        image_instructions)
                 if left["offset"] not in window_bytes),
             "donor-rewriting image does not preserve the donor's "
-            "instruction grid outside the declared windows")
+            "instruction grid outside the declared windows and rewrite "
+            "regions")
+    # Line rows ride their own instructions: a row naming an instruction a
+    # window or a rewrite region moved is reseated to the instruction's new
+    # offset, and fidelity is then measured against the reseated table --
+    # which is the table the same-slot resize installs.
+    line_moves = {}
+    for window in windows:
+        cursor = window["start"]
+        starts = []
+        for length in window["source_instruction_lengths"]:
+            starts.append(cursor)
+            cursor += length
+        cursor = window["start"]
+        for source_index in window["target_order"]:
+            if starts[source_index] != cursor:
+                line_moves[starts[source_index]] = cursor
+            cursor += window["source_instruction_lengths"][source_index]
+    for region in rewrite_detail:
+        for old, new in region["instruction_moves"]:
+            line_moves[old] = new
+    lined_donor = bytearray(donor_bytes)
+    if line_moves:
+        table_at = dp["line_offset"]
+        rows_lined = []
+        for position in range(1, dp["line_count"]):
+            entry_at = table_at + position * 6
+            old = int.from_bytes(lined_donor[entry_at:entry_at + 4],
+                                 "little")
+            line_no = int.from_bytes(
+                lined_donor[entry_at + 4:entry_at + 6], "little")
+            rows_lined.append((line_moves.get(old, old), line_no))
+        # A row rides its instruction; the table stays offset-sorted.
+        rows_lined.sort()
+        for position, (offset, line_no) in enumerate(rows_lined, start=1):
+            entry_at = table_at + position * 6
+            lined_donor[entry_at:entry_at + 4] = offset.to_bytes(4, "little")
+            lined_donor[entry_at + 4:entry_at + 6] =                 line_no.to_bytes(2, "little")
+    lined = CoffObject(bytes(lined_donor))
+    lp = lined.function_section(mangled)
     debug_detail = require_instruction_schedule_debug_fidelity(
-        donor, dp, image, windows, spec, mangled,
+        lined, lp, image, windows, spec, mangled,
         "donor-rewriting debug fidelity", relocation_symbols,
         code_length, internal_targets,
     )
@@ -36676,15 +37014,18 @@ def compose_retail_exact_donor_rewriting(
     require(len(retail_body) == pinned_length == len(image)
             == function["expected_donor_length"],
             "donor-rewriting retail length changed")
+    installed_rows = [{**row, "offset": relocation_moves.get(row["offset"],
+                                                             row["offset"])}
+                      for row in donor_rows]
     semantic_detail = require_retail_relocation_oracle(
-        donor_rows, bytes(retail_body),
+        installed_rows, bytes(retail_body),
         int(function["retail_oracle"]["address"], 16),
         function["retail_relocations"],
         "donor-rewriting retail relocation oracle",
     )
     masked_image = bytearray(image)
     masked_retail = bytearray(retail_body)
-    for row in donor_rows:
+    for row in installed_rows:
         start, width = row["offset"], row["width"]
         masked_image[start:start + width] = b"\0" * width
         masked_retail[start:start + width] = b"\0" * width
@@ -36694,18 +37035,25 @@ def compose_retail_exact_donor_rewriting(
             f"donor-rewriting output is not retail-exact: {differing} "
             "byte(s) differ under the relocation mask")
 
-    # --- D3: debug silence, on the stream the install carries -------------
-    mapped = frozenset(register
-                       for item in spec.get("register_bijections") or []
-                       for register in item["mapping"])
-    if mapped:
-        _require_no_mapped_debug_register(
-            coff_body(seed, _comdat_child(seed, sp, ".debug$S")),
-            mapped, "donor-rewriting seed debug$S")
+    # --- D3, resolved: the class rewrites the DONOR body and installs the
+    # SEED's CodeView stream untouched, exactly as every landed
+    # same_slot_resize row does.  The seed's S_REGISTER records describe the
+    # seed's own allocation -- they never described the donor body this
+    # entry installs -- so there is no record for this class to map, and
+    # none it may corrupt.
 
     # --- install: the donor with its body replaced in place ---------------
-    derived = bytearray(donor_bytes)
+    derived = bytearray(lined_donor)
     derived[dp["raw_offset"]:dp["raw_offset"] + dp["raw_size"]] = image
+    if relocation_moves:
+        # The record moves WITH its own instruction: rewrite the COFF
+        # relocation entries' VirtualAddress fields to the proved reseat.
+        table_at = dp["relocation_offset"]
+        for position in range(dp["relocation_count"]):
+            entry_at = table_at + position * 10
+            old = int.from_bytes(derived[entry_at:entry_at + 4], "little")
+            if old in relocation_moves:
+                derived[entry_at:entry_at + 4] =                     relocation_moves[old].to_bytes(4, "little")
     effective = {
         "mangled": mangled,
         "splice_class": "retail_exact_reloc_divergent",
@@ -36720,26 +37068,25 @@ def compose_retail_exact_donor_rewriting(
     }
     composed, detail = compose_same_slot_resize(
         seed_bytes, bytes(derived), effective,
-        retail_body=bytes(retail_body))
+        retail_body=bytes(retail_body),
+        declared_donor_extras=(
+            function.get("expected_donor_extra_functions") or None))
     checked = CoffObject(composed)
     cp = checked.function_section(mangled)
     require(coff_body(checked, cp) == image,
             "donor-rewriting composed body differs from the image")
     require([_relocation_identity(row)
              for row in detailed_relocations(checked, cp)]
-            == [_relocation_identity(row) for row in donor_rows],
-            "donor-rewriting composed relocation table differs from the "
-            "donor's")
-    if mapped:
-        _require_no_mapped_debug_register(
-            coff_body(checked, _comdat_child(checked, cp, ".debug$S")),
-            mapped, "donor-rewriting composed debug$S")
+            == [_relocation_identity(row) for row in installed_rows],
+            "donor-rewriting composed relocation table is not the proved "
+            "reseat")
     return composed, {
         **detail,
         "splice_class": DONOR_REWRITING_CLASS,
         "instruction_schedule": schedule_detail,
         "fp_sum_reassociation": fp_detail,
         "fp_pointer_exchanges": exchange_detail,
+        "simulated_region_rewrites": rewrite_detail,
         "register_bijections": bijection_detail,
         "relational_form": relational_detail,
         "instruction_count": len(image_instructions),
@@ -37017,4 +37364,453 @@ def apply_fp_pointer_exchange(
     return image, {
         "kind": FP_POINTER_EXCHANGE_KIND,
         "exchanges": proved,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Simulated region rewrite: a permutation plus register-field rewrites whose
+# soundness is SYMBOLIC EXECUTION, not pattern.
+# ---------------------------------------------------------------------------
+#
+# The remaining shape on real rows is a straight-line region where the
+# compiler chose a different TEMPORARY ASSIGNMENT: the same values flow to
+# the same places, but which register carries which value, which value is
+# parked in a scratch frame slot, and the interleaving order all differ.
+# No landed pattern class covers it -- a region bijection cannot rename one
+# LIVE RANGE of a register and not another, a window cannot rename at all,
+# and a web declaration cannot move instructions.  This primitive takes the
+# transformation as data -- a permutation of the region's instructions and a
+# list of register-FIELD rewrites -- and discharges soundness the only way
+# that composition can be sound: by executing both versions symbolically
+# from the same unknown start state and requiring the same end state.
+#
+# WHAT IT PROVES, per declared region:
+#  R1  The region is straight-line and closed: no control flow inside, no
+#      branch into the interior, no external entry, and every relocation-
+#      carrying instruction is a fixed point of the permutation, so no COFF
+#      relocation offset moves.
+#  R2  The image is EXACTLY the declared permutation of the seed's own
+#      instructions with the declared register fields rewritten -- every
+#      installed byte derives from a seed instruction.
+#  R3  Symbolic execution over the closed operation set (register moves,
+#      loads, stores, adds, leas, pushes, register tests, m32/m64 fld/fmul/
+#      faddp) yields, for seed and image: equal FP stacks (sums as flattened
+#      multisets -- the fp-sum reassociation licence), equal push sequences,
+#      equal final values for every written frame slot except the declared
+#      dead scratch slots, equal registers except the declared dead set, and
+#      an equal last flag writer or all integer flags dead at the exit.
+#  R4  Every declared dead register is dead on the exit edge (the bijection
+#      certificate's own backward atom liveness).
+#  R5  Every declared dead frame slot is a pure scratch: its address is
+#      never taken anywhere in the body (no lea names it), and on every path
+#      from the region exit it is written before it is read.
+
+
+SIMULATED_REGION_REWRITE_KIND = "simulated_region_rewrite_v1"
+
+
+def _srr_simulate(body: bytes, start: int, end: int, context: str):
+    """Symbolically execute [start, end); return the end state."""
+    regs = {name: ("reg0", name) for name in _SIMULATOR_REGS}
+    stack = []            # FP stack (unknown base below)
+    pushes = []           # integer push sequence, in order
+    slots = {}            # ebp-relative dword stores: disp -> value expr
+    last_flags = None
+    offset = start
+
+    def norm_sum(left, right):
+        parts = []
+        for item in (left, right):
+            if isinstance(item, tuple) and item[0] == "fsum":
+                parts.extend(item[1])
+            else:
+                parts.append(item)
+        return ("fsum", tuple(sorted(parts, key=repr)))
+
+    while offset < end:
+        length = supported_ia32_instruction_length(body[offset:], context)
+        require(offset + length <= end,
+                f"{context}: an instruction straddles the region boundary "
+                f"at {offset}")
+        encoded = body[offset:offset + length]
+        op = encoded[0]
+        modrm = encoded[1] if length >= 2 else None
+        mod = modrm >> 6 if modrm is not None else None
+        reg_field = (modrm >> 3) & 7 if modrm is not None else None
+        rm = modrm & 7 if modrm is not None else None
+
+        def mem_operand(cursor_base):
+            require(rm != 4, f"{context}: SIB addressing at {offset} is "
+                    "outside the simulator set")
+            require(not (mod == 0 and rm == 5),
+                    f"{context}: absolute address at {offset}")
+            base = regs[_SIMULATOR_REGS[rm]]
+            if mod == 1:
+                disp = int.from_bytes(encoded[cursor_base:cursor_base + 1],
+                                      "little", signed=True)
+            elif mod == 2:
+                disp = int.from_bytes(encoded[cursor_base:cursor_base + 4],
+                                      "little", signed=True)
+            else:
+                disp = 0
+            return ("addr", base, disp)
+
+        def frame_disp(addr):
+            return addr[2] if addr[1] == ("reg0", "ebp") else None
+
+        if op == 0x8B and mod != 3:            # mov r32, m32
+            addr = mem_operand(2)
+            if addr[1] == ("reg0", "ebp") and addr[2] in slots:
+                # Store-to-load forwarding: the frame is only ever written
+                # through EBP inside the closed set, so a tracked slot's
+                # last store IS the loaded value.
+                regs[_SIMULATOR_REGS[reg_field]] = slots[addr[2]]
+            else:
+                regs[_SIMULATOR_REGS[reg_field]] = ("load", addr)
+        elif op in (0x8B, 0x89) and mod == 3:  # mov r32, r32
+            if op == 0x8B:
+                regs[_SIMULATOR_REGS[reg_field]] = regs[_SIMULATOR_REGS[rm]]
+            else:
+                regs[_SIMULATOR_REGS[rm]] = regs[_SIMULATOR_REGS[reg_field]]
+        elif op == 0x89 and mod != 3:          # mov m32, r32
+            addr = mem_operand(2)
+            disp = frame_disp(addr)
+            require(disp is not None,
+                    f"{context}: a non-frame store at {offset} is outside "
+                    "the simulator set")
+            slots[disp] = regs[_SIMULATOR_REGS[reg_field]]
+        elif op == 0xC7 and mod != 3 and reg_field == 0:   # mov m32, imm32
+            addr = mem_operand(2)
+            disp = frame_disp(addr)
+            require(disp is not None,
+                    f"{context}: a non-frame store at {offset} is outside "
+                    "the simulator set")
+            imm_at = length - 4
+            slots[disp] = ("imm", bytes(encoded[imm_at:imm_at + 4]))
+        elif op == 0x8D and mod != 3:          # lea r32, m
+            regs[_SIMULATOR_REGS[reg_field]] = ("lea", mem_operand(2))
+        elif op == 0x83 and mod == 3 and reg_field == 0:   # add r32, imm8
+            value = int.from_bytes(encoded[2:3], "little", signed=True)
+            name = _SIMULATOR_REGS[rm]
+            regs[name] = ("add", regs[name], value)
+            last_flags = ("addflags", regs[name])
+        elif op == 0x81 and mod == 3 and reg_field == 0:   # add r32, imm32
+            value = int.from_bytes(encoded[2:6], "little", signed=True)
+            name = _SIMULATOR_REGS[rm]
+            regs[name] = ("add", regs[name], value)
+            last_flags = ("addflags", regs[name])
+        elif op == 0x85 and mod == 3:          # test r32, r32
+            last_flags = ("test", regs[_SIMULATOR_REGS[rm]],
+                          regs[_SIMULATOR_REGS[reg_field]])
+        elif op == 0x80 and mod != 3 and reg_field == 7:   # cmp r/m8, imm8
+            last_flags = ("cmp8", mem_operand(2), encoded[length - 1])
+        elif 0x50 <= op <= 0x57:               # push r32
+            pushes.append(regs[_SIMULATOR_REGS[op - 0x50]])
+        elif op == 0xD9 and mod != 3 and reg_field == 0:   # fld m32
+            stack.append(("load32", mem_operand(2)))
+        elif op == 0xD8 and mod != 3 and reg_field == 1:   # fmul m32
+            require(stack, f"{context}: fmul at {offset} multiplies the "
+                    "unknown stack base")
+            stack[-1] = ("fmul", stack[-1], ("load32", mem_operand(2)))
+        elif op == 0xDD and mod != 3 and reg_field == 0:   # fld m64
+            stack.append(("load64", mem_operand(2)))
+        elif op == 0xDC and mod != 3 and reg_field == 1:   # fmul m64
+            require(stack, f"{context}: fmul at {offset} multiplies the "
+                    "unknown stack base")
+            stack[-1] = ("fmul", stack[-1], ("load64", mem_operand(2)))
+        elif encoded == b"\xde\xc1":           # faddp st(1), st
+            require(len(stack) >= 2,
+                    f"{context}: faddp at {offset} reaches the unknown "
+                    "stack base")
+            right = stack.pop()
+            stack[-1] = norm_sum(stack[-1], right)
+        else:
+            require(False,
+                    f"{context}: the instruction at {offset} is outside "
+                    "the simulator's closed set")
+        offset += length
+    require(offset == end,
+            f"{context}: the region does not end on an instruction boundary")
+    return regs, stack, pushes, slots, last_flags
+
+
+def _srr_slot_scratch_proof(
+    decoded: list, items: list, successors: list, entries: list,
+    exit_offset: int, disp: int, context: str, body_bytes: bytes = b"",
+) -> None:
+    """R5: [ebp+disp] is written before read on every path from the exit,
+    and its address is never taken anywhere in the body."""
+    # Leas that take the slot's address.  One reached from the region exit
+    # BEFORE a killing write publishes the scratch's address and is refused
+    # as a read below; one dominated by a write observes only the new value.
+    lea_offsets = set()
+    for item in decoded:
+        if item["opcode"] != 0x8D:
+            continue
+        enc = item.get("encoding") or {}
+        if enc.get("mode") not in (1, 2) or enc.get("rm") != 5 \
+                or enc.get("sib_at") is not None or enc.get("absolute"):
+            continue
+        at, size = enc["displacement_at"], enc["displacement_size"]
+        lea_disp = int.from_bytes(body_bytes[at:at + size], "little",
+                                  signed=True)
+        if lea_disp == disp:
+            lea_offsets.add(item["offset"])
+    index_of = {item["offset"]: index for index, item in enumerate(items)}
+    require(exit_offset in index_of,
+            f"{context}: the region exit is not a flow boundary")
+    # Forward walk: from the exit, a READ of the slot before a WRITE refuses.
+    decoded_at = {item["offset"]: item for item in decoded}
+    seen = set()
+    frontier = [index_of[exit_offset]]
+    while frontier:
+        index = frontier.pop()
+        if index in seen:
+            continue
+        seen.add(index)
+        item = items[index]
+        require(item["offset"] not in lea_offsets,
+                f"{context}: the scratch slot's address is taken at "
+                f"{item['offset']} before any write")
+        info = decoded_at.get(item["offset"])
+        if info is not None:
+            mem = info.get("memory")
+            if mem and mem.get("base") == "ebp" \
+                    and mem.get("displacement") in (disp, disp - 4):
+                covers = (mem.get("displacement") == disp
+                          or mem.get("width", 0) >= 8)
+                if covers:
+                    opcode = info["opcode"]
+                    enc = info.get("encoding") or {}
+                    reg = enc.get("reg")
+                    # The closed decoder labels every x87 memory operand a
+                    # conservative READ; the store forms are classified here.
+                    if opcode == 0xD9 and reg in (2, 3):
+                        kills = mem.get("displacement") == disp
+                    elif opcode == 0xDD and reg in (2, 3):
+                        kills = True
+                    elif opcode in (0xD8, 0xDC, 0xD9, 0xDD, 0xDB, 0xDF,
+                                    0xDA, 0xDE):
+                        kills = False
+                    else:
+                        kills = (mem.get("write") and not mem.get("read")
+                                 and mem.get("width") == 4
+                                 and mem.get("displacement") == disp)
+                    if kills:
+                        continue    # written first on this path: safe
+                    require(False,
+                            f"{context}: the scratch slot is read at "
+                            f"{item['offset']} before any write")
+        for edge in successors[index]:
+            if edge not in seen:
+                frontier.append(edge)
+        if item["flow"] in ("ret", "exit"):
+            continue
+
+
+def apply_simulated_region_rewrite(
+    body: bytes, regions: list, relocation_offsets: frozenset,
+    context: str, relocations: dict | None = None,
+    code_length: int | None = None,
+    external_entries: frozenset | None = None,
+    internal_targets: frozenset | None = None,
+) -> tuple[bytes, dict]:
+    """Apply declared permutation+field rewrites, proved by simulation."""
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(regions, list) and regions,
+            f"{context}: no region is declared")
+    items, successors, entries = ia32_relational_flow_walk(
+        body, relocations, context, code_length, external_entries)
+    branch_targets = {item["target"] for item in items
+                      if item.get("target") is not None}
+    flag_live = ia32_relational_flag_liveness(items, successors, context)
+    walk_index = {item["offset"]: index for index, item in enumerate(items)}
+    decoded = decode_ia32_bijection_body(body, f"{context} liveness",
+                                         relocations, code_length)
+    # No calling convention on this toolchain passes an argument in EAX
+    # (cdecl/stdcall read none, thiscall reads ECX, fastcall ECX+EDX), so an
+    # INDIRECT call -- whose callee cannot be named -- still cannot read it.
+    # The dead-register proofs below use liveness with that one refinement;
+    # everything else stays the bijection certificate's model.
+    refined = []
+    for entry in decoded:
+        if entry["flow"] == "call" and entry["opcode"] == 0xFF:
+            entry = {**entry,
+                     "read_atoms": frozenset(entry["read_atoms"])
+                     - _IA32_ATOMS_OF["eax"]}
+        refined.append(entry)
+    live, _succ = _register_bijection_live_sets(refined,
+                                                f"{context} liveness")
+    exit_index = {item["offset"]: index for index, item in enumerate(decoded)}
+    image = bytearray(body)
+    proved = []
+    previous_end = 0
+    for ordinal, item in enumerate(regions):
+        item_context = f"{context} region {ordinal}"
+        start, end = item["region_start"], item["region_end"]
+        require(type(start) is int and type(end) is int
+                and 0 < start < end <= len(body),
+                f"{item_context}: bounds are out of range")
+        require(previous_end <= start,
+                f"{item_context}: regions are unsorted or overlapping")
+        previous_end = end
+        require(not any(start < target < end for target in branch_targets),
+                f"{item_context}: a branch targets the region interior")
+        require(not any(start < items[entry]["offset"] < end
+                        for entry in entries[1:]),
+                f"{item_context}: an external entry lies inside the region")
+        require(not any(start < target < end
+                        for target in (internal_targets or frozenset())),
+                f"{item_context}: a relocated target lies inside the region")
+        # Decode the region's instruction list.
+        pieces = []
+        offset = start
+        while offset < end:
+            length = supported_ia32_instruction_length(
+                body[offset:], item_context)
+            require(offset + length <= end,
+                    f"{item_context}: an instruction straddles the region")
+            pieces.append((offset, bytes(body[offset:offset + length])))
+            offset += length
+        order = item["target_order"]
+        require(isinstance(order, list)
+                and sorted(order) == list(range(len(pieces))),
+                f"{item_context}: the order is not a permutation of the "
+                f"{len(pieces)} instructions")
+        # R2: rebuild, applying field rewrites through the closed decoder.
+        rewrites = {}
+        for rewrite in item.get("field_rewrites") or []:
+            index, field_ordinal, register = rewrite
+            require(type(index) is int and 0 <= index < len(pieces)
+                    and type(field_ordinal) is int
+                    and register in _IA32_REGISTER_NUMBERS
+                    and register not in ("esp", "ebp"),
+                    f"{item_context}: field rewrite {rewrite} is invalid")
+            rewrites.setdefault(index, []).append(
+                (field_ordinal, register))
+        rebuilt = []
+        cursor = start
+        moved_offsets = {}
+        region_reseat = []
+        for position, source_index in enumerate(order):
+            source_offset, encoded = pieces[source_index]
+            carried = [offs for offs in range(
+                source_offset, source_offset + len(encoded))
+                if offs in relocation_offsets]
+            if carried and cursor != source_offset:
+                # The record moves WITH its own instruction and by nothing
+                # else -- the derived reseat is returned for the composer to
+                # apply to the COFF table it installs.
+                starts = sorted({offs - (offs - source_offset) % 1
+                                 for offs in carried})
+                heads = sorted({offs for offs in carried})
+                # group contiguous runs into whole records by their head
+                for offs in heads:
+                    if offs - 1 in carried:
+                        continue
+                    region_reseat.append(
+                        [offs, cursor + (offs - source_offset)])
+            if source_index in rewrites:
+                info = decode_ia32_bijection_instruction(
+                    body, source_offset, item_context, relocations)
+                fields = info["fields"]
+                mutable = bytearray(encoded)
+                for field_ordinal, register in rewrites[source_index]:
+                    require(0 <= field_ordinal < len(fields),
+                            f"{item_context}: instruction {source_index} "
+                            f"has no field {field_ordinal}")
+                    byte_at, shift = fields[field_ordinal]
+                    local = byte_at - source_offset
+                    mutable[local] = (mutable[local]
+                                      & ~(7 << shift)) \
+                        | (_IA32_REGISTER_NUMBERS[register] << shift)
+                encoded = bytes(mutable)
+            moved_offsets[pieces[source_index][0]] = cursor
+            rebuilt.append(encoded)
+            cursor += len(encoded)
+        rebuilt = b"".join(rebuilt)
+        require(len(rebuilt) == end - start,
+                f"{item_context}: the permuted region changed length")
+        image[start:end] = rebuilt
+        # R3: simulate both versions.
+        seed_state = _srr_simulate(body, start, end, f"{item_context} seed")
+        image_state = _srr_simulate(bytes(image), start, end,
+                                    f"{item_context} image")
+        for label, seed_part, image_part in (
+                ("FP stack", seed_state[1], image_state[1]),
+                ("push sequence", seed_state[2], image_state[2])):
+            require(seed_part == image_part,
+                    f"{item_context}: the two versions leave a different "
+                    f"{label}")
+        seed_slots, image_slots = seed_state[3], image_state[3]
+        dead_slots = item.get("dead_slots") or []
+        require(isinstance(dead_slots, list)
+                and all(type(d) is int for d in dead_slots),
+                f"{item_context}.dead_slots is invalid")
+        require(set(seed_slots) == set(image_slots),
+                f"{item_context}: the two versions write different frame "
+                "slots")
+        differing_slots = sorted(d for d in seed_slots
+                                 if seed_slots[d] != image_slots[d])
+        require(differing_slots == sorted(dead_slots),
+                f"{item_context}: the slots left differing "
+                f"{differing_slots} are not the declared dead set "
+                f"{sorted(dead_slots)}")
+        seed_flags, image_flags = seed_state[4], image_state[4]
+        if seed_flags != image_flags:
+            require(end in walk_index and not flag_live[walk_index[end]],
+                    f"{item_context}: the two versions leave different "
+                    "flag state and a flag is live at the exit")
+        differing = sorted(name for name in _SIMULATOR_REGS
+                           if seed_state[0][name] != image_state[0][name])
+        declared_dead = item.get("dead_registers") or []
+        require(differing == sorted(declared_dead),
+                f"{item_context}: the registers left differing {differing} "
+                f"are not the declared dead set {sorted(declared_dead)}")
+        # R4 / R5: liveness proofs at the exit.
+        require(end in exit_index,
+                f"{item_context}: the region end is not an instruction "
+                "boundary of the body")
+        live_in = live[exit_index[end]]
+        for name in declared_dead:
+            overlap = _IA32_ATOMS_OF[name] & live_in
+            require(not overlap,
+                    f"{item_context}: {name} is live on the region's exit "
+                    f"edge ({sorted(overlap)})")
+        for disp in dead_slots:
+            _srr_slot_scratch_proof(decoded, items, successors, entries,
+                                    end, disp,
+                                    f"{item_context} slot {disp:#x}", body)
+        proved.append({
+            "region_start": start, "region_end": end,
+            "target_order": list(order),
+            "field_rewrites": [[index, ordinal, register]
+                               for index, pairs in sorted(rewrites.items())
+                               for ordinal, register in pairs],
+            "dead_registers": sorted(declared_dead),
+            "dead_slots": sorted(dead_slots),
+            "relocation_reseat": sorted(region_reseat),
+            "instruction_moves": sorted(
+                [old, new] for old, new in moved_offsets.items()
+                if old != new),
+            "rewritten_offsets": sorted(
+                offs for offs in range(start, end)
+                if body[offs] != image[offs]),
+        })
+    image = bytes(image)
+    require(image != body, f"{context}: the image does not move the body")
+    changed = {offs for offs in range(len(body)) if body[offs] != image[offs]}
+    declared = {offs for region in proved
+                for offs in region["rewritten_offsets"]}
+    require(changed <= declared,
+            f"{context}: the image changed a byte outside the declared "
+            "regions")
+    return image, {
+        "kind": SIMULATED_REGION_REWRITE_KIND,
+        "regions": proved,
+        "relocation_reseat": sorted(
+            pair for region in proved
+            for pair in region["relocation_reseat"]),
     }

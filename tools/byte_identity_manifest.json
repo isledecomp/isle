@@ -2059,6 +2059,85 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated forward-declaration run appended after the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_d744a807f4a7",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "canonical_overlay_replay": "owning_translation_unit_v1",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK",
+       "include_projection": "source_root_mirror_v1"
+      },
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "A declaration-only compiler-state carrier (forward run MxUnkRecVC 29 at EOF) over the shipped overlay replay, plus the vector.h dead-update at repeat 0 paying the Vector3(float*) inline budget in the donor's private rendering only; nothing emits code, data, strings, vtables, or linker payload.",
+      "renderings": [
+       {
+        "path": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
+        "clean_sha256": "2ee3e3de86026a41e5b793fb04f7fe510dbe71aef52ad45a46ec9a83f5f2676e",
+        "rendered_sha256": "4fe9dd861096f4c36f3636570a739909611d3b00e5c2dcaff2d2f9a9d5f51cb9",
+        "operations": [
+         {
+          "op": "insert",
+          "id": "op_state_run_vc29",
+          "anchor": {
+           "ctx": "0e1dde072e7c71f689363538230491fd05197c79b4f9c3261974c44479095f13",
+           "a": 0,
+           "at": "end"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 29,
+           "items": [
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecVC",
+             "first": 0,
+             "count": 29,
+             "line": 1,
+             "width": 3
+            }
+           ]
+          }
+         }
+        ]
+       },
+       {
+        "path": "LEGO1/realtime/vector.h",
+        "clean_sha256": "8dd2e497e8327d7486d3f3f3755aea67374c11fc64e2ad5cfef9945e21d9565b",
+        "rendered_sha256": "3ce523c09acd59d1686b0e8587e465d1b6aca7af1ba2b5d05d25042e9c78c1ea",
+        "operations": [
+         {
+          "op": "replace",
+          "id": "op_vector3_dead_updates",
+          "from": {
+           "ctx": "717d3890fd4ce90df9f8dd094fae8d176d349698a8484acc91e65e39a65a4cb5",
+           "at": "before_token"
+          },
+          "to": {
+           "ctx": "e22e7b7660dbf27e80c82bc582ffe6d5c56638dedcc55a66b49a08d593266675",
+           "at": "after_token"
+          },
+          "removed": {
+           "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+           "size": 2
+          },
+          "gen": {
+           "k": "dead_updates",
+           "id": "_n",
+           "initial": 0,
+           "increment": 1,
+           "repeat": 0,
+           "nl": false
+          }
+         }
+        ]
+       }
+      ],
+      "rendering_identity_sha256": "d744a807f4a7bd0407f7d3893861307830741faa50a8af8d9df5a78d32157c0e"
+     }
     }
    ],
    "functions": [
@@ -2246,6 +2325,1299 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_2b406d5b3fc1"
+    },
+    {
+     "mangled": "?FUN_100417c0@Act3Brickster@@QAEJXZ",
+     "donor": "d_d744a807f4a7",
+     "splice_class": "retail_exact_donor_rewriting",
+     "expected_section_number": 371,
+     "expected_section_count": 584,
+     "expected_donor_section_count": 587,
+     "expected_donor_extra_functions": [
+      "?FUN_10048c40@LegoOrientedEdge@@QAEKABVVector3@@@Z"
+     ],
+     "expected_relocation_divergences": [
+      [
+       13,
+       "??0Vector2@@QAE@PAM@Z",
+       "??0Vector3@@QAE@PAM@Z"
+      ]
+     ],
+     "expected_seed_length": 2875,
+     "expected_donor_length": 2875,
+     "expected_linked_span": 2880,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 70,
+     "expected_seed_line_count": 116,
+     "expected_donor_line_count": 116,
+     "expected_function_count": 179,
+     "expected_comdat_count": 219,
+     "expected_seed_body_sha256": "d8e08bd851f380617e617e1eb579a10c402764643c3b2705f466a1fbb82361cd",
+     "expected_donor_body_sha256": "a54def1d59934c462acec08da02b0df1e88b69d95723d36e4879790e74a6a10a",
+     "expected_body_sha256": "64caeebc92a1eebd2da9826fa14e3209338f1f211c05dd670c2c58ba24da89c1",
+     "expected_seed_metadata_sha256": "a0cec96e2424af3a0fe4eaadabe26a03e1dfd2ce119a824793db4869e8263b4d",
+     "expected_donor_metadata_sha256": "9191a8a1aaff46b23e16514de408e22a7c9a41baa62b1533bdbbe609c689b077",
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100417c0",
+      "verdict": "MATCH",
+      "length": 2875
+     },
+     "retail_relocations": [
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$L74620",
+       "target_section": 371,
+       "target_value": 2157,
+       "target_type": 0,
+       "target_storage": 6,
+       "offset": 12,
+       "retail_target": "0x1004202d"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 41,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 209,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 90,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 205,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 120,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 205,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 164,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T75098",
+       "target_section": 8,
+       "target_value": 132,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 179,
+       "retail_target": "0x100d7654"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 209,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 288,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 205,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 341,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 357,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T75099",
+       "target_section": 8,
+       "target_value": 136,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 441,
+       "retail_target": "0x100d7658"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 481,
+       "retail_target": "0x10086240"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE@ABV?$allocator@ULegoBoundaryEdge@@@@@Z",
+       "target_section": 330,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 517,
+       "retail_target": "0x100194f0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 374,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 532,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 541,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 374,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 552,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 562,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FindPath@LegoPathController@@QAEJPAULegoPathEdgeContainer@@ABVVector3@@1PAVLegoPathBoundary@@112EPAM@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 667,
+       "retail_target": "0x10048310"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 726,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 785,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?PlantManager@@YAPAVLegoPlantManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 834,
+       "retail_target": "0x100157e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?GetInfoArray@LegoPlantManager@@QAEPAULegoPlantInfo@@AAH@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 841,
+       "retail_target": "0x10026570"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 877,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 888,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?BuildingManager@@YAPAVLegoBuildingManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 909,
+       "retail_target": "0x100157f0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?GetInfoArray@LegoBuildingManager@@QAEPAULegoBuildingInfo@@AAH@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 916,
+       "retail_target": "0x10030790"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1017,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1228,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE@XZ",
+       "target_section": 333,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1265,
+       "retail_target": "0x10018bc0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$List@ULegoBoundaryEdge@@@@QAE@XZ",
+       "target_section": 336,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1273,
+       "retail_target": "0x10018b70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$List@ULegoBoundaryEdge@@@@QAE@XZ",
+       "target_section": 336,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1281,
+       "retail_target": "0x10018b70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$List@ULegoBoundaryEdge@@@@QAE@XZ",
+       "target_section": 336,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1289,
+       "retail_target": "0x10018b70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1298,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1355,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1420,
+       "retail_target": "0x10086240"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE@ABV?$allocator@ULegoBoundaryEdge@@@@@Z",
+       "target_section": 330,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1449,
+       "retail_target": "0x100194f0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector2@@QAE@PAM@Z",
+       "target_section": 296,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1464,
+       "retail_target": "0x1000c0f0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1473,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 374,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1484,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1490,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE@XZ",
+       "target_section": 333,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1517,
+       "retail_target": "0x10018bc0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$List@ULegoBoundaryEdge@@@@QAE@XZ",
+       "target_section": 336,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1525,
+       "retail_target": "0x10018b70"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 1617,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 1638,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FindPath@LegoPathController@@QAEJPAULegoPathEdgeContainer@@ABVVector3@@1PAVLegoPathBoundary@@112EPAM@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1727,
+       "retail_target": "0x10048310"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1758,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1797,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1835,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1873,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 6,
+       "addend": 32,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 16,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1912,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 205,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1991,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$List@ULegoBoundaryEdge@@@@QAE@XZ",
+       "target_section": 336,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2110,
+       "retail_target": "0x10018b70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2119,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?BadEnding@Act3@@QAEXABVMatrix4@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2148,
+       "retail_target": "0x100739c0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T75097",
+       "target_section": 372,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2158,
+       "retail_target": "0x100e2b90"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2163,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$List@ULegoBoundaryEdge@@@@QAE@XZ",
+       "target_section": 336,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2171,
+       "retail_target": "0x10018b70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?CWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2191,
+       "retail_target": "0x1009a510"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?CCWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2220,
+       "retail_target": "0x1009a530"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2343,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2364,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?CWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2475,
+       "retail_target": "0x1009a510"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?CCWVertex@LegoEdge@@QAEPAVVector3@@AAVLegoWEEdge@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2485,
+       "retail_target": "0x1009a530"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 205,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2552,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "type": 6,
+       "addend": 32,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 205,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2632,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2660,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2681,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2736,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T73248",
+       "target_section": 8,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2757,
+       "retail_target": "0x100d75e8"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2864,
+       "retail_target": "0x00000000"
+      }
+     ],
+     "donor_rewriting": {
+      "kind": "donor_fp_bijection_rewriting_v1",
+      "register_bijections": [
+       {
+        "mapping": {
+         "ebx": "edi",
+         "edi": "ebx"
+        },
+        "region_start": 906,
+        "region_end": 1171,
+        "expected_region_instruction_count": 77,
+        "expected_rewritten_offsets": [
+         907,
+         924,
+         933,
+         936,
+         945,
+         955,
+         965,
+         978,
+         987,
+         990,
+         1002,
+         1151,
+         1159,
+         1161,
+         1163
+        ]
+       },
+       {
+        "mapping": {
+         "ecx": "edx",
+         "edx": "ecx"
+        },
+        "region_start": 399,
+        "region_end": 437,
+        "expected_region_instruction_count": 12,
+        "expected_rewritten_offsets": [
+         400,
+         406,
+         412,
+         415,
+         428,
+         430,
+         434,
+         436
+        ]
+       }
+      ],
+      "fp_pointer_exchanges": [
+       {
+        "region_start": 399,
+        "region_end": 439,
+        "swap_offsets": [
+         411,
+         414
+        ],
+        "dead_registers": [
+         "ecx",
+         "edx"
+        ],
+        "expected_rewritten_offsets": [
+         413,
+         416
+        ]
+       }
+      ],
+      "simulated_region_rewrites": [
+       {
+        "region_start": 114,
+        "region_end": 168,
+        "target_order": [
+         0,
+         2,
+         3,
+         4,
+         5,
+         6,
+         7,
+         8,
+         9,
+         1
+        ],
+        "field_rewrites": [],
+        "dead_registers": [],
+        "dead_slots": [],
+        "relocation_reseat": [
+         [
+          130,
+          164
+         ]
+        ],
+        "expected_rewritten_offsets": [
+         124,
+         126,
+         127,
+         130,
+         131,
+         132,
+         133,
+         134,
+         135,
+         136,
+         137,
+         138,
+         139,
+         140,
+         141,
+         142,
+         143,
+         144,
+         145,
+         146,
+         147,
+         149,
+         150,
+         151,
+         152,
+         153,
+         154,
+         155,
+         156,
+         157,
+         158,
+         159,
+         160,
+         161,
+         162,
+         163,
+         164,
+         165,
+         166,
+         167
+        ]
+       }
+      ],
+      "windows": [
+       {
+        "start": 1143,
+        "end": 1158,
+        "source_instruction_lengths": [
+         7,
+         2,
+         3,
+         3
+        ],
+        "target_order": [
+         2,
+         1,
+         3,
+         0
+        ],
+        "expected_dependence_edges": [
+         [
+          2,
+          3,
+          [
+           "register_raw"
+          ]
+         ]
+        ],
+        "expected_line_rows": [
+         [
+          1146,
+          90,
+          1
+         ],
+         [
+          1148,
+          91,
+          3
+         ],
+         [
+          1151,
+          89,
+          0
+         ]
+        ]
+       }
+      ],
+      "relational_sites": [
+       {
+        "compare_offset": 751,
+        "branch_offset": 754,
+        "seed_condition": "e",
+        "image_condition": "e",
+        "expected_rewritten_offsets": [
+         751,
+         754
+        ]
+       },
+       {
+        "compare_offset": 1162,
+        "branch_offset": 1165,
+        "seed_condition": "l",
+        "image_condition": "g",
+        "expected_rewritten_offsets": [
+         1162,
+         1166
+        ]
+       }
+      ],
+      "expected_procedure_range": [
+       2875,
+       70,
+       2861
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$S",
+        "?FUN_100417c0@Act3Brickster@@QAEJXZ",
+        0
+       ],
+       [
+        ".debug$S",
+        "?FUN_100417c0@Act3Brickster@@QAEJXZ",
+        0
+       ],
+       [
+        ".debug$S",
+        "$L74846",
+        2167
+       ],
+       [
+        ".debug$S",
+        "$L74846",
+        2167
+       ],
+       [
+        ".debug$S",
+        "$L74620",
+        2157
+       ],
+       [
+        ".debug$S",
+        "$L74620",
+        2157
+       ],
+       [
+        ".debug$S",
+        "$L74628",
+        2114
+       ],
+       [
+        ".debug$S",
+        "$L74628",
+        2114
+       ],
+       [
+        ".debug$S",
+        "$L74839",
+        2106
+       ],
+       [
+        ".debug$S",
+        "$L74839",
+        2106
+       ],
+       [
+        ".debug$S",
+        "$L75014",
+        1521
+       ],
+       [
+        ".debug$S",
+        "$L75014",
+        1521
+       ],
+       [
+        ".debug$S",
+        "$L75023",
+        1513
+       ],
+       [
+        ".debug$S",
+        "$L75023",
+        1513
+       ],
+       [
+        ".debug$S",
+        "$L74621",
+        1293
+       ],
+       [
+        ".debug$S",
+        "$L74621",
+        1293
+       ],
+       [
+        ".debug$S",
+        "$L74832",
+        1285
+       ],
+       [
+        ".debug$S",
+        "$L74832",
+        1285
+       ],
+       [
+        ".debug$S",
+        "$L74825",
+        1277
+       ],
+       [
+        ".debug$S",
+        "$L74825",
+        1277
+       ],
+       [
+        ".debug$S",
+        "$L74968",
+        1269
+       ],
+       [
+        ".debug$S",
+        "$L74968",
+        1269
+       ],
+       [
+        ".debug$S",
+        "$L74973",
+        1261
+       ],
+       [
+        ".debug$S",
+        "$L74973",
+        1261
+       ],
+       [
+        ".xdata$x",
+        "$L74621",
+        1293
+       ],
+       [
+        ".xdata$x",
+        "$L74973",
+        1261
+       ],
+       [
+        ".xdata$x",
+        "$L74968",
+        1269
+       ],
+       [
+        ".xdata$x",
+        "$L74825",
+        1277
+       ],
+       [
+        ".xdata$x",
+        "$L74832",
+        1285
+       ],
+       [
+        ".xdata$x",
+        "$L74628",
+        2114
+       ],
+       [
+        ".xdata$x",
+        "$L75023",
+        1513
+       ],
+       [
+        ".xdata$x",
+        "$L75014",
+        1521
+       ],
+       [
+        ".xdata$x",
+        "$L74839",
+        2106
+       ],
+       [
+        ".xdata$x",
+        "$L74846",
+        2167
+       ]
+      ],
+      "expected_instruction_count": 834,
+      "expected_changed_offsets": [
+       124,
+       126,
+       127,
+       130,
+       131,
+       132,
+       133,
+       134,
+       135,
+       136,
+       137,
+       138,
+       139,
+       140,
+       141,
+       142,
+       143,
+       144,
+       145,
+       146,
+       147,
+       149,
+       150,
+       151,
+       152,
+       153,
+       154,
+       155,
+       156,
+       157,
+       158,
+       159,
+       160,
+       161,
+       162,
+       163,
+       164,
+       165,
+       166,
+       167,
+       400,
+       406,
+       412,
+       413,
+       415,
+       416,
+       428,
+       430,
+       434,
+       436,
+       751,
+       907,
+       924,
+       933,
+       936,
+       945,
+       955,
+       965,
+       978,
+       987,
+       990,
+       1002,
+       1143,
+       1145,
+       1146,
+       1147,
+       1148,
+       1149,
+       1150,
+       1151,
+       1152,
+       1153,
+       1154,
+       1155,
+       1156,
+       1157,
+       1159,
+       1161,
+       1162,
+       1163,
+       1166
+      ],
+      "expected_external_entries": [
+       1261,
+       1269,
+       1277,
+       1285,
+       1293,
+       1513,
+       1521,
+       2106,
+       2114,
+       2157,
+       2167
+      ],
+      "authenticity_rationale": "The pre-image is a donor_source_overlay state: the shipped overlay replayed, a declaration-only forward run (MxUnkRecVC 29) at EOF, and the vector.h dead-local at repeat 0 paying the Vector3(float*) inline budget donor-privately. Two regional bijections recolour counters and temporaries; one pointer-addend exchange and one simulated region rewrite are proved by symbolic execution with dead registers and a moved store's relocation reseated with its instruction; one window and two mirrored compares (one an equality whose operands simply exchange) finish."
+     }
     }
    ],
    "completion": {
@@ -35587,8 +36959,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4929,
-    "accepted_row_identity_sha256": "734fdadf230bda21348d4cfdf2be6c0faf2a7d7f0afa4ca02277e1272428f752",
+    "exact_raw_1_0_count": 4930,
+    "accepted_row_identity_sha256": "8d7d243c445ebc9f1a33df1ce6563e2037b0b76e088ab52ec5b5e71d934b8a22",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -36540,6 +37912,7 @@
     "ops": [
      {
       "op": "insert",
+      "id": "op_act3actors_00",
       "anchor": {
        "ctx": "a1b7d281c65414f3224e28233592ae04e166ec4eef7bf401496396678d005c31",
        "b": 0,
@@ -36679,6 +38052,7 @@
      },
      {
       "op": "insert",
+      "id": "op_act3actors_01",
       "anchor": {
        "ctx": "8450966597687d02ce787017f3da4ba3a8dc5f51e702c24f2906c1159835d5c6",
        "at": "before_token"
@@ -36728,6 +38102,7 @@
      },
      {
       "op": "insert",
+      "id": "op_act3actors_02",
       "anchor": {
        "ctx": "4317ec56f88d990b453cb9077eac92925f674c5c4b6180e63894c83d278aacf7",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -36752,6 +38127,7 @@
      },
      {
       "op": "insert",
+      "id": "op_act3actors_03",
       "anchor": {
        "ctx": "7b52092b1d065e31b8c9d98dc378a6919063eb95fbd9eacd9b02d75a8fab9d4f",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -36786,6 +38162,7 @@
      },
      {
       "op": "insert",
+      "id": "op_act3actors_04",
       "anchor": {
        "ctx": "7630ed8d1fe242abf56e8af846a52444d0c8198609aebf0e6c52c008a5df4e6f",
        "line_before": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
@@ -36843,6 +38220,7 @@
      },
      {
       "op": "insert",
+      "id": "op_act3actors_05",
       "anchor": {
        "ctx": "10536ab2a98065fe89fb9b6fe3ae4b3c8201e8d8816ac21046d440e3d65d9a45",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -36868,6 +38246,7 @@
      },
      {
       "op": "insert",
+      "id": "op_act3actors_06",
       "anchor": {
        "ctx": "0a9c20538e0f0ef184798c16efccd2eec35381b24b6e5689c6534a6f9e3ed241",
        "line_before": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
@@ -36901,6 +38280,7 @@
      },
      {
       "op": "insert",
+      "id": "op_act3actors_07",
       "anchor": {
        "ctx": "f7edf64c4c5fcd1ff35864b33e7c3c56f2fb678da2bfb70b1d12e2b7d052e005",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -36928,6 +38308,7 @@
      },
      {
       "op": "delete",
+      "id": "op_act3actors_08",
       "from": {
        "ctx": "fbf3ef133d14f675128fa9b616a58a0fa6535a80a68488fc0b15785e6bbaf4df",
        "line_before": "cc5984c5c744a145057a95d2da6a4a7b5568fd869ac924ab241f2d2cc4abccfa",
@@ -36954,6 +38335,7 @@
      },
      {
       "op": "delete",
+      "id": "op_act3actors_09",
       "from": {
        "ctx": "64cce3a5caf9174953c75f4b0851558de02d9d0bc5327402d5f2554588c791c8",
        "line_before": "3eb89bcabf30c2f05bb20b393cb293eadbf3d380111292b2ffd6283612a53066",
@@ -36980,6 +38362,7 @@
      },
      {
       "op": "delete",
+      "id": "op_act3actors_10",
       "from": {
        "ctx": "8a305563122b6584e95dc8cadeb4cee855df75801d2afef751ba0f2d8a578344",
        "line_before": "8364bcb24586069ffbef8898bf55bfc1eb2a0d71906a9992ff99da4d05ebd761",
@@ -37006,6 +38389,7 @@
      },
      {
       "op": "delete",
+      "id": "op_act3actors_11",
       "from": {
        "ctx": "d96e3b66e13361d38d04f2c9315cd8a0a7d472b8bc4be242ff0c1bea1ebec65c",
        "line_before": "10063fe2e71965e0629c5c962196f1bb9c0f5e0e347199437fac1cee43db1b7c",
@@ -37032,6 +38416,7 @@
      },
      {
       "op": "delete",
+      "id": "op_act3actors_12",
       "from": {
        "ctx": "533d7adac5ae9903e42432c84b42ac038c3e184ddeb8890cfbf1ba336d8632f0",
        "line_before": "2c3769535838ef447b1bcf956d7a6d98ae8d109e9163b8c1af4678bbc1e0e4a2",
