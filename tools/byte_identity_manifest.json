@@ -31479,6 +31479,24 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_683ad730a993",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVC",
+      "count": 32,
+      "width": 3,
+      "placement": "suffix",
+      "generated_header_sha256": "683ad730a993f3041ebe69c07c450069c3e21e0cf3bcf13d815316c57c462698",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -31980,6 +31998,261 @@
       "expected_seed_debug_s_sha256": "f8d1c535ca81adebd95d52978707181dbe6c7985a657f7825d1fe7488623802e",
       "expected_image_debug_s_sha256": "f8d1c535ca81adebd95d52978707181dbe6c7985a657f7825d1fe7488623802e",
       "authenticity_rationale": "One simulated region rewrite over the seed's own body: the same values reach the same stack arguments and the same virtual call, differing only in which caller-saved register carries the width/height temporary, where the returned this is copied into ecx, and which register holds the vtable -- proved by symbolic execution through the terminal call with the push sequence and call target required identical."
+     },
+     "retail_image_target": "lego1"
+    },
+    {
+     "mangled": "?PutFrame@MxVideoPresenter@@UAEXXZ",
+     "donor": "d_683ad730a993",
+     "splice_class": "retail_exact_simulated_elision",
+     "expected_section_number": 31,
+     "expected_donor_section_number": 31,
+     "expected_section_count": 61,
+     "expected_donor_section_count": 61,
+     "expected_seed_length": 1254,
+     "expected_donor_length": 1260,
+     "expected_linked_span": 1264,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 11,
+     "expected_seed_line_count": 48,
+     "expected_donor_line_count": 48,
+     "expected_function_count": 19,
+     "expected_comdat_count": 20,
+     "expected_seed_body_sha256": "3ed013243b64e67dc41a08a9e197d63f34077b37111fa36373cd5364ed693343",
+     "expected_donor_body_sha256": "3ed013243b64e67dc41a08a9e197d63f34077b37111fa36373cd5364ed693343",
+     "expected_body_sha256": "97b2f2c596760613e8092db7a64ed269d586c296b32ac0e4d72d76dc0c0ead8f",
+     "expected_seed_metadata_sha256": "c0b69caa8c81799c57780c48a60b850c0e1154ab3335c02b2969059a4a6ff0a3",
+     "expected_donor_metadata_sha256": "0c51bd1cf35ae5a2b5c63f0ae601f270068f34cba4a078adf2e11de5bfbdd4b2",
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100b2a70",
+      "length": 1260,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$L51762",
+       "target_section": 31,
+       "target_value": 1242,
+       "target_type": 0,
+       "target_storage": 6,
+       "offset": 12,
+       "retail_target": "0x100b2f4a"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 20,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?MVideoManager@@YAPAVMxVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 33,
+       "retail_target": "0x100acf10"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?MVideoManager@@YAPAVMxVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 44,
+       "retail_target": "0x100acf10"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 387,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxRegionCursor@@QAE@PAVMxRegion@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 494,
+       "retail_target": "0x100c3f70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?Next@MxRegionCursor@@UAEPAVMxRect32@@AAV2@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 513,
+       "retail_target": "0x100c44a0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T51909",
+       "target_section": 32,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 1243,
+       "retail_target": "0x100ea010"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1248,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxRegionCursor@@UAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1256,
+       "retail_target": "0x100c40b0"
+      }
+     ],
+     "simulated_elision": {
+      "kind": "simulated_elision_v1",
+      "regions": [
+       {
+        "region_start": 308,
+        "region_end": 316,
+        "image_start": 312,
+        "image_length": 8
+       },
+       {
+        "region_start": 321,
+        "region_end": 329,
+        "image_start": 325,
+        "image_length": 8
+       },
+       {
+        "region_start": 341,
+        "region_end": 357,
+        "image_start": 345,
+        "image_length": 20,
+        "dead_registers": [
+         "ecx",
+         "edx"
+        ]
+       },
+       {
+        "region_start": 1082,
+        "region_end": 1087,
+        "image_start": 1090,
+        "image_length": 5
+       },
+       {
+        "region_start": 1095,
+        "region_end": 1100,
+        "image_start": 1103,
+        "image_length": 5
+       },
+       {
+        "region_start": 1171,
+        "region_end": 1214,
+        "image_start": 1179,
+        "image_length": 41
+       }
+      ],
+      "branch_widenings": [
+       230
+      ],
+      "expected_branch_repairs": [
+       122,
+       133,
+       207,
+       221,
+       230,
+       239,
+       298,
+       310,
+       343,
+       519,
+       1220,
+       1237
+      ],
+      "expected_branch_widenings": [
+       230
+      ],
+      "expected_relocation_reseat": [
+       [
+        379,
+        387
+       ],
+       [
+        486,
+        494
+       ],
+       [
+        505,
+        513
+       ],
+       [
+        1237,
+        1243
+       ],
+       [
+        1242,
+        1248
+       ],
+       [
+        1250,
+        1256
+       ]
+      ],
+      "expected_instruction_count": 426,
+      "expected_image_code_length": 1260,
+      "expected_external_entries": [
+       1236,
+       1246
+      ]
      },
      "retail_image_target": "lego1"
     }
@@ -43246,8 +43519,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4931,
-    "accepted_row_identity_sha256": "e2cba793dd8ac8231306ec3ce739182873ea32eb3f1c6228592008fa218edab7",
+    "exact_raw_1_0_count": 4932,
+    "accepted_row_identity_sha256": "ebcf8d2923f01d7bf941b90322d93fc6abdf6a1c6ae4248102a79b3523b1b015",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

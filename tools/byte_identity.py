@@ -14167,6 +14167,7 @@ def validate_manifest(
                                          RELATIONAL_FORM_CLASS,
                                          COMPOSED_REWRITING_CLASS,
                                          DONOR_REWRITING_CLASS,
+                                         SIMULATED_ELISION_CLASS,
                                          INSTRUCTION_SCHEDULE_CLASS),
                         f"{function_context}: unsupported splice class")
                 if splice_class == RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS:
@@ -14975,6 +14976,199 @@ def validate_manifest(
                     normalized_functions.append({
                         **function, "composed_rewriting": composed_spec,
                     })
+                    continue
+                if splice_class == SIMULATED_ELISION_CLASS:
+                    # The copy-elision-with-resize certificate: the pre-image
+                    # is the seed's own body (the witness reproduces it), the
+                    # image is the retail oracle's bytes region by region,
+                    # each region proved equivalent by symbolic execution,
+                    # and installation is the same-slot resize.
+                    elision_keys = {
+                        "mangled", "donor", "splice_class",
+                        "expected_section_number",
+                        "expected_donor_section_number",
+                        "expected_section_count",
+                        "expected_donor_section_count",
+                        "expected_seed_length", "expected_donor_length",
+                        "expected_linked_span",
+                        "expected_characteristics",
+                        "expected_selection", "expected_relocation_count",
+                        "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_seed_body_sha256",
+                        "expected_donor_body_sha256",
+                        "expected_body_sha256",
+                        "expected_seed_metadata_sha256",
+                        "expected_donor_metadata_sha256",
+                        "expected_closure",
+                        "retail_oracle", "retail_relocations",
+                        "simulated_elision",
+                    }
+                    if "retail_image_target" in function:
+                        elision_keys.add("retail_image_target")
+                    exact_keys(function, elision_keys, function_context)
+                    for name in (
+                        "expected_section_number",
+                        "expected_donor_section_number",
+                        "expected_section_count",
+                        "expected_donor_section_count",
+                        "expected_seed_length", "expected_donor_length",
+                        "expected_linked_span", "expected_characteristics",
+                        "expected_selection", "expected_seed_line_count",
+                        "expected_donor_line_count",
+                        "expected_function_count", "expected_comdat_count",
+                        "expected_relocation_count",
+                    ):
+                        require_exact_int(function.get(name),
+                                          f"{function_context}.{name}",
+                                          minimum=0)
+                    for name in ("expected_seed_body_sha256",
+                                 "expected_donor_body_sha256",
+                                 "expected_body_sha256",
+                                 "expected_seed_metadata_sha256",
+                                 "expected_donor_metadata_sha256"):
+                        require_sha(function.get(name),
+                                    f"{function_context}.{name}")
+                    require(function["expected_seed_body_sha256"]
+                            == function["expected_donor_body_sha256"],
+                            f"{function_context}: the simulated-elision "
+                            "witness must reproduce the seed's body")
+                    require(function["expected_body_sha256"]
+                            != function["expected_seed_body_sha256"],
+                            f"{function_context}: the image pin does not "
+                            "move the seed body")
+                    require(function["expected_seed_length"]
+                            != function["expected_donor_length"],
+                            f"{function_context}: an elision whose image "
+                            "keeps the seed's length is a region rewrite, "
+                            "not a resize")
+                    require(
+                        function.get("expected_closure")
+                        in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                            INSTRUCTION_SCHEDULE_EH_CLOSURE),
+                        f"{function_context}.expected_closure differs",
+                    )
+                    retail = function.get("retail_oracle")
+                    exact_keys(retail, {
+                        "image", "address", "length", "verdict",
+                    }, f"{function_context}.retail_oracle")
+                    elision_image_target = function.get(
+                        "retail_image_target", target)
+                    if "retail_image_target" in function:
+                        require(
+                            (target, elision_image_target)
+                            in INSTRUCTION_SCHEDULE_IMAGE_TARGETS,
+                            f"{function_context}.retail_image_target "
+                            "differs",
+                        )
+                    require_target_bound_retail_image(
+                        manifest.get("images"), elision_image_target,
+                        retail.get("image"),
+                        f"{function_context}.retail_oracle",
+                    )
+                    require(
+                        isinstance(retail.get("address"), str)
+                        and ADDRESS_RE.fullmatch(retail["address"])
+                        is not None
+                        and retail.get("verdict") == "MATCH"
+                        and retail.get("length")
+                        == function["expected_donor_length"],
+                        f"{function_context}.retail_oracle differs",
+                    )
+                    validate_retail_relocation_oracle(
+                        function.get("retail_relocations"),
+                        f"{function_context}.retail_relocations",
+                        function["expected_donor_length"],
+                        allow_empty=(
+                            function["expected_relocation_count"] == 0
+                        ),
+                    )
+                    spec = function.get("simulated_elision")
+                    spec_context = f"{function_context}.simulated_elision"
+                    require(isinstance(spec, dict),
+                            f"{spec_context} is not an object")
+                    spec_keys = {
+                        "kind", "regions", "branch_widenings",
+                        "expected_branch_repairs",
+                        "expected_branch_widenings",
+                        "expected_relocation_reseat",
+                        "expected_instruction_count",
+                        "expected_image_code_length",
+                        "expected_external_entries",
+                    }
+                    for optional in ("expected_code_length",
+                                     "expected_internal_relocation_targets"):
+                        if optional in spec:
+                            spec_keys.add(optional)
+                    exact_keys(spec, spec_keys, spec_context)
+                    require(spec.get("kind") == SIMULATED_ELISION_KIND,
+                            f"{spec_context}.kind differs")
+                    require(isinstance(spec.get("regions"), list)
+                            and spec["regions"],
+                            f"{spec_context}.regions is empty")
+                    previous_end = 0
+                    for index, region in enumerate(spec["regions"]):
+                        region_context = f"{spec_context}.regions[{index}]"
+                        region_keys = {"region_start", "region_end",
+                                       "image_start", "image_length"}
+                        for optional in ("dead_registers", "dead_slots"):
+                            if optional in region:
+                                region_keys.add(optional)
+                        require(isinstance(region, dict),
+                                f"{region_context} is not an object")
+                        exact_keys(region, region_keys, region_context)
+                        for name in ("region_start", "region_end",
+                                     "image_start", "image_length"):
+                            require_exact_int(region.get(name),
+                                              f"{region_context}.{name}",
+                                              minimum=0)
+                        require(previous_end <= region["region_start"]
+                                < region["region_end"]
+                                <= function["expected_seed_length"],
+                                f"{region_context} bounds are invalid")
+                        previous_end = region["region_end"]
+                        for name in ("dead_registers",):
+                            value = region.get(name) or []
+                            require(isinstance(value, list)
+                                    and all(item in _IA32_REGISTER_NUMBERS
+                                            for item in value)
+                                    and value == sorted(set(value)),
+                                    f"{region_context}.{name} is invalid")
+                        slots = region.get("dead_slots") or []
+                        require(isinstance(slots, list)
+                                and all(type(item) is int for item in slots)
+                                and slots == sorted(set(slots)),
+                                f"{region_context}.dead_slots is invalid")
+                    widenings = spec.get("branch_widenings")
+                    require(isinstance(widenings, list)
+                            and all(type(item) is int and item >= 0
+                                    for item in widenings)
+                            and widenings == sorted(set(widenings)),
+                            f"{spec_context}.branch_widenings is invalid")
+                    for name in ("expected_branch_repairs",
+                                 "expected_branch_widenings",
+                                 "expected_external_entries"):
+                        value = spec.get(name)
+                        require(isinstance(value, list)
+                                and all(type(item) is int and item >= 0
+                                        for item in value)
+                                and value == sorted(set(value)),
+                                f"{spec_context}.{name} is invalid")
+                    reseat = spec.get("expected_relocation_reseat")
+                    require(isinstance(reseat, list)
+                            and all(isinstance(pair, list) and len(pair) == 2
+                                    and all(type(item) is int and item >= 0
+                                            for item in pair)
+                                    for pair in reseat),
+                            f"{spec_context}.expected_relocation_reseat "
+                            "is invalid")
+                    for name in ("expected_instruction_count",
+                                 "expected_image_code_length"):
+                        require_exact_int(spec.get(name),
+                                          f"{spec_context}.{name}",
+                                          minimum=1)
+                    normalized_functions.append(dict(function))
                     continue
                 if splice_class == DONOR_REWRITING_CLASS:
                     # The rewriting seam with a donor pre-image: pins are the
@@ -31310,6 +31504,7 @@ def _reencoding_branch_width(item: dict, raw: bytes, context: str) -> int:
 
 def _reencoded_donor_object(
     donor_bytes: bytes, mangled: str, image: bytes, proof: dict, context: str,
+    fpo_required: bool = True,
 ) -> bytes:
     """Re-seat one COMDAT's dependent COFF records around a resized body.
 
@@ -31367,8 +31562,9 @@ def _reencoded_donor_object(
     # its debug range is carried through the same map.
     debug_child = _comdat_child(donor, primary, ".debug$S")
     debug_raw = bytes(coff_body(donor, debug_child))
-    require(len(debug_raw) >= 28 and debug_raw[2:4] == b"\x05\x02",
-            f"{context}: the donor debug$S is not an S_LPROC32 record")
+    require(len(debug_raw) >= 28
+            and debug_raw[2:4] in (b"\x04\x02", b"\x05\x02"),
+            f"{context}: the donor debug$S is not a procedure record")
     code_length, debug_start, debug_end = coff_unpack(
         "<III", debug_raw, 16, f"{context} debug range")
     require(code_length == primary["raw_size"]
@@ -31383,15 +31579,28 @@ def _reencoded_donor_object(
         + offset_map[debug_end].to_bytes(4, "little"))
 
     # The FPO record: only cbProcSize moves; every other field is identical.
-    fpo_child = _comdat_child(donor, primary, ".debug$F")
-    fpo_raw = bytes(coff_body(donor, fpo_child))
-    parse_fpo_data(fpo_raw, expected_proc_size=primary["raw_size"])
-    rebuilt_fpo = bytearray(fpo_raw)
-    rebuilt_fpo[4:8] = body_length.to_bytes(4, "little")
-    parse_fpo_data(bytes(rebuilt_fpo), expected_proc_size=body_length)
-    require(rebuilt_fpo[:4] == fpo_raw[:4] and rebuilt_fpo[8:] == fpo_raw[8:],
-            f"{context}: the rebuilt FPO record changed a field other than "
-            "cbProcSize")
+    # An EH body has no .debug$F child at all -- its closure carries
+    # .xdata$x instead, whose content this derivation leaves byte-identical
+    # (its code references go through relocated label SYMBOLS, which the
+    # carried-symbol loop below reseats through the same boundary map).
+    fpo_child = None
+    if fpo_required:
+        fpo_child = _comdat_child(donor, primary, ".debug$F")
+    else:
+        try:
+            fpo_child = _comdat_child(donor, primary, ".debug$F")
+        except ByteIdentityError:
+            fpo_child = None
+    if fpo_child is not None:
+        fpo_raw = bytes(coff_body(donor, fpo_child))
+        parse_fpo_data(fpo_raw, expected_proc_size=primary["raw_size"])
+        rebuilt_fpo = bytearray(fpo_raw)
+        rebuilt_fpo[4:8] = body_length.to_bytes(4, "little")
+        parse_fpo_data(bytes(rebuilt_fpo), expected_proc_size=body_length)
+        require(rebuilt_fpo[:4] == fpo_raw[:4]
+                and rebuilt_fpo[8:] == fpo_raw[8:],
+                f"{context}: the rebuilt FPO record changed a field other "
+                "than cbProcSize")
 
     replacements = [
         (primary["raw_offset"], primary["raw_offset"] + primary["raw_size"],
@@ -31405,10 +31614,13 @@ def _reencoded_donor_object(
         (debug_child["raw_offset"],
          debug_child["raw_offset"] + debug_child["raw_size"],
          bytes(rebuilt_debug)),
-        (fpo_child["raw_offset"],
-         fpo_child["raw_offset"] + fpo_child["raw_size"],
-         bytes(rebuilt_fpo)),
     ]
+    if fpo_child is not None:
+        replacements.append(
+            (fpo_child["raw_offset"],
+             fpo_child["raw_offset"] + fpo_child["raw_size"],
+             bytes(rebuilt_fpo)))
+        replacements.sort()
     output = bytearray(apply_replacements(donor_bytes, replacements))
 
     def shifted(pointer: int) -> int:
@@ -37624,6 +37836,540 @@ def apply_fp_pointer_exchange(
 
 
 SIMULATED_REGION_REWRITE_KIND = "simulated_region_rewrite_v1"
+SIMULATED_ELISION_KIND = "simulated_elision_v1"
+SIMULATED_ELISION_CLASS = "retail_exact_simulated_elision"
+
+
+def apply_simulated_elision(
+    body: bytes, regions: list, relocation_offsets: frozenset,
+    context: str, retail_body: bytes,
+    relocations: dict | None = None,
+    code_length: int | None = None,
+    external_entries: frozenset | None = None,
+    internal_targets: frozenset | None = None,
+    branch_widenings: list | None = None,
+) -> tuple[bytes, dict]:
+    """Replace declared regions with the RETAIL ORACLE's own bytes, each
+    replacement proved equivalent to the seed's region by symbolic execution.
+
+    This is the copy-elision-with-RESIZE primitive: a region's image may have
+    a DIFFERENT length than its source, so the whole body is rebuilt around
+    the replacements, every relative branch that crosses a region is repaired
+    through the derived boundary map (the re-encoding class's fixpoint,
+    reused verbatim in shape), and every dependent COFF record is reseated by
+    the same map.  Soundness never comes from the oracle: `_srr_simulate`
+    runs BOTH versions and the composition refuses unless their exit states
+    agree exactly -- registers, frame slots, FP stack, push sequence, and the
+    final flag/terminal-call effect -- modulo a declared dead set that is
+    then proved dead by the bijection certificate's own liveness.  A region
+    whose two versions compute different things cannot compose, whatever the
+    oracle says.
+    """
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            f"{context}: retail oracle body is missing")
+    require(isinstance(regions, list) and regions,
+            f"{context}: no region is declared")
+    limit = len(body) if code_length is None else code_length
+    require(0 < limit <= len(body), f"{context}: code length is invalid")
+    instructions = decode_ia32_bijection_body(
+        body, context, relocations, code_length)
+    index_of = {item["offset"]: index
+                for index, item in enumerate(instructions)}
+    boundaries = set(index_of)
+    boundaries.add(limit)
+    items, successors, entries = ia32_relational_flow_walk(
+        body, relocations, context, code_length, external_entries)
+    branch_targets = {item["target"] for item in items
+                      if item.get("target") is not None}
+    walk_items = items
+    flag_live = ia32_relational_flag_liveness(items, successors, context)
+    walk_index = {item["offset"]: index for index, item in enumerate(items)}
+    # The liveness refinement the parent SRR uses: an indirect call cannot
+    # read EAX under any convention of this toolchain.
+    refined = []
+    for entry in instructions:
+        if entry["flow"] == "call" and entry["opcode"] == 0xFF:
+            entry = {**entry,
+                     "read_atoms": frozenset(entry["read_atoms"])
+                     - _IA32_ATOMS_OF["eax"]}
+        refined.append(entry)
+    live, _succ = _register_bijection_live_sets(refined,
+                                                f"{context} liveness")
+
+    previous_end = 0
+    delta = 0
+    proved = []
+    replacements = {}
+    for ordinal, item in enumerate(regions):
+        item_context = f"{context} region {ordinal}"
+        start, end = item["region_start"], item["region_end"]
+        image_start = item["image_start"]
+        image_length = item["image_length"]
+        require(type(start) is int and type(end) is int
+                and type(image_start) is int and type(image_length) is int
+                and 0 < start < end <= limit and image_length > 0,
+                f"{item_context}: bounds are out of range")
+        require(previous_end <= start,
+                f"{item_context}: regions are unsorted or overlapping")
+        previous_end = end
+        require(start in boundaries and end in boundaries,
+                f"{item_context}: region does not span whole instructions")
+        # The image start is DECLARED, not derived: branch widenings that
+        # the fixpoint discovers later also shift the retail layout, so the
+        # cumulative region delta alone cannot predict it.  A wrong
+        # declaration cannot compose -- the final retail-equality check
+        # compares every byte of the rebuilt body against the oracle.
+        require(image_start + image_length <= len(retail_body),
+                f"{item_context}: the image slice leaves the oracle")
+        require(not any(start < target < end for target in branch_targets),
+                f"{item_context}: a branch targets the region interior")
+        require(not any(start < walk_items[entry]["offset"] < end
+                        for entry in entries[1:]),
+                f"{item_context}: an external entry lies inside the region")
+        require(not any(start < target < end
+                        for target in (internal_targets or frozenset())),
+                f"{item_context}: a relocated target lies inside the region")
+        require(not any(start <= offset < end
+                        for offset in relocation_offsets),
+                f"{item_context}: a relocation lies inside the region; the "
+                "elision does not reseat relocations it replaces")
+        image_slice = bytes(retail_body[image_start:
+                                        image_start + image_length])
+        # Both versions execute symbolically; the closed simulator set is
+        # the guard against any branch inside either version.
+        seed_state = _srr_simulate(body, start, end, f"{item_context} seed")
+        image_state = _srr_simulate(image_slice, 0, image_length,
+                                    f"{item_context} image")
+        for label, seed_part, image_part in (
+                ("FP stack", seed_state[1], image_state[1]),
+                ("push sequence", seed_state[2], image_state[2])):
+            require(seed_part == image_part,
+                    f"{item_context}: the two versions leave a different "
+                    f"{label}")
+        seed_slots, image_slots = seed_state[3], image_state[3]
+        dead_slots = item.get("dead_slots") or []
+        require(isinstance(dead_slots, list)
+                and all(type(d) is int for d in dead_slots),
+                f"{item_context}.dead_slots is invalid")
+        require(set(seed_slots) == set(image_slots),
+                f"{item_context}: the two versions write different frame "
+                "slots")
+        differing_slots = sorted(d for d in seed_slots
+                                 if seed_slots[d] != image_slots[d])
+        require(differing_slots == sorted(dead_slots),
+                f"{item_context}: the slots left differing "
+                f"{differing_slots} are not the declared dead set "
+                f"{sorted(dead_slots)}")
+        seed_flags, image_flags = seed_state[4], image_state[4]
+        terminal = tuple(
+            isinstance(flags, tuple) and flags[0] == "terminal_call"
+            for flags in (seed_flags, image_flags))
+        require(terminal[0] == terminal[1],
+                f"{item_context}: only one version ends at a terminal call")
+        if any(terminal):
+            require(seed_flags == image_flags,
+                    f"{item_context}: the two versions reach the terminal "
+                    "call with a different target or argument sequence")
+        elif seed_flags != image_flags:
+            require(end in walk_index and not flag_live[walk_index[end]],
+                    f"{item_context}: the two versions leave different flag "
+                    "state and a flag is live at the exit")
+        differing = sorted(name for name in _SIMULATOR_REGS
+                           if seed_state[0][name] != image_state[0][name])
+        declared_dead = item.get("dead_registers") or []
+        require(differing == sorted(declared_dead),
+                f"{item_context}: the registers left differing {differing} "
+                f"are not the declared dead set {sorted(declared_dead)}")
+        require(end in index_of or end == limit,
+                f"{item_context}: the region end is not an instruction "
+                "boundary of the body")
+        if end != limit:
+            live_in = live[index_of[end]]
+            for name in declared_dead:
+                overlap = _IA32_ATOMS_OF[name] & live_in
+                require(not overlap,
+                        f"{item_context}: {name} is live on the region's "
+                        f"exit edge ({sorted(overlap)})")
+        else:
+            require(not declared_dead,
+                    f"{item_context}: a region ending at the code limit can "
+                    "declare no dead register")
+        for disp in dead_slots:
+            _srr_slot_scratch_proof(instructions, walk_items, successors,
+                                    entries, end, disp,
+                                    f"{item_context} slot {disp:#x}", body)
+        replacements[start] = (end, image_slice)
+        delta += image_length - (end - start)
+        proved.append({
+            "region_start": start, "region_end": end,
+            "image_start": image_start, "image_length": image_length,
+            "dead_registers": sorted(declared_dead),
+            "dead_slots": sorted(dead_slots),
+        })
+
+    # Rebuild the body: one piece per instruction outside every region, one
+    # opaque piece per region.  Then the branch-displacement fixpoint.
+    pieces = []
+    piece_owner = []                # instruction index or ("region", start)
+    cursor = 0
+    for index, item in enumerate(instructions):
+        offset = item["offset"]
+        if offset < cursor:
+            continue
+        if offset in replacements:
+            end, image_slice = replacements[offset]
+            pieces.append(bytearray(image_slice))
+            piece_owner.append(("region", offset))
+            cursor = end
+            continue
+        pieces.append(bytearray(body[offset:offset + item["length"]]))
+        piece_owner.append(index)
+        cursor = offset + item["length"]
+    require(cursor == limit,
+            f"{context}: the rebuilt pieces do not cover the code")
+    tail = body[limit:]
+
+    def _starts(current):
+        at, out = 0, []
+        for raw in current:
+            out.append(at)
+            at += len(raw)
+        return out
+
+    def _map_offset(offset, starts):
+        # Map a seed boundary to the image frame: region starts map to the
+        # region piece's start; other boundaries to their own piece.
+        for piece_index, owner in enumerate(piece_owner):
+            if owner == ("region", offset):
+                return starts[piece_index]
+            if isinstance(owner, int)                     and instructions[owner]["offset"] == offset:
+                return starts[piece_index]
+        return None
+
+    repaired = set()
+    widened_set = set()
+    for _round in range(REGISTER_BIJECTION_REENCODING_FIXPOINT_ROUNDS):
+        starts = _starts(pieces)
+        changed = False
+        for piece_index, owner in enumerate(piece_owner):
+            if not isinstance(owner, int):
+                continue
+            item = instructions[owner]
+            if item["flow"] not in ("jcc", "jmp") or item["target"] is None:
+                continue
+            if item["offset"] in widened_set:
+                raw = pieces[piece_index]
+                destination = _map_offset(item["target"], starts)
+                new_delta = destination - (starts[piece_index] + len(raw))
+                encoded = new_delta.to_bytes(4, "little", signed=True)
+                if bytes(raw[len(raw) - 4:]) != encoded:
+                    raw[len(raw) - 4:] = encoded
+                    changed = True
+                continue
+            raw = pieces[piece_index]
+            width = _reencoding_branch_width(item, raw, context)
+            destination = _map_offset(item["target"], starts)
+            require(destination is not None,
+                    f"{context}: the branch at {item['offset']} targets an "
+                    "offset the elision erased")
+            new_delta = destination - (starts[piece_index] + len(raw))
+            if not (-(1 << (8 * width - 1)) <= new_delta
+                    < (1 << (8 * width - 1))) and width == 1 \
+                    and item["offset"] in (branch_widenings or []):
+                # The optimizer's own forced widening: a rel8 branch whose
+                # target the layout pushed out of range becomes the rel32
+                # form of the SAME condition.  Only a DECLARED offset may
+                # widen, so an unexpected out-of-range branch still refuses.
+                opcode = raw[0]
+                if opcode == 0xEB:
+                    widened = bytearray(b"\xe9\x00\x00\x00\x00")
+                else:
+                    require(0x70 <= opcode <= 0x7F,
+                            f"{context}: the branch at {item['offset']} has "
+                            "no rel32 form to widen to")
+                    widened = bytearray(
+                        bytes((0x0F, 0x80 | (opcode & 0x0F))) + b"\x00" * 4)
+                pieces[piece_index] = widened
+                widened_set.add(item["offset"])
+                repaired.add(item["offset"])
+                changed = True
+                continue
+            require(-(1 << (8 * width - 1)) <= new_delta
+                    < (1 << (8 * width - 1)),
+                    f"{context}: the branch at {item['offset']} no longer "
+                    f"reaches its target in {width} displacement byte(s)")
+            encoded = new_delta.to_bytes(width, "little", signed=True)
+            if bytes(raw[len(raw) - width:]) != encoded:
+                raw[len(raw) - width:] = encoded
+                repaired.add(item["offset"])
+                changed = True
+        if not changed:
+            break
+    else:
+        raise ByteIdentityError(
+            f"{context}: the branch-displacement fixpoint did not converge")
+
+    starts = _starts(pieces)
+    image = b"".join(bytes(piece) for piece in pieces) + tail
+    image_limit = starts[-1] + len(pieces[-1]) if pieces else 0
+    offset_map = {}
+    for piece_index, owner in enumerate(piece_owner):
+        if isinstance(owner, int):
+            offset_map[instructions[owner]["offset"]] = starts[piece_index]
+        else:
+            offset_map[owner[1]] = starts[piece_index]
+    offset_map[limit] = image_limit
+    reseat = []
+    for offset in sorted(relocations or {}):
+        width = (relocations or {})[offset]["width"]
+        owner = None
+        for piece_index, piece_owner_item in enumerate(piece_owner):
+            if not isinstance(piece_owner_item, int):
+                continue
+            item = instructions[piece_owner_item]
+            if (item["offset"] <= offset
+                    and offset + width <= item["offset"] + item["length"]):
+                owner = (piece_index, item)
+                break
+        require(owner is not None,
+                f"{context}: the relocation at {offset} does not lie wholly "
+                "inside one instruction outside every region")
+        piece_index, item = owner
+        require(len(pieces[piece_index]) == item["length"],
+                f"{context}: the relocation at {offset} sits in an "
+                "instruction the fixpoint resized")
+        moved_to = starts[piece_index] + (offset - item["offset"])
+        if moved_to != offset:
+            reseat.append([offset, moved_to])
+    require(image != body, f"{context}: the elision moves nothing")
+    return image, {
+        "kind": SIMULATED_ELISION_KIND,
+        "regions": proved,
+        "branch_repairs": sorted(offset_map[offset] for offset in repaired),
+        "branch_widenings": sorted(offset_map[offset]
+                                   for offset in widened_set),
+        "relocation_reseat": reseat,
+        "offset_map": {str(key): value
+                       for key, value in sorted(offset_map.items())},
+        "instruction_count": len(instructions),
+        "code_length": limit,
+        "image_code_length": image_limit,
+    }
+
+
+def compose_retail_exact_simulated_elision(
+    seed_bytes: bytes,
+    donor_bytes: bytes,
+    function: dict,
+    retail_body: bytes,
+) -> tuple[bytes, dict]:
+    """Install the elision image after proving it is retail's own code.
+
+    The pre-image is the SEED's own body (the donor is a provenance witness
+    required to reproduce it, exactly as in composed rewriting); each
+    declared region is replaced by the retail oracle's bytes only after
+    `_srr_simulate` proves both versions compute the same machine state; the
+    rebuilt body's crossing branches are repaired -- and, where declared,
+    widened to their rel32 forms -- through the derived boundary map; every
+    dependent COFF record is reseated by the same map; and the composition
+    is refused unless the result equals the pinned retail oracle under the
+    reseated relocation mask.  Installation is the same-slot resize.
+    """
+    require(function.get("splice_class") == SIMULATED_ELISION_CLASS,
+            "splice class is not retail_exact_simulated_elision")
+    require("target_source_refactor" not in function,
+            "simulated-elision functions carry no source refactor")
+    require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
+            "retail oracle body is missing")
+    spec = function["simulated_elision"]
+    require(spec.get("kind") == SIMULATED_ELISION_KIND,
+            "simulated-elision kind differs")
+    seed = CoffObject(seed_bytes)
+    donor = CoffObject(donor_bytes)
+    mangled = function["mangled"]
+    sp = seed.function_section(mangled)
+    dp = donor.function_section(mangled)
+    require(sp["number"] == function["expected_section_number"]
+            and dp["number"] == function["expected_donor_section_number"],
+            "simulated-elision target section seat changed: seed "
+            f"{sp['number']} donor {dp['number']}")
+    require(len(seed.sections) == function["expected_section_count"]
+            and len(donor.sections)
+            == function["expected_donor_section_count"],
+            "simulated-elision global section count changed: seed "
+            f"{len(seed.sections)} donor {len(donor.sections)}")
+    seed_functions = function_multiset(seed)
+    require(seed_functions == function_multiset(donor)
+            and sum(seed_functions.values())
+            == function["expected_function_count"],
+            "simulated-elision witness function set differs")
+    seed_comdats = comdat_primary_identity_multiset(seed)
+    require(seed_comdats == comdat_primary_identity_multiset(donor)
+            and sum(seed_comdats.values())
+            == function["expected_comdat_count"],
+            "simulated-elision witness COMDAT identity set differs")
+    require(
+        sp["raw_size"] == dp["raw_size"]
+        == function["expected_seed_length"]
+        and sp["relocation_count"] == dp["relocation_count"]
+        == function["expected_relocation_count"]
+        and sp["line_count"] == function["expected_seed_line_count"]
+        and dp["line_count"] == function["expected_donor_line_count"]
+        and sp["name"] == dp["name"]
+        and sp["characteristics"] == dp["characteristics"]
+        == function["expected_characteristics"],
+        "simulated-elision target header/count pins changed",
+    )
+    require(
+        section_definitions(seed)[sp["number"]]["selection"]
+        == section_definitions(donor)[dp["number"]]["selection"]
+        == function["expected_selection"],
+        "simulated-elision COMDAT selection changed",
+    )
+    expected_closure = tuple(function["expected_closure"])
+    require(_comdat_child_closure(seed, sp)
+            == _comdat_child_closure(donor, dp)
+            == (len(expected_closure), expected_closure),
+            "simulated-elision target closure changed")
+    require(list(expected_closure) in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                                       INSTRUCTION_SCHEDULE_EH_CLOSURE),
+            "simulated-elision closure pin names no installation delegate")
+    require(instruction_mosaic_metadata_sha256(seed, sp)
+            == function["expected_seed_metadata_sha256"]
+            and instruction_mosaic_metadata_sha256(donor, dp)
+            == function["expected_donor_metadata_sha256"],
+            "simulated-elision metadata differs from its pin")
+    seed_body = coff_body(seed, sp)
+    donor_body = coff_body(donor, dp)
+    require(sha256_bytes(seed_body) == function["expected_seed_body_sha256"]
+            and sha256_bytes(donor_body)
+            == function["expected_donor_body_sha256"],
+            "simulated-elision seed/witness body differs from its pin")
+    require(donor_body == seed_body,
+            "simulated-elision witness does not reproduce the seed's body")
+
+    seed_rows = detailed_relocations(seed, sp)
+    relocation_offsets = frozenset(
+        row["offset"] + byte
+        for row in seed_rows for byte in range(row["width"]))
+    relocation_symbols = {
+        row["offset"]: {"width": row["width"], "target": row["target"]}
+        for row in seed_rows}
+    internal_targets = frozenset(
+        row["target_value"] for row in seed_rows
+        if row["target_section"] == sp["number"])
+    declared_targets = spec.get("expected_internal_relocation_targets")
+    if declared_targets is not None:
+        require(sorted(internal_targets) == declared_targets,
+                "simulated-elision in-body relocated target set changed")
+    external_entries = relational_form_external_entries(
+        seed, sp, "simulated-elision external entries")
+    require(sorted(external_entries) == spec["expected_external_entries"],
+            "simulated-elision external entry set differs from its "
+            "declaration")
+
+    image, proof = apply_simulated_elision(
+        bytes(seed_body), spec["regions"], relocation_offsets,
+        "simulated-elision image", bytes(retail_body), relocation_symbols,
+        spec.get("expected_code_length"), frozenset(external_entries),
+        internal_targets, spec.get("branch_widenings") or [])
+    require(proof["branch_repairs"] == spec["expected_branch_repairs"]
+            and proof["branch_widenings"]
+            == spec["expected_branch_widenings"]
+            and proof["relocation_reseat"]
+            == spec["expected_relocation_reseat"]
+            and proof["instruction_count"]
+            == spec["expected_instruction_count"]
+            and proof["image_code_length"]
+            == spec["expected_image_code_length"],
+            "simulated-elision image differs from its declaration")
+    require(sha256_bytes(image) == function["expected_body_sha256"],
+            "simulated-elision image differs from its pin")
+    require(len(image) == function["expected_donor_length"],
+            "simulated-elision image length differs from its pin")
+
+    pinned_length = function["retail_oracle"]["length"]
+    require(len(retail_body) == pinned_length == len(image),
+            "simulated-elision retail length changed")
+    moved = dict(proof["relocation_reseat"])
+    offset_map = {int(key): value
+                  for key, value in proof["offset_map"].items()}
+    installed_rows = []
+    for row in seed_rows:
+        installed = {**row, "offset": moved.get(row["offset"],
+                                                row["offset"])}
+        if row["target_section"] == sp["number"]:
+            # An in-body label's VALUE is a code offset; the derived object
+            # carries it through the boundary map, so the pin describes the
+            # installed image, not the pre-image.
+            require(row["target_value"] in offset_map,
+                    "simulated-elision relocation names an in-body target "
+                    f"at {row['target_value']} that is not an instruction "
+                    "boundary")
+            installed["target_value"] = offset_map[row["target_value"]]
+        installed_rows.append(installed)
+    semantic_detail = require_retail_relocation_oracle(
+        installed_rows, bytes(retail_body),
+        int(function["retail_oracle"]["address"], 16),
+        function["retail_relocations"],
+        "simulated-elision retail relocation oracle",
+    )
+    masked_image = bytearray(image)
+    masked_retail = bytearray(retail_body)
+    for row in installed_rows:
+        start, width = row["offset"], row["width"]
+        masked_image[start:start + width] = b"\0" * width
+        masked_retail[start:start + width] = b"\0" * width
+    differing = sum(left != right
+                    for left, right in zip(masked_image, masked_retail))
+    require(differing == 0,
+            f"simulated-elision output is not retail-exact: {differing} "
+            "byte(s) differ under the relocation mask")
+
+    derived, derived_detail = _reencoded_donor_object(
+        seed_bytes, mangled, image, proof, "simulated-elision derived",
+        fpo_required=False)
+    effective = {
+        "mangled": mangled,
+        "splice_class": "retail_exact_reloc_divergent",
+        "expected_seed_length": function["expected_seed_length"],
+        "expected_donor_length": function["expected_donor_length"],
+        "expected_linked_span": function["expected_linked_span"],
+        "expected_body_sha256": function["expected_body_sha256"],
+        "expected_seed_line_count": function["expected_seed_line_count"],
+        "expected_donor_line_count": function["expected_seed_line_count"],
+        "retail_oracle": function["retail_oracle"],
+        "retail_relocations": function["retail_relocations"],
+    }
+    composed, detail = compose_same_slot_resize(
+        seed_bytes, derived, effective, retail_body=bytes(retail_body))
+
+    checked = CoffObject(composed)
+    cp = checked.function_section(mangled)
+    require(coff_body(checked, cp) == image,
+            "simulated-elision composed body differs from the image")
+    require([row["offset"] for row in detailed_relocations(checked, cp)]
+            == [row["offset"] for row in installed_rows]
+            and [row["target"] for row in detailed_relocations(checked, cp)]
+            == [row["target"] for row in installed_rows],
+            "simulated-elision composed relocation table is not the proved "
+            "reseat")
+    return composed, {
+        **detail,
+        "splice_class": SIMULATED_ELISION_CLASS,
+        "simulated_elision": proof["regions"],
+        "branch_repairs": proof["branch_repairs"],
+        "branch_widenings": proof["branch_widenings"],
+        "relocation_reseat": proof["relocation_reseat"],
+        "carried_code_symbols": derived_detail["carried_code_symbols"],
+        "procedure_range": derived_detail["procedure_range"],
+        "retail_exact": True,
+        **semantic_detail,
+    }
+
 
 
 def _srr_simulate(body: bytes, start: int, end: int, context: str):
@@ -37634,6 +38380,32 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
     slots = {}            # ebp-relative dword stores: disp -> value expr
     last_flags = None
     offset = start
+
+    def norm_isub(left, right):
+        # x - a - b == x - b - a over the integers, always: an integer
+        # subtraction CHAIN is one minuend and a multiset of subtrahends,
+        # so two chains that differ only in subtrahend order normalise to
+        # the same expression.  Only the FINAL value's flags are compared
+        # (a region is straight-line, so intermediate flags are unread).
+        if isinstance(left, tuple) and left[0] == "isub":
+            base, parts = left[1], left[2]
+        else:
+            base, parts = left, ()
+        return ("isub", base, tuple(sorted(parts + (right,), key=repr)))
+
+    def norm_iadd(left, right):
+        # Integer addition commutes and associates without exception, so an
+        # addition CHAIN normalises to a sorted multiset of its terms; the
+        # decrement is the term -1.  (The imm-add form 0x83/0x81 keeps its
+        # separate ("add", value, int) shape because the ESP push-tracking
+        # arithmetic in mem_operand depends on it.)
+        parts = []
+        for item in (left, right):
+            if isinstance(item, tuple) and item[0] == "iadd":
+                parts.extend(item[1])
+            else:
+                parts.append(item)
+        return ("iadd", tuple(sorted(parts, key=repr)))
 
     def norm_sum(left, right):
         parts = []
@@ -37759,16 +38531,32 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
             last_flags = ("cmp8", mem_operand(2), encoded[length - 1])
         elif op == 0x2B and mod != 3:          # sub r32, m32
             name = _SIMULATOR_REGS[reg_field]
-            regs[name] = ("sub", regs[name], ("load", mem_operand(2)))
+            regs[name] = norm_isub(regs[name], ("load", mem_operand(2)))
             last_flags = ("subflags", regs[name])
         elif op == 0x2B and mod == 3:          # sub r32, r32
             name = _SIMULATOR_REGS[reg_field]
-            regs[name] = ("sub", regs[name], regs[_SIMULATOR_REGS[rm]])
+            regs[name] = norm_isub(regs[name], regs[_SIMULATOR_REGS[rm]])
             last_flags = ("subflags", regs[name])
         elif 0x40 <= op <= 0x47:               # inc r32
             name = _SIMULATOR_REGS[op - 0x40]
             regs[name] = ("add", regs[name], 1)
             last_flags = ("incflags", regs[name])
+        elif 0x48 <= op <= 0x4F:               # dec r32
+            name = _SIMULATOR_REGS[op - 0x48]
+            regs[name] = norm_iadd(regs[name], -1)
+            last_flags = ("decflags", regs[name])
+        elif op == 0x03 and mod == 3:          # add r32, r32
+            name = _SIMULATOR_REGS[reg_field]
+            regs[name] = norm_iadd(regs[name], regs[_SIMULATOR_REGS[rm]])
+            last_flags = ("addflags", regs[name])
+        elif op == 0x03 and mod != 3:          # add r32, m32
+            name = _SIMULATOR_REGS[reg_field]
+            regs[name] = norm_iadd(regs[name], ("load", mem_operand(2)))
+            last_flags = ("addflags", regs[name])
+        elif op == 0x33 and mod == 3 and reg_field == rm:  # xor r32, r32 self
+            name = _SIMULATOR_REGS[reg_field]
+            regs[name] = ("imm", 0)
+            last_flags = ("zeroflags",)
         elif 0x50 <= op <= 0x57:               # push r32
             pushes.append(regs[_SIMULATOR_REGS[op - 0x50]])
             # ESP moves with the push, so later [esp+d] operands name the

@@ -84,9 +84,12 @@ class RewriteTests(unittest.TestCase):
                       str(raised.exception))
 
     def test_an_instruction_outside_the_simulator_set_is_refused(self):
+        # The region reaches the terminating `ret` -- a control transfer the
+        # simulator never admits.  (The self-XOR that used to play this role
+        # was deliberately admitted on 2026-08-22 as the zero idiom.)
         with self.assertRaises(byte_identity.ByteIdentityError) as raised:
-            apply(items=[declaration(region_end=15,
-                                     target_order=[1, 0, 2, 3, 4])])
+            apply(items=[declaration(region_end=18,
+                                     target_order=[1, 0, 2, 3, 4, 5, 6])])
         self.assertIn("outside the simulator's closed set",
                       str(raised.exception))
 

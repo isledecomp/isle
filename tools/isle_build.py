@@ -1867,6 +1867,30 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
                 elif (function["splice_class"]
+                        == byte_identity.SIMULATED_ELISION_CLASS):
+                    # The copy-elision-with-resize certificate: each declared
+                    # region of the seed's own body is replaced by the retail
+                    # oracle's bytes only after symbolic execution proves the
+                    # two versions compute the same machine state; crossing
+                    # branches are repaired (and declared rel8 branches
+                    # widened) through the derived boundary map, dependent
+                    # COFF records are reseated by the same map, and the
+                    # result is refused unless it equals the pinned retail
+                    # oracle.  Installation is the same-slot resize.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_simulated_elision(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
+                elif (function["splice_class"]
                         == byte_identity.DONOR_REWRITING_CLASS):
                     # The rewriting seam with a donor pre-image: the fp-sum
                     # rotations and regional bijections are applied to the
