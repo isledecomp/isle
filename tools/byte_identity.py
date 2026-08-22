@@ -31817,6 +31817,7 @@ INSTRUCTION_SCHEDULE_CLASS = "retail_exact_instruction_schedule"
 INSTRUCTION_SCHEDULE_IMAGE_TARGETS = frozenset({
     ("roi", "lego1"),
     ("realtime", "lego1"),
+    ("omni", "lego1"),
 })
 
 
@@ -35520,7 +35521,7 @@ def validate_composed_rewriting(
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(value, {
         "kind", "windows", "register_bijections", "relational_sites",
-        "fp_sum_rotations",
+        "fp_sum_rotations", "simulated_region_rewrites",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_seed_debug_s_sha256",
@@ -35528,6 +35529,7 @@ def validate_composed_rewriting(
         "expected_internal_relocation_targets", "authenticity_rationale",
     }, context, optional={"windows", "register_bijections",
                           "relational_sites", "fp_sum_rotations",
+                          "simulated_region_rewrites",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == COMPOSED_REWRITING_KIND,
@@ -35593,6 +35595,53 @@ def validate_composed_rewriting(
         normalized_rotations.append({
             "chain_start": start, "chain_end": end,
             "order": list(order),
+            "expected_rewritten_offsets": list(offsets),
+        })
+    normalized_region_rewrites = []
+    region_rewrite_bytes = []
+    region_rewrite_regions = set()
+    previous_region_end = 0
+    for index, item in enumerate(
+            value.get("simulated_region_rewrites") or []):
+        item_context = f"{context}.simulated_region_rewrites[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "region_start", "region_end", "target_order", "field_rewrites",
+            "dead_registers", "dead_slots", "relocation_reseat",
+            "expected_rewritten_offsets",
+        }, item_context, optional={"field_rewrites", "dead_registers",
+                                   "dead_slots", "relocation_reseat"})
+        start = require_exact_int(item.get("region_start"),
+                                  f"{item_context}.region_start",
+                                  minimum=1, maximum=body_length - 1)
+        end = require_exact_int(item.get("region_end"),
+                                f"{item_context}.region_end",
+                                minimum=2, maximum=body_length)
+        require(previous_region_end <= start < end,
+                f"{item_context}: regions are unsorted or overlapping")
+        previous_region_end = end
+        order = item.get("target_order")
+        require(isinstance(order, list) and len(order) >= 2
+                and sorted(order) == list(range(len(order))),
+                f"{item_context}.target_order is not a permutation")
+        require(not (item.get("relocation_reseat")),
+                f"{item_context}: this class installs the seed's own "
+                "relocation table and admits no reseat")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and start <= offset < end
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        region_rewrite_bytes.extend(offsets)
+        region_rewrite_regions.update(range(start, end))
+        normalized_region_rewrites.append({
+            "region_start": start, "region_end": end,
+            "target_order": list(order),
+            "field_rewrites": [list(r) for r in
+                               item.get("field_rewrites") or []],
+            "dead_registers": list(item.get("dead_registers") or []),
+            "dead_slots": list(item.get("dead_slots") or []),
             "expected_rewritten_offsets": list(offsets),
         })
     # The bijections.  Each is exactly the declaration the single-statement
@@ -35788,9 +35837,13 @@ def validate_composed_rewriting(
             "expected_rewritten_offsets": list(offsets),
         })
     require(normalized_windows or normalized_bijections or normalized_sites
-            or normalized_rotations,
+            or normalized_rotations or normalized_region_rewrites,
             f"{context} declares no certificate")
-    require(len(normalized_windows) + len(normalized_bijections)
+    # A lone window, bijection, mirror or rotation belongs to its own
+    # class; the simulated region rewrite has no single-statement class, so
+    # one of those may stand alone.
+    require(normalized_region_rewrites
+            or len(normalized_windows) + len(normalized_bijections)
             + len(normalized_sites) + len(normalized_rotations) >= 2,
             f"{context} composes nothing: a single statement belongs to its "
             "own class")
@@ -35809,9 +35862,15 @@ def validate_composed_rewriting(
             f"{context}: a byte-local certificate rewrites a byte inside a "
             "reordered window")
     require(not (rotation_regions & (window_bytes | set(bijection_bytes)
-                                     | set(relational_bytes))),
+                                     | set(relational_bytes)
+                                     | region_rewrite_regions)),
             f"{context}: an fp-sum chain overlaps another certificate's "
             "bytes")
+    require(not (region_rewrite_regions & (window_bytes
+                                           | set(bijection_bytes)
+                                           | set(relational_bytes))),
+            f"{context}: a simulated region rewrite overlaps another "
+            "certificate's bytes")
     changed = value.get("expected_changed_offsets")
     require(isinstance(changed, list) and changed
             and changed == sorted(set(changed))
@@ -35819,9 +35878,11 @@ def validate_composed_rewriting(
                     for offset in changed),
             f"{context}.expected_changed_offsets is invalid")
     require(set(bijection_bytes) | set(relational_bytes)
-            | set(rotation_bytes) <= set(changed),
+            | set(rotation_bytes) | set(region_rewrite_bytes)
+            <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in window_bytes or offset in rotation_regions
+                or offset in region_rewrite_regions
                 or offset in set(bijection_bytes) | set(relational_bytes)
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
@@ -35870,6 +35931,7 @@ def validate_composed_rewriting(
     normalized["register_bijections"] = normalized_bijections
     normalized["relational_sites"] = normalized_sites
     normalized["fp_sum_rotations"] = normalized_rotations
+    normalized["simulated_region_rewrites"] = normalized_region_rewrites
     if code_length is not None:
         normalized["expected_code_length"] = code_length
     if targets is not None:
@@ -35998,7 +36060,7 @@ def compose_retail_exact_composed_rewriting(
     # C1, first half: every reordering, applied to the seed's own body.
     image = seed_body
     schedule_detail = []
-    windows = spec["windows"]
+    windows = spec.get("windows") or []
     if windows:
         image, schedule_proof = apply_instruction_schedule(
             image, windows, relocation_offsets,
@@ -36029,10 +36091,26 @@ def compose_retail_exact_composed_rewriting(
                     f"composed-rewriting fp-sum chain {index} rewrote a "
                     "different byte set from its declaration")
         fp_detail = fp_proof["chains"]
+    region_rewrite_detail = []
+    if spec.get("simulated_region_rewrites"):
+        image, region_proof = apply_simulated_region_rewrite(
+            image, spec["simulated_region_rewrites"], relocation_offsets,
+            "composed-rewriting simulated rewrite", relocation_symbols,
+            code_length, frozenset(external_entries), internal_targets)
+        require(not region_proof["relocation_reseat"],
+                "composed-rewriting refuses to move a relocation")
+        for index, (item, region) in enumerate(
+                zip(spec["simulated_region_rewrites"],
+                    region_proof["regions"])):
+            require(region["rewritten_offsets"]
+                    == item["expected_rewritten_offsets"],
+                    f"composed-rewriting simulated rewrite {index} rewrote "
+                    "a different byte set from its declaration")
+        region_rewrite_detail = region_proof["regions"]
     # C1, second half: the byte-local certificates, measured on the image the
     # reordering produced.
     bijection_detail = []
-    for index, item in enumerate(spec["register_bijections"]):
+    for index, item in enumerate(spec.get("register_bijections") or []):
         image, proof = apply_register_bijection(
             image, item["mapping"],
             (item["region_start"], item["region_end"]),
@@ -36053,7 +36131,7 @@ def compose_retail_exact_composed_rewriting(
             "region_instruction_count": proof["region_instruction_count"],
         })
     relational_detail = []
-    if spec["relational_sites"]:
+    if spec.get("relational_sites"):
         sites = [{key: item[key] for key in ("compare_offset",
                                              "branch_offset",
                                              "seed_condition",
@@ -36157,7 +36235,7 @@ def compose_retail_exact_composed_rewriting(
             == spec["expected_seed_debug_s_sha256"],
             "composed-rewriting debug$S differs from its pin")
     claimed = {}
-    for index, item in enumerate(spec["register_bijections"]):
+    for index, item in enumerate(spec.get("register_bijections") or []):
         for record in parse_codeview_symbol_stream(
                 debug_stream, "composed-rewriting debug$S"):
             if record["type"] != CODEVIEW_REGISTER_RECORD_TYPE:
@@ -36175,7 +36253,7 @@ def compose_retail_exact_composed_rewriting(
             claimed[record["offset"]] = index
     debug_image = debug_stream
     debug_maps = []
-    for index, item in enumerate(spec["register_bijections"]):
+    for index, item in enumerate(spec.get("register_bijections") or []):
         mapped = apply_codeview_register_bijection(
             debug_stream, item["mapping"], item["debug_s_register_map"],
             f"composed-rewriting debug$S bijection {index}")
@@ -36213,6 +36291,7 @@ def compose_retail_exact_composed_rewriting(
         "splice_class": COMPOSED_REWRITING_CLASS,
         "instruction_schedule": schedule_detail,
         "fp_sum_reassociation": fp_detail,
+        "simulated_region_rewrites": region_rewrite_detail,
         "register_bijections": bijection_detail,
         "relational_form": relational_detail,
         "instruction_count": len(image_instructions),
@@ -37440,19 +37519,31 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
         rm = modrm & 7 if modrm is not None else None
 
         def mem_operand(cursor_base):
-            require(rm != 4, f"{context}: SIB addressing at {offset} is "
-                    "outside the simulator set")
             require(not (mod == 0 and rm == 5),
                     f"{context}: absolute address at {offset}")
-            base = regs[_SIMULATOR_REGS[rm]]
+            cursor = cursor_base
+            if rm == 4:
+                sib = encoded[cursor]
+                cursor += 1
+                require((sib >> 3) & 7 == 4 and (sib >> 6) == 0,
+                        f"{context}: an indexed SIB at {offset} is outside "
+                        "the simulator set")
+                base = regs[_SIMULATOR_REGS[sib & 7]]
+            else:
+                base = regs[_SIMULATOR_REGS[rm]]
             if mod == 1:
-                disp = int.from_bytes(encoded[cursor_base:cursor_base + 1],
+                disp = int.from_bytes(encoded[cursor:cursor + 1],
                                       "little", signed=True)
             elif mod == 2:
-                disp = int.from_bytes(encoded[cursor_base:cursor_base + 4],
+                disp = int.from_bytes(encoded[cursor:cursor + 4],
                                       "little", signed=True)
             else:
                 disp = 0
+            # Normalise esp-relative addresses through the tracked pushes so
+            # the same frame slot names the same expression at any depth.
+            if isinstance(base, tuple) and base[0] == "add" \
+                    and isinstance(base[2], int):
+                return ("addr", base[1], disp + base[2])
             return ("addr", base, disp)
 
         def frame_disp(addr):
@@ -37504,8 +37595,39 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
                           regs[_SIMULATOR_REGS[reg_field]])
         elif op == 0x80 and mod != 3 and reg_field == 7:   # cmp r/m8, imm8
             last_flags = ("cmp8", mem_operand(2), encoded[length - 1])
+        elif op == 0x2B and mod != 3:          # sub r32, m32
+            name = _SIMULATOR_REGS[reg_field]
+            regs[name] = ("sub", regs[name], ("load", mem_operand(2)))
+            last_flags = ("subflags", regs[name])
+        elif op == 0x2B and mod == 3:          # sub r32, r32
+            name = _SIMULATOR_REGS[reg_field]
+            regs[name] = ("sub", regs[name], regs[_SIMULATOR_REGS[rm]])
+            last_flags = ("subflags", regs[name])
+        elif 0x40 <= op <= 0x47:               # inc r32
+            name = _SIMULATOR_REGS[op - 0x40]
+            regs[name] = ("add", regs[name], 1)
+            last_flags = ("incflags", regs[name])
         elif 0x50 <= op <= 0x57:               # push r32
             pushes.append(regs[_SIMULATOR_REGS[op - 0x50]])
+            # ESP moves with the push, so later [esp+d] operands name the
+            # frame slot they actually read.  Kept flat so depth compares
+            # across versions that push at different points.
+            esp = regs["esp"]
+            if isinstance(esp, tuple) and esp[0] == "add" \
+                    and isinstance(esp[2], int):
+                regs["esp"] = ("add", esp[1], esp[2] - 4)
+            else:
+                regs["esp"] = ("add", esp, -4)
+        elif op == 0xFF and mod != 3 and reg_field == 2 \
+                and offset + length == end:    # terminal call [mem]
+            last_flags = ("terminal_call", mem_operand(2), tuple(pushes))
+            # Caller-saved registers are clobbered; the callee restores the
+            # stack per its convention.  Both versions get the same fresh
+            # post-call state, so only callee-saved differences survive to
+            # the exit comparison.
+            for name in ("eax", "ecx", "edx"):
+                regs[name] = ("call_clobber", name)
+            regs["esp"] = ("call_balanced", regs["esp"])
         elif op == 0xD9 and mod != 3 and reg_field == 0:   # fld m32
             stack.append(("load32", mem_operand(2)))
         elif op == 0xD8 and mod != 3 and reg_field == 1:   # fmul m32

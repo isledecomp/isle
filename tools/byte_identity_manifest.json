@@ -30503,6 +30503,22 @@
       "authenticity_rationale": "Framework-generated extern declarations are seated after the final include and at physical EOF; they emit no code, data, strings, vtables, linker payload, or retained object input and are confined to one exact FPO instruction self-permutation.",
       "role_policy": "retail_exact_instruction_permutation_fpo_only_v1"
      }
+    },
+    {
+     "id": "d_a9a90ebc7b08",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 1,
+      "generated_header_sha256": "a9a90ebc7b083a7a2f186f0bbb62530f885755a70199720658d60b430833949a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state shape force-included ahead of the rendered translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -30686,6 +30702,326 @@
       "length": 101
      },
      "retail_relocations": []
+    },
+    {
+     "mangled": "?Destroy@MxVideoPresenter@@IAEXE@Z",
+     "donor": "d_a9a90ebc7b08",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 22,
+     "expected_donor_section_number": 22,
+     "expected_section_count": 61,
+     "expected_donor_section_count": 61,
+     "expected_body_length": 247,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 8,
+     "expected_seed_line_count": 21,
+     "expected_donor_line_count": 21,
+     "expected_function_count": 19,
+     "expected_comdat_count": 20,
+     "expected_seed_body_sha256": "7ac19d71991d68eff92e0ca5adb7bcaac3f706c9a914b40ef05589683c7f0ced",
+     "expected_donor_body_sha256": "7ac19d71991d68eff92e0ca5adb7bcaac3f706c9a914b40ef05589683c7f0ced",
+     "expected_body_sha256": "37605d183761649e33c1632873916c263c27f4fdfb248847fab66c107c844b74",
+     "expected_seed_metadata_sha256": "9f39d6ca1c13b3c05312c4893c6cd5ee6e8a25dc342f91ac2084fc7f7f68cd3c",
+     "expected_donor_metadata_sha256": "3d5cf3fb148f7530e1b1bad1edbf04ecbf781e8c7f6336cb7c0536919395c19f",
+     "expected_changed_offsets": [
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      171,
+      173,
+      177,
+      180,
+      181,
+      185,
+      187
+     ],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100b27b0",
+      "verdict": "MATCH",
+      "length": 247
+     },
+     "retail_relocations": [
+      {
+       "offset": 9,
+       "type": 20,
+       "addend": 0,
+       "target": "?MVideoManager@@YAPAVMxVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100acf10"
+      },
+      {
+       "offset": 18,
+       "type": 20,
+       "addend": 0,
+       "target": "?MVideoManager@@YAPAVMxVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100acf10"
+      },
+      {
+       "offset": 64,
+       "type": 20,
+       "addend": 0,
+       "target": "?MVideoManager@@YAPAVMxVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100acf10"
+      },
+      {
+       "offset": 136,
+       "type": 20,
+       "addend": 0,
+       "target": "?MVideoManager@@YAPAVMxVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100acf10"
+      },
+      {
+       "offset": 143,
+       "type": 20,
+       "addend": 0,
+       "target": "?InvalidateRect@MxVideoManager@@QAEXAAVMxRect32@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100bea60"
+      },
+      {
+       "offset": 148,
+       "type": 20,
+       "addend": 0,
+       "target": "?MVideoManager@@YAPAVMxVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100acf10"
+      },
+      {
+       "offset": 218,
+       "type": 20,
+       "addend": 0,
+       "target": "?Init@MxVideoPresenter@@AAEXXZ",
+       "target_section": 19,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100b2760"
+      },
+      {
+       "offset": 234,
+       "type": 20,
+       "addend": 0,
+       "target": "?Destroy@MxMediaPresenter@@IAEXE@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100b54f0"
+      }
+     ],
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "simulated_region_rewrites": [
+       {
+        "region_start": 152,
+        "region_end": 189,
+        "target_order": [
+         1,
+         2,
+         3,
+         4,
+         5,
+         6,
+         13,
+         7,
+         8,
+         9,
+         10,
+         11,
+         12,
+         0,
+         14
+        ],
+        "field_rewrites": [
+         [
+          1,
+          0,
+          "ecx"
+         ],
+         [
+          2,
+          0,
+          "ecx"
+         ],
+         [
+          4,
+          0,
+          "ecx"
+         ],
+         [
+          6,
+          0,
+          "ecx"
+         ],
+         [
+          13,
+          0,
+          "edi"
+         ],
+         [
+          13,
+          1,
+          "eax"
+         ],
+         [
+          7,
+          0,
+          "ecx"
+         ],
+         [
+          8,
+          0,
+          "ecx"
+         ],
+         [
+          9,
+          0,
+          "ecx"
+         ],
+         [
+          10,
+          0,
+          "ecx"
+         ],
+         [
+          14,
+          0,
+          "edi"
+         ]
+        ],
+        "dead_registers": [
+         "edi"
+        ],
+        "dead_slots": [],
+        "expected_rewritten_offsets": [
+         153,
+         154,
+         155,
+         156,
+         157,
+         158,
+         159,
+         160,
+         161,
+         162,
+         163,
+         164,
+         165,
+         166,
+         167,
+         168,
+         169,
+         170,
+         171,
+         173,
+         177,
+         180,
+         181,
+         185,
+         187
+        ]
+       }
+      ],
+      "expected_instruction_count": 91,
+      "expected_changed_offsets": [
+       153,
+       154,
+       155,
+       156,
+       157,
+       158,
+       159,
+       160,
+       161,
+       162,
+       163,
+       164,
+       165,
+       166,
+       167,
+       168,
+       169,
+       170,
+       171,
+       173,
+       177,
+       180,
+       181,
+       185,
+       187
+      ],
+      "expected_procedure_range": [
+       247,
+       8,
+       238
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?Destroy@MxVideoPresenter@@IAEXE@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?Destroy@MxVideoPresenter@@IAEXE@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?Destroy@MxVideoPresenter@@IAEXE@Z",
+        0
+       ]
+      ],
+      "expected_external_entries": [],
+      "expected_seed_debug_s_sha256": "f8d1c535ca81adebd95d52978707181dbe6c7985a657f7825d1fe7488623802e",
+      "expected_image_debug_s_sha256": "f8d1c535ca81adebd95d52978707181dbe6c7985a657f7825d1fe7488623802e",
+      "authenticity_rationale": "One simulated region rewrite over the seed's own body: the same values reach the same stack arguments and the same virtual call, differing only in which caller-saved register carries the width/height temporary, where the returned this is copied into ecx, and which register holds the vtable -- proved by symbolic execution through the terminal call with the push sequence and call target required identical."
+     },
+     "retail_image_target": "lego1"
     }
    ],
    "completion": {
@@ -36959,8 +37295,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4930,
-    "accepted_row_identity_sha256": "8d7d243c445ebc9f1a33df1ce6563e2037b0b76e088ab52ec5b5e71d934b8a22",
+    "exact_raw_1_0_count": 4931,
+    "accepted_row_identity_sha256": "e2cba793dd8ac8231306ec3ce739182873ea32eb3f1c6228592008fa218edab7",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
