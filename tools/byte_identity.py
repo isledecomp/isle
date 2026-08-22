@@ -32462,9 +32462,14 @@ def require_instruction_schedule_debug_fidelity(
                 "instruction boundary of the image")
         rows.append([offset, line])
     interior = []
-    require(len(windows) == len(spec["windows"]),
+    # A web-recolour certificate may declare a second, TRAILING phase of
+    # windows -- reorderings its own recolour made legal.  Line fidelity is
+    # measured over both phases at once, in the order they were applied.
+    declared_windows = list(spec.get("windows") or []) \
+        + list(spec.get("trailing_windows") or [])
+    require(len(windows) == len(declared_windows),
             f"{context}: the window list differs from its declaration")
-    for window, declared in zip(windows, spec["windows"]):
+    for window, declared in zip(windows, declared_windows):
         start, end = window["start"], window["end"]
         order = list(window["target_order"])
         # For each line row INSIDE a window, name the SOURCE instruction that
@@ -32676,9 +32681,11 @@ def validate_web_recolour(
         "expected_changed_offsets", "expected_procedure_range",
         "expected_code_symbol_references", "expected_debug_s_registers",
         "expected_code_length", "expected_internal_relocation_targets",
-        "authenticity_rationale",
-    }, context, optional={"windows", "expected_code_length",
-                          "expected_internal_relocation_targets"})
+        "expected_fpo_record", "trailing_windows", "authenticity_rationale",
+    }, context, optional={"windows", "trailing_windows",
+                          "expected_code_length",
+                          "expected_internal_relocation_targets",
+                          "expected_fpo_record"})
     require(value.get("kind") == WEB_RECOLOUR_KIND,
             f"{context}.kind differs")
     code_length = value.get("expected_code_length")
@@ -32693,16 +32700,51 @@ def validate_web_recolour(
                 and all(type(item) is int and 0 <= item < body_length
                         for item in targets),
                 f"{context}.expected_internal_relocation_targets is invalid")
-    normalized_windows = []
-    if value.get("windows") is not None:
-        windows = value["windows"]
+    def _windows(key):
+        if value.get(key) is None:
+            return []
+        windows = value[key]
         require(isinstance(windows, list) and 1 <= len(windows) <= 32,
-                f"{context}.windows must contain 1..32 windows")
-        normalized_windows = _validate_schedule_windows(
-            windows, context, body_length, code_length, targets)
+                f"{context}.{key} must contain 1..32 windows")
+        return _validate_schedule_windows(
+            windows, f"{context}.{key}" if key != "windows" else context,
+            body_length, code_length, targets)
+
+    normalized_windows = _windows("windows")
+    # A reordering may be legal only AFTER a recolour.  Site 2 of
+    # `LegoAct2::SpawnBricks` is the case: retail hoists a `lea edx` above a
+    # store that, in OUR colours, still reads edx -- an anti-dependence that
+    # the recolour removes by moving that value to EBP.  Declaring such a
+    # window here runs it on the recoloured image, where the dependence
+    # graph the schedule proves against is the one that actually holds.
+    normalized_trailing = _windows("trailing_windows")
+    # The two phases are proved separately but the line-table fidelity check
+    # sees one window list, so they may not overlap -- an offset reordered
+    # twice has no single source instruction to map a line row through.
+    for leading in normalized_windows:
+        for trailing in normalized_trailing:
+            require(leading["end"] <= trailing["start"]
+                    or trailing["end"] <= leading["start"],
+                    f"{context}: a trailing window overlaps a leading one")
+    # EBP is a general register in a frame-pointer-free frame, and retail
+    # colours webs into it.  It is admitted only against a PROVED FPO record
+    # -- the same evidence the re-encoding bijection demands -- because that
+    # is what says EBP is not holding the frame.  ESP is never admitted: a
+    # rename to or from it is not a recolour but a change of addressing form.
+    fpo_record = value.get("expected_fpo_record")
+    if fpo_record is not None:
+        require(isinstance(fpo_record, dict)
+                and set(fpo_record) == FPO_RECORD_KEYS - {"raw_sha256"},
+                f"{context}.expected_fpo_record is invalid")
+        require(fpo_record.get("cbFrame") == FPO_FRAME_KIND_FPO
+                and fpo_record.get("fHasSEH") == 0,
+                f"{context}.expected_fpo_record does not declare a "
+                "frame-pointer-free, SEH-free frame")
+    structural = ({"esp"} if fpo_record is not None
+                  else _IA32_STRUCTURAL_REGISTERS)
     webs = value.get("webs")
-    require(isinstance(webs, list) and 1 <= len(webs) <= 4,
-            f"{context}.webs must contain 1..4 webs")
+    require(isinstance(webs, list) and 1 <= len(webs) <= 32,
+            f"{context}.webs must contain 1..32 webs")
     normalized_webs = []
     rewritten = []
     for index, web in enumerate(webs):
@@ -32718,8 +32760,9 @@ def validate_web_recolour(
                 and image_register in _IA32_REGISTER_NUMBERS
                 and source != image_register,
                 f"{web_context} does not name two distinct general registers")
-        require(not ({source, image_register} & _IA32_STRUCTURAL_REGISTERS),
-                f"{web_context} touches ESP or EBP")
+        require(not ({source, image_register} & structural),
+                f"{web_context} touches "
+                + ("ESP" if fpo_record is not None else "ESP or EBP"))
         # A membership entry is an instruction offset, or a two-element
         # [offset, field_ordinal] pair naming WHICH of that instruction's
         # register fields belongs to this web.  The scoped form is what lets
@@ -32766,7 +32809,8 @@ def validate_web_recolour(
             and all(type(offset) is int
                     and (offset in rewritten
                          or any(item["start"] <= offset < item["end"]
-                                for item in normalized_windows))
+                                for item in normalized_windows
+                                + normalized_trailing))
                     for offset in changed),
             f"{context}.expected_changed_offsets is invalid")
     require(set(rewritten) <= set(changed),
@@ -32810,6 +32854,8 @@ def validate_web_recolour(
     }
     if normalized_windows:
         normalized["windows"] = normalized_windows
+    if normalized_trailing:
+        normalized["trailing_windows"] = normalized_trailing
     if code_length is not None:
         normalized["expected_code_length"] = code_length
     if targets is not None:
@@ -32920,23 +32966,49 @@ def compose_retail_exact_web_recolour(
                 "web-recolour in-body relocated target set changed")
     code_length = spec.get("expected_code_length")
 
-    windows = spec.get("windows") or []
-    image = seed_body
-    schedule_detail = []
-    if windows:
+    def _schedule(windows, phase):
+        nonlocal image
+        if not windows:
+            return []
         image, schedule_proof = apply_instruction_schedule(
-            image, windows, relocation_offsets, "web-recolour schedule",
+            image, windows, relocation_offsets, f"web-recolour {phase}",
             relocation_symbols, code_length, internal_targets)
         require(not schedule_proof["relocation_reseat"],
                 "web-recolour refuses to move a relocation")
-        schedule_detail = schedule_proof["windows"]
+        return schedule_proof["windows"]
+
+    image = seed_body
+    schedule_detail = _schedule(spec.get("windows") or [], "schedule")
+    # When any web names EBP the declaration must carry an FPO record, and it
+    # is PROVED here against the seed's own `.debug$F` and decoded body before
+    # a single field is rewritten.
+    declared_fpo = spec.get("expected_fpo_record")
+    names_ebp = any("ebp" in {web.get("source_register"),
+                             web.get("image_register")}
+                    for web in spec["webs"])
+    require(declared_fpo is not None or not names_ebp,
+            "web-recolour names EBP without a frame-pointer-free record")
+    if declared_fpo is not None:
+        measured = require_frame_pointer_free_frame(
+            seed, sp, seed_body,
+            decode_ia32_bijection_body(seed_body, "web-recolour frame proof",
+                                       relocation_symbols, code_length),
+            "web-recolour frame proof")
+        require({key: value for key, value in measured.items()
+                 if key != "raw_sha256"} == declared_fpo,
+                "web-recolour FPO record differs from its declaration")
     image, proof = apply_web_recolour(
         image, spec["webs"], relocation_offsets, "web-recolour image",
-        relocation_symbols, code_length, internal_targets)
+        relocation_symbols, code_length, internal_targets,
+        declared_fpo is not None)
     require(proof["code_length"] == (code_length or len(seed_body)),
             "web-recolour code length differs from its pin")
     require(proof["instruction_count"] == spec["expected_instruction_count"],
             "web-recolour instruction count differs from its declaration")
+    # A window whose legality the recolour ESTABLISHED runs here, on the
+    # recoloured image, and is proved by the unchanged schedule primitive.
+    schedule_detail = schedule_detail + _schedule(
+        spec.get("trailing_windows") or [], "trailing schedule")
     changed = sorted(index for index in range(len(seed_body))
                      if seed_body[index] != image[index])
     require(changed == spec["expected_changed_offsets"],
@@ -32949,7 +33021,9 @@ def compose_retail_exact_web_recolour(
     # Obligation 7, measured on the IMAGE with the SEED's own tables -- which
     # are the tables this composition installs, unchanged.
     debug_detail = require_instruction_schedule_debug_fidelity(
-        seed, sp, image, windows, spec, mangled,
+        seed, sp, image,
+        (spec.get("windows") or []) + (spec.get("trailing_windows") or []),
+        spec, mangled,
         "web-recolour debug fidelity", relocation_symbols, code_length,
         internal_targets,
     )
@@ -33334,6 +33408,7 @@ def apply_web_recolour(
     context: str, relocations: dict | None = None,
     code_length: int | None = None,
     internal_targets: frozenset | None = None,
+    frame_pointer_free: bool = False,
 ) -> tuple[bytes, dict]:
     """Recolour each declared web, proving W1..W7 on the body it is given.
 
@@ -33362,9 +33437,22 @@ def apply_web_recolour(
         require(source in _IA32_REGISTER_NUMBERS
                 and target in _IA32_REGISTER_NUMBERS and source != target,
                 f"{web_context}: the recolour names an unknown register")
-        require(not ({source, target} & _IA32_STRUCTURAL_REGISTERS),
-                f"{web_context}: the recolour touches ESP or EBP, whose "
-                "encodings carry ModRM/SIB structure")
+        # EBP carries ModRM structure -- `mod=00, r/m=101` is a bare disp32,
+        # not `[ebp]` -- so a rename into or out of it can change the
+        # ADDRESSING FORM rather than just the register.  It is admitted only
+        # when the caller has discharged the frame-pointer-free obligation,
+        # and the encoding hazard is then caught where every other claim
+        # about the image is: W7 re-decodes the result to exhaustion and
+        # refuses any changed instruction boundary or operand set, which is
+        # exactly what a silently reinterpreted ModRM would produce.  ESP
+        # stays refused: `r/m=100` means a SIB byte follows, and a rename to
+        # or from the stack pointer is not a recolour at all.
+        structural = ({"esp"} if frame_pointer_free
+                      else _IA32_STRUCTURAL_REGISTERS)
+        require(not ({source, target} & structural),
+                f"{web_context}: the recolour touches "
+                + ("ESP" if frame_pointer_free else "ESP or EBP")
+                + ", whose encodings carry ModRM/SIB structure")
         source_atoms = ia32_register_atoms({source})
         target_atoms = ia32_register_atoms({target})
         source_number = _IA32_REGISTER_NUMBERS[source]

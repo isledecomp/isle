@@ -642,5 +642,122 @@ class FieldScopedSchemaTests(unittest.TestCase):
         self.assertIn("definitions is invalid", str(caught.exception))
 
 
+# EBP is a general register in a frame-pointer-free frame, and retail colours
+# webs into and out of it.  Both fixtures kill EBP before the `ret` -- the
+# decoder reports `ret` as reading every callee-saved register, so a live EBP
+# would fail W5 for reasons that have nothing to do with the encoding.
+EBP_SOURCE = (bytes.fromhex("53") + bytes.fromhex("8b6c2408")     # mov ebp,[esp+8]
+              + bytes.fromhex("8b4508")                           # mov eax,[ebp+8]
+              + bytes.fromhex("8bee")                             # mov ebp,esi
+              + bytes.fromhex("5b") + bytes.fromhex("c3"))
+# `mov eax,[ecx]` addresses with mod=00.  Renaming its base to EBP would make
+# the ModRM a bare disp32 -- a DIFFERENT addressing form, four bytes longer.
+EBP_TARGET = (bytes.fromhex("53") + bytes.fromhex("8b4c2408")     # mov ecx,[esp+8]
+              + bytes.fromhex("8b01")                             # mov eax,[ecx]
+              + bytes.fromhex("8bee")                             # mov ebp,esi
+              + bytes.fromhex("5b") + bytes.fromhex("c3"))
+
+
+class FramePointerFreeWebTests(unittest.TestCase):
+    """EBP webs, admitted only against a discharged FPO obligation."""
+
+    def apply(self, body, source, image, frame_pointer_free, rewritten):
+        web = web_declaration(source_register=source, image_register=image,
+                              definitions=[1], uses=[5],
+                              expected_rewritten_offsets=rewritten)
+        return byte_identity.apply_web_recolour(
+            body, [web], frozenset(), "web", None, None, None,
+            frame_pointer_free)
+
+    def test_a_web_out_of_ebp_is_admitted_under_an_fpo_frame(self):
+        image, _ = self.apply(EBP_SOURCE, "ebp", "ecx", True, [2, 6])
+        # mov ecx,[esp+8] ; mov eax,[ecx+8] -- the disp8 form is preserved
+        self.assertEqual(image.hex(), "538b4c24088b41088bee5bc3")
+
+    def test_the_same_web_is_refused_without_the_fpo_obligation(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply(EBP_SOURCE, "ebp", "ecx", False, [2, 6])
+        self.assertIn("ESP or EBP", str(caught.exception))
+
+    def test_esp_stays_refused_even_under_an_fpo_frame(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply(EBP_SOURCE, "esp", "ecx", True, [2, 6])
+        self.assertIn("touches ESP,", str(caught.exception))
+
+    def test_a_rename_into_ebp_that_changes_the_addressing_form_is_refused(
+            self):
+        # W7 re-decodes the image: `mov eax,[ecx]` would become a bare disp32,
+        # which moves every following instruction boundary.
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply(EBP_TARGET, "ecx", "ebp", True, [2, 6])
+        self.assertIn("changed an instruction boundary", str(caught.exception))
+
+
+FPO_RECORD = {
+    "ulOffStart": 0, "cbProcSize": SIZE, "cdwLocals": 0, "cdwParams": 0,
+    "cbProlog": 1, "cbRegs": 1, "fHasSEH": 0, "fUseBP": 1, "reserved": 0,
+    "cbFrame": 0,
+}
+
+
+class FramePointerFreeSchemaTests(unittest.TestCase):
+    """The declaration side of the EBP admission."""
+
+    def validate(self, **overrides):
+        return byte_identity.validate_web_recolour(
+            recolour_spec(**overrides), "recolour", SIZE)
+
+    def test_ebp_without_a_declared_record_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(webs=[web_declaration(image_register="ebp")])
+        self.assertIn("touches ESP or EBP", str(caught.exception))
+
+    def test_ebp_with_a_declared_fpo_record_validates(self):
+        normalized = self.validate(
+            expected_fpo_record=dict(FPO_RECORD),
+            webs=[web_declaration(image_register="ebp")])
+        self.assertEqual(normalized["webs"][0]["image_register"], "ebp")
+
+    def test_a_record_that_is_not_frame_pointer_free_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(expected_fpo_record=dict(FPO_RECORD, cbFrame=1),
+                          webs=[web_declaration(image_register="ebp")])
+        self.assertIn("frame-pointer-free", str(caught.exception))
+
+    def test_esp_is_refused_even_with_a_record(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(expected_fpo_record=dict(FPO_RECORD),
+                          webs=[web_declaration(image_register="esp")])
+        self.assertIn("touches ESP", str(caught.exception))
+
+    def test_more_than_thirty_two_webs_are_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(webs=[web_declaration()] * 33)
+        self.assertIn("1..32 webs", str(caught.exception))
+
+
+class TrailingWindowSchemaTests(unittest.TestCase):
+    """A window phase the recolour itself makes legal."""
+
+    def validate(self, **overrides):
+        return byte_identity.validate_web_recolour(
+            recolour_spec(**overrides), "recolour", SIZE)
+
+    def test_a_trailing_window_validates_and_is_kept_separate(self):
+        normalized = self.validate(
+            trailing_windows=[window_declaration(start=19, end=25,
+                                                 source_instruction_lengths=[5, 1],
+                                                 target_order=[1, 0])],
+            expected_changed_offsets=sorted(
+                set(recolour_spec()["expected_changed_offsets"]) | {19}))
+        self.assertEqual(len(normalized["trailing_windows"]), 1)
+        self.assertEqual(len(normalized["windows"]), 1)
+
+    def test_a_trailing_window_overlapping_a_leading_one_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(trailing_windows=[window_declaration()])
+        self.assertIn("overlaps a leading one", str(caught.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -24441,6 +24441,882 @@
   },
   {
    "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/worlds/legoact2.cpp",
+   "source_sha256": "7a2917d8695366f0d4ae35a7547b0a20126196cb01ee5c09099526e1b3e9402b",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_a9a90ebc7b08",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 1,
+      "functions": 1,
+      "generated_header_sha256": "a9a90ebc7b083a7a2f186f0bbb62530f885755a70199720658d60b430833949a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?SpawnBricks@LegoAct2@@AAEXXZ",
+     "donor": "d_a9a90ebc7b08",
+     "splice_class": "retail_exact_web_recolour",
+     "expected_section_number": 362,
+     "expected_section_count": 386,
+     "expected_body_length": 1115,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 20,
+     "expected_seed_line_count": 81,
+     "expected_donor_line_count": 81,
+     "expected_function_count": 112,
+     "expected_comdat_count": 157,
+     "expected_seed_body_sha256": "bbf0c73d1ba5db5fb7fdd0fa315cb79815c407b2a666708b629e98a88aba66bb",
+     "expected_donor_body_sha256": "bbf0c73d1ba5db5fb7fdd0fa315cb79815c407b2a666708b629e98a88aba66bb",
+     "expected_body_sha256": "a55f1e9a23d6a914e674c41025cf91c808a696c81894cbc1035e217ec9382ed9",
+     "expected_seed_metadata_sha256": "51fea77ab0402ba87f56c2f7937defd6466e7d39d68ea36ffb254ce6d26050ad",
+     "expected_donor_metadata_sha256": "1d50414e8a6a3fb754b604aa9d96e9074d1525158c7c9924b05467f7b46b21c8",
+     "expected_changed_offsets": [
+      440,
+      444,
+      446,
+      449,
+      456,
+      459,
+      460,
+      461,
+      462,
+      463,
+      464,
+      788,
+      792,
+      794,
+      797,
+      798,
+      799,
+      800,
+      801,
+      802,
+      803,
+      804,
+      805,
+      806,
+      807,
+      808,
+      809,
+      810,
+      811,
+      812,
+      813,
+      814,
+      815,
+      816,
+      817,
+      962,
+      978,
+      1017,
+      1033,
+      1044,
+      1046,
+      1053,
+      1055,
+      1056,
+      1057,
+      1058,
+      1059,
+      1060,
+      1061,
+      1062,
+      1063,
+      1064,
+      1065,
+      1066,
+      1067,
+      1068,
+      1069,
+      1071
+     ],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10051ac0",
+      "verdict": "MATCH",
+      "length": 1115
+     },
+     "retail_relocations": [
+      {
+       "offset": 313,
+       "type": 20,
+       "addend": 0,
+       "target": "?InitBricks@LegoAct2@@AAEXXZ",
+       "target_section": 356,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10051a60"
+      },
+      {
+       "offset": 353,
+       "type": 20,
+       "addend": 0,
+       "target": "?Create@Act2Brick@@QAEJH@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a4e0"
+      },
+      {
+       "offset": 383,
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 17,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "offset": 393,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 476,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetLocal2World@OrientableROI@@QAEXABVMatrix4@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a58f0"
+      },
+      {
+       "offset": 497,
+       "type": 20,
+       "addend": 0,
+       "target": "?PlayWhistleSound@Act2Brick@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a990"
+      },
+      {
+       "offset": 541,
+       "type": 20,
+       "addend": 0,
+       "target": "?Create@Act2Brick@@QAEJH@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a4e0"
+      },
+      {
+       "offset": 564,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 650,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetLocal2World@OrientableROI@@QAEXABVMatrix4@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a58f0"
+      },
+      {
+       "offset": 668,
+       "type": 20,
+       "addend": 0,
+       "target": "?PlayWhistleSound@Act2Brick@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a990"
+      },
+      {
+       "offset": 712,
+       "type": 20,
+       "addend": 0,
+       "target": "?Create@Act2Brick@@QAEJH@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a4e0"
+      },
+      {
+       "offset": 735,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 824,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetLocal2World@OrientableROI@@QAEXABVMatrix4@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a58f0"
+      },
+      {
+       "offset": 842,
+       "type": 20,
+       "addend": 0,
+       "target": "?PlayWhistleSound@Act2Brick@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a990"
+      },
+      {
+       "offset": 886,
+       "type": 20,
+       "addend": 0,
+       "target": "?Create@Act2Brick@@QAEJH@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a4e0"
+      },
+      {
+       "offset": 909,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 932,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 987,
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "offset": 1076,
+       "type": 20,
+       "addend": 0,
+       "target": "?SetLocal2World@OrientableROI@@QAEXABVMatrix4@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x100a58f0"
+      },
+      {
+       "offset": 1094,
+       "type": 20,
+       "addend": 0,
+       "target": "?PlayWhistleSound@Act2Brick@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x1007a990"
+      }
+     ],
+     "web_recolour": {
+      "kind": "web_recolour_v1",
+      "expected_internal_relocation_targets": [],
+      "windows": [
+       {
+        "start": 458,
+        "end": 465,
+        "source_instruction_lengths": [
+         4,
+         3
+        ],
+        "target_order": [
+         1,
+         0
+        ],
+        "expected_dependence_edges": [],
+        "expected_line_rows": []
+       },
+       {
+        "start": 1055,
+        "end": 1073,
+        "source_instruction_lengths": [
+         4,
+         1,
+         3,
+         4,
+         3,
+         3
+        ],
+        "target_order": [
+         2,
+         4,
+         3,
+         0,
+         1,
+         5
+        ],
+        "expected_dependence_edges": [
+         [
+          0,
+          1,
+          [
+           "register_raw"
+          ]
+         ],
+         [
+          2,
+          3,
+          [
+           "memory",
+           "register_war"
+          ]
+         ],
+         [
+          2,
+          4,
+          [
+           "memory"
+          ]
+         ],
+         [
+          2,
+          5,
+          [
+           "memory"
+          ]
+         ],
+         [
+          3,
+          5,
+          [
+           "memory",
+           "register_raw"
+          ]
+         ],
+         [
+          4,
+          5,
+          [
+           "memory",
+           "register_raw"
+          ]
+         ]
+        ],
+        "expected_line_rows": [],
+        "stack_adjustments": [
+         [
+          3,
+          1066,
+          28,
+          24
+         ]
+        ]
+       }
+      ],
+      "webs": [
+       {
+        "source_register": "ecx",
+        "image_register": "esi",
+        "definitions": [
+         439
+        ],
+        "uses": [
+         445
+        ],
+        "expected_rewritten_offsets": [
+         440,
+         446
+        ]
+       },
+       {
+        "source_register": "eax",
+        "image_register": "ecx",
+        "definitions": [
+         443
+        ],
+        "uses": [
+         445
+        ],
+        "expected_rewritten_offsets": [
+         444,
+         446
+        ]
+       },
+       {
+        "source_register": "esi",
+        "image_register": "eax",
+        "definitions": [
+         439
+        ],
+        "uses": [
+         445
+        ],
+        "expected_rewritten_offsets": [
+         440,
+         446
+        ]
+       },
+       {
+        "source_register": "ecx",
+        "image_register": "eax",
+        "definitions": [
+         448
+        ],
+        "uses": [
+         455
+        ],
+        "expected_rewritten_offsets": [
+         449,
+         456
+        ]
+       },
+       {
+        "source_register": "edx",
+        "image_register": "ebp",
+        "definitions": [
+         1043
+        ],
+        "uses": [
+         1045
+        ],
+        "expected_rewritten_offsets": [
+         1044,
+         1046
+        ]
+       },
+       {
+        "source_register": "ecx",
+        "image_register": "edx",
+        "definitions": [
+         961,
+         977,
+         1016,
+         1032
+        ],
+        "uses": [
+         1043,
+         1052,
+         [
+          1058,
+          1
+         ]
+        ],
+        "expected_rewritten_offsets": [
+         962,
+         978,
+         1017,
+         1033,
+         1044,
+         1053,
+         1059
+        ]
+       },
+       {
+        "source_register": "ebp",
+        "image_register": "ecx",
+        "definitions": [
+         1043
+        ],
+        "uses": [
+         1045
+        ],
+        "expected_rewritten_offsets": [
+         1044,
+         1046
+        ]
+       },
+       {
+        "source_register": "ecx",
+        "image_register": "ebp",
+        "definitions": [
+         1058
+        ],
+        "uses": [
+         1070
+        ],
+        "expected_rewritten_offsets": [
+         1059,
+         1071
+        ]
+       },
+       {
+        "source_register": "eax",
+        "image_register": "ecx",
+        "definitions": [
+         1061
+        ],
+        "uses": [
+         1070
+        ],
+        "expected_rewritten_offsets": [
+         1062,
+         1071
+        ]
+       },
+       {
+        "source_register": "ebp",
+        "image_register": "eax",
+        "definitions": [
+         1058
+        ],
+        "uses": [
+         1070
+        ],
+        "expected_rewritten_offsets": [
+         1059,
+         1071
+        ]
+       },
+       {
+        "source_register": "edx",
+        "image_register": "ebp",
+        "definitions": [
+         787
+        ],
+        "uses": [
+         793
+        ],
+        "expected_rewritten_offsets": [
+         788,
+         794
+        ]
+       },
+       {
+        "source_register": "eax",
+        "image_register": "edx",
+        "definitions": [
+         791
+        ],
+        "uses": [
+         793
+        ],
+        "expected_rewritten_offsets": [
+         792,
+         794
+        ]
+       },
+       {
+        "source_register": "ebp",
+        "image_register": "eax",
+        "definitions": [
+         787
+        ],
+        "uses": [
+         793
+        ],
+        "expected_rewritten_offsets": [
+         788,
+         794
+        ]
+       },
+       {
+        "source_register": "ebp",
+        "image_register": "eax",
+        "definitions": [
+         799
+        ],
+        "uses": [
+         803
+        ],
+        "expected_rewritten_offsets": [
+         800,
+         804
+        ]
+       },
+       {
+        "source_register": "edx",
+        "image_register": "ebp",
+        "definitions": [
+         796
+        ],
+        "uses": [
+         803
+        ],
+        "expected_rewritten_offsets": [
+         797,
+         804
+        ]
+       }
+      ],
+      "trailing_windows": [
+       {
+        "start": 796,
+        "end": 818,
+        "source_instruction_lengths": [
+         3,
+         4,
+         3,
+         4,
+         4,
+         3,
+         1
+        ],
+        "target_order": [
+         1,
+         0,
+         3,
+         6,
+         2,
+         4,
+         5
+        ],
+        "expected_dependence_edges": [
+         [
+          0,
+          2,
+          [
+           "memory",
+           "register_raw"
+          ]
+         ],
+         [
+          0,
+          5,
+          [
+           "register_war"
+          ]
+         ],
+         [
+          1,
+          2,
+          [
+           "memory",
+           "register_raw"
+          ]
+         ],
+         [
+          1,
+          4,
+          [
+           "register_waw"
+          ]
+         ],
+         [
+          2,
+          4,
+          [
+           "memory",
+           "register_war"
+          ]
+         ],
+         [
+          2,
+          5,
+          [
+           "memory"
+          ]
+         ],
+         [
+          3,
+          6,
+          [
+           "register_raw"
+          ]
+         ]
+        ],
+        "expected_line_rows": [],
+        "stack_adjustments": [
+         [
+          4,
+          813,
+          24,
+          28
+         ]
+        ]
+       }
+      ],
+      "expected_fpo_record": {
+       "ulOffStart": 0,
+       "cbProcSize": 1115,
+       "cdwLocals": 49,
+       "cdwParams": 0,
+       "cbProlog": 61,
+       "cbRegs": 4,
+       "fHasSEH": 0,
+       "fUseBP": 1,
+       "reserved": 0,
+       "cbFrame": 0
+      },
+      "expected_instruction_count": 278,
+      "expected_changed_offsets": [
+       440,
+       444,
+       446,
+       449,
+       456,
+       459,
+       460,
+       461,
+       462,
+       463,
+       464,
+       788,
+       792,
+       794,
+       797,
+       798,
+       799,
+       800,
+       801,
+       802,
+       803,
+       804,
+       805,
+       806,
+       807,
+       808,
+       809,
+       810,
+       811,
+       812,
+       813,
+       814,
+       815,
+       816,
+       817,
+       962,
+       978,
+       1017,
+       1033,
+       1044,
+       1046,
+       1053,
+       1055,
+       1056,
+       1057,
+       1058,
+       1059,
+       1060,
+       1061,
+       1062,
+       1063,
+       1064,
+       1065,
+       1066,
+       1067,
+       1068,
+       1069,
+       1071
+      ],
+      "expected_procedure_range": [
+       1115,
+       61,
+       1105
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?SpawnBricks@LegoAct2@@AAEXXZ",
+        0
+       ],
+       [
+        ".debug$S",
+        "?SpawnBricks@LegoAct2@@AAEXXZ",
+        0
+       ],
+       [
+        ".debug$S",
+        "?SpawnBricks@LegoAct2@@AAEXXZ",
+        0
+       ]
+      ],
+      "expected_debug_s_registers": [
+       [
+        "this",
+        59,
+        "ebx"
+       ],
+       [
+        "location",
+        196,
+        "edx"
+       ],
+       [
+        "roi",
+        245,
+        "ebp"
+       ]
+      ],
+      "authenticity_rationale": "Retail's body is ours with three sites recoloured and reordered. Each site loads a location vector through SET3 and writes it into local2world[3]; the allocator's colours differ site by site, and two exchanges of a pair of overlapping live ranges are expressed as sequential coalesces through a register the liveness proves dead across the exchange. The reorderings sink a `lea edx,[esp+0x14]; push edx` pair across an `[esp+0x18]` load, whose displacement moves by the push's own four-byte stack delta."
+     }
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Closes 1 row in LEGO1/lego/legoomni/src/worlds/legoact2.cpp: a web-recolour certificate over a generated declaration-only carrier state of the rendered current source.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/score.cpp",
    "source_sha256": "8350480349c789ceaeac6f92480594512a6d0c15a04358a3bdc5657692520971",
    "mode": "compose_equal_body_comdat",
@@ -34241,8 +35117,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4927,
-    "accepted_row_identity_sha256": "077e7adf8314588c08825e1ccf3de2a31f797098f8707be16a7a0e556cfd68e0",
+    "exact_raw_1_0_count": 4928,
+    "accepted_row_identity_sha256": "1dfc0f034e137c1042fb3f92d2c5985f964d848e86314792b39a46ad1e64dd0c",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
