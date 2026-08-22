@@ -752,19 +752,20 @@ MxResult LegoAnimPresenter::CopyTransform(LegoROI* p_roi)
 		}
 	}
 
-	{
-		mn->Product(inverse, local2world);
-		SetRoiTransform(mn);
-		delete[] roiTransforms;
-		SetRoiTransformApplied();
+	mn->Product(inverse, local2world);
+	SetRoiTransform(mn);
+	delete[] roiTransforms;
+	SetRoiTransformApplied();
 
+	{
 		MxMatrix originalTransform(*m_transform);
 		MxMatrix newTransform;
 
 		newTransform.Product(originalTransform, *m_roiTransform);
 		*m_transform = newTransform;
-		return SUCCESS;
 	}
+
+	return SUCCESS;
 
 done:
 	if (mn != NULL) {
