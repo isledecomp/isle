@@ -1866,6 +1866,27 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         ))
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])
+                elif (function["splice_class"]
+                        == byte_identity.DONOR_REWRITING_CLASS):
+                    # The rewriting seam with a donor pre-image: the fp-sum
+                    # rotations and regional bijections are applied to the
+                    # donor's own compiler-produced body, the image must
+                    # preserve the donor's instruction grid, and the result
+                    # is refused unless it equals the pinned retail oracle.
+                    # Installation is the same-slot resize.
+                    retail = function["retail_oracle"]
+                    composed, detail = (
+                        byte_identity
+                        .compose_retail_exact_donor_rewriting(
+                            composed, donor_objects[function["donor"]],
+                            function,
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(retail["address"], 16), retail["length"],
+                            ),
+                        ))
+                    byte_identity.validate_donor_object_excluded(
+                        composed, [donor_objects[function["donor"]]])
                 elif function["splice_class"] == "same_slot_resize":
                     composed, detail = byte_identity.compose_same_slot_resize(
                         composed, donor_objects[function["donor"]], function
