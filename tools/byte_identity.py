@@ -29142,9 +29142,20 @@ def msvc_call_argument_registers(symbol: object) -> frozenset | None:
         return None
     readings = set()
     for index in range(len(symbol) - 1):
-        if symbol[index:index + 2] != "@@":
+        if symbol[index:index + 2] == "@@":
+            cursor = index + 2
+        elif symbol[index] == "@" and symbol[index + 1] in \
+                _MSVC_GLOBAL_FUNCTION_CLASSES:
+            # A GLOBAL operator's scope list is empty, so its terminator is
+            # a single `@` (`??2@YAPAXI@Z`).  Only the global function
+            # classes are admitted at a single-`@` position -- a member
+            # always carries `@@` -- and a coincidental match inside a type
+            # encoding either agrees with the true reading or lands in
+            # `readings` as a second value, which the exactly-one guard
+            # below already refuses.
+            cursor = index + 1
+        else:
             continue
-        cursor = index + 2
         if cursor >= len(symbol):
             continue
         letter = symbol[cursor]
@@ -36127,14 +36138,14 @@ def validate_donor_rewriting(
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(value, {
         "kind", "windows", "fp_sum_rotations", "register_bijections",
-        "relational_sites",
+        "fp_pointer_exchanges", "relational_sites",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_code_length",
         "expected_internal_relocation_targets", "authenticity_rationale",
     }, context, optional={"windows", "fp_sum_rotations",
-                          "register_bijections", "relational_sites",
-                          "expected_code_length",
+                          "register_bijections", "fp_pointer_exchanges",
+                          "relational_sites", "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == DONOR_REWRITING_KIND,
             f"{context}.kind differs")
@@ -36228,9 +36239,17 @@ def validate_donor_rewriting(
         end = require_exact_int(item.get("region_end"),
                                 f"{item_context}.region_end",
                                 minimum=2, maximum=body_length - 1)
-        require(previous_end <= start < end,
-                f"{item_context}: regions are unsorted or overlapping")
-        previous_end = end
+        require(start < end,
+                f"{item_context}: the region is empty or inverted")
+        # Two bijection regions may overlap ONLY when their mappings touch
+        # disjoint register sets -- the renames then commute, and each is
+        # proved on the image the previous one produced (C1).
+        for earlier in normalized_bijections:
+            if start < earlier["region_end"]                     and earlier["region_start"] < end:
+                require(not (set(mapping)
+                             & set(earlier["mapping"])),
+                        f"{item_context}: overlapping regions rename a "
+                        "common register")
         offsets = item.get("expected_rewritten_offsets")
         require(isinstance(offsets, list) and offsets
                 and offsets == sorted(set(offsets))
@@ -36245,6 +36264,48 @@ def validate_donor_rewriting(
                 item.get("expected_region_instruction_count"),
                 f"{item_context}.expected_region_instruction_count",
                 minimum=1),
+            "expected_rewritten_offsets": list(offsets),
+        })
+    normalized_exchanges = []
+    exchange_bytes = []
+    previous_exchange_end = 0
+    for index, item in enumerate(value.get("fp_pointer_exchanges") or []):
+        item_context = f"{context}.fp_pointer_exchanges[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "region_start", "region_end", "swap_offsets", "dead_registers",
+            "expected_rewritten_offsets",
+        }, item_context)
+        start = require_exact_int(item.get("region_start"),
+                                  f"{item_context}.region_start",
+                                  minimum=1, maximum=body_length - 1)
+        end = require_exact_int(item.get("region_end"),
+                                f"{item_context}.region_end",
+                                minimum=2, maximum=body_length)
+        require(previous_exchange_end <= start < end,
+                f"{item_context}: exchanges are unsorted or overlapping")
+        previous_exchange_end = end
+        swap = item.get("swap_offsets")
+        require(isinstance(swap, list) and len(swap) == 2
+                and all(type(offset) is int for offset in swap)
+                and start <= swap[0] < swap[1] < end,
+                f"{item_context}.swap_offsets is invalid")
+        dead = item.get("dead_registers")
+        require(isinstance(dead, list) and dead == sorted(set(dead))
+                and all(name in _IA32_REGISTER_NUMBERS for name in dead)
+                and not (set(dead) & _IA32_STRUCTURAL_REGISTERS),
+                f"{item_context}.dead_registers is invalid")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and start <= offset < end
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        exchange_bytes.extend(offsets)
+        normalized_exchanges.append({
+            "region_start": start, "region_end": end,
+            "swap_offsets": list(swap),
+            "dead_registers": list(dead),
             "expected_rewritten_offsets": list(offsets),
         })
     normalized_sites = []
@@ -36290,7 +36351,8 @@ def validate_donor_rewriting(
             "expected_rewritten_offsets": list(offsets),
         })
     require(normalized_windows or normalized_rotations
-            or normalized_bijections or normalized_sites,
+            or normalized_bijections or normalized_exchanges
+            or normalized_sites,
             f"{context} declares no certificate")
     window_bytes = {offset for window in normalized_windows
                     for offset in range(window["start"], window["end"])}
@@ -36298,16 +36360,18 @@ def validate_donor_rewriting(
             f"{context}: two bijections rewrite the same byte")
     require(len(set(relational_bytes)) == len(relational_bytes),
             f"{context}: two relational sites rewrite the same byte")
-    require(not (set(bijection_bytes) & set(relational_bytes)),
-            f"{context}: a bijection and a relational reversal rewrite the "
-            "same byte")
-    require(not (window_bytes & (rotation_regions | set(bijection_bytes)
-                                 | set(relational_bytes))),
-            f"{context}: a byte-local certificate rewrites a byte inside a "
-            "reordered window")
+    require(len({*bijection_bytes} & {*exchange_bytes}) == 0
+            and len({*bijection_bytes} & {*relational_bytes}) == 0
+            and len({*exchange_bytes} & {*relational_bytes}) == 0,
+            f"{context}: two certificates rewrite the same byte")
     require(not (rotation_regions & (set(bijection_bytes)
-                                     | set(relational_bytes))),
-            f"{context}: a bijection rewrites a byte inside an fp-sum chain")
+                                     | set(exchange_bytes)
+                                     | set(relational_bytes)
+                                     | window_bytes)),
+            f"{context}: another certificate reaches inside an fp-sum chain")
+    require(not (window_bytes & set(relational_bytes)),
+            f"{context}: a relational reversal rewrites a byte inside a "
+            "reordered window")
     changed = value.get("expected_changed_offsets")
     require(isinstance(changed, list) and changed
             and changed == sorted(set(changed))
@@ -36315,10 +36379,11 @@ def validate_donor_rewriting(
                     for offset in changed),
             f"{context}.expected_changed_offsets is invalid")
     require(set(rotation_bytes) | set(bijection_bytes)
-            | set(relational_bytes) <= set(changed),
+            | set(exchange_bytes) | set(relational_bytes) <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in rotation_regions or offset in window_bytes
-                or offset in set(bijection_bytes) | set(relational_bytes)
+                or offset in set(bijection_bytes) | set(exchange_bytes)
+                | set(relational_bytes)
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
             "certificate can move")
@@ -36358,6 +36423,7 @@ def validate_donor_rewriting(
         "windows": normalized_windows,
         "fp_sum_rotations": normalized_rotations,
         "register_bijections": normalized_bijections,
+        "fp_pointer_exchanges": normalized_exchanges,
         "relational_sites": normalized_sites,
     }
     if code_length is not None:
@@ -36488,31 +36554,11 @@ def compose_retail_exact_donor_rewriting(
             "donor-rewriting external entry set differs from its "
             "declaration")
 
-    # --- the primitives, in the one order that is sound (C1) --------------
+    # --- the primitives, in the one order that is sound (C1): the regional
+    # renames first (each measured on the previous image), the semantic
+    # exchanges on the renamed image, the reorderings, and the byte-local
+    # mirrors last, on the image whose offsets their declarations name.
     image = donor_body
-    schedule_detail = []
-    windows = spec.get("windows") or []
-    if windows:
-        image, schedule_proof = apply_instruction_schedule(
-            image, windows, relocation_offsets,
-            "donor-rewriting schedule", relocation_symbols, code_length,
-            internal_targets)
-        require(not schedule_proof["relocation_reseat"],
-                "donor-rewriting refuses to move a relocation")
-        schedule_detail = schedule_proof["windows"]
-    fp_detail = []
-    if spec.get("fp_sum_rotations"):
-        image, fp_proof = apply_fp_sum_reassociation(
-            image, spec["fp_sum_rotations"], relocation_offsets,
-            "donor-rewriting fp-sum", relocation_symbols, code_length,
-            frozenset(external_entries), internal_targets)
-        for index, (item, chain) in enumerate(
-                zip(spec["fp_sum_rotations"], fp_proof["chains"])):
-            require(chain["rewritten_offsets"]
-                    == item["expected_rewritten_offsets"],
-                    f"donor-rewriting fp-sum chain {index} rewrote a "
-                    "different byte set from its declaration")
-        fp_detail = fp_proof["chains"]
     bijection_detail = []
     for index, item in enumerate(spec.get("register_bijections") or []):
         image, proof = apply_register_bijection(
@@ -36534,6 +36580,43 @@ def compose_retail_exact_donor_rewriting(
             "rewritten_offsets": proof["rewritten_offsets"],
             "region_instruction_count": proof["region_instruction_count"],
         })
+    fp_detail = []
+    if spec.get("fp_sum_rotations"):
+        image, fp_proof = apply_fp_sum_reassociation(
+            image, spec["fp_sum_rotations"], relocation_offsets,
+            "donor-rewriting fp-sum", relocation_symbols, code_length,
+            frozenset(external_entries), internal_targets)
+        for index, (item, chain) in enumerate(
+                zip(spec["fp_sum_rotations"], fp_proof["chains"])):
+            require(chain["rewritten_offsets"]
+                    == item["expected_rewritten_offsets"],
+                    f"donor-rewriting fp-sum chain {index} rewrote a "
+                    "different byte set from its declaration")
+        fp_detail = fp_proof["chains"]
+    exchange_detail = []
+    if spec.get("fp_pointer_exchanges"):
+        image, exchange_proof = apply_fp_pointer_exchange(
+            image, spec["fp_pointer_exchanges"], relocation_offsets,
+            "donor-rewriting fp-exchange", relocation_symbols, code_length,
+            frozenset(external_entries), internal_targets)
+        for index, (item, exchange) in enumerate(
+                zip(spec["fp_pointer_exchanges"],
+                    exchange_proof["exchanges"])):
+            require(exchange["rewritten_offsets"]
+                    == item["expected_rewritten_offsets"],
+                    f"donor-rewriting fp-exchange {index} rewrote a "
+                    "different byte set from its declaration")
+        exchange_detail = exchange_proof["exchanges"]
+    schedule_detail = []
+    windows = spec.get("windows") or []
+    if windows:
+        image, schedule_proof = apply_instruction_schedule(
+            image, windows, relocation_offsets,
+            "donor-rewriting schedule", relocation_symbols, code_length,
+            internal_targets)
+        require(not schedule_proof["relocation_reseat"],
+                "donor-rewriting refuses to move a relocation")
+        schedule_detail = schedule_proof["windows"]
     relational_detail = []
     if spec.get("relational_sites"):
         sites = [{key: item[key] for key in ("compare_offset",
@@ -36653,6 +36736,7 @@ def compose_retail_exact_donor_rewriting(
         "splice_class": DONOR_REWRITING_CLASS,
         "instruction_schedule": schedule_detail,
         "fp_sum_reassociation": fp_detail,
+        "fp_pointer_exchanges": exchange_detail,
         "register_bijections": bijection_detail,
         "relational_form": relational_detail,
         "instruction_count": len(image_instructions),
@@ -36661,4 +36745,273 @@ def compose_retail_exact_donor_rewriting(
         "external_entries": sorted(external_entries),
         "retail_exact": True,
         **semantic_detail,
+    }
+
+
+# ---------------------------------------------------------------------------
+# FP pointer-addend exchange: swap the immediates of two pointer-setup adds
+# whose products feed one x87 summation chain.
+# ---------------------------------------------------------------------------
+#
+# The fp-sum reassociation primitive covers the case where whole
+# (fld m64; fmul m64) pairs permute.  MSVC 4.2 exercises the same licence in
+# a second shape: the products are addressed THROUGH POINTER REGISTERS
+# (`mov edx,[p]; add edx,4; ... fld [edx]; fmul [edx]`), and two states of
+# the optimizer differ only in WHICH pointer register receives which element
+# offset -- the visible difference is two exchanged `add r32, imm` immediate
+# fields, and the semantic difference is the order of two addends inside one
+# faddp chain.  Both orders are the compiler's own output for the same
+# source (measured on Act3Brickster::FUN_100417c0, where sibling donor
+# states render each).
+#
+# WHAT IT PROVES, per declared exchange -- and unlike every other primitive,
+# the equality here is established by SYMBOLIC EXECUTION of the region, not
+# by pattern:
+#  X1  The region is straight-line: every instruction is in the closed
+#      simulator set (register moves and adds, m32 fld/fmul, faddp st(1),
+#      register-register test), no control flow, no memory write, no
+#      relocation, no branch into the interior, no external entry.
+#  X2  The image is the body with exactly the two declared immediate fields
+#      exchanged; the fields have the same width and their instructions the
+#      same form.
+#  X3  Both versions are executed symbolically from the same unknown start
+#      state.  Register moves and adds build expressions; fld/fmul build
+#      product terms over symbolic loads; faddp joins terms into a MULTISET
+#      -- nested sums flatten, which is the fp-sum reassociation licence
+#      restated (the addend multiset of one summation chain is preserved;
+#      its association order is the optimizer's).
+#  X4  At the region end the two versions must agree on: the FP stack (with
+#      sums compared as multisets), every general register except a declared
+#      dead set, the identity and operands of the last flag-writing
+#      instruction, and the absence of memory writes.
+#  X5  Every register in the declared dead set is proved dead on the region's
+#      exit edge by the same backward atom liveness the bijection
+#      certificate uses, measured over the WHOLE body.
+
+
+FP_POINTER_EXCHANGE_KIND = "fp_pointer_addend_exchange_v1"
+
+
+_SIMULATOR_REGS = ("eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi")
+
+
+def _fp_exchange_simulate(body: bytes, start: int, end: int, context: str):
+    """Symbolically execute [start, end); return the end state."""
+    regs = {name: ("reg0", name) for name in _SIMULATOR_REGS}
+    stack = []          # FP stack, top last; unknown base below
+    last_flags = None   # (offset - start, canonical operand expression)
+    offset = start
+
+    def norm_sum(left, right):
+        parts = []
+        for item in (left, right):
+            if isinstance(item, tuple) and item[0] == "fsum":
+                parts.extend(item[1])
+            else:
+                parts.append(item)
+        return ("fsum", tuple(sorted(parts, key=repr)))
+
+    while offset < end:
+        length = supported_ia32_instruction_length(body[offset:], context)
+        require(offset + length <= end,
+                f"{context}: an instruction straddles the region boundary "
+                f"at {offset}")
+        encoded = body[offset:offset + length]
+        op = encoded[0]
+        modrm = encoded[1] if length >= 2 else None
+        mod = modrm >> 6 if modrm is not None else None
+        reg_field = (modrm >> 3) & 7 if modrm is not None else None
+        rm = modrm & 7 if modrm is not None else None
+
+        def mem_operand(cursor_base):
+            # [reg], [reg+disp8/32], [ebp+disp] -- no SIB support needed yet
+            require(rm != 4, f"{context}: SIB addressing at {offset} is "
+                    "outside the simulator set")
+            base = regs[_SIMULATOR_REGS[rm]]
+            cursor = cursor_base
+            if mod == 1:
+                disp = int.from_bytes(encoded[cursor:cursor + 1],
+                                      "little", signed=True)
+            elif mod == 2:
+                disp = int.from_bytes(encoded[cursor:cursor + 4],
+                                      "little", signed=True)
+            elif mod == 0 and rm == 5:
+                require(False, f"{context}: absolute address at {offset}")
+            else:
+                disp = 0
+            return ("addr", base, disp)
+
+        if op == 0x8B and mod != 3:          # mov r32, m32
+            regs[_SIMULATOR_REGS[reg_field]] = ("load", mem_operand(2))
+        elif op == 0x8B and mod == 3:        # mov r32, r32
+            regs[_SIMULATOR_REGS[reg_field]] = regs[_SIMULATOR_REGS[rm]]
+        elif op == 0x89 and mod == 3:        # mov r32, r32 (store form)
+            regs[_SIMULATOR_REGS[rm]] = regs[_SIMULATOR_REGS[reg_field]]
+        elif op == 0x83 and mod == 3 and reg_field == 0:   # add r32, imm8
+            value = int.from_bytes(encoded[2:3], "little", signed=True)
+            name = _SIMULATOR_REGS[rm]
+            regs[name] = ("add", regs[name], value)
+            last_flags = (offset - start, ("addflags", regs[name]))
+        elif op == 0x81 and mod == 3 and reg_field == 0:   # add r32, imm32
+            value = int.from_bytes(encoded[2:6], "little", signed=True)
+            name = _SIMULATOR_REGS[rm]
+            regs[name] = ("add", regs[name], value)
+            last_flags = (offset - start, ("addflags", regs[name]))
+        elif op == 0x85 and mod == 3:        # test r32, r32
+            last_flags = (offset - start,
+                          ("test", regs[_SIMULATOR_REGS[rm]],
+                           regs[_SIMULATOR_REGS[reg_field]]))
+        elif op == 0xD9 and mod != 3 and reg_field == 0:   # fld m32
+            stack.append(("load32", mem_operand(2)))
+        elif op == 0xD8 and mod != 3 and reg_field == 1:   # fmul m32
+            require(stack, f"{context}: fmul at {offset} multiplies the "
+                    "unknown stack base")
+            stack[-1] = ("fmul", stack[-1], ("load32", mem_operand(2)))
+        elif encoded == b"\xde\xc1":         # faddp st(1), st
+            require(len(stack) >= 2,
+                    f"{context}: faddp at {offset} reaches the unknown "
+                    "stack base")
+            right = stack.pop()
+            stack[-1] = norm_sum(stack[-1], right)
+        else:
+            require(False,
+                    f"{context}: the instruction at {offset} is outside "
+                    "the simulator's closed set")
+        offset += length
+    require(offset == end,
+            f"{context}: the region does not end on an instruction boundary")
+    return regs, stack, last_flags
+
+
+def apply_fp_pointer_exchange(
+    body: bytes, exchanges: list, relocation_offsets: frozenset,
+    context: str, relocations: dict | None = None,
+    code_length: int | None = None,
+    external_entries: frozenset | None = None,
+    internal_targets: frozenset | None = None,
+) -> tuple[bytes, dict]:
+    """Exchange declared pointer-setup immediates, or refuse."""
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(exchanges, list) and exchanges,
+            f"{context}: no exchange is declared")
+    items, successors, entries = ia32_relational_flow_walk(
+        body, relocations, context, code_length, external_entries)
+    branch_targets = {item["target"] for item in items
+                      if item.get("target") is not None}
+    flag_live = ia32_relational_flag_liveness(items, successors, context)
+    walk_index = {item["offset"]: index for index, item in enumerate(items)}
+    # Whole-body liveness for the dead-register proofs (X5).
+    decoded = decode_ia32_bijection_body(body, f"{context} liveness",
+                                         relocations, code_length)
+    live, _live_successors = _register_bijection_live_sets(
+        decoded, f"{context} liveness")
+    exit_index = {item["offset"]: index
+                  for index, item in enumerate(decoded)}
+    image = bytearray(body)
+    proved = []
+    previous_end = 0
+    for ordinal, item in enumerate(exchanges):
+        item_context = f"{context} exchange {ordinal}"
+        start, end = item["region_start"], item["region_end"]
+        require(type(start) is int and type(end) is int
+                and 0 < start < end <= len(body),
+                f"{item_context}: bounds are out of range")
+        require(previous_end <= start,
+                f"{item_context}: exchanges are unsorted or overlapping")
+        previous_end = end
+        require(not any(start <= offset < end
+                        for offset in relocation_offsets),
+                f"{item_context}: a relocation lies inside the region")
+        require(not any(start < target < end for target in branch_targets),
+                f"{item_context}: a branch targets the region interior")
+        require(not any(start < items[entry]["offset"] < end
+                        for entry in entries[1:]),
+                f"{item_context}: an external entry lies inside the region")
+        require(not any(start < target < end
+                        for target in (internal_targets or frozenset())),
+                f"{item_context}: a relocated target lies inside the region")
+        first, second = item["swap_offsets"]
+        require(start <= first < second < end,
+                f"{item_context}: the swapped adds are outside the region")
+        # X2: both are `add r32, imm` of the same immediate width.
+        forms = []
+        for at in (first, second):
+            length = supported_ia32_instruction_length(
+                body[at:], item_context)
+            encoded = body[at:at + length]
+            require(encoded[0] in (0x81, 0x83)
+                    and (encoded[1] >> 6) == 3
+                    and ((encoded[1] >> 3) & 7) == 0,
+                    f"{item_context}: the instruction at {at} is not "
+                    "add r32, imm")
+            forms.append((encoded[0], length))
+        require(forms[0] == forms[1],
+                f"{item_context}: the two adds have different forms")
+        width = 1 if forms[0][0] == 0x83 else 4
+        imm_a = image[first + 2:first + 2 + width]
+        imm_b = image[second + 2:second + 2 + width]
+        require(imm_a != imm_b,
+                f"{item_context}: the immediates are already equal")
+        image[first + 2:first + 2 + width] = imm_b
+        image[second + 2:second + 2 + width] = imm_a
+        # X1, X3, X4: simulate both versions.
+        seed_state = _fp_exchange_simulate(body, start, end,
+                                           f"{item_context} seed")
+        image_state = _fp_exchange_simulate(bytes(image), start, end,
+                                            f"{item_context} image")
+        seed_regs, seed_stack, seed_flags = seed_state
+        image_regs, image_stack, image_flags = image_state
+        require(seed_stack == image_stack,
+                f"{item_context}: the two versions leave different FP "
+                "stacks -- the exchange is not a reassociation of one sum")
+        if seed_flags != image_flags:
+            # The exchanged adds write the arithmetic flags; a differing
+            # last-writer is admissible only when every integer flag is dead
+            # at the region's exit, measured on the whole body's own flow.
+            require(end in walk_index,
+                    f"{item_context}: the region end is not a flow boundary")
+            live_flags = flag_live[walk_index[end]]
+            require(not live_flags,
+                    f"{item_context}: the two versions leave different flag "
+                    f"state and {sorted(live_flags)} is live at the exit")
+        differing = sorted(name for name in _SIMULATOR_REGS
+                           if seed_regs[name] != image_regs[name])
+        declared_dead = item["dead_registers"]
+        require(differing == sorted(declared_dead),
+                f"{item_context}: the registers left differing {differing} "
+                f"are not the declared dead set {sorted(declared_dead)}")
+        # X5: each differing register is dead on the exit edge.
+        require(end in exit_index or end == len(body),
+                f"{item_context}: the region end is not an instruction "
+                "boundary of the body")
+        if end in exit_index:
+            live_in = live[exit_index[end]]
+            for name in declared_dead:
+                overlap = _IA32_ATOMS_OF[name] & live_in
+                require(not overlap,
+                        f"{item_context}: {name} is live on the region's "
+                        f"exit edge ({sorted(overlap)})")
+        proved.append({
+            "region_start": start, "region_end": end,
+            "swap_offsets": [first, second],
+            "immediate_width": width,
+            "dead_registers": sorted(declared_dead),
+            "rewritten_offsets": sorted(
+                offset for offset in range(start, end)
+                if body[offset] != image[offset]),
+        })
+    image = bytes(image)
+    require(image != body, f"{context}: the image does not move the body")
+    changed = {offset for offset in range(len(body))
+               if body[offset] != image[offset]}
+    declared = {offset for item in proved
+                for offset in item["rewritten_offsets"]}
+    require(changed <= declared,
+            f"{context}: the image changed a byte outside the declared "
+            "exchanges")
+    return image, {
+        "kind": FP_POINTER_EXCHANGE_KIND,
+        "exchanges": proved,
     }

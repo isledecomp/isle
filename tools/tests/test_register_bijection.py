@@ -647,6 +647,12 @@ class CallArgumentModelTests(unittest.TestCase):
             (THISCALL_SYMBOL, frozenset({"ecx"})),
             ("?Insert@Act3List@@QAEXHW4Mode@Element@@@Z", frozenset({"ecx"})),
             (FASTCALL_SYMBOL, frozenset({"ecx", "edx"})),
+            # A GLOBAL operator terminates its empty scope list with a
+            # single `@`; the single-`@` reading admits only the global
+            # function classes, and a coincidental second reading inside a
+            # type encoding is refused by the exactly-one guard.
+            ("??2@YAPAXI@Z", frozenset()),
+            ("??3@YAXPAX@Z", frozenset()),
         ):
             self.assertEqual(
                 byte_identity.msvc_call_argument_registers(symbol), expected,
@@ -657,11 +663,6 @@ class CallArgumentModelTests(unittest.TestCase):
         for symbol in (UNMANGLED_SYMBOL, "_chkstk", "___CxxFrameHandler",
                        "__imp__CreateWindowExA@48", THUNK_SYMBOL,
                        "?_Nil@?$_Tree@PAVFixture@@@@1PAU_Node@1@A",
-                       # An operator decoration terminates its (empty) scope
-                       # list with a single `@`, so the table's `@@` scan
-                       # never reaches it.  That is the safe direction: the
-                       # call simply stays fully conservative.
-                       "??3@YAXPAX@Z",
                        "", "?", None, 17):
             self.assertIsNone(
                 byte_identity.msvc_call_argument_registers(symbol),
