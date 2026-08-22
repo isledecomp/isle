@@ -32720,21 +32720,34 @@ def validate_web_recolour(
                 f"{web_context} does not name two distinct general registers")
         require(not ({source, image_register} & _IA32_STRUCTURAL_REGISTERS),
                 f"{web_context} touches ESP or EBP")
+        # A membership entry is an instruction offset, or a two-element
+        # [offset, field_ordinal] pair naming WHICH of that instruction's
+        # register fields belongs to this web.  The scoped form is what lets
+        # one instruction carry two webs -- `mov ecx,[ecx+8]` whose base
+        # belongs to one web and whose destination to another -- and it makes
+        # that case DECIDABLE rather than merely permitted.
+        role_offsets = {}
+        field_scopes = {}
         for role in ("definitions", "uses"):
-            entries = web.get(role)
-            require(isinstance(entries, list) and entries
-                    and entries == sorted(set(entries))
-                    and all(type(item) is int
-                            and 0 <= item < (code_length or body_length)
-                            for item in entries),
+            offsets, scopes = _ia32_web_membership(web, role, web_context)
+            require(offsets == sorted(set(offsets))
+                    and all(0 <= offset < (code_length or body_length)
+                            for offset in offsets),
                     f"{web_context}.{role} is invalid")
-        require(not (set(web["definitions"]) & set(web["uses"])),
+            for offset, ordinal in scopes.items():
+                require(offset not in field_scopes,
+                        f"{web_context} scopes {offset} twice")
+                field_scopes[offset] = ordinal
+            role_offsets[role] = offsets
+        require(not (set(role_offsets["definitions"])
+                     & set(role_offsets["uses"])),
                 f"{web_context}: an instruction is both a definition and a "
                 "use")
         offsets = web.get("expected_rewritten_offsets")
         require(isinstance(offsets, list) and offsets
                 and offsets == sorted(set(offsets))
-                and len(offsets) == len(web["definitions"]) + len(web["uses"])
+                and len(offsets) == len(role_offsets["definitions"])
+                + len(role_offsets["uses"])
                 and all(type(item) is int
                         and 0 <= item < (code_length or body_length)
                         for item in offsets),
@@ -32742,8 +32755,9 @@ def validate_web_recolour(
         rewritten.extend(offsets)
         normalized_webs.append({
             "source_register": source, "image_register": image_register,
-            "definitions": list(web["definitions"]),
-            "uses": list(web["uses"]),
+            "definitions": list(role_offsets["definitions"]),
+            "uses": list(role_offsets["uses"]),
+            "field_scopes": dict(field_scopes),
             "expected_rewritten_offsets": list(offsets),
         })
     changed = value.get("expected_changed_offsets")
@@ -33278,6 +33292,43 @@ def _ia32_web_reaching_definitions(
     return reaching, seen
 
 
+def _ia32_web_membership(web: dict, role: str, context: str) -> tuple:
+    """Split a web's membership list into offsets and their field scopes.
+
+    An entry is an instruction offset, or a two-element `[offset, ordinal]`
+    pair naming WHICH register field of that instruction belongs to the web.
+    Both the manifest schema and the composer read membership through here,
+    so a declaration means the same thing on both sides -- the composer is
+    handed the RAW manifest dict, and a normalizer that lived only in the
+    schema would be silently bypassed.
+    """
+    entries = web.get(role)
+    require(isinstance(entries, list) and entries,
+            f"{context}.{role} is invalid")
+    offsets = []
+    scopes = {}
+    for item in entries:
+        if type(item) is int:
+            offsets.append(item)
+            continue
+        require(isinstance(item, list) and len(item) == 2
+                and type(item[0]) is int and type(item[1]) is int
+                and item[1] >= 0,
+                f"{context}.{role} entry is invalid")
+        require(item[0] not in scopes, f"{context}.{role} scopes {item[0]} "
+                "twice")
+        scopes[item[0]] = item[1]
+        offsets.append(item[0])
+    declared = web.get("field_scopes") or {}
+    for offset, ordinal in declared.items():
+        offset = int(offset)
+        require(offset not in scopes or scopes[offset] == ordinal,
+                f"{context}.{role} scopes {offset} twice")
+        if offset in offsets:
+            scopes[offset] = ordinal
+    return offsets, scopes
+
+
 def apply_web_recolour(
     body: bytes, webs: list[dict], relocation_offsets: frozenset,
     context: str, relocations: dict | None = None,
@@ -33318,13 +33369,31 @@ def apply_web_recolour(
         target_atoms = ia32_register_atoms({target})
         source_number = _IA32_REGISTER_NUMBERS[source]
         target_number = _IA32_REGISTER_NUMBERS[target]
-        for role in ("definitions", "uses"):
-            for offset in web[role]:
+        # An entry may name WHICH register field of its instruction belongs
+        # to this web.  A scoped entry is what makes an instruction that names
+        # the source register twice -- `mov ecx,[ecx+8]`, whose base is one
+        # web's use and whose destination is another's definition -- decidable
+        # instead of ambiguous.  Nothing about the dataflow proofs changes:
+        # W3 already stops propagating at a read-then-kill instruction and the
+        # W5 blinding already subtracts the read before the write.  What the
+        # scope removes is only the refusal to DECIDE, and W7 below re-earns
+        # that by measuring the field-exact operand image.
+        definition_offsets, field_scopes = _ia32_web_membership(
+            web, "definitions", web_context)
+        use_offsets, use_scopes = _ia32_web_membership(
+            web, "uses", web_context)
+        for offset, ordinal in use_scopes.items():
+            require(offset not in field_scopes,
+                    f"{web_context} scopes {offset} twice")
+            field_scopes[offset] = ordinal
+        for role, offsets in (("definitions", definition_offsets),
+                              ("uses", use_offsets)):
+            for offset in offsets:
                 require(offset in index_of,
                         f"{web_context}: {role} names {offset}, which is not "
                         "an instruction boundary of this body")
-        definitions = [index_of[offset] for offset in web["definitions"]]
-        uses = [index_of[offset] for offset in web["uses"]]
+        definitions = [index_of[offset] for offset in definition_offsets]
+        uses = [index_of[offset] for offset in use_offsets]
         require(not (set(definitions) & set(uses)),
                 f"{web_context}: an instruction is both a definition and a "
                 "use of the web")
@@ -33336,8 +33405,10 @@ def apply_web_recolour(
             # A definition that also READS the source register consumes some
             # other value of it, so which occurrence belongs to the web is not
             # decidable and the rename would change what the instruction
-            # computes.
-            require(not (source_atoms & item["read_atoms"]),
+            # computes -- unless the entry says which field is the definition,
+            # in which case the read is another web's use and stays put.
+            require(not (source_atoms & item["read_atoms"])
+                    or item["offset"] in field_scopes,
                     f"{web_context}: the declared definition at "
                     f"{item['offset']} also reads the source register")
             require(target not in item["writes"],
@@ -33345,8 +33416,12 @@ def apply_web_recolour(
                     f"{item['offset']} already writes the image register")
         for index in uses:
             item = instructions[index]
+            # Likewise a use that also DEFINES the source register: the read
+            # is this web's, the write begins the next one, and only a scoped
+            # entry says so.  The read obligation itself never relaxes.
             require(source_atoms <= item["read_atoms"]
-                    and not (source_atoms & item["write_atoms"]),
+                    and (not (source_atoms & item["write_atoms"])
+                         or item["offset"] in field_scopes),
                     f"{web_context}: the declared use at {item['offset']} "
                     "does not read the whole register without defining it")
             # A use that already names the image register would, after the
@@ -33416,14 +33491,24 @@ def apply_web_recolour(
                     f"{web_context}: {sorted(blocked)} is named by a "
                     f"sub-register field at {item['offset']} that the "
                     "recolour cannot rewrite")
-            hits = [(byte_index, shift)
-                    for byte_index, shift in item["fields"]
-                    if (buffer[byte_index] >> shift) & 7 == source_number]
-            require(len(hits) == 1,
-                    f"{web_context}: the instruction at {item['offset']} names "
-                    f"{source} in {len(hits)} register fields, so which "
-                    "occurrence belongs to the web is not decidable")
-            byte_index, shift = hits[0]
+            ordinal = field_scopes.get(item["offset"])
+            if ordinal is None:
+                hits = [(byte_index, shift)
+                        for byte_index, shift in item["fields"]
+                        if (buffer[byte_index] >> shift) & 7 == source_number]
+                require(len(hits) == 1,
+                        f"{web_context}: the instruction at {item['offset']} "
+                        f"names {source} in {len(hits)} register fields, so "
+                        "which occurrence belongs to the web is not decidable")
+                byte_index, shift = hits[0]
+            else:
+                require(ordinal < len(item["fields"]),
+                        f"{web_context}: the instruction at {item['offset']} "
+                        f"has no register field {ordinal}")
+                byte_index, shift = item["fields"][ordinal]
+                require((buffer[byte_index] >> shift) & 7 == source_number,
+                        f"{web_context}: register field {ordinal} at "
+                        f"{item['offset']} does not name {source}")
             require(byte_index not in relocation_offsets,
                     f"{web_context}: a rewritten byte overlaps a relocation")
             buffer[byte_index] = (
@@ -33453,13 +33538,22 @@ def apply_web_recolour(
                     and left["flow"] == right["flow"]
                     and left["target"] == right["target"],
                     f"{web_context}: the image changed an opcode or a branch")
-            recoloured = right["offset"] in web["definitions"] \
-                or right["offset"] in web["uses"]
+            offset = right["offset"]
+            is_definition = offset in definition_offsets
+            recoloured = is_definition or offset in use_offsets
+            # A scoped entry moves exactly one side of the operand set: a
+            # scoped definition renames what the instruction WRITES and leaves
+            # its reads -- the other web's use -- alone, and a scoped use is
+            # the mirror.  This is the field-exact re-measurement that pays
+            # for the relaxed membership refusals above.
+            scoped = recoloured and offset in field_scopes
+            rename_reads = recoloured and not (scoped and is_definition)
+            rename_writes = recoloured and not (scoped and not is_definition)
             expected_reads = frozenset(
-                mapping.get(name, name) if recoloured else name
+                mapping.get(name, name) if rename_reads else name
                 for name in right["reads"])
             expected_writes = frozenset(
-                mapping.get(name, name) if recoloured else name
+                mapping.get(name, name) if rename_writes else name
                 for name in right["writes"])
             require(left["reads"] == expected_reads
                     and left["writes"] == expected_writes,
@@ -33473,14 +33567,18 @@ def apply_web_recolour(
         require(changed == list(web["expected_rewritten_offsets"]),
                 f"{web_context}: the rewritten offset set {changed} differs "
                 "from its declaration")
-        detail.append({
+        entry = {
             "source_register": source, "image_register": target,
-            "definitions": list(web["definitions"]),
-            "uses": list(web["uses"]),
+            "definitions": list(definition_offsets),
+            "uses": list(use_offsets),
             "live_range": sorted(instructions[index]["offset"]
                                  for index in interior),
             "rewritten_offsets": changed,
-        })
+        }
+        if field_scopes:
+            entry["field_scopes"] = {str(offset): ordinal for offset, ordinal
+                                     in sorted(field_scopes.items())}
+        detail.append(entry)
         rewritten_all.extend(changed)
         image = candidate
     require(image != body, f"{context}: the recolour moves nothing")

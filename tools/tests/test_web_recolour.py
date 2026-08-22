@@ -494,5 +494,153 @@ class RecolourCompositionTests(unittest.TestCase):
         self.assertIn("inside the web's live range", str(caught.exception))
 
 
-if __name__ == "__main__":  # pragma: no cover
+# A second fixture, the shape the class could not previously decide:
+#
+#     0:  53              push ebx
+#     1:  8b 4c 24 08     mov ecx, [esp+8]   <- web A's definition
+#     5:  8b 49 08        mov ecx, [ecx+8]   <- web A's USE (the base) and
+#                                               web B's DEFINITION (the dest)
+#     8:  51              push ecx           <- web B's use
+#     9:  33 c0           xor eax, eax
+#    11:  5b              pop ebx
+#    12:  c3              ret
+#
+# One instruction names ecx in two register fields in two different ROLES.
+# Unscoped, neither web is decidable and the class refuses.  A `[offset,
+# ordinal]` entry says which field is the web's, and W7 then re-measures the
+# operand set field-exactly -- which is why the scope cannot be abused: a
+# duplicate in the SAME role is still refused, because half-renaming it moves
+# the operand set to something the recolour does not predict.
+SPLIT = (bytes.fromhex("53") + bytes.fromhex("8b4c2408")
+         + bytes.fromhex("8b4908") + bytes.fromhex("51")
+         + bytes.fromhex("33c0") + bytes.fromhex("5b") + bytes.fromhex("c3"))
+SPLIT_IMAGE = (bytes.fromhex("53") + bytes.fromhex("8b542408")
+               + bytes.fromhex("8b4208") + bytes.fromhex("50")
+               + bytes.fromhex("33c0") + bytes.fromhex("5b")
+               + bytes.fromhex("c3"))
+# The same instruction naming ecx twice in ONE role: `mov [ecx], ecx`.
+SAME_ROLE = (bytes.fromhex("53") + bytes.fromhex("8b4c2408")
+             + bytes.fromhex("8909") + bytes.fromhex("5b")
+             + bytes.fromhex("c3"))
+
+
+def web_a(**overrides):
+    """ecx -> edx: defined at 1, used at the BASE field of the mov at 5."""
+    web = {"source_register": "ecx", "image_register": "edx",
+           "definitions": [1], "uses": [[5, 1]],
+           "expected_rewritten_offsets": [2, 6]}
+    web.update(overrides)
+    return web
+
+
+def web_b(**overrides):
+    """ecx -> eax: defined at the DEST field of the mov at 5, used at 8."""
+    web = {"source_register": "ecx", "image_register": "eax",
+           "definitions": [[5, 0]], "uses": [8],
+           "expected_rewritten_offsets": [6, 8]}
+    web.update(overrides)
+    return web
+
+
+class FieldScopedMembershipTests(unittest.TestCase):
+    """One instruction, two webs: the scope decides which field is whose."""
+
+    def apply(self, webs, body=SPLIT):
+        return byte_identity.apply_web_recolour(
+            body, [copy.deepcopy(web) for web in webs], frozenset(), "web")
+
+    def test_both_webs_recolour_and_the_order_does_not_matter(self):
+        # each web moves exactly one field of the shared instruction, so the
+        # two orders are the same rewrite and must reach the same image
+        for order in ([web_a(), web_b()], [web_b(), web_a()]):
+            image, proof = self.apply(order)
+            self.assertEqual(image, SPLIT_IMAGE)
+            self.assertEqual(sorted(entry["rewritten_offsets"]
+                                    for entry in proof["webs"]),
+                             [[2, 6], [6, 8]])
+
+    def test_the_scope_is_reported_in_the_proof(self):
+        _, proof = self.apply([web_a()])
+        self.assertEqual(proof["webs"][0]["field_scopes"], {"5": 1})
+        self.assertEqual(proof["webs"][0]["uses"], [5])
+
+    def test_an_unscoped_definition_that_reads_the_source_is_still_refused(
+            self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply([web_b(definitions=[5])])
+        self.assertIn("also reads the source register", str(caught.exception))
+
+    def test_an_unscoped_use_that_defines_the_source_is_still_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply([web_a(uses=[5])])
+        self.assertIn("does not read the whole register without defining it",
+                      str(caught.exception))
+
+    def test_a_scope_naming_the_other_role_s_field_is_refused(self):
+        # web A's use is the BASE; claiming the destination renames the wrong
+        # half and W7 measures it
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply([web_a(uses=[[5, 0]])])
+        self.assertIn("is not the recolour's image", str(caught.exception))
+
+    def test_a_scope_naming_a_field_that_is_not_the_source_is_refused(self):
+        # field 1 of `mov ecx, [esp+8]` is the base, esp -- not the web
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply([web_a(definitions=[[1, 1]])])
+        self.assertIn("does not name ecx", str(caught.exception))
+
+    def test_a_scope_ordinal_off_the_end_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.apply([web_a(uses=[[5, 7]])])
+        self.assertIn("has no register field 7", str(caught.exception))
+
+    def test_a_same_role_duplicate_cannot_be_half_renamed(self):
+        # `mov [ecx], ecx` names ecx as both the address and the stored value,
+        # both READS.  Renaming either field alone leaves the other behind, so
+        # W7's operand set refuses it whichever ordinal is claimed.
+        for ordinal in (0, 1):
+            web = web_a(definitions=[1], uses=[[5, ordinal]],
+                        expected_rewritten_offsets=[2, 6])
+            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+                self.apply([web], SAME_ROLE)
+            self.assertIn("is not the recolour's image", str(caught.exception))
+
+
+class FieldScopedSchemaTests(unittest.TestCase):
+    """The manifest side of the scope, normalized once for both readers."""
+
+    def validate(self, **overrides):
+        return byte_identity.validate_web_recolour(
+            recolour_spec(**overrides), "recolour", SIZE)
+
+    def test_a_scoped_entry_normalizes_to_an_offset_and_a_scope(self):
+        normalized = self.validate(
+            webs=[web_declaration(definitions=[[3, 0]])])
+        self.assertEqual(normalized["webs"][0]["definitions"], [3])
+        self.assertEqual(normalized["webs"][0]["field_scopes"], {3: 0})
+
+    def test_an_unscoped_entry_carries_no_scope(self):
+        normalized = self.validate()
+        self.assertEqual(normalized["webs"][0]["field_scopes"], {})
+
+    def test_a_malformed_scope_entry_is_refused(self):
+        for entry in ([3], [3, 0, 1], [3, "0"], [3, -1], ["3", 0]):
+            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+                self.validate(webs=[web_declaration(definitions=[entry])])
+            self.assertIn("definitions", str(caught.exception))
+
+    def test_one_offset_scoped_twice_in_a_role_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(webs=[web_declaration(
+                definitions=[[3, 0], [3, 1]],
+                expected_rewritten_offsets=[4, 12])])
+        self.assertIn("twice", str(caught.exception))
+
+    def test_a_scoped_offset_off_the_body_is_refused(self):
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            self.validate(webs=[web_declaration(definitions=[[SIZE, 0]])])
+        self.assertIn("definitions is invalid", str(caught.exception))
+
+
+if __name__ == "__main__":
     unittest.main()
