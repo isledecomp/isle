@@ -474,12 +474,20 @@ class DeliberateRefusalTests(unittest.TestCase):
         self.assertEqual(decoded["writes"], frozenset({"eax"}))
         self.assertEqual(sorted(decoded["fields"]), [(2, 0), (2, 3)])
 
-    def test_setcc_and_imul_stay_refused(self):
-        """Neither is needed by any open row and neither was measured, so
-        neither is guessed."""
-        for encoding in ("0f94c0", "0f9cc1", "0faf6c2478"):
-            self.assertIn("outside the register-bijection table",
-                          refusal(self, encoding))
+    def test_imul_stays_refused_and_setcc_is_admitted(self):
+        """`0F AF` is still not needed by any row, so it is not guessed.
+        SETcc (`0F 90..9F`) became load-bearing on 2026-08-22: the
+        BuildROIMap donor-rewriting pre-image decodes one, and the ISA
+        defines its reg field as an ignored /0 extension with an r/m8
+        write, which is exactly how the table admits it."""
+        self.assertIn("outside the register-bijection table",
+                      refusal(self, "0faf6c2478"))
+        for encoding, register in (("0f94c0", "eax"), ("0f9cc1", "ecx")):
+            decoded = decode(encoding)
+            self.assertEqual(decoded["fields"], [])
+            self.assertEqual(decoded["frozen"], frozenset({register}))
+            self.assertEqual(decoded["write_atoms"],
+                             frozenset({register + ".l"}))
 
     def test_the_flag_and_stack_transfer_forms_stay_refused(self):
         for encoding in ("9c", "9d", "9e", "9f", "60", "61"):
@@ -559,7 +567,10 @@ class TableIntegrityTests(unittest.TestCase):
     def test_the_admitted_table_matches_its_hardware_verified_digest(self):
         self.assertEqual(
             self.digest(),
-            "fc83899fe702dd570e9d114a7bfca8776b8001377cc4a6f39cd92286b2b256cb")
+            # Re-pinned 2026-08-22 for the deliberate SETcc admission; every
+            # prior row of the corpus digests identically (only the sixteen
+            # 0F 90..9F rows moved from refused to decoded).
+            "5dc6ba5b570ae6cf8dba4118ee7f0b9fed4d9c5b5fd0eac1b1b2c6b209501e10")
 
     def test_the_corpus_covers_every_admitted_opcode(self):
         admitted = set()

@@ -2592,7 +2592,14 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
                 bound + bound[:1], bound[:1] + bound, bound[1:], "fixture")
 
     def test_live_manifest_stacked_carrier_hybrid_is_axis_disjoint(self):
-        """The live stacked-carrier pair differs only in its run count."""
+        """The live stacked-carrier pair differs only in its run count.
+
+        The forward_run_with_shape sub-branch is exercised whenever the live
+        manifest carries such a pair; after the 2026-08-22 arena requake the
+        two rows that used it re-landed under retail_exact_donor_rewriting,
+        so the census now requires at least one hybrid of ANY carrier kind
+        and keeps the layout-proof assertions for instances that remain.
+        """
         manifest = json.loads(
             (TOOLS / "byte_identity_manifest.json").read_text())
         found = 0
@@ -2616,8 +2623,8 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
                 for name in shared:
                     self.assertEqual(target[name], instruction[name], name)
                 self.assertNotEqual(target[run_axis], instruction[run_axis])
+                found += 1
                 if target["kind"] == "forward_run_with_shape":
-                    found += 1
                     proof = function["same_tu_source_identity"]
                     self.assertEqual(
                         proof["carrier_layout"], "forward_run_placement_v1")

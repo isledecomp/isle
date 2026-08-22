@@ -32,6 +32,22 @@
 #include <io.h>
 #include <vec.h>
 
+inline void LegoTranInfoList::Append(LegoTranInfo* p_obj)
+{
+	MxListEntry<LegoTranInfo*>* last = this->m_last;
+	MxListEntry<LegoTranInfo*>* newEntry = new MxListEntry<LegoTranInfo*>(p_obj, last);
+
+	if (last) {
+		last->SetNext(newEntry);
+	}
+	else {
+		this->m_first = newEntry;
+	}
+
+	this->m_last = newEntry;
+	this->m_count++;
+}
+
 DECOMP_SIZE_ASSERT(LegoAnimationManager, 0x500)
 DECOMP_SIZE_ASSERT(LegoAnimationManager::Character, 0x18)
 DECOMP_SIZE_ASSERT(LegoAnimationManager::Vehicle, 0x08)
@@ -1292,14 +1308,17 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 
 		while (cursor.Next(tranInfo)) {
 			if (tranInfo->m_presenter) {
+				MxU32 flags = tranInfo->m_flags;
+				MxBool flags2 = (MxBool) (flags & LegoTranInfo::c_bit2);
+
 				// LINE: LEGO1 0x100610e6
 				if (tranInfo->m_unk0x14 && tranInfo->m_location != -1 && p_und) {
 					if (tranInfo->m_presenter->GetPresenter() &&
 						tranInfo->m_presenter->GetPresenter()->GetAnimation() &&
 						tranInfo->m_presenter->GetPresenter()->GetAnimation()->GetCamAnim()) {
-						if (tranInfo->m_flags & LegoTranInfo::c_bit2) {
+						if (flags2) {
 							BackgroundAudioManager()->RaiseVolume();
-							tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
+							tranInfo->m_flags = flags & ~LegoTranInfo::c_bit2;
 						}
 
 						tranInfo->m_presenter->FUN_1004b840();
@@ -1314,10 +1333,10 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 					}
 				}
 				else {
-					if (tranInfo->m_flags & LegoTranInfo::c_bit2) {
+					if (flags2) {
 						// LINE: LEGO1 0x10061150
 						BackgroundAudioManager()->RaiseVolume();
-						tranInfo->m_flags &= ~LegoTranInfo::c_bit2;
+						tranInfo->m_flags = flags & ~LegoTranInfo::c_bit2;
 					}
 
 					MxTrace("Stopping %d\n", tranInfo->m_objectId);
@@ -1328,8 +1347,6 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 				if (m_tranInfoList2 != NULL) {
 					LegoTranInfoListCursor cursor(m_tranInfoList2);
 					if (!cursor.Find(tranInfo)) {
-						// TODO: For some reason, the embedded `MxListEntry` constructor is not inlined.
-						// This may be the key for getting this function to match correctly.
 						m_tranInfoList2->Append(tranInfo);
 					}
 				}

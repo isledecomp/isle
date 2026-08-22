@@ -14631,9 +14631,16 @@ def validate_manifest(
                         f"{function_context}.expected_changed_offsets "
                         "is invalid",
                     )
+                    # Two closure shapes, each naming one PRE-EXISTING
+                    # equal-body installation delegate: the FPO closure
+                    # installs strict, the EH closure installs through
+                    # `equal_body_eh_structural_local` with an empty rename
+                    # set (a recolour rewrites register fields, never a
+                    # relocation target).  Anything else is refused.
                     require(
                         function.get("expected_closure")
-                        == INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                        in (INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+                            INSTRUCTION_SCHEDULE_EH_CLOSURE),
                         f"{function_context}.expected_closure differs",
                     )
                     retail = function.get("retail_oracle")
@@ -27361,12 +27368,27 @@ def compose_equal_body_comdat(
                     "reloc-layout splice: relocation type/addend differs")
             if a["target"] != b["target"]:
                 kind = local_symbol_kind(a["target"])
-                require(kind is not None
-                        and kind == local_symbol_kind(b["target"])
-                        and all(a["target_" + field] == b["target_" + field]
-                                for field in ("section", "value", "type",
-                                              "storage")),
+                if kind is None:
+                    # function-static data: <base>$S<serial> renumbered by
+                    # compiler state -- the same admission the structural-
+                    # local rename proof makes for its 'S' kind.
+                    left_base, _, left_serial = a["target"].rpartition("$S")
+                    right_base, _, right_serial = b["target"].rpartition("$S")
+                    require(
+                        left_base and left_base == right_base
+                        and left_serial.isdigit()
+                        and right_serial.isdigit()
+                        and a["target_type"] == b["target_type"]
+                        and a["target_storage"] == b["target_storage"],
                         "reloc-layout splice: non-local relocation rename")
+                else:
+                    require(kind == local_symbol_kind(b["target"])
+                            and all(a["target_" + field]
+                                    == b["target_" + field]
+                                    for field in ("section", "value", "type",
+                                                  "storage")),
+                            "reloc-layout splice: non-local relocation "
+                            "rename")
             if a["offset"] != b["offset"]:
                 relocation_moves.append([a["offset"], b["offset"]])
         require(relocation_moves == function["expected_relocation_moves"],
@@ -29029,6 +29051,13 @@ def _ia32_bijection_two_byte_table() -> dict:
     for opcode in (0xB7, 0xBF):
         table[opcode] = _bijection_form(modrm=True, reg="gpr",
                                         reg_write=True, rm_read=True)
+    # 0F 90..9F SETcc r/m8: the reg field is an ignored extension the
+    # compiler always encodes as /0, and the destination is an 8-bit write,
+    # so the field is frozen exactly as every other width-8 r/m is.
+    for opcode in range(0x90, 0xA0):
+        table[opcode] = _bijection_form(modrm=True, reg="ext",
+                                        ext_allowed=frozenset({0}),
+                                        rm_write=True, width=8)
     return table
 
 
@@ -32174,7 +32203,32 @@ def ia32_schedule_dependence_edges(
                                                         or two["write"]):
                 base_is_written = (one["base"] in written
                                    or two["base"] in written)
-                if (base_is_written
+                # In a stack-adjusted window whose only ESP writers are the
+                # tracked pushes, two esp-based cells compare in the
+                # push-depth-canonical space: each displacement is taken
+                # relative to the window-entry ESP by subtracting the push
+                # slots that precede its instruction.  The pushes themselves
+                # write below every admitted displacement (required above),
+                # so a canonical disjointness IS an aliasing proof; ESP's
+                # membership in `written` through those pushes says nothing
+                # a canonical comparison has not already accounted for.
+                canonical_disjoint = False
+                if (stack_adjusted and body is not None
+                        and one["base"] == "esp" == two["base"]
+                        and all(is_stack_operation[k]
+                                or "esp" not in facts[k]["writes"]
+                                for k in range(len(facts)))):
+                    def _canonical(mem, index):
+                        depth = sum(1 for k in range(index)
+                                    if is_stack_operation[k])
+                        adjusted = dict(mem)
+                        adjusted["displacement"] = (
+                            mem["displacement"] - 4 * depth)
+                        return adjusted
+                    canonical_disjoint = ia32_memory_provably_disjoint(
+                        _canonical(one, left), _canonical(two, right))
+                if not canonical_disjoint and (
+                        base_is_written
                         or not ia32_memory_provably_disjoint(one, two)):
                     reasons.append("memory")
             if reasons:
@@ -33117,8 +33171,18 @@ def compose_retail_exact_web_recolour(
             == _comdat_child_closure(donor, dp)
             == (len(expected_closure), expected_closure),
             "web-recolour target closure changed")
-    require(list(expected_closure) == INSTRUCTION_SCHEDULE_FPO_CLOSURE,
+    require(list(expected_closure) == INSTRUCTION_SCHEDULE_FPO_CLOSURE
+            or list(expected_closure) == [".debug$S", ".xdata$x"],
             "web-recolour closure pin names no installation delegate")
+    # Identical delegate policy to the register-bijection certificate: the
+    # FPO closure installs through `equal_body_strict`; the EH closure
+    # installs through `equal_body_eh_structural_local`, whose xdata must be
+    # byte-identical and whose rename set here is empty by construction --
+    # a recolour rewrites register fields, never a relocation target.
+    installation_delegate = (
+        "equal_body_strict"
+        if list(expected_closure) == INSTRUCTION_SCHEDULE_FPO_CLOSURE
+        else "equal_body_eh_structural_local")
     require(instruction_mosaic_metadata_sha256(seed, sp)
             == function["expected_seed_metadata_sha256"]
             and instruction_mosaic_metadata_sha256(donor, dp)
@@ -33186,7 +33250,9 @@ def compose_retail_exact_web_recolour(
     image, proof = apply_web_recolour(
         image, spec["webs"], relocation_offsets, "web-recolour image",
         relocation_symbols, code_length, internal_targets,
-        declared_fpo is not None)
+        declared_fpo is not None,
+        frozenset(relational_form_external_entries(
+            seed, sp, "web-recolour funclet entries")))
     require(proof["code_length"] == (code_length or len(seed_body)),
             "web-recolour code length differs from its pin")
     require(proof["instruction_count"] == spec["expected_instruction_count"],
@@ -33242,11 +33308,14 @@ def compose_retail_exact_web_recolour(
     derived[sp["raw_offset"]:sp["raw_offset"] + sp["raw_size"]] = image
     effective = {
         "mangled": mangled,
-        "splice_class": "equal_body_strict",
+        "splice_class": installation_delegate,
         "expected_body_length": function["expected_body_length"],
         "expected_body_sha256": function["expected_body_sha256"],
         "expected_changed_offsets": function["expected_changed_offsets"],
     }
+    if installation_delegate == "equal_body_eh_structural_local":
+        effective["expected_code_renames"] = []
+        effective["expected_xdata_rename_offsets"] = []
     composed, detail = compose_equal_body_comdat(
         seed_bytes, bytes(derived), effective)
 
@@ -33430,6 +33499,7 @@ WEB_RECOLOUR_KIND = "web_recolour_v1"
 def ia32_web_control_flow(
     instructions: list[dict], context: str,
     internal_targets: frozenset | None = None,
+    entry_offsets: frozenset | None = None,
 ) -> list[list[int]]:
     """The body's complete control-flow graph, or a refusal.
 
@@ -33437,8 +33507,11 @@ def ia32_web_control_flow(
     jump has no decodable successors, so it is admitted only against the
     relocated in-body target set, whose in-code members become its successors.
     `ret` and a relocated tail-jump out of the COMDAT have none.  Every
-    instruction must then be reachable from the entry: an unreachable block
-    would make every reaching-definition statement about it vacuous.
+    instruction must then be reachable from an entry: an unreachable block
+    would make every reaching-definition statement about it vacuous.  The
+    entries are the function head plus `entry_offsets` -- on a C++ EH function
+    the unwind funclet heads the `.xdata$x` table hands to the runtime, a
+    DERIVED set (`relational_form_external_entries`), never an author's claim.
     """
     index_of = {item["offset"]: index
                 for index, item in enumerate(instructions)}
@@ -33462,6 +33535,9 @@ def ia32_web_control_flow(
         successors.append(sorted(set(edges)))
     seen = set()
     stack = [0]
+    if entry_offsets:
+        stack.extend(index_of[offset] for offset in sorted(entry_offsets)
+                     if offset in index_of)
     while stack:
         index = stack.pop()
         if index in seen:
@@ -33595,6 +33671,7 @@ def apply_web_recolour(
     code_length: int | None = None,
     internal_targets: frozenset | None = None,
     frame_pointer_free: bool = False,
+    entry_offsets: frozenset | None = None,
 ) -> tuple[bytes, dict]:
     """Recolour each declared web, proving W1..W7 on the body it is given.
 
@@ -33613,7 +33690,7 @@ def apply_web_recolour(
             image, web_context, relocations, code_length)
         instruction_count = len(instructions)
         successors = ia32_web_control_flow(
-            instructions, web_context, internal_targets)
+            instructions, web_context, internal_targets, entry_offsets)
         predecessors = _ia32_web_predecessors(successors)
         index_of = {item["offset"]: index
                     for index, item in enumerate(instructions)}
@@ -33790,10 +33867,22 @@ def apply_web_recolour(
                 hits = [(byte_index, shift)
                         for byte_index, shift in item["fields"]
                         if (buffer[byte_index] >> shift) & 7 == source_number]
-                require(len(hits) == 1,
+                # A register-write-free instruction (test/cmp r,r) reads the
+                # same reaching value through every occurrence, so every
+                # occurrence belongs to this web and all of them rewrite; any
+                # instruction that WRITES a register keeps the one-occurrence
+                # rule, because its destination field may open a different web.
+                require(len(hits) == 1
+                        or (len(hits) > 1 and not item["writes"]),
                         f"{web_context}: the instruction at {item['offset']} "
                         f"names {source} in {len(hits)} register fields, so "
                         "which occurrence belongs to the web is not decidable")
+                if len(hits) > 1:
+                    for byte_index, shift in hits[1:]:
+                        buffer[byte_index] = ((buffer[byte_index]
+                                               & ~(7 << shift))
+                                              | (target_number << shift))
+                        rewritten.append(byte_index)
                 byte_index, shift = hits[0]
             else:
                 require(ordinal < len(item["fields"]),
@@ -34624,9 +34713,18 @@ def ia32_relational_flow_walk(
             if extension == 2:
                 flow = "call"
             elif extension == 4:
-                raise ByteIdentityError(
-                    f"{context}: a computed jump at {offset} makes the "
-                    "control-flow graph unknowable")
+                # A computed jump's targets are the in-body offsets its jump
+                # table's relocations name -- exactly the derived
+                # external-entry set this walk already receives.  Those
+                # offsets are walk roots AND become this jump's successor
+                # set below, an over-approximation (a superset of the true
+                # targets) that can only lengthen liveness, never shorten
+                # it.  With no entry set the graph stays unknowable.
+                require(external_entries,
+                        f"{context}: a computed jump at {offset} makes the "
+                        "control-flow graph unknowable")
+                flow = "computed"
+                target = None
         if (flow in ("jmp", "jcc")
                 and (opcode == 0xE9 or 0x0F80 <= opcode <= 0x0F8F)
                 and relocations.get(offset + length - 4, {}).get("width") == 4):
@@ -34677,8 +34775,14 @@ def ia32_relational_flow_walk(
                         f"{context}: body falls off its end")
         if item["flow"] in ("jcc", "jmp") and item["target"] is not None:
             edges.append(index_of[item["target"]])
+        if item["flow"] == "computed":
+            edges.extend(index_of[target]
+                         for target in sorted(external_entries or ())
+                         if target in index_of)
         successors.append(sorted(set(edges)))
-    external = sorted(external_entries or ())
+    code_end = items[-1]["offset"] + items[-1]["length"] if items else 0
+    external = sorted(target for target in (external_entries or ())
+                      if target < code_end)
     for target in external:
         require(target in index_of,
                 f"{context}: the external entry {target} is not an "
@@ -34798,10 +34902,32 @@ def apply_relational_form(
         require(compare_byte not in relocation_offsets
                 and branch_byte not in relocation_offsets,
                 f"{site_context}: a rewritten byte overlaps a relocation")
-        image[compare_byte] = IA32_RELATIONAL_COMPARE_PAIRS[compare["opcode"]]
-        image[branch_byte] = (image[branch_byte] & 0xF0) | \
-            IA32_CONDITION_CODES[image_name]
-        rewritten.extend([compare_byte, branch_byte])
+        if site.get("reencode"):
+            # A register-register compare has TWO encodings of its mirror:
+            # flip the opcode (39<->3B, modrm kept) or keep the opcode and
+            # swap the modrm register fields.  Both name the same mirrored
+            # compare; `reencode` selects the second, and is admitted only
+            # for a direct (mod==3) modrm so the swap is a pure register
+            # exchange with no memory operand to disturb.
+            modrm_at = compare_byte + 1
+            modrm = image[modrm_at]
+            require(modrm >> 6 == 3,
+                    f"{site_context}: reencode requires a register-direct "
+                    "compare")
+            require(modrm_at not in relocation_offsets,
+                    f"{site_context}: a rewritten byte overlaps a "
+                    "relocation")
+            image[modrm_at] = (modrm & 0xC0) | ((modrm & 7) << 3) | \
+                ((modrm >> 3) & 7)
+            image[branch_byte] = (image[branch_byte] & 0xF0) | \
+                IA32_CONDITION_CODES[image_name]
+            rewritten.extend([modrm_at, branch_byte])
+        else:
+            image[compare_byte] = \
+                IA32_RELATIONAL_COMPARE_PAIRS[compare["opcode"]]
+            image[branch_byte] = (image[branch_byte] & 0xF0) | \
+                IA32_CONDITION_CODES[image_name]
+            rewritten.extend([compare_byte, branch_byte])
         proved.append({
             "compare_offset": compare_at, "branch_offset": branch_at,
             "seed_condition": seed_name, "image_condition": image_name,
@@ -35802,8 +35928,8 @@ def validate_composed_rewriting(
         require(isinstance(site, dict), f"{site_context} must be an object")
         exact_audit_keys(site, {
             "compare_offset", "branch_offset", "seed_condition",
-            "image_condition", "expected_rewritten_offsets",
-        }, site_context)
+            "image_condition", "expected_rewritten_offsets", "reencode",
+        }, site_context, optional={"reencode"})
         compare_at = require_exact_int(
             site.get("compare_offset"), f"{site_context}.compare_offset",
             minimum=0, maximum=body_length - 2)
@@ -35830,12 +35956,17 @@ def validate_composed_rewriting(
                         for offset in offsets),
                 f"{site_context}.expected_rewritten_offsets is invalid")
         relational_bytes.extend(offsets)
-        normalized_sites.append({
+        normalized_site = {
             "compare_offset": compare_at, "branch_offset": branch_at,
             "seed_condition": seed_condition,
             "image_condition": IA32_RELATIONAL_MIRROR[seed_condition],
             "expected_rewritten_offsets": list(offsets),
-        })
+        }
+        if site.get("reencode"):
+            require(site["reencode"] is True,
+                    f"{site_context}.reencode must be true when present")
+            normalized_site["reencode"] = True
+        normalized_sites.append(normalized_site)
     require(normalized_windows or normalized_bijections or normalized_sites
             or normalized_rotations or normalized_region_rewrites,
             f"{context} declares no certificate")
@@ -36135,7 +36266,8 @@ def compose_retail_exact_composed_rewriting(
         sites = [{key: item[key] for key in ("compare_offset",
                                              "branch_offset",
                                              "seed_condition",
-                                             "image_condition")}
+                                             "image_condition", "reencode")
+                  if key in item}
                  for item in spec["relational_sites"]]
         image, proof = apply_relational_form(
             image, sites, relocation_offsets,
@@ -36602,8 +36734,8 @@ def validate_donor_rewriting(
         require(isinstance(site, dict), f"{site_context} must be an object")
         exact_audit_keys(site, {
             "compare_offset", "branch_offset", "seed_condition",
-            "image_condition", "expected_rewritten_offsets",
-        }, site_context)
+            "image_condition", "expected_rewritten_offsets", "reencode",
+        }, site_context, optional={"reencode"})
         compare_at = require_exact_int(
             site.get("compare_offset"), f"{site_context}.compare_offset",
             minimum=0, maximum=body_length - 2)
@@ -36630,12 +36762,17 @@ def validate_donor_rewriting(
                         for offset in offsets),
                 f"{site_context}.expected_rewritten_offsets is invalid")
         relational_bytes.extend(offsets)
-        normalized_sites.append({
+        normalized_site = {
             "compare_offset": compare_at, "branch_offset": branch_at,
             "seed_condition": seed_condition,
             "image_condition": IA32_RELATIONAL_MIRROR[seed_condition],
             "expected_rewritten_offsets": list(offsets),
-        })
+        }
+        if site.get("reencode"):
+            require(site["reencode"] is True,
+                    f"{site_context}.reencode must be true when present")
+            normalized_site["reencode"] = True
+        normalized_sites.append(normalized_site)
     require(normalized_windows or normalized_rotations
             or normalized_bijections or normalized_exchanges
             or normalized_rewrites or normalized_sites,
@@ -37000,7 +37137,8 @@ def compose_retail_exact_donor_rewriting(
         sites = [{key: item[key] for key in ("compare_offset",
                                              "branch_offset",
                                              "seed_condition",
-                                             "image_condition")}
+                                             "image_condition", "reencode")
+                  if key in item}
                  for item in spec["relational_sites"]]
         image, proof = apply_relational_form(
             image, sites, relocation_offsets,
@@ -37547,15 +37685,30 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
             return ("addr", base, disp)
 
         def frame_disp(addr):
-            return addr[2] if addr[1] == ("reg0", "ebp") else None
+            if addr[1] == ("reg0", "ebp"):
+                return addr[2]
+            if addr[1] == ("reg0", "esp"):
+                # The canonical displacement is relative to the region-entry
+                # ESP (mem_operand already normalised the tracked pushes
+                # out).  A negative canonical displacement would alias the
+                # push slots themselves, which the push list -- not the slot
+                # map -- accounts for, so it stays outside the simulator set.
+                require(addr[2] >= 0,
+                        f"{context}: an esp store below the region-entry "
+                        f"stack pointer at {offset} aliases the push "
+                        "sequence")
+                return ("esp", addr[2])
+            return None
 
         if op == 0x8B and mod != 3:            # mov r32, m32
             addr = mem_operand(2)
-            if addr[1] == ("reg0", "ebp") and addr[2] in slots:
-                # Store-to-load forwarding: the frame is only ever written
-                # through EBP inside the closed set, so a tracked slot's
-                # last store IS the loaded value.
-                regs[_SIMULATOR_REGS[reg_field]] = slots[addr[2]]
+            if (addr[1] in (("reg0", "ebp"), ("reg0", "esp"))
+                    and frame_disp(addr) in slots):
+                addr = ("addr", addr[1], addr[2])
+                # Store-to-load forwarding: the frame is only written
+                # through tracked slot keys inside the closed set, so a
+                # tracked slot's last store IS the loaded value.
+                regs[_SIMULATOR_REGS[reg_field]] = slots[frame_disp(addr)]
             else:
                 regs[_SIMULATOR_REGS[reg_field]] = ("load", addr)
         elif op in (0x8B, 0x89) and mod == 3:  # mov r32, r32
@@ -37570,6 +37723,15 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
                     f"{context}: a non-frame store at {offset} is outside "
                     "the simulator set")
             slots[disp] = regs[_SIMULATOR_REGS[reg_field]]
+        elif 0xB8 <= op <= 0xBF:               # mov r32, imm32
+            require(length == 5,
+                    f"{context}: an operand-size-prefixed immediate move at "
+                    f"{offset} is outside the simulator set")
+            # A relocated immediate reads as its raw bytes; the relocation's
+            # target identity is enforced by the reseat validation, which
+            # pairs every moved relocation with its instruction.
+            regs[_SIMULATOR_REGS[op - 0xB8]] = (
+                "imm", int.from_bytes(encoded[1:5], "little"))
         elif op == 0xC7 and mod != 3 and reg_field == 0:   # mov m32, imm32
             addr = mem_operand(2)
             disp = frame_disp(addr)

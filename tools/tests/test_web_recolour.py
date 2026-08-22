@@ -321,17 +321,34 @@ class StructuralRefusalTests(unittest.TestCase):
         self.assertIn("requires the relocated in-body target set",
                       str(caught.exception))
 
-    def test_a_use_whose_two_fields_name_the_source_is_refused(self):
-        # `mov [eax], eax` names eax as BOTH the stored value and the address,
-        # so which occurrence belongs to the web is not decidable
+    def test_a_register_write_free_double_use_recolours_both_fields(self):
+        # `mov [eax], eax` names eax as BOTH the stored value and the
+        # address.  A register has one reaching value per program point, so
+        # every read occurrence at one instruction belongs to the same web:
+        # since 2026-08-22 a register-write-free instruction rewrites every
+        # matching field instead of refusing.
         body = bytearray(reordered())
         body[10:12] = bytes.fromhex("8900")
+        webs = [web_declaration(uses=[10, 12],
+                                expected_rewritten_offsets=[4, 11, 12])]
+        image, proof = byte_identity.apply_web_recolour(
+            bytes(body), webs, frozenset(), "web")
+        self.assertEqual(image[11], 0x09)       # mov [ecx], ecx
+
+    def test_a_register_writing_double_use_stays_refused_upstream(self):
+        # `mov eax, eax` also names the source twice, but a use member must
+        # read the whole register without defining it, so the membership
+        # check upstream of the field rule already refuses it; the
+        # one-occurrence field rule stays as the fail-closed backstop for
+        # any writing instruction that could slip past it.
+        body = bytearray(reordered())
+        body[10:12] = bytes.fromhex("8bc0")
         webs = [web_declaration(uses=[10, 12],
                                 expected_rewritten_offsets=[4, 11, 12])]
         with self.assertRaises(byte_identity.ByteIdentityError) as caught:
             byte_identity.apply_web_recolour(
                 bytes(body), webs, frozenset(), "web")
-        self.assertIn("register fields", str(caught.exception))
+        self.assertIn("without defining it", str(caught.exception))
 
 
 class RecolourSchemaTests(unittest.TestCase):

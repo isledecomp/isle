@@ -19,6 +19,8 @@
 class LegoTranInfoList : public MxPtrList<LegoTranInfo> {
 public:
 	LegoTranInfoList() : MxPtrList<LegoTranInfo>(FALSE) {}
+
+	void Append(LegoTranInfo* p_obj);
 };
 
 // VTABLE: LEGO1 0x100d8cf0
