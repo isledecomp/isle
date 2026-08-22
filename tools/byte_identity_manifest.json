@@ -29915,7 +29915,29 @@
        2399
       ],
       "expected_external_entries": [],
-      "authenticity_rationale": "The pre-image is a census-pinned declaration-only donor state of this translation unit whose body reproduces retail's frame. Fifteen faddp summation chains from the vec.h _DOTcol4 macro are rotated within themselves -- the reassociation licence MSVC 4.2 itself exercises: the body renders the same macro's sums in several pair orders, and nine of the fifteen retail orders are byte-witnessed in sibling donor states of this same source. One {ebx,edx} regional bijection recolours the copy loop's two counters."
+      "authenticity_rationale": "The pre-image is a census-pinned declaration-only donor state of this translation unit whose body reproduces retail's frame. Fifteen faddp summation chains from the vec.h _DOTcol4 macro are rotated within themselves -- the reassociation licence MSVC 4.2 itself exercises: the body renders the same macro's sums in several pair orders, and nine of the fifteen retail orders are byte-witnessed in sibling donor states of this same source. One {ebx,edx} regional bijection recolours the copy loop's two counters.",
+      "expected_procedure_range": [
+       2515,
+       33,
+       2502
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?UpdateTransformationRelativeToParent@OrientableROI@@QAEXABVMatrix4@@@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?UpdateTransformationRelativeToParent@OrientableROI@@QAEXABVMatrix4@@@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?UpdateTransformationRelativeToParent@OrientableROI@@QAEXABVMatrix4@@@Z",
+        0
+       ]
+      ]
      }
     },
     {

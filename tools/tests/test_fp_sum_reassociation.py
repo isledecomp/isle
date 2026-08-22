@@ -174,6 +174,8 @@ class DonorRewritingValidatorTests(unittest.TestCase):
             "expected_changed_offsets": sorted(
                 set(chain_declaration()["expected_rewritten_offsets"])
                 | {3, 5}),
+            "expected_procedure_range": [SIZE, 2, SIZE - 3],
+            "expected_code_symbol_references": [],
             "expected_external_entries": [],
             "authenticity_rationale": "x" * 64,
         }
@@ -185,10 +187,11 @@ class DonorRewritingValidatorTests(unittest.TestCase):
         self.assertEqual(len(spec["fp_sum_rotations"]), 1)
         self.assertEqual(len(spec["register_bijections"]), 1)
 
-    def test_a_declaration_without_a_rotation_is_refused(self):
+    def test_a_declaration_without_any_certificate_is_refused(self):
         with self.assertRaises(byte_identity.ByteIdentityError) as raised:
-            self.spec(fp_sum_rotations=[])
-        self.assertIn("declares no fp-sum rotation", str(raised.exception))
+            self.spec(fp_sum_rotations=[], register_bijections=[],
+                      expected_changed_offsets=[1])
+        self.assertIn("declares no certificate", str(raised.exception))
 
     def test_overlapping_chains_are_refused(self):
         with self.assertRaises(byte_identity.ByteIdentityError) as raised:

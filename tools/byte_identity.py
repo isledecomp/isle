@@ -36126,11 +36126,14 @@ def validate_donor_rewriting(
     """Validate one donor-rewriting certificate declaration."""
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(value, {
-        "kind", "fp_sum_rotations", "register_bijections",
+        "kind", "windows", "fp_sum_rotations", "register_bijections",
+        "relational_sites",
         "expected_instruction_count", "expected_changed_offsets",
+        "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_code_length",
         "expected_internal_relocation_targets", "authenticity_rationale",
-    }, context, optional={"fp_sum_rotations", "register_bijections",
+    }, context, optional={"windows", "fp_sum_rotations",
+                          "register_bijections", "relational_sites",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == DONOR_REWRITING_KIND,
@@ -36147,6 +36150,16 @@ def validate_donor_rewriting(
                 and all(type(item) is int and 0 <= item < body_length
                         for item in targets),
                 f"{context}.expected_internal_relocation_targets is invalid")
+    normalized_windows = []
+    if value.get("windows") is not None:
+        windows = value["windows"]
+        require(isinstance(windows, list) and 1 <= len(windows) <= 32,
+                f"{context}.windows must contain 1..32 windows")
+        normalized_windows = _validate_schedule_windows(
+            windows, context, body_length, code_length, targets)
+        require(not any(window.get("relocation_reseat")
+                        for window in normalized_windows),
+                f"{context}: this class refuses to move a relocation")
     normalized_rotations = []
     rotation_bytes = []
     rotation_regions = set()
@@ -36234,12 +36247,66 @@ def validate_donor_rewriting(
                 minimum=1),
             "expected_rewritten_offsets": list(offsets),
         })
-    require(normalized_rotations,
-            f"{context} declares no fp-sum rotation: without one this row "
-            "belongs to a landed single-statement class")
+    normalized_sites = []
+    relational_bytes = []
+    previous = -1
+    for index, site in enumerate(value.get("relational_sites") or []):
+        site_context = f"{context}.relational_sites[{index}]"
+        require(isinstance(site, dict), f"{site_context} must be an object")
+        exact_audit_keys(site, {
+            "compare_offset", "branch_offset", "seed_condition",
+            "image_condition", "expected_rewritten_offsets",
+        }, site_context)
+        compare_at = require_exact_int(
+            site.get("compare_offset"), f"{site_context}.compare_offset",
+            minimum=0, maximum=body_length - 2)
+        branch_at = require_exact_int(
+            site.get("branch_offset"), f"{site_context}.branch_offset",
+            minimum=1, maximum=body_length - 1)
+        require(compare_at > previous,
+                f"{site_context}: sites are unsorted or overlapping")
+        require(compare_at < branch_at,
+                f"{site_context}: the branch does not follow the compare")
+        previous = branch_at
+        seed_condition = site.get("seed_condition")
+        require(seed_condition in IA32_RELATIONAL_MIRROR,
+                f"{site_context}.seed_condition has no mirror in the closed "
+                "table")
+        require(site.get("image_condition")
+                == IA32_RELATIONAL_MIRROR[seed_condition],
+                f"{site_context}.image_condition is not the closed table's "
+                "mirror")
+        offsets = site.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and len(offsets) == 2
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and 0 <= offset < body_length
+                        for offset in offsets),
+                f"{site_context}.expected_rewritten_offsets is invalid")
+        relational_bytes.extend(offsets)
+        normalized_sites.append({
+            "compare_offset": compare_at, "branch_offset": branch_at,
+            "seed_condition": seed_condition,
+            "image_condition": IA32_RELATIONAL_MIRROR[seed_condition],
+            "expected_rewritten_offsets": list(offsets),
+        })
+    require(normalized_windows or normalized_rotations
+            or normalized_bijections or normalized_sites,
+            f"{context} declares no certificate")
+    window_bytes = {offset for window in normalized_windows
+                    for offset in range(window["start"], window["end"])}
     require(len(set(bijection_bytes)) == len(bijection_bytes),
             f"{context}: two bijections rewrite the same byte")
-    require(not (rotation_regions & set(bijection_bytes)),
+    require(len(set(relational_bytes)) == len(relational_bytes),
+            f"{context}: two relational sites rewrite the same byte")
+    require(not (set(bijection_bytes) & set(relational_bytes)),
+            f"{context}: a bijection and a relational reversal rewrite the "
+            "same byte")
+    require(not (window_bytes & (rotation_regions | set(bijection_bytes)
+                                 | set(relational_bytes))),
+            f"{context}: a byte-local certificate rewrites a byte inside a "
+            "reordered window")
+    require(not (rotation_regions & (set(bijection_bytes)
+                                     | set(relational_bytes))),
             f"{context}: a bijection rewrites a byte inside an fp-sum chain")
     changed = value.get("expected_changed_offsets")
     require(isinstance(changed, list) and changed
@@ -36247,12 +36314,27 @@ def validate_donor_rewriting(
             and all(type(offset) is int and 0 <= offset < body_length
                     for offset in changed),
             f"{context}.expected_changed_offsets is invalid")
-    require(set(rotation_bytes) | set(bijection_bytes) <= set(changed),
+    require(set(rotation_bytes) | set(bijection_bytes)
+            | set(relational_bytes) <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
-    require(all(offset in rotation_regions or offset in set(bijection_bytes)
+    require(all(offset in rotation_regions or offset in window_bytes
+                or offset in set(bijection_bytes) | set(relational_bytes)
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
             "certificate can move")
+    procedure = value.get("expected_procedure_range")
+    require(isinstance(procedure, list) and len(procedure) == 3
+            and all(type(item) is int and item >= 0 for item in procedure)
+            and procedure[0] == body_length
+            and procedure[1] <= procedure[2] <= body_length,
+            f"{context}.expected_procedure_range is invalid")
+    references = value.get("expected_code_symbol_references")
+    require(isinstance(references, list)
+            and all(isinstance(item, list) and len(item) == 3
+                    and isinstance(item[0], str) and isinstance(item[1], str)
+                    and type(item[2]) is int and 0 <= item[2] <= body_length
+                    for item in references),
+            f"{context}.expected_code_symbol_references is invalid")
     external = value.get("expected_external_entries")
     require(isinstance(external, list)
             and external == sorted(set(external))
@@ -36268,10 +36350,15 @@ def validate_donor_rewriting(
             value.get("expected_instruction_count"),
             f"{context}.expected_instruction_count", minimum=2),
         "expected_changed_offsets": list(changed),
+        "expected_procedure_range": list(procedure),
+        "expected_code_symbol_references": [list(item)
+                                            for item in references],
         "expected_external_entries": list(external),
         "authenticity_rationale": rationale,
+        "windows": normalized_windows,
         "fp_sum_rotations": normalized_rotations,
         "register_bijections": normalized_bijections,
+        "relational_sites": normalized_sites,
     }
     if code_length is not None:
         normalized["expected_code_length"] = code_length
@@ -36401,10 +36488,20 @@ def compose_retail_exact_donor_rewriting(
             "donor-rewriting external entry set differs from its "
             "declaration")
 
-    # --- the primitives, in the declared order ----------------------------
+    # --- the primitives, in the one order that is sound (C1) --------------
     image = donor_body
+    schedule_detail = []
+    windows = spec.get("windows") or []
+    if windows:
+        image, schedule_proof = apply_instruction_schedule(
+            image, windows, relocation_offsets,
+            "donor-rewriting schedule", relocation_symbols, code_length,
+            internal_targets)
+        require(not schedule_proof["relocation_reseat"],
+                "donor-rewriting refuses to move a relocation")
+        schedule_detail = schedule_proof["windows"]
     fp_detail = []
-    if spec["fp_sum_rotations"]:
+    if spec.get("fp_sum_rotations"):
         image, fp_proof = apply_fp_sum_reassociation(
             image, spec["fp_sum_rotations"], relocation_offsets,
             "donor-rewriting fp-sum", relocation_symbols, code_length,
@@ -36417,7 +36514,7 @@ def compose_retail_exact_donor_rewriting(
                     "different byte set from its declaration")
         fp_detail = fp_proof["chains"]
     bijection_detail = []
-    for index, item in enumerate(spec["register_bijections"]):
+    for index, item in enumerate(spec.get("register_bijections") or []):
         image, proof = apply_register_bijection(
             image, item["mapping"],
             (item["region_start"], item["region_end"]),
@@ -36437,23 +36534,50 @@ def compose_retail_exact_donor_rewriting(
             "rewritten_offsets": proof["rewritten_offsets"],
             "region_instruction_count": proof["region_instruction_count"],
         })
+    relational_detail = []
+    if spec.get("relational_sites"):
+        sites = [{key: item[key] for key in ("compare_offset",
+                                             "branch_offset",
+                                             "seed_condition",
+                                             "image_condition")}
+                 for item in spec["relational_sites"]]
+        image, proof = apply_relational_form(
+            image, sites, relocation_offsets,
+            "donor-rewriting relational", relocation_symbols,
+            code_length, frozenset(external_entries))
+        require(proof["rewritten_offsets"]
+                == sorted(offset for item in spec["relational_sites"]
+                          for offset in item["expected_rewritten_offsets"]),
+                "donor-rewriting relational rewrite set differs from its "
+                "declaration")
+        relational_detail = proof["sites"]
     require(image != donor_body,
             "donor-rewriting image does not move the donor body")
 
-    # --- D2: boundary preservation ----------------------------------------
+    # --- D2: the image decodes; the grid moves only where a window says ---
     donor_instructions = decode_ia32_bijection_body(
         donor_body, "donor-rewriting pre-image", relocation_symbols,
         code_length)
     image_instructions = decode_ia32_bijection_body(
         image, "donor-rewriting image", relocation_symbols, code_length)
     require(len(image_instructions) == len(donor_instructions)
-            == spec["expected_instruction_count"]
-            and all(left["offset"] == right["offset"]
-                    and left["length"] == right["length"]
-                    for left, right in zip(donor_instructions,
-                                           image_instructions)),
+            == spec["expected_instruction_count"],
+            "donor-rewriting image instruction count differs from its "
+            "declaration")
+    window_bytes = {offset for window in windows
+                    for offset in range(window["start"], window["end"])}
+    require(all(left["offset"] == right["offset"]
+                and left["length"] == right["length"]
+                for left, right in zip(donor_instructions,
+                                       image_instructions)
+                if left["offset"] not in window_bytes),
             "donor-rewriting image does not preserve the donor's "
-            "instruction grid")
+            "instruction grid outside the declared windows")
+    debug_detail = require_instruction_schedule_debug_fidelity(
+        donor, dp, image, windows, spec, mangled,
+        "donor-rewriting debug fidelity", relocation_symbols,
+        code_length, internal_targets,
+    )
     changed = sorted(index for index in range(len(donor_body))
                      if donor_body[index] != image[index])
     require(changed == spec["expected_changed_offsets"],
@@ -36486,7 +36610,7 @@ def compose_retail_exact_donor_rewriting(
 
     # --- D3: debug silence, on the stream the install carries -------------
     mapped = frozenset(register
-                       for item in spec["register_bijections"]
+                       for item in spec.get("register_bijections") or []
                        for register in item["mapping"])
     if mapped:
         _require_no_mapped_debug_register(
@@ -36527,10 +36651,13 @@ def compose_retail_exact_donor_rewriting(
     return composed, {
         **detail,
         "splice_class": DONOR_REWRITING_CLASS,
+        "instruction_schedule": schedule_detail,
         "fp_sum_reassociation": fp_detail,
         "register_bijections": bijection_detail,
+        "relational_form": relational_detail,
         "instruction_count": len(image_instructions),
         "changed_offsets": changed,
+        "debug_fidelity": debug_detail,
         "external_entries": sorted(external_entries),
         "retail_exact": True,
         **semantic_detail,
