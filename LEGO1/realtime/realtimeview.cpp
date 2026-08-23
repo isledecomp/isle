@@ -1,5 +1,7 @@
 #include "realtimeview.h"
 
+#include "mxgeometry/mxmatrix.h"
+
 #include <math.h>
 
 // GLOBAL: LEGO1 0x10109598

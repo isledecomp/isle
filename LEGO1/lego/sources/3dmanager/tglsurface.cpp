@@ -2,6 +2,8 @@
 
 #include "tglsurface.h"
 
+#include "mxgeometry/mxmatrix.h"
+
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(TglSurface, 0x70);

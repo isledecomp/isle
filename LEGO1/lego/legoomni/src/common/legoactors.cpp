@@ -1,5 +1,8 @@
 #include "legoactors.h"
 
+#include "tgl/tglvector.h"
+#include "mxgeometry/mxmatrix.h"
+
 DECOMP_SIZE_ASSERT(LegoActorInfo, 0x108)
 DECOMP_SIZE_ASSERT(LegoActorInfo::Part, 0x18)
 DECOMP_SIZE_ASSERT(LegoActorLOD, 0x58)
