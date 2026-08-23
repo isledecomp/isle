@@ -48132,7 +48132,7 @@
     ],
     "expected_absolute_fixups": [
      {
-      "site_va": "0x100dd1d0",
+      "site_va": "0x100dd1e0",
       "old": "0x100d3850",
       "new": "0x100d3840"
      }
@@ -70675,6 +70675,32 @@
          "id": "RkC15",
          "line": 18
         }
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "path": "LEGO1/realtime/realtimeview.cpp",
+    "clean": "d368a276a572873adb3adfbfb94952786236edd5f3716256671f007f815c1a50",
+    "effective": "bbef6a973bb34c8c9b91d6d7972a9d22d6fa89d7ae1d4c62ed488e6c1f9cbae0",
+    "size": 1352,
+    "ops": [
+     {
+      "op": "insert",
+      "id": "op_9021_rdata_realtimeview",
+      "anchor": {
+       "ctx": "260d49137586d625b6de1844cda91b6c44e3618ba5576bd78f2c2f8b95410944",
+       "b": 3,
+       "at": "before_token"
+      },
+      "gen": {
+       "k": "include",
+       "header": "mxgeometry/mxmatrix.h",
+       "style": "quote",
+       "lines": 2,
+       "at": [
+        1
        ]
       }
      }
