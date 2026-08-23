@@ -41774,7 +41774,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/buildings.cpp",
-   "source_sha256": "348a78e6c2d3d8ceef20c414c9a8bbbbe52d74b09ad8a7cdeb35cf9e2fc2ef93",
+   "source_sha256": "87d5cfd4c6c8da29e09430b52f1ce4bd36b91f19ec717471442c004bdab1b7a8",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -49461,8 +49461,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/actors/buildings.cpp",
     "clean": "1c42815f3308426253610910ba10bbef89581f7639511b04b242573ac38b9c98",
-    "effective": "348a78e6c2d3d8ceef20c414c9a8bbbbe52d74b09ad8a7cdeb35cf9e2fc2ef93",
-    "size": 8675,
+    "effective": "87d5cfd4c6c8da29e09430b52f1ce4bd36b91f19ec717471442c004bdab1b7a8",
+    "size": 8736,
     "ops": [
      {
       "op": "insert",
@@ -49500,6 +49500,33 @@
          "k": "empty_class",
          "id": "RkBUC0",
          "line": 9
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "id": "op_9042_rdata_buildings",
+      "anchor": {
+       "ctx": "3c01ef8aa2ca627aff574dc046b651ac2d3f5bed8f60a825ec33e517eee89e19",
+       "b": 0,
+       "at": "start"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 3,
+       "items": [
+        {
+         "k": "include",
+         "header": "mxgeometry/mxmatrix.h",
+         "style": "quote",
+         "line": 1
+        },
+        {
+         "k": "include",
+         "header": "tgl/tglvector.h",
+         "style": "quote",
+         "line": 2
         }
        ]
       }
@@ -63209,8 +63236,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/worlds/registrationbook.cpp",
     "clean": "4aeec154f6b7c9323243cefdc53ec401adb60ab865607cf833da591fe6bc3014",
-    "effective": "8e61889c0f13058105809bb88559d3074769ad80cd8a83bc37032e97c918b183",
-    "size": 17496,
+    "effective": "3cc493fec47b71ef35d6f900ec3abd80df5301eae108165f9d5698baceaf75af",
+    "size": 17530,
     "ops": [
      {
       "op": "insert",
@@ -63237,6 +63264,27 @@
           "Record1"
          ],
          "line": 5
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "id": "op_9041_rdata_registrationbook",
+      "anchor": {
+       "ctx": "80dfe5c9fc66ad71ae42a30d5559813c144deac3f142646322a4c266ab95be34",
+       "b": 0,
+       "at": "start"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 2,
+       "items": [
+        {
+         "k": "include",
+         "header": "mxgeometry/mxmatrix.h",
+         "style": "quote",
+         "line": 1
         }
        ]
       }
