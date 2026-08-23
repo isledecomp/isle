@@ -3008,6 +3008,27 @@ class DonorSourceOverlayTests(unittest.TestCase):
             byte_identity.validate_donor_source_compiler_state_carrier(
                 extra, "fixture.carrier")
 
+        pad = byte_identity.entropy_generator.generate_pad_shape(
+            10, 4).encode("ascii")
+        pad_carrier = {
+            "kind": "force_included_pad_shape_v1",
+            "placement": "force_include_v1",
+            "classes": 10,
+            "functions_per_class": 4,
+            "generated_declarations_sha256": hashlib.sha256(pad).hexdigest(),
+        }
+        self.assertEqual(
+            byte_identity.donor_source_overlay_force_include_payload(
+                self._recipe(compiler_state_carrier=pad_carrier)),
+            pad,
+        )
+        # The two force-included grammars do not share a parameter set.
+        crossed = copy.deepcopy(pad_carrier)
+        crossed["functions"] = crossed.pop("functions_per_class")
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.validate_donor_source_compiler_state_carrier(
+                crossed, "fixture.carrier")
+
     def test_rejects_final_source_component_symlink(self):
         payload = b"int source_overlay_fixture;\n"
         with tempfile.TemporaryDirectory() as temporary:

@@ -25143,8 +25143,21 @@ DONOR_SOURCE_CARRIER_SEATS = {
 # strings, vtables or linker directives, exactly as the `declaration_shape`
 # recipe's force-included carrier does.
 DONOR_SOURCE_FORCE_INCLUDE_CARRIERS = {
-    "force_included_shape_v1": "force_include_v1",
+    "force_included_shape_v1": (
+        "force_include_v1", "generate_shape", ("classes", "functions"),
+    ),
+    "force_included_pad_shape_v1": (
+        "force_include_v1", "generate_pad_shape",
+        ("classes", "functions_per_class"),
+    ),
 }
+
+
+def _donor_source_force_included_shape(kind: str, params: dict) -> bytes:
+    """Render one force-included carrier's declaration-only shape."""
+    _, generator_name, names = DONOR_SOURCE_FORCE_INCLUDE_CARRIERS[kind]
+    generator = getattr(entropy_generator, generator_name)
+    return generator(*(params[name] for name in names)).encode("ascii")
 
 
 def validate_donor_source_compiler_state_carrier(
@@ -25163,24 +25176,20 @@ def validate_donor_source_compiler_state_carrier(
     require(isinstance(value, dict), f"{context} must be an object")
     kind = value.get("kind")
     if kind in DONOR_SOURCE_FORCE_INCLUDE_CARRIERS:
-        placement = DONOR_SOURCE_FORCE_INCLUDE_CARRIERS[kind]
+        placement, _, names = DONOR_SOURCE_FORCE_INCLUDE_CARRIERS[kind]
         exact_audit_keys(value, {
-            "kind", "placement", "classes", "functions",
-            "generated_declarations_sha256",
+            "kind", "placement", "generated_declarations_sha256", *names,
         }, context)
         require(value.get("placement") == placement,
                 f"{context} kind or placement differs")
-        classes = require_exact_int(
-            value.get("classes"), context + ".classes",
-            minimum=1, maximum=64,
-        )
-        functions = require_exact_int(
-            value.get("functions"), context + ".functions",
-            minimum=1, maximum=4096,
-        )
+        params = {
+            name: require_exact_int(
+                value.get(name), f"{context}.{name}", minimum=1, maximum=4096,
+            )
+            for name in names
+        }
         try:
-            generated = entropy_generator.generate_shape(
-                classes, functions).encode("ascii")
+            generated = _donor_source_force_included_shape(kind, params)
         except ValueError as error:
             raise ByteIdentityError(
                 f"{context} declaration shape is invalid: {error}"
@@ -25191,8 +25200,7 @@ def validate_donor_source_compiler_state_carrier(
             == sha256_bytes(generated),
             f"{context} generated declarations differ from their pin",
         )
-        return {"kind": kind, "placement": placement, "classes": classes,
-                "functions": functions,
+        return {"kind": kind, "placement": placement, **params,
                 "generated_declarations_sha256": sha256_bytes(generated)}
     require(kind in DONOR_SOURCE_CARRIER_SEATS,
             f"{context} kind or placement differs")
@@ -25257,7 +25265,7 @@ def render_donor_source_compiler_state_carrier(
     kind = carrier["kind"]
     if kind in DONOR_SOURCE_FORCE_INCLUDE_CARRIERS:
         require(carrier["placement"]
-                == DONOR_SOURCE_FORCE_INCLUDE_CARRIERS[kind],
+                == DONOR_SOURCE_FORCE_INCLUDE_CARRIERS[kind][0],
                 "donor source compiler-state carrier differs")
         # Force-included ahead of the unit: the rendered text is untouched.
         return data
@@ -25316,9 +25324,7 @@ def donor_source_overlay_force_include_payload(recipe: object) -> bytes | None:
     validated = validate_donor_source_compiler_state_carrier(
         carrier, "donor source overlay compiler-state carrier"
     )
-    return entropy_generator.generate_shape(
-        validated["classes"], validated["functions"]
-    ).encode("ascii")
+    return _donor_source_force_included_shape(validated["kind"], validated)
 
 
 def render_donor_source_overlay(
