@@ -41774,7 +41774,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/buildings.cpp",
-   "source_sha256": "87d5cfd4c6c8da29e09430b52f1ce4bd36b91f19ec717471442c004bdab1b7a8",
+   "source_sha256": "348a78e6c2d3d8ceef20c414c9a8bbbbe52d74b09ad8a7cdeb35cf9e2fc2ef93",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -45217,7 +45217,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp",
-   "source_sha256": "b151d426addbc231efcefa1daedb682a24368244936a32b7af5ec3875841895d",
+   "source_sha256": "9d058f2d1708cb8506cbd0b7932910b7e869cbb0edd2b9981563d626485cc395",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -47021,7 +47021,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp",
-   "source_sha256": "9428d1fca629134f2063436c7b0f13d10d58d641121e03a42cdca42d19e8701b",
+   "source_sha256": "6e0f7601f4e36f4acd8021100286fe593ba0313067f03989e7c904e0bd1d4753",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -47776,7 +47776,7 @@
     ],
     "expected_absolute_fixups": [
      {
-      "site_va": "0x100dd248",
+      "site_va": "0x100dd238",
       "old": "0x100d3850",
       "new": "0x100d3840"
      }
@@ -49461,8 +49461,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/actors/buildings.cpp",
     "clean": "1c42815f3308426253610910ba10bbef89581f7639511b04b242573ac38b9c98",
-    "effective": "87d5cfd4c6c8da29e09430b52f1ce4bd36b91f19ec717471442c004bdab1b7a8",
-    "size": 8736,
+    "effective": "348a78e6c2d3d8ceef20c414c9a8bbbbe52d74b09ad8a7cdeb35cf9e2fc2ef93",
+    "size": 8675,
     "ops": [
      {
       "op": "insert",
@@ -49500,33 +49500,6 @@
          "k": "empty_class",
          "id": "RkBUC0",
          "line": 9
-        }
-       ]
-      }
-     },
-     {
-      "op": "insert",
-      "id": "op_9042_rdata_buildings",
-      "anchor": {
-       "ctx": "3c01ef8aa2ca627aff574dc046b651ac2d3f5bed8f60a825ec33e517eee89e19",
-       "b": 0,
-       "at": "start"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 3,
-       "items": [
-        {
-         "k": "include",
-         "header": "mxgeometry/mxmatrix.h",
-         "style": "quote",
-         "line": 1
-        },
-        {
-         "k": "include",
-         "header": "tgl/tglvector.h",
-         "style": "quote",
-         "line": 2
         }
        ]
       }
@@ -50003,14 +49976,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/actors/radio.cpp",
-    "clean": "b0a0690476211649485f2ece84d296142b5a200fb59960188387f0b0221a9b66",
-    "effective": "fcca06c2e4417e0cd69bd3cd061619fef014108b5c9ade331b97d98095a6a06a",
-    "size": 6623,
+    "clean": "8fd69414093398ece5a719d50f285ab3ab5bc4def106dd89637950702fdd12f4",
+    "effective": "39b292da4ba6fafa89632db41ec40542567e62dbd632432f9a93ec33ae223522",
+    "size": 6337,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "14133372b46939ee7ec96914358970b257cf96a5aa2990b397a2d3c861de7ee5",
+       "ctx": "c8a563e756bed495dba535da83d254725cefebc12573e2ef5e689c30cbdbe382",
        "b": 0,
        "at": "start"
       },
@@ -50608,14 +50581,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp",
-    "clean": "9fdc02b9f875d2436db4cf38777f5ae2b77bc189adfadf26b72e1654834230c7",
-    "effective": "5cc274c4aa8d94cf21e633fe444733380724441712f55082da2ba7921d583e28",
-    "size": 9868,
+    "clean": "98eaf1dd219378c682a174cbdfcf43cd876d0620890764bc07fd34c504e30911",
+    "effective": "f2aff7e10bdc6a3398b558ed94b11ad66748ea20f6272481e49f5adaaab8ef21",
+    "size": 9592,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "d0309a38437c128d8f44235b3ec9afdac9a21ff8fe6eca55c60696916ab22d74",
+       "ctx": "008da4a4e2983a40f21dd00ea36d9bc950f4c0d7d61a4015871f41f31403ec03",
        "b": 0,
        "at": "start"
       },
@@ -51523,9 +51496,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp",
-    "clean": "295a552e413115f86252b4c2a2477bfacca1aef397d44c115acbc1576eeb7b45",
-    "effective": "9428d1fca629134f2063436c7b0f13d10d58d641121e03a42cdca42d19e8701b",
-    "size": 12567,
+    "clean": "7d3232cfd8d7f164277247415b22a081aca24fe007d3a46fad4a9040888ede6e",
+    "effective": "6e0f7601f4e36f4acd8021100286fe593ba0313067f03989e7c904e0bd1d4753",
+    "size": 12281,
     "ops": [
      {
       "op": "insert",
@@ -63236,8 +63209,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/worlds/registrationbook.cpp",
     "clean": "4aeec154f6b7c9323243cefdc53ec401adb60ab865607cf833da591fe6bc3014",
-    "effective": "3cc493fec47b71ef35d6f900ec3abd80df5301eae108165f9d5698baceaf75af",
-    "size": 17530,
+    "effective": "8e61889c0f13058105809bb88559d3074769ad80cd8a83bc37032e97c918b183",
+    "size": 17496,
     "ops": [
      {
       "op": "insert",
@@ -63264,27 +63237,6 @@
           "Record1"
          ],
          "line": 5
-        }
-       ]
-      }
-     },
-     {
-      "op": "insert",
-      "id": "op_9041_rdata_registrationbook",
-      "anchor": {
-       "ctx": "80dfe5c9fc66ad71ae42a30d5559813c144deac3f142646322a4c266ab95be34",
-       "b": 0,
-       "at": "start"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 2,
-       "items": [
-        {
-         "k": "include",
-         "header": "mxgeometry/mxmatrix.h",
-         "style": "quote",
-         "line": 1
         }
        ]
       }
