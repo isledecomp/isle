@@ -48132,7 +48132,7 @@
     ],
     "expected_absolute_fixups": [
      {
-      "site_va": "0x100dd1f0",
+      "site_va": "0x100dd200",
       "old": "0x100d3850",
       "new": "0x100d3840"
      }
@@ -51167,6 +51167,41 @@
          "k": "empty_class",
          "id": "MxUnkRecordLW",
          "line": 197
+        }
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "path": "LEGO1/lego/legoomni/src/common/legoactors.cpp",
+    "clean": "849c2f2b2c53955e24f175a0fc5ce4dfa4dd3a8eb9434faff32c5052e1fefb19",
+    "effective": "6dbabfcf13e182d08e6d349e17078609eb5784aae31e4e11217e3b0ac23b2053",
+    "size": 50598,
+    "ops": [
+     {
+      "op": "insert",
+      "id": "op_9025_rdata_legoactors",
+      "anchor": {
+       "ctx": "5a9ca0b76567fe40b44669c72a19f66e6ed220c5e2a7ef8794f4554380c9538e",
+       "b": 3,
+       "at": "before_token"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 3,
+       "items": [
+        {
+         "k": "include",
+         "header": "tgl/tglvector.h",
+         "style": "quote",
+         "line": 1
+        },
+        {
+         "k": "include",
+         "header": "mxgeometry/mxmatrix.h",
+         "style": "quote",
+         "line": 2
         }
        ]
       }
