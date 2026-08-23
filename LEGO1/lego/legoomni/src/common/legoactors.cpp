@@ -1,7 +1,12 @@
+// The order of these includes is byte-identity significant: it decides which
+// of Tgl::Constant::Pi and rotateIndex[] this unit seats first in its .rdata
+// constant pool, and clang-format would sort them back.
+// clang-format off
 #include "legoactors.h"
 
 #include "tgl/tglvector.h"
 #include "mxgeometry/mxmatrix.h"
+// clang-format on
 
 DECOMP_SIZE_ASSERT(LegoActorInfo, 0x108)
 DECOMP_SIZE_ASSERT(LegoActorInfo::Part, 0x18)

@@ -293,14 +293,17 @@ MxResult LegoPathController::PlaceActor(
 
 				if (((LegoOrientedEdge*) edge->GetClockwiseEdge(*boundary))->GetFaceNormal(*boundary, vec) == SUCCESS &&
 					vec.Dot(vec, p_direction) < 0.0f) {
-					edge = (LegoOrientedEdge*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
+					edge =
+						(LegoOrientedEdge*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary
+						);
 				}
 
 				if (!edge->GetMask0x03()) {
 					return FAILURE;
 				}
 
-				if (p_actor->SetTransformAndDestinationFromPoints(boundary, time, p_position, p_direction, edge, 0.5f) ==
+				if (p_actor
+						->SetTransformAndDestinationFromPoints(boundary, time, p_position, p_direction, edge, 0.5f) ==
 					SUCCESS) {
 					p_actor->SetController(this);
 					m_actors.insert(p_actor);
