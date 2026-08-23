@@ -12254,8 +12254,76 @@ def validate_execution_backends(value: object | None) -> dict:
 TOOLCHAIN_COMMON_KEYS = {
     "compiler_sha256", "compiler_id", "compiler_version",
     "python_sha256", "python_version", "keep_compile_debug",
-    "max_child_seconds", "provenance",
+    "max_child_seconds", "provenance", "codegen_path_contract",
 }
+
+
+CODEGEN_PATH_CONTRACT_SCHEMA = "msvc42_arena_path_length_v1"
+
+
+def validate_codegen_path_contract(
+    value: object,
+    source_root: Path,
+    build_root: Path,
+    configured_compiler: str | None,
+    *,
+    required: bool,
+) -> dict | None:
+    """Enforce the pinned build-tree seats the codegen is sensitive to.
+
+    MSVC 4.2's register allocator and COMDAT emission order depend on the
+    compiler's internal arena state, which the LENGTH of every path it
+    processes perturbs (source root, build root, object and PDB paths).
+    Identical sources compiled under differently named roots are therefore
+    NOT attested to reproduce the pinned bodies.  This contract pins the
+    exact roots the manifest's pins were measured under; a build under any
+    other seat refuses here, loudly, instead of drifting silently.
+
+    This pin is an INTERIM guard, and the burden it names is the
+    framework's, never the user's: the planned path-normalization
+    transport (a fixed virtual drive mapping inside the Wine prefix, so
+    the compiler only ever sees constant-shape paths) removes the host
+    path from the codegen equation entirely, and this contract then pins
+    the virtual seats instead.
+    """
+    if value is None:
+        require(not required,
+                "toolchain.codegen_path_contract is required: the build "
+                "would compile under unattested path seats (MSVC 4.2 "
+                "codegen is path-length sensitive)")
+        return None
+    require(isinstance(value, dict),
+            "toolchain.codegen_path_contract must be an object")
+    exact_audit_keys(value, {
+        "schema", "rationale", "source_root", "build_root", "compiler",
+    }, "toolchain.codegen_path_contract")
+    require(value.get("schema") == CODEGEN_PATH_CONTRACT_SCHEMA,
+            "toolchain.codegen_path_contract.schema differs")
+    require(isinstance(value.get("rationale"), str) and value["rationale"],
+            "toolchain.codegen_path_contract.rationale must be stated")
+    for key in ("source_root", "build_root", "compiler"):
+        declared = value.get(key)
+        require(isinstance(declared, str) and declared
+                and Path(declared).is_absolute(),
+                f"toolchain.codegen_path_contract.{key} must be an "
+                "absolute host path")
+    require(str(source_root) == value["source_root"],
+            "codegen path contract: the source tree is seated at "
+            f"{source_root}, but the manifest's pins were measured under "
+            f"{value['source_root']}; MSVC 4.2 codegen is path-length "
+            "sensitive, so this build is not attested to reproduce them")
+    require(str(build_root) == value["build_root"],
+            "codegen path contract: the build tree is seated at "
+            f"{build_root}, but the manifest's pins were measured under "
+            f"{value['build_root']}; MSVC 4.2 codegen is path-length "
+            "sensitive, so this build is not attested to reproduce them")
+    if configured_compiler is not None:
+        active = str(lexical_absolute_path(Path(configured_compiler)))
+        require(active == value["compiler"],
+                "codegen path contract: the compiler is invoked as "
+                f"{active}, but the manifest's pins were measured under "
+                f"{value['compiler']}")
+    return dict(value)
 
 
 TOOLCHAIN_POSIX_PROFILE_KEYS = {
@@ -12488,6 +12556,9 @@ def validate_manifest(
     require(current_python_version == expected_python_version,
             "active Python interpreter version differs")
     require(toolchain.get("keep_compile_debug") == "/Zi", "byte-identity compiles must retain /Zi")
+    validate_codegen_path_contract(
+        toolchain.get("codegen_path_contract"), source_root, build_root,
+        configured_compiler, required=configured_compiler is not None)
     timeout = toolchain.get("max_child_seconds")
     require(isinstance(timeout, int) and not isinstance(timeout, bool)
             and 1 <= timeout <= 900, "max_child_seconds is out of range")
@@ -14967,6 +15038,10 @@ def validate_manifest(
                         function.get("composed_rewriting"),
                         f"{function_context}.composed_rewriting",
                         function["expected_body_length"],
+                        lone_statement_ok=(
+                            function.get("expected_donor_section_number")
+                            != function["expected_section_number"]
+                        ),
                     )
                     require(
                         composed_spec["expected_changed_offsets"] == changed,
@@ -15440,7 +15515,9 @@ def validate_manifest(
                 if splice_class == REGISTER_BIJECTION_CLASS:
                     bijection_keys = {
                         "mangled", "donor", "splice_class",
-                        "expected_section_number", "expected_section_count",
+                        "expected_section_number",
+                        "expected_donor_section_number",
+                        "expected_section_count",
                         "expected_body_length", "expected_characteristics",
                         "expected_selection", "expected_relocation_count",
                         "expected_seed_line_count",
@@ -17080,7 +17157,11 @@ def validate_manifest(
                 require_sha(function.get("expected_body_sha256"),
                             f"{function_context}.expected_body_sha256")
                 offsets = function.get("expected_changed_offsets")
-                require(isinstance(offsets, list) and offsets
+                # An EMPTY list is a legitimate declaration: the donor's
+                # body is byte-identical to the seed's.  Such an entry still
+                # pins the installed body exactly and keeps stabilising a
+                # bistable row when a later seed compile drifts.
+                require(isinstance(offsets, list)
                         and all(isinstance(item, int)
                                 and not isinstance(item, bool)
                                 and 0 <= item < length
@@ -23824,12 +23905,63 @@ def _pair_reloc_divergent(seed, donor, seed_rows, donor_rows, seed_primary,
                 "does not name the paired seed symbol",
             )
         else:
-            # The divergence this class exists for: retail calls a function
-            # where we inline it (or the reverse).  B1 is what proves the
-            # substitution is retail's own, so nothing is inferred here --
-            # only that the seed can name the donor's target.
-            substitutions[ordinal] = _resolve_substituted_seed_symbol(
-                seed, right, context)
+            left_base, left_sep, left_serial = left["target"].rpartition("$S")
+            right_base, right_sep, right_serial = \
+                right["target"].rpartition("$S")
+            if (left_sep and right_sep and left_base
+                    and left_base == right_base
+                    and left_serial.isdigit() and right_serial.isdigit()):
+                # A function-static datum whose <base>$S<serial> was
+                # renumbered by the donor's extra declarations: the SAME
+                # variable under a shifted compiler serial.  The pairing is
+                # admitted only when the two symbols agree in class, seat
+                # and the complete identity of the section they name --
+                # the same fail-closed test the paired $L/$T locals get.
+                require(
+                    left["addend"] == right["addend"]
+                    and left["target_type"] == right["target_type"]
+                    and left["target_storage"] == right["target_storage"]
+                    and left["target_value"] == right["target_value"],
+                    f"{context}: renamed $S relocation target class "
+                    "differs",
+                )
+                left_section_number = left["target_section"]
+                right_section_number = right["target_section"]
+                require(
+                    0 < left_section_number <= len(seed.sections)
+                    and 0 < right_section_number <= len(donor.sections),
+                    f"{context}: renamed $S relocation names no section",
+                )
+                left_section = seed.sections[left_section_number - 1]
+                right_section = donor.sections[right_section_number - 1]
+                require(
+                    all(left_section[key] == right_section[key] for key in (
+                        "name", "raw_size", "relocation_count", "line_count",
+                        "characteristics",
+                    ))
+                    and coff_body(seed, left_section)
+                    == coff_body(donor, right_section)
+                    and _coff_table_bytes(seed, left_section, "relocations")
+                    == _coff_table_bytes(donor, right_section,
+                                         "relocations"),
+                    f"{context}: renamed $S target section differs",
+                )
+                matches = [
+                    index for index, symbol in seed.symbols.items()
+                    if symbol["name"] == left["target"]
+                ]
+                require(len(matches) == 1,
+                        f"{context}: renamed $S seed symbol "
+                        f"{left['target']!r} is not unique")
+                substitutions[ordinal] = matches[0]
+            else:
+                # The divergence this class exists for: retail calls a
+                # function where we inline it (or the reverse).  B1 is what
+                # proves the substitution is retail's own, so nothing is
+                # inferred here -- only that the seed can name the donor's
+                # target.
+                substitutions[ordinal] = _resolve_substituted_seed_symbol(
+                    seed, right, context)
         pairs.append((left, right))
     # Each appended donor row must be an ORDINARY target the seed can already
     # name (B5/B6).  A compiler-local extra would need a symbol the seed does
@@ -24407,6 +24539,18 @@ def compose_same_slot_resize(
                         == local_symbol_kind(right["target"]),
                         f"composed local relocation class changed at "
                         f"offset {left['offset']}")
+                continue
+            left_base, left_sep, left_serial = left["target"].rpartition(
+                "$S")
+            right_base, right_sep, right_serial = \
+                right["target"].rpartition("$S")
+            if (left["target"] != right["target"] and left_sep and right_sep
+                    and left_base and left_base == right_base
+                    and left_serial.isdigit() and right_serial.isdigit()):
+                # A paired function-static rename: the seed's own $S symbol
+                # legitimately keeps its name -- the pairing was proved
+                # (class, seat and section identity) when the substitution
+                # was recorded.
                 continue
             require(left["target"] == right["target"],
                     f"composed relocation target {left['target']!r} is not "
@@ -29016,7 +29160,8 @@ def _bijection_form(
     opreg: str | None = None,
     reads: frozenset = frozenset(), writes: frozenset = frozenset(),
     flow: str = "fall", displacement: int = 0,
-    width: int = 32, x87: bool = False, size16_ok: bool = False,
+    width: int = 32, rm_width: int | None = None,
+    x87: bool = False, size16_ok: bool = False,
     size16_ext: frozenset | None = None,
     string_memory: dict | None = None,
 ) -> dict:
@@ -29046,7 +29191,8 @@ def _bijection_form(
         # 32-bit and are always remappable.  `x87` marks a form whose ModRM
         # reg field is an opcode extension and whose mod == 3 operand is an
         # FPU stack register, i.e. not a general register at all.
-        "width": width, "x87": x87, "size16_ok": size16_ok,
+            "width": width, "rm_width": rm_width, "x87": x87,
+        "size16_ok": size16_ok,
         # `size16_ext` restricts the operand-size prefix to named extension
         # digits of a group whose other members would be nonsense (or
         # unmodelled) at 16 bits; None admits the prefix for every admitted
@@ -29369,8 +29515,13 @@ def _ia32_bijection_two_byte_table() -> dict:
     fields number the SAME eight registers (a mod == 3 r/m16 is AX..DI, not
     AL..BH), so sigma's permutation is the right rewriting for both, and the
     destination write is a full 32-bit definition that legitimately kills.
-    The byte-source siblings `0F B6`/`0F BE` are deliberately absent: their
-    r/m8 is a frozen field, and no row needs them.
+    The byte-source siblings `0F B6`/`0F BE` carry an ASYMMETRIC pair of
+    fields: the destination is a full 32-bit register field sigma rewrites
+    and legitimately kills, while the r/m8 source names AL..BH and is frozen
+    exactly as every other width-8 field is -- `rm_width` records that
+    split.  A memory-source encoding freezes nothing: its base and index
+    are ordinary 32-bit address registers.  (Tickle's mirror region is the
+    row that needs them.)
     """
     table = {}
     for opcode in range(0x80, 0x90):
@@ -29378,6 +29529,10 @@ def _ia32_bijection_two_byte_table() -> dict:
     for opcode in (0xB7, 0xBF):
         table[opcode] = _bijection_form(modrm=True, reg="gpr",
                                         reg_write=True, rm_read=True)
+    for opcode in (0xB6, 0xBE):
+        table[opcode] = _bijection_form(modrm=True, reg="gpr",
+                                        reg_write=True, rm_read=True,
+                                        rm_width=8)
     # 0F 90..9F SETcc r/m8: the reg field is an ignored extension the
     # compiler always encodes as /0, and the destination is an 8-bit write,
     # so the field is frozen exactly as every other width-8 r/m is.
@@ -29688,6 +29843,7 @@ def decode_ia32_bijection_instruction(
                 f"{context}: the operand-size prefix is outside the "
                 "register-bijection table for this opcode")
         width = 16
+    effective_width = width
     fields = []
     # The ModRM/SIB LAYOUT of this instruction, or None when it has none.
     # A register bijection never reads it; the re-encoding bijection needs it
@@ -29709,7 +29865,8 @@ def decode_ia32_bijection_instruction(
     indirect = False
     names = IA32_GENERAL_REGISTER_NAMES
 
-    def _touch(value: int, is_read: bool, is_write: bool) -> None:
+    def _touch(value: int, is_read: bool, is_write: bool,
+               field_width: int | None = None) -> None:
         """Account for one register-operand field of the form's own width.
 
         32- and 16-bit fields number the same eight registers, so they are
@@ -29717,7 +29874,10 @@ def decode_ia32_bijection_instruction(
         bytes of EAX..EBX, so it is frozen.  At REGISTER granularity a write
         narrower than 32 bits is reported as a read and never as a kill; at
         ATOM granularity it reads and kills exactly the atoms it touches.
+        A form with an `rm_width` narrower than its register field passes
+        that width here explicitly; every symmetric form passes None.
         """
+        width = effective_width if field_width is None else field_width
         if width == 8:
             name = names[value & 3]
             frozen.add(name)
@@ -29813,9 +29973,10 @@ def decode_ia32_bijection_instruction(
                     write_atoms |= {"eax.l", "eax.h"}
                     frozen.add("eax")
             else:
-                if width != 8:
+                rm_field_width = form["rm_width"] or width
+                if rm_field_width != 8:
                     fields.append((modrm_at, 0))
-                _touch(rm, form["rm_read"], rm_write)
+                _touch(rm, form["rm_read"], rm_write, rm_field_width)
         else:
             # A memory operand: the base and index registers are read for the
             # address computation and are always 32-bit, whatever the form's
@@ -30149,9 +30310,15 @@ def apply_register_bijection(
     require(all(source != destination
                 for source, destination in mapping.items()),
             f"{context}: mapping fixes a register it names")
-    require(not (support & _IA32_STRUCTURAL_REGISTERS),
-            f"{context}: mapping touches ESP or EBP, whose encodings carry "
+    require("esp" not in support,
+            f"{context}: mapping touches ESP, whose encodings carry "
             "ModRM/SIB structure")
+    # EBP is admitted as a general register: in a frame-pointer-free body
+    # the compiler colours it like any other callee-saved register.  The
+    # [ebp] ModRM/SIB quirk (mod 00 with r/m or SIB base 101 encodes a
+    # bare disp32, so a bare-[partner] form has no same-length mirror) is
+    # caught structurally: the image is re-decoded below and any rewrite
+    # that changes an instruction's length or grid refuses there.
 
     live, successors = _register_bijection_live_sets(instructions, context)
     inside = [item for item in instructions
@@ -30182,6 +30349,29 @@ def apply_register_bijection(
     require(not dead_in,
             f"{context}: {_ia32_atom_registers(dead_in)} is live on entry "
             "to the region")
+    # An EH unwind funclet seated inside the region is entered only by the
+    # unwinder, never by region control flow.  Its `ret` still carries the
+    # ABI's callee-saved read set, but no recoloured value can reach it: a
+    # value sigma renames lives only along paths from the instructions sigma
+    # touches, and the leak obligations below refuse any such value escaping
+    # the region.  So a ret/exit that is UNREACHABLE from every
+    # sigma-affected instruction is exempt from the return-liveness
+    # refusal -- and only from that one; every other obligation still holds
+    # for the funclet's bytes.
+    affected = {
+        index for index, item in enumerate(instructions)
+        if start <= item["offset"] < end
+        and item["flow"] not in ("ret", "exit")
+        and support_atoms & (set(item["read_atoms"])
+                             | set(item["write_atoms"]))}
+    sigma_reachable = set(affected)
+    frontier = list(affected)
+    while frontier:
+        node = frontier.pop()
+        for edge in successors[node]:
+            if edge not in sigma_reachable:
+                sigma_reachable.add(edge)
+                frontier.append(edge)
     for index, item in enumerate(instructions):
         if not (start <= item["offset"] < end):
             continue
@@ -30194,7 +30384,7 @@ def apply_register_bijection(
                     f"an edge leaving the region at {item['offset']}")
         if item["flow"] in ("ret", "exit"):
             leaking = support_atoms & set(item["read_atoms"])
-            require(not leaking,
+            require(not leaking or index not in sigma_reachable,
                     f"{context}: {_ia32_atom_registers(leaking)} is live at "
                     "the region's return")
 
@@ -30313,7 +30503,13 @@ def apply_codeview_register_bijection(
             if record["type"] != CODEVIEW_REGISTER_RECORD_TYPE:
                 continue
             field_at = _codeview_register_field(record, context)
-            name = _codeview_register_name(image, field_at, context)
+            try:
+                name = _codeview_register_name(image, field_at, context)
+            except ByteIdentityError:
+                # A non-general register (an x87 home, a segment): no
+                # general-register mapping can name it, so the record is
+                # identity under every map this primitive applies.
+                continue
             if name not in mapping:
                 continue
             seen.append({
@@ -30727,9 +30923,18 @@ def compose_retail_exact_register_bijection(
     mangled = function["mangled"]
     sp = seed.function_section(mangled)
     dp = donor.function_section(mangled)
-    require(sp["number"] == dp["number"]
-            == function["expected_section_number"],
-            "register-bijection target section seat changed")
+    donor_seat = function.get("expected_donor_section_number")
+    if donor_seat is None:
+        require(sp["number"] == dp["number"]
+                == function["expected_section_number"],
+                "register-bijection target section seat changed")
+    else:
+        # A witness whose object seats the target differently (its own
+        # emission order diverges from the seed's) declares that seat as a
+        # pin of its own -- exactly as the composed-rewriting class does.
+        require(sp["number"] == function["expected_section_number"]
+                and dp["number"] == donor_seat,
+                "register-bijection target section seat changed")
     require(len(seed.sections) == len(donor.sections)
             == function["expected_section_count"],
             "register-bijection global section count changed")
@@ -31298,6 +31503,98 @@ IA32_REPAIRABLE_BRANCH_WIDTHS = (1, 4)
 
 
 REGISTER_BIJECTION_REENCODING_FIXPOINT_ROUNDS = 64
+
+
+def apply_slot_bijection(
+    body: bytes, mapping: dict, relocation_offsets: frozenset,
+    context: str, relocations: dict | None = None,
+    code_length: int | None = None,
+) -> tuple[bytes, dict]:
+    """Exchange two (or more) EBP frame slots' displacements body-wide.
+
+    Renaming same-width private stack slots consistently everywhere is an
+    isomorphism of the machine function: every read, write and address
+    formation moves with its slot, so no execution can tell the difference.
+    The soundness rests on TOTALITY and NON-OVERLAP, and both are checked
+    here: every instruction whose EBP-based operand touches a mapped slot
+    must reference it exactly (same displacement, dword width or an address
+    formation), any partial overlap refuses, any ESP-based operand in the
+    body refuses (it could alias a mapped slot at a distance this check
+    cannot bound), and a displacement byte under a relocation refuses.
+    Length preservation is structural: only displacement BYTES change, and
+    each rewritten value must fit the encoded displacement size.
+    """
+    require(isinstance(mapping, dict) and len(mapping) >= 2,
+            f"{context}: the slot mapping is empty")
+    slots = {int(key): int(value) for key, value in mapping.items()}
+    require(set(slots) == set(slots.values())
+            and len(set(slots.values())) == len(slots)
+            and all(key != value for key, value in slots.items()),
+            f"{context}: the slot mapping is not a fixed-point-free "
+            "bijection")
+    require(all(key < 0 and value < 0 for key, value in slots.items()),
+            f"{context}: the slot mapping leaves the local frame")
+    ordered = sorted(slots)
+    for left, right in zip(ordered, ordered[1:]):
+        require(right - left >= 4,
+                f"{context}: mapped slots overlap")
+    instructions = decode_ia32_bijection_body(
+        body, context, relocations, code_length)
+    image = bytearray(body)
+    rewritten = []
+    for item in instructions:
+        memory = item.get("memory")
+        if not memory or memory.get("absolute"):
+            continue
+        base = memory.get("base")
+        require(base != "esp",
+                f"{context}: an ESP-based operand at {item['offset']} "
+                "could alias a mapped slot")
+        if base != "ebp":
+            continue
+        displacement = memory.get("displacement")
+        width = memory.get("width") or 4
+        if displacement in slots:
+            is_lea = item["opcode"] == 0x8D
+            require(is_lea or width == 4,
+                    f"{context}: the access at {item['offset']} reads a "
+                    "mapped slot at a different width")
+            encoding = item.get("encoding") or {}
+            at = encoding.get("displacement_at")
+            size = encoding.get("displacement_size")
+            require(at is not None and size in (1, 4),
+                    f"{context}: the instruction at {item['offset']} has "
+                    "no rewritable displacement field")
+            require(not any(at + k in relocation_offsets
+                            for k in range(size)),
+                    f"{context}: the displacement at {item['offset']} is "
+                    "relocated")
+            value = slots[displacement]
+            limit = 1 << (8 * size - 1)
+            require(-limit <= value < limit,
+                    f"{context}: the exchanged displacement at "
+                    f"{item['offset']} does not fit its field")
+            image[at:at + size] = value.to_bytes(size, "little",
+                                                 signed=True)
+            rewritten.extend(range(at, at + size))
+        else:
+            for slot in slots:
+                require(displacement + width <= slot
+                        or slot + 4 <= displacement,
+                        f"{context}: the access at {item['offset']} "
+                        "partially overlaps a mapped slot")
+    require(rewritten,
+            f"{context}: the slot bijection rewrites nothing")
+    reencoded = decode_ia32_bijection_body(
+        bytes(image), f"{context} image", relocations, code_length)
+    require(len(reencoded) == len(instructions)
+            and all(left["offset"] == right["offset"]
+                    and left["length"] == right["length"]
+                    for left, right in zip(instructions, reencoded)),
+            f"{context}: the exchange changed the instruction grid")
+    changed = [offset for offset in rewritten
+               if image[offset] != body[offset]]
+    return bytes(image), {"rewritten_offsets": sorted(changed)}
 
 
 def apply_register_bijection_reencoding(
@@ -35987,12 +36284,13 @@ def composed_rewriting_delegate(expected_closure: object) -> str:
 
 def validate_composed_rewriting(
     value: object, context: str, body_length: int,
+    lone_statement_ok: bool = False,
 ) -> dict:
     """Validate one composed-rewriting certificate declaration."""
     require(isinstance(value, dict), f"{context} must be an object")
     exact_audit_keys(value, {
         "kind", "windows", "register_bijections", "relational_sites",
-        "fp_sum_rotations", "simulated_region_rewrites",
+        "fp_sum_rotations", "simulated_region_rewrites", "slot_bijections",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_seed_debug_s_sha256",
@@ -36000,7 +36298,7 @@ def validate_composed_rewriting(
         "expected_internal_relocation_targets", "authenticity_rationale",
     }, context, optional={"windows", "register_bijections",
                           "relational_sites", "fp_sum_rotations",
-                          "simulated_region_rewrites",
+                          "simulated_region_rewrites", "slot_bijections",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == COMPOSED_REWRITING_KIND,
@@ -36312,15 +36610,24 @@ def validate_composed_rewriting(
                     f"{site_context}.reencode must be true when present")
             normalized_site["reencode"] = True
         normalized_sites.append(normalized_site)
+    declared_slots = value.get("slot_bijections") or []
     require(normalized_windows or normalized_bijections or normalized_sites
-            or normalized_rotations or normalized_region_rewrites,
+            or normalized_rotations or normalized_region_rewrites
+            or declared_slots,
             f"{context} declares no certificate")
     # A lone window, bijection, mirror or rotation belongs to its own
     # class; the simulated region rewrite has no single-statement class, so
-    # one of those may stand alone.
-    require(normalized_region_rewrites
+    # one of those may stand alone.  A slot bijection is likewise a
+    # composition-only seam and counts toward the total.
+    # A lone statement normally belongs to its dedicated class.  The one
+    # admitted exception is a lane-divergent witness (the entry pins a donor
+    # seat different from the seed's): the dedicated classes require the
+    # witness to reproduce the seed's section structure, which such a
+    # witness cannot, so the composition context is the only sound home.
+    require(normalized_region_rewrites or lone_statement_ok
             or len(normalized_windows) + len(normalized_bijections)
-            + len(normalized_sites) + len(normalized_rotations) >= 2,
+            + len(normalized_sites) + len(normalized_rotations)
+            + len(declared_slots) >= 2,
             f"{context} composes nothing: a single statement belongs to its "
             "own class")
     # C2, the byte-level half.
@@ -36353,12 +36660,17 @@ def validate_composed_rewriting(
             and all(type(offset) is int and 0 <= offset < body_length
                     for offset in changed),
             f"{context}.expected_changed_offsets is invalid")
+    slot_bytes = {
+        offset
+        for item in declared_slots if isinstance(item, dict)
+        for offset in (item.get("expected_rewritten_offsets") or [])
+        if type(offset) is int}
     require(set(bijection_bytes) | set(relational_bytes)
-            | set(rotation_bytes) | set(region_rewrite_bytes)
+            | set(rotation_bytes) | set(region_rewrite_bytes) | slot_bytes
             <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in window_bytes or offset in rotation_regions
-                or offset in region_rewrite_regions
+                or offset in region_rewrite_regions or offset in slot_bytes
                 or offset in set(bijection_bytes) | set(relational_bytes)
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
@@ -36403,11 +36715,52 @@ def validate_composed_rewriting(
             f"{context}.expected_image_debug_s_sha256"),
         "authenticity_rationale": rationale,
     }
+    normalized_slots = []
+    for index, item in enumerate(value.get("slot_bijections") or []):
+        item_context = f"{context}.slot_bijections[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "mapping", "expected_rewritten_offsets",
+            "debug_s_bprel_offsets",
+        }, item_context)
+        slot_mapping = item.get("mapping")
+        require(isinstance(slot_mapping, dict)
+                and 2 <= len(slot_mapping) <= 8
+                and all(isinstance(key, str)
+                        and type(slot_value) is int and slot_value < 0
+                        and int(key) < 0
+                        for key, slot_value in slot_mapping.items()),
+                f"{item_context}.mapping is invalid")
+        slot_keys = {int(key) for key in slot_mapping}
+        require(slot_keys == set(slot_mapping.values())
+                and len(set(slot_mapping.values())) == len(slot_mapping)
+                and all(int(key) != slot_value
+                        for key, slot_value in slot_mapping.items()),
+                f"{item_context}.mapping is not a fixed-point-free "
+                "bijection")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and 0 <= offset < body_length
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        records = item.get("debug_s_bprel_offsets")
+        require(isinstance(records, list)
+                and records == sorted(set(records))
+                and all(type(offset) is int and offset >= 0
+                        for offset in records),
+                f"{item_context}.debug_s_bprel_offsets is invalid")
+        normalized_slots.append({
+            "mapping": dict(sorted(slot_mapping.items())),
+            "expected_rewritten_offsets": list(offsets),
+            "debug_s_bprel_offsets": list(records),
+        })
     normalized["windows"] = normalized_windows
     normalized["register_bijections"] = normalized_bijections
     normalized["relational_sites"] = normalized_sites
     normalized["fp_sum_rotations"] = normalized_rotations
     normalized["simulated_region_rewrites"] = normalized_region_rewrites
+    normalized["slot_bijections"] = normalized_slots
     if code_length is not None:
         normalized["expected_code_length"] = code_length
     if targets is not None:
@@ -36606,6 +36959,20 @@ def compose_retail_exact_composed_rewriting(
             "rewritten_offsets": proof["rewritten_offsets"],
             "region_instruction_count": proof["region_instruction_count"],
         })
+    slot_detail = []
+    for index, item in enumerate(spec.get("slot_bijections") or []):
+        image, proof = apply_slot_bijection(
+            image, item["mapping"], relocation_offsets,
+            f"composed-rewriting slot bijection {index}",
+            relocation_symbols, code_length)
+        require(proof["rewritten_offsets"]
+                == item["expected_rewritten_offsets"],
+                f"composed-rewriting slot bijection {index} rewrote a "
+                "different byte set from its declaration")
+        slot_detail.append({
+            "mapping": dict(sorted(item["mapping"].items())),
+            "rewritten_offsets": proof["rewritten_offsets"],
+        })
     relational_detail = []
     if spec.get("relational_sites"):
         sites = [{key: item[key] for key in ("compare_offset",
@@ -36640,10 +37007,47 @@ def compose_retail_exact_composed_rewriting(
     require(changed == function["expected_changed_offsets"],
             "composed-rewriting changed offsets differ from their pin")
 
+    # A line row rides its instruction: the reordering seams move source
+    # instructions, so the rows that head them move with them -- exactly the
+    # rule the donor-rewriting composer applies to its pre-image.  The
+    # installed tables are the seed's own, with only those row offsets
+    # rewritten; every other byte of the table is untouched and re-verified
+    # below.
+    # Window rows keep their offsets (their attribution is proved against
+    # the image grid below, unchanged semantics); only a simulated region
+    # rewrite -- whose permutation the old semantics could not host rows
+    # inside at all -- carries its rows with its instructions.
+    line_moves = {}
+    for region in region_rewrite_detail:
+        for old_at, new_at in region["instruction_moves"]:
+            line_moves[old_at] = new_at
+    lined_seed_bytes = bytearray(seed_bytes)
+    if line_moves:
+        table_at = sp["line_offset"]
+        rows_lined = []
+        for position in range(1, sp["line_count"]):
+            entry_at = table_at + position * 6
+            old_off = int.from_bytes(
+                lined_seed_bytes[entry_at:entry_at + 4], "little")
+            line_no = int.from_bytes(
+                lined_seed_bytes[entry_at + 4:entry_at + 6], "little")
+            rows_lined.append((line_moves.get(old_off, old_off), line_no))
+        rows_lined.sort()
+        for position, (offset, line_no) in enumerate(rows_lined, start=1):
+            entry_at = table_at + position * 6
+            lined_seed_bytes[entry_at:entry_at + 4] = \
+                offset.to_bytes(4, "little")
+            lined_seed_bytes[entry_at + 4:entry_at + 6] = \
+                line_no.to_bytes(2, "little")
+    lined_seed = CoffObject(bytes(lined_seed_bytes)) if line_moves else seed
+    lined_sp = (lined_seed.function_section(mangled)
+                if line_moves else sp)
+
     # Obligation 7 of the schedule class, measured on the IMAGE with the
-    # SEED's own tables -- which are the tables this composition installs.
+    # SEED's own tables (rows moved with their instructions) -- which are
+    # the tables this composition installs.
     debug_detail = require_instruction_schedule_debug_fidelity(
-        seed, sp, image, windows, spec, mangled,
+        lined_seed, lined_sp, image, windows, spec, mangled,
         "composed-rewriting debug fidelity", relocation_symbols,
         code_length, internal_targets,
     )
@@ -36669,7 +37073,7 @@ def compose_retail_exact_composed_rewriting(
             f"composed-rewriting output is not retail-exact: {differing} "
             "byte(s) differ under the relocation mask")
 
-    derived = bytearray(seed_bytes)
+    derived = bytearray(lined_seed_bytes)
     derived[sp["raw_offset"]:sp["raw_offset"] + sp["raw_size"]] = image
     effective = {
         "mangled": mangled,
@@ -36689,7 +37093,7 @@ def compose_retail_exact_composed_rewriting(
         effective["expected_code_renames"] = []
         effective["expected_xdata_rename_offsets"] = []
     composed, detail = compose_equal_body_comdat(
-        seed_bytes, bytes(derived), effective)
+        bytes(lined_seed_bytes), bytes(derived), effective)
 
     checked = CoffObject(composed)
     cp = checked.function_section(mangled)
@@ -36699,7 +37103,7 @@ def compose_retail_exact_composed_rewriting(
             and _coff_table_bytes(checked, cp, "relocations")
             == _coff_table_bytes(seed, sp, "relocations")
             and _coff_table_bytes(checked, cp, "lines")
-            == _coff_table_bytes(seed, sp, "lines"),
+            == _coff_table_bytes(lined_seed, lined_sp, "lines"),
             "composed-rewriting output changed seed relocation/line bytes")
 
     # C3.  Every bijection's S_REGISTER record set is measured on the SEED's
@@ -36719,8 +37123,13 @@ def compose_retail_exact_composed_rewriting(
                 continue
             field_at = _codeview_register_field(
                 record, "composed-rewriting debug$S")
-            name = _codeview_register_name(
-                debug_stream, field_at, "composed-rewriting debug$S")
+            try:
+                name = _codeview_register_name(
+                    debug_stream, field_at, "composed-rewriting debug$S")
+            except ByteIdentityError:
+                # A non-general register home: no general-register mapping
+                # can claim it.
+                continue
             if name not in item["mapping"]:
                 continue
             require(record["offset"] not in claimed,
@@ -36740,6 +37149,35 @@ def compose_retail_exact_composed_rewriting(
                 moved[position] = mapped[position]
         debug_image = bytes(moved)
         debug_maps.append(item["debug_s_register_map"])
+    for index, item in enumerate(spec.get("slot_bijections") or []):
+        # The S_BPREL32 exchange: a frame slot's CodeView record names its
+        # offset in a fixed-width i32 field, so the exchange maps the field
+        # and nothing else.  Totality is checked against the stream: every
+        # BPREL record naming a mapped slot must be declared, and every
+        # declared record must name one.
+        slot_map = {int(key): value
+                    for key, value in item["mapping"].items()}
+        declared = set(item["debug_s_bprel_offsets"])
+        moved = bytearray(debug_image)
+        seen = set()
+        for record in parse_codeview_symbol_stream(
+                debug_stream, "composed-rewriting debug$S bprel"):
+            if record["type"] != 0x0200:
+                continue
+            field_at = record["offset"] + 4
+            off_value = int.from_bytes(
+                debug_stream[field_at:field_at + 4], "little", signed=True)
+            if off_value in slot_map:
+                require(record["offset"] in declared,
+                        "composed-rewriting slot bijection misses the "
+                        f"S_BPREL32 record at {record['offset']}")
+                seen.add(record["offset"])
+                moved[field_at:field_at + 4] = slot_map[
+                    off_value].to_bytes(4, "little", signed=True)
+        require(seen == declared,
+                "composed-rewriting slot bijection declares an S_BPREL32 "
+                "record that names no mapped slot")
+        debug_image = bytes(moved)
     require(sha256_bytes(debug_image)
             == spec["expected_image_debug_s_sha256"],
             "composed-rewriting mapped debug$S differs from its pin")
@@ -36760,6 +37198,17 @@ def compose_retail_exact_composed_rewriting(
     allowed = set(range(sp["raw_offset"], sp["raw_offset"] + sp["raw_size"]))
     allowed |= set(range(debug_child["raw_offset"],
                          debug_child["raw_offset"] + debug_child["raw_size"]))
+    if line_moves:
+        # The moved rows live in the target's own COFF line table; only the
+        # 4-byte offset field of a row may change, and the rewrite above is
+        # re-derived here rather than trusted.
+        allowed |= set(range(sp["line_offset"],
+                             sp["line_offset"] + sp["line_count"] * 6))
+        require(_coff_table_bytes(CoffObject(composed),
+                                  CoffObject(composed).function_section(
+                                      mangled), "lines")
+                == _coff_table_bytes(lined_seed, lined_sp, "lines"),
+                "composed-rewriting line rows differ from the proved moves")
     require({index for index in range(len(seed_bytes))
              if seed_bytes[index] != composed[index]} <= allowed,
             "composed-rewriting changed bytes outside its own COMDAT")
@@ -36770,6 +37219,7 @@ def compose_retail_exact_composed_rewriting(
         "fp_sum_reassociation": fp_detail,
         "simulated_region_rewrites": region_rewrite_detail,
         "register_bijections": bijection_detail,
+        "slot_bijections": slot_detail,
         "relational_form": relational_detail,
         "instruction_count": len(image_instructions),
         "changed_offsets": changed,
@@ -37350,6 +37800,15 @@ def compose_retail_exact_donor_rewriting(
             return ("static", row["type"], row["addend"],
                     row["target_section"], row["target_value"],
                     row["target_type"])
+        if row["target_storage"] == 3:
+            # A function-static datum <base>$S<serial>: the serial restarts
+            # with the donor's extra declarations exactly as $L/$T do, so
+            # its identity is its base name and location, not the number.
+            base, sep, serial = row["target"].rpartition("$S")
+            if sep and base and serial.isdigit():
+                return ("static-s", row["type"], row["addend"], base,
+                        row["target_section"], row["target_value"],
+                        row["target_type"])
         return ("named", row["type"], row["addend"],
                 row["target"], row["target_type"], row["target_storage"])
     seed_rows_d1 = detailed_relocations(seed, sp)
@@ -38930,6 +39389,8 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
     pushes = []           # integer push sequence, in order
     slots = {}            # ebp-relative dword stores: disp -> value expr
     widths = {}           # store widths per slot key, for overlap refusal
+    heap_slots = {}       # single-base non-frame stores: disp -> (value, w)
+    heap_base = [None]    # the one admitted non-frame base expression
     last_flags = None
     frames = []           # inlined-callee return frames
     cur_body, offset, cur_end = body, start, end
@@ -39075,6 +39536,56 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
                 return pointed + addr[2]
             return None
 
+        def heap_key(addr):
+            """The single-base heap map's key, or None for a frame address.
+
+            Non-frame stores are admitted under two invariants the emitting
+            compiler itself relies on: (a) every non-frame access in one
+            region goes through ONE common symbolic base, so two keys with
+            different displacements name provably different bytes, and
+            (b) the compiler's own esp/ebp frame addressing is private --
+            no indirect pointer aliases it -- which is exactly the license
+            MSVC uses to reorder its own spill traffic around such stores.
+            A second, different non-frame base in the same region refuses.
+            """
+            if frame_disp_quiet(addr) is not None:
+                return None
+            base = addr[1]
+            if heap_base[0] is None:
+                heap_base[0] = base
+            require(base == heap_base[0],
+                    f"{context}: a second non-frame base at {offset} "
+                    "leaves the single-base heap set")
+            return addr[2]
+
+        def frame_disp_quiet(addr):
+            if addr[1] == ("reg0", "ebp"):
+                return addr[2]
+            if addr[1] == ("reg0", "esp") and addr[2] >= 0:
+                return ("esp", addr[2])
+            pointed = frame_address(addr[1])
+            if pointed is not None:
+                return pointed + addr[2]
+            return None
+
+        def heap_store(addr, value, width):
+            key = heap_key(addr)
+            for other, (_, other_width) in heap_slots.items():
+                if other == key:
+                    continue
+                require(key + width <= other or other + other_width <= key,
+                        f"{context}: overlapping heap stores at {offset}")
+            require(heap_slots.get(key, (None, width))[1] == width,
+                    f"{context}: the heap store at {offset} resizes a slot")
+            heap_slots[key] = (value, width)
+
+        def heap_load(addr, width):
+            key = heap_key(addr)
+            held = heap_slots.get(key)
+            if held is not None and held[1] == width:
+                return held[0]
+            return None
+
         def read_disp(addr):
             # The non-raising read-side twin of frame_disp: a read below
             # the entry stack pointer is the push list's business, never an
@@ -39145,6 +39656,10 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
                 regs[_SIMULATOR_REGS[reg_field]] = forwarded
             elif pushed is not None:
                 regs[_SIMULATOR_REGS[reg_field]] = pushed
+            elif heap_slots and frame_disp_quiet(addr) is None:
+                held = heap_load(addr, 4)
+                regs[_SIMULATOR_REGS[reg_field]] = (
+                    held if held is not None else ("load", addr))
             else:
                 regs[_SIMULATOR_REGS[reg_field]] = ("load", addr)
         elif op in (0x8B, 0x89) and mod == 3:  # mov r32, r32
@@ -39154,14 +39669,14 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
                 regs[_SIMULATOR_REGS[rm]] = regs[_SIMULATOR_REGS[reg_field]]
         elif op == 0x89 and mod != 3:          # mov m32, r32
             addr = mem_operand(2)
-            disp = frame_disp(addr)
-            require(disp is not None,
-                    f"{context}: a non-frame store at {offset} is outside "
-                    "the simulator set")
-            require(widths.get(disp, 4) == 4,
-                    f"{context}: the store at {offset} resizes a slot")
-            slots[disp] = regs[_SIMULATOR_REGS[reg_field]]
-            widths[disp] = 4
+            disp = frame_disp_quiet(addr)
+            if disp is None:
+                heap_store(addr, regs[_SIMULATOR_REGS[reg_field]], 4)
+            else:
+                require(widths.get(disp, 4) == 4,
+                        f"{context}: the store at {offset} resizes a slot")
+                slots[disp] = regs[_SIMULATOR_REGS[reg_field]]
+                widths[disp] = 4
         elif op == 0x8A and mod != 3:          # mov r8, m8
             addr = mem_operand(2)
             disp = read_disp(addr)
@@ -39172,15 +39687,19 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
             regs[name] = ("setbyte", regs[name], reg_field >> 2, value)
         elif op == 0x88 and mod != 3:          # mov m8, r8
             addr = mem_operand(2)
-            disp = frame_disp(addr)
-            require(disp is not None,
-                    f"{context}: a non-frame byte store at {offset} is "
-                    "outside the simulator set")
-            require(widths.get(disp, 1) == 1,
-                    f"{context}: the byte store at {offset} resizes a slot")
-            slots[disp] = ("byte", regs[_SIMULATOR_REGS[reg_field & 3]],
-                           reg_field >> 2)
-            widths[disp] = 1
+            disp = frame_disp_quiet(addr)
+            if disp is None:
+                heap_store(addr, ("byte",
+                                  regs[_SIMULATOR_REGS[reg_field & 3]],
+                                  reg_field >> 2), 1)
+            else:
+                require(widths.get(disp, 1) == 1,
+                        f"{context}: the byte store at {offset} resizes a "
+                        "slot")
+                slots[disp] = ("byte",
+                               regs[_SIMULATOR_REGS[reg_field & 3]],
+                               reg_field >> 2)
+                widths[disp] = 1
         elif 0xB8 <= op <= 0xBF:               # mov r32, imm32
             require(length == 5,
                     f"{context}: an operand-size-prefixed immediate move at "
@@ -39193,17 +39712,30 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
                 else ("imm", int.from_bytes(encoded[1:5], "little")))
         elif op == 0xC7 and mod != 3 and reg_field == 0:   # mov m32, imm32
             addr = mem_operand(2)
-            disp = frame_disp(addr)
-            require(disp is not None,
-                    f"{context}: a non-frame store at {offset} is outside "
-                    "the simulator set")
+            disp = frame_disp_quiet(addr)
             imm_at = length - 4
-            require(widths.get(disp, 4) == 4,
-                    f"{context}: the store at {offset} resizes a slot")
             symbol = reloc_symbol(offset + imm_at)
-            slots[disp] = (("sym", symbol) if symbol is not None
-                           else ("imm", bytes(encoded[imm_at:imm_at + 4])))
-            widths[disp] = 4
+            value = (("sym", symbol) if symbol is not None
+                     else ("imm", bytes(encoded[imm_at:imm_at + 4])))
+            if disp is None:
+                heap_store(addr, value, 4)
+            else:
+                require(widths.get(disp, 4) == 4,
+                        f"{context}: the store at {offset} resizes a slot")
+                slots[disp] = value
+                widths[disp] = 4
+        elif op == 0xC6 and mod != 3 and reg_field == 0:   # mov m8, imm8
+            addr = mem_operand(2)
+            disp = frame_disp_quiet(addr)
+            value = ("imm8", encoded[length - 1])
+            if disp is None:
+                heap_store(addr, value, 1)
+            else:
+                require(widths.get(disp, 1) == 1,
+                        f"{context}: the byte store at {offset} resizes a "
+                        "slot")
+                slots[disp] = value
+                widths[disp] = 1
         elif op == 0x8D and mod != 3:          # lea r32, m
             regs[_SIMULATOR_REGS[reg_field]] = ("lea", mem_operand(2))
         elif op == 0x83 and mod != 3 and reg_field == 0:   # add m32, imm8
@@ -39439,7 +39971,7 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
                     "the simulator's closed set")
         if not advanced:
             offset += length
-    return regs, stack, pushes, slots, last_flags
+    return regs, stack, pushes, slots, last_flags, heap_base[0], heap_slots
 
 
 def _srr_slot_scratch_proof(

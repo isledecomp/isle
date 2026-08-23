@@ -1296,6 +1296,12 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 	m_unk0x404 = Timer()->GetTime();
 }
 #else
+inline void RestoreBackgroundVolume(MxBool p_lowered)
+{
+	MxBool& lowered = p_lowered;
+	BackgroundAudioManager()->RaiseVolume();
+}
+
 // FUNCTION: LEGO1 0x10061010
 void LegoAnimationManager::FUN_10061010(MxBool p_und)
 {
@@ -1308,17 +1314,18 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 
 		while (cursor.Next(tranInfo)) {
 			if (tranInfo->m_presenter) {
-				MxU32 flags = tranInfo->m_flags;
-				MxBool flags2 = (MxBool) (flags & LegoTranInfo::c_bit2);
+				MxU32* flagsPtr = &tranInfo->m_flags;
+				MxU32 flags = *flagsPtr;
+				MxBool flags2 = (MxBool) (*flagsPtr & LegoTranInfo::c_bit2);
 
 				// LINE: LEGO1 0x100610e6
 				if (tranInfo->m_unk0x14 && tranInfo->m_location != -1 && p_und) {
 					if (tranInfo->m_presenter->GetPresenter() &&
 						tranInfo->m_presenter->GetPresenter()->GetAnimation() &&
 						tranInfo->m_presenter->GetPresenter()->GetAnimation()->GetCamAnim()) {
-						if (flags2) {
-							BackgroundAudioManager()->RaiseVolume();
-							tranInfo->m_flags = flags & ~LegoTranInfo::c_bit2;
+						if (flags & LegoTranInfo::c_bit2) {
+							RestoreBackgroundVolume(flags2);
+							*flagsPtr &= ~LegoTranInfo::c_bit2;
 						}
 
 						tranInfo->m_presenter->FUN_1004b840();
@@ -1333,10 +1340,10 @@ void LegoAnimationManager::FUN_10061010(MxBool p_und)
 					}
 				}
 				else {
-					if (flags2) {
+					if (flags & LegoTranInfo::c_bit2) {
 						// LINE: LEGO1 0x10061150
-						BackgroundAudioManager()->RaiseVolume();
-						tranInfo->m_flags = flags & ~LegoTranInfo::c_bit2;
+						RestoreBackgroundVolume(flags2);
+						*flagsPtr &= ~LegoTranInfo::c_bit2;
 					}
 
 					MxTrace("Stopping %d\n", tranInfo->m_objectId);

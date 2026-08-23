@@ -422,6 +422,13 @@
    "forbid_emitted_padding": true,
    "forbid_opaque_objects": true,
    "forbid_source_tree_writes": true
+  },
+  "codegen_path_contract": {
+   "schema": "msvc42_arena_path_length_v1",
+   "rationale": "MSVC 4.2 codegen (register colouring, COMDAT emission order) depends on the compiler's internal arena state, which the length of every path it processes perturbs. The pins in this manifest are attested only under these exact seats; a build under any other root must re-measure and re-pin, or provide these seats via a fixed mount.",
+   "source_root": "/Users/foxtacles/Projects/isle",
+   "build_root": "/Users/foxtacles/Projects/isle-build-lean",
+   "compiler": "/Users/foxtacles/Projects/MSVC420/wine/x86/cl"
   }
  },
  "target_policies": [
@@ -6996,7 +7003,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-   "source_sha256": "69e46b8b4dd2dee13a80a0c0a22fc66aa638457f2a2a60e76d21ca07f7f98436",
+   "source_sha256": "1c1727a4d521bcb05239db274a61f89a85f36994a79bb73d6ab54d7806d8cb91",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -7012,40 +7019,6 @@
    },
    "donors": [
     {
-     "id": "d_f19236fd3b65",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVB",
-      "count": 7,
-      "width": 3,
-      "placement": "after_includes",
-      "generated_header_sha256": "f19236fd3b65aecf32bbd4e6512c62399202e634816a654dd66cdb02e3940137",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_6303786cde97",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "pad_shape",
-      "classes": 1,
-      "functions_per_class": 5,
-      "generated_header_sha256": "6303786cde97cea657d8027b5de2f2c39dcf86f7bc7d9d8fbaadb97d2c4e878d",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
      "id": "d_0003e04e9d35",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
@@ -7054,24 +7027,6 @@
       "classes": 9,
       "functions_per_class": 12,
       "generated_header_sha256": "0003e04e9d35c2d984ba669b0f72092ba6fd6776e6453613db0e8c8e92013b01",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_d180a5b6acdd",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVC",
-      "count": 14,
-      "width": 3,
-      "placement": "suffix",
-      "generated_header_sha256": "d180a5b6acdd3924a2636b698b346b110a122f6016c7e8e88237aa9d764bc2f1",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -7137,25 +7092,6 @@
      }
     },
     {
-     "id": "d_46208d2c51ac",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "extern_run_pair",
-      "header_prefix": "g_h",
-      "header_count": 18,
-      "seat_prefix": "g_p",
-      "seat_count": 22,
-      "width": 2,
-      "generated_header_sha256": "46208d2c51acb55023326b34c6d86b297287d80bef87980bbc90a45cf5d6c78e",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
      "id": "d_da1547df0cb0",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
@@ -7175,33 +7111,14 @@
      }
     },
     {
-     "id": "d_9ecbc41dc277",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "extern_run_pair",
-      "header_prefix": "g_h",
-      "header_count": 12,
-      "seat_prefix": "g_p",
-      "seat_count": 2,
-      "width": 2,
-      "generated_header_sha256": "9ecbc41dc277b41a1599e2976dca1a16f8d88db108eddf9f246b5e25405a3e05",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_11eccce8f834",
+     "id": "d_bd4f5c3defa3",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
       "classes": 2,
-      "functions": 8,
-      "generated_header_sha256": "11eccce8f834e5beb5ad0c2f26ed62a6cd1c9527795d32d8da9eb377f30b4bf4",
+      "functions": 6,
+      "generated_header_sha256": "bd4f5c3defa361043a8f0919dba6c3b514dc3db9aed412bb25a6936dc0926885",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -7210,14 +7127,14 @@
      }
     },
     {
-     "id": "d_892a7e395c44",
+     "id": "d_e6fa4b2fb8c6",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "pad_shape",
-      "classes": 8,
-      "functions_per_class": 6,
-      "generated_header_sha256": "892a7e395c44d6049a40b5f13f212e5c2dd07eab6a75ca1b1da15ea246c4e8b1",
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 18,
+      "generated_header_sha256": "e6fa4b2fb8c654b0cdf1a9fd5cb3acad532513dd2842824b5b4a34ff7c3e300f",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -7226,14 +7143,14 @@
      }
     },
     {
-     "id": "d_b947f8fa52f1",
+     "id": "d_31e36d131642",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "pad_shape",
-      "classes": 4,
-      "functions_per_class": 10,
-      "generated_header_sha256": "b947f8fa52f1415e8c194999000dcda5f843d32883f3d95fc4833b975b90d5ae",
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 16,
+      "generated_header_sha256": "31e36d131642decc78958672d6c6b512ff487efd79b9aa76b97f0b0e497957db",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -7242,30 +7159,1355 @@
      }
     },
     {
-     "id": "d_51a894016b80",
+     "id": "d_89aab9afd158",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_run_with_shape",
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 14,
+      "generated_header_sha256": "89aab9afd1589012de38dc293cec982f20505dc4763243fba460a8bcb2a84d4b",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_eec6c33322bc",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 4,
+      "generated_header_sha256": "eec6c33322bcb2cd4aacff89c604bd9a73df547bb00867341ba8a77c3aa43370",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_e4be0bb0a4aa",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 2,
+      "functions": 10,
+      "generated_header_sha256": "e4be0bb0a4aa26c221c29d7e14e6f3ae7d1034d1d3b891b26b26e1c8724933fd",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_b194656585fd",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 3,
+      "functions": 21,
+      "generated_header_sha256": "b194656585fdab9c8213663fa2648e74b7ec1f8dbc7c78c6f3f5b0c4d5c7bf5f",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_45e54f6457b0",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 1,
+      "seat_prefix": "g_p",
+      "seat_count": 4,
+      "width": 2,
+      "generated_header_sha256": "45e54f6457b0d2e92c9da442012edccea071c06210d8d7f4d588d35673e0ba99",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_ad512bc8d4c5",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
       "prefix": "MxUnkRecVC",
-      "count": 11,
+      "count": 38,
       "width": 3,
-      "classes": 1,
-      "functions": 2,
       "placement": "suffix",
-      "generated_header_sha256": "51a894016b80c4e9af63a1eea60d77e2604a0716cdb2c9d375e3275d1c4b6da2",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives.",
+      "generated_header_sha256": "ad512bc8d4c54f1488d728c693bd9803355b7f8d341242a752373ffba4a652da",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
-      "emission_policy": "non_emitting_declarations_only"
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_338669d89f79",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 10,
+      "seat_prefix": "g_p",
+      "seat_count": 2,
+      "width": 3,
+      "generated_header_sha256": "338669d89f79c803b2d4117c4fed883cab1c7bdb0f599e76fe361f4fea069c67",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_e65005fc7a06",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 2,
+      "seat_prefix": "g_p",
+      "seat_count": 2,
+      "width": 1,
+      "generated_header_sha256": "e65005fc7a06707113ecef3be25edbda968358679bb11fb04629e6dfc53bd9ac",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
     {
+     "mangled": "?FUN_100623a0@LegoAnimationManager@@AAEEAAUAnimInfo@@@Z",
+     "donor": "d_0003e04e9d35",
+     "expected_body_sha256": "1547949de2e61afd0ab63ecf65a3778184fff18e0c8eca5b4f114ea1add688b3",
+     "expected_body_length": 384,
+     "expected_changed_offsets": [
+      217
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       367,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60
+     ]
+    },
+    {
+     "mangled": "??1LegoAnimationManager@@UAE@XZ",
+     "donor": "d_ef778b37e301",
+     "expected_body_sha256": "601b52ff5bb74fad64cd334acd8fb94504140329f6bf2d032b4a803b9bdaec13",
+     "expected_body_length": 330,
+     "expected_changed_offsets": [
+      69,
+      70,
+      71,
+      72,
+      74,
+      76,
+      79,
+      81,
+      85,
+      167,
+      181
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       313,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ]
+    },
+    {
+     "mangled": "?StartEntityAction@LegoAnimationManager@@QAEJAAVMxDSAction@@PAVLegoEntity@@@Z",
+     "donor": "d_ef778b37e301",
+     "expected_body_sha256": "a8fba4814437118e6aaba2d6e77ff5ccf6d225b45170692a6731f9569fbc6422",
+     "expected_body_length": 192,
+     "expected_changed_offsets": [
+      83,
+      85,
+      98,
+      102,
+      104,
+      106,
+      114
+     ],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?FUN_100605e0@LegoAnimationManager@@AAEJIEPAVMxMatrix@@EPAVLegoROI@@EEEE@Z",
+     "donor": "d_bd4f5c3defa3",
+     "expected_body_sha256": "54c7d63b4811f31e90bf069f62c492c50d1a4b236a95400ff1969f31bffb5f28",
+     "expected_body_length": 1037,
+     "expected_changed_offsets": [
+      548,
+      551,
+      555,
+      575,
+      577,
+      584,
+      586,
+      588,
+      591,
+      619,
+      627,
+      630,
+      633,
+      853
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       1017,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68
+     ]
+    },
+    {
+     "mangled": "?FUN_100604f0@LegoAnimationManager@@QAEXQAHI@Z",
+     "donor": "d_e6fa4b2fb8c6",
+     "expected_body_sha256": "a35af4a87bcead6a8edfa5177464acaf6192bbe72247f3c08c745801fa59da26",
+     "expected_body_length": 69,
+     "expected_changed_offsets": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      13,
+      17,
+      20,
+      25,
+      30,
+      32,
+      43,
+      45,
+      53,
+      57,
+      59
+     ],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?LoadWorldInfo@LegoAnimationManager@@QAEJW4World@LegoOmni@@@Z",
+     "donor": "d_31e36d131642",
+     "expected_body_sha256": "9658b167a71b425e104ac0c6be56de7fefdb92b69356ead39d35407272d255d3",
+     "expected_body_length": 1733,
+     "expected_changed_offsets": [
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1021,
+      1022,
+      1184
+     ],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       1716,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76,
+      84,
+      92,
+      100,
+      108,
+      116
+     ]
+    },
+    {
+     "mangled": "?FUN_10064880@LegoAnimationManager@@QAEJPBDHH@Z",
+     "donor": "d_89aab9afd158",
+     "expected_body_sha256": "56acde105dc693bb96afd2bd76154952d1796aa6cd3900824e499f212e1f6328",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 111,
+     "expected_donor_length": 110,
+     "expected_linked_span": 112
+    },
+    {
+     "mangled": "?FUN_10062580@LegoAnimationManager@@AAEXAAUAnimInfo@@@Z",
+     "donor": "d_eec6c33322bc",
+     "expected_body_sha256": "14a002b2b9545d949f7eb0fdb9aa49db0a77605918acc9b224491057bafe2661",
+     "expected_body_length": 206,
+     "expected_changed_offsets": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      20,
+      64,
+      115,
+      150
+     ],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?FUN_10064380@LegoAnimationManager@@AAEJPBD0HMHMIHIHM@Z",
+     "donor": "d_e4be0bb0a4aa",
+     "expected_body_sha256": "ed5f3d54cb293b053cd22b39265a4a2a385f47059e9126eb044e0fe57f62c88a",
+     "expected_body_length": 746,
+     "expected_changed_offsets": [
+      12,
+      14,
+      58,
+      88,
+      90,
+      110,
+      112,
+      116,
+      122,
+      134,
+      151,
+      158,
+      168,
+      175,
+      183,
+      198,
+      202,
+      228,
+      238,
+      295,
+      313,
+      325,
+      359,
+      362,
+      369,
+      382,
+      386,
+      393,
+      438,
+      510,
+      565,
+      569,
+      576,
+      621,
+      625,
+      632,
+      704,
+      705,
+      706,
+      707,
+      710,
+      711,
+      712,
+      713,
+      716,
+      717,
+      718,
+      719,
+      722
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       706,
+       707
+      ],
+      [
+       712,
+       713
+      ],
+      [
+       718,
+       719
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?FUN_10062110@LegoAnimationManager@@AAEGPAVLegoROI@@AAVVector3@@1PAVLegoPathBoundary@@MEE@Z",
+     "donor": "d_b194656585fd",
+     "expected_body_sha256": "c5bf3f2a9eab7ebf6bcf1fac6f3042755452eb2c21f0fe0ea953dce943d9c705",
+     "expected_body_length": 592,
+     "expected_changed_offsets": [
+      244,
+      245,
+      246,
+      247,
+      248,
+      249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256,
+      264,
+      277,
+      279,
+      281,
+      292
+     ],
+     "splice_class": "equal_body_eh_reloc_layout",
+     "expected_relocation_moves": [
+      [
+       245,
+       253
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
+     "donor": "d_45e54f6457b0",
+     "expected_body_sha256": "bc020d8dbf54db1aebec21a9d5bf907479f7042d0d42709cc13b9dd72ebddfff",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 915,
+     "expected_donor_length": 912,
+     "expected_linked_span": 912,
+     "expected_seed_line_count": 23,
+     "expected_donor_line_count": 22
+    },
+    {
+     "mangled": "?FUN_10061010@LegoAnimationManager@@QAEXE@Z",
+     "donor": "d_ad512bc8d4c5",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 529,
+     "expected_donor_section_number": 529,
+     "expected_section_count": 834,
+     "expected_donor_section_count": 834,
+     "expected_body_length": 731,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 35,
+     "expected_seed_line_count": 38,
+     "expected_donor_line_count": 38,
+     "expected_function_count": 211,
+     "expected_comdat_count": 407,
+     "expected_seed_body_sha256": "bc16039218bb4eba6452b493299f024e39f1a0b52bad4bcbd9d2ea6cb901fde2",
+     "expected_donor_body_sha256": "bc16039218bb4eba6452b493299f024e39f1a0b52bad4bcbd9d2ea6cb901fde2",
+     "expected_body_sha256": "4b420eab338a597b23266e67a75383fe678c6a93afad979ec1536d95d1fd76c5",
+     "expected_seed_metadata_sha256": "e503715caab215750249cd473cffcd5d716a224a7b2cfd89f227bf9d4679991b",
+     "expected_donor_metadata_sha256": "799dfc29343cc739c955a44409c08b4092af9d59edc3a4fa3d89c45ddd93230f",
+     "expected_changed_offsets": [
+      34,
+      46,
+      169,
+      177,
+      178,
+      180,
+      183,
+      194,
+      195,
+      198,
+      200,
+      209,
+      221,
+      275,
+      278,
+      333,
+      336,
+      349,
+      433,
+      476,
+      513,
+      630,
+      706
+     ],
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10061010",
+      "length": 731,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$L80974",
+       "target_section": 529,
+       "target_value": 677,
+       "target_type": 0,
+       "target_storage": 6,
+       "offset": 12,
+       "retail_target": "0x100612b5"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 20,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
+       "target_section": 773,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 40,
+       "retail_target": "0x10064b50"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxCore@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 62,
+       "retail_target": "0x100ae1a0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxListCursor@PAULegoTranInfo@@@@6B@",
+       "target_section": 533,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 76,
+       "retail_target": "0x100d8cf0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxPtrListCursor@ULegoTranInfo@@@@6B@",
+       "target_section": 531,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 97,
+       "retail_target": "0x100d8d08"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7LegoTranInfoListCursor@@6B@",
+       "target_section": 532,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 111,
+       "retail_target": "0x100d8d20"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?BackgroundAudioManager@@YAPAVMxBackgroundAudioManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 263,
+       "retail_target": "0x10015730"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?RaiseVolume@MxBackgroundAudioManager@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 270,
+       "retail_target": "0x1007f5b0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_1004b840@LegoAnimMMPresenter@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 280,
+       "retail_target": "0x1004b840"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_1004b8c0@LegoAnimMMPresenter@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 296,
+       "retail_target": "0x1004b8c0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?BackgroundAudioManager@@YAPAVMxBackgroundAudioManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 321,
+       "retail_target": "0x10015730"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?RaiseVolume@MxBackgroundAudioManager@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 328,
+       "retail_target": "0x1007f5b0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_1004b840@LegoAnimMMPresenter@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 338,
+       "retail_target": "0x1004b840"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxCore@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 365,
+       "retail_target": "0x100ae1a0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxListCursor@PAULegoTranInfo@@@@6B@",
+       "target_section": 533,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 376,
+       "retail_target": "0x100d8cf0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxPtrListCursor@ULegoTranInfo@@@@6B@",
+       "target_section": 531,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 394,
+       "retail_target": "0x100d8d08"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7LegoTranInfoListCursor@@6B@",
+       "target_section": 532,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 405,
+       "retail_target": "0x100d8d20"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 486,
+       "retail_target": "0x10086240"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 573,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxCore@@UAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 585,
+       "retail_target": "0x100ae1e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxListCursor@PAULegoTranInfo@@@@UAE@XZ",
+       "target_section": 547,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 593,
+       "retail_target": "0x10061490"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxPtrListCursor@ULegoTranInfo@@@@UAE@XZ",
+       "target_section": 538,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 601,
+       "retail_target": "0x10061360"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1LegoTranInfoListCursor@@UAE@XZ",
+       "target_section": 550,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 609,
+       "retail_target": "0x100614e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?Timer@@YAPAVMxTimer@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 635,
+       "retail_target": "0x100aced0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeTimerStarted@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 647,
+       "retail_target": "0x10101418"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxCore@@UAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 657,
+       "retail_target": "0x100ae1e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxListCursor@PAULegoTranInfo@@@@UAE@XZ",
+       "target_section": 547,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 665,
+       "retail_target": "0x10061490"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxPtrListCursor@ULegoTranInfo@@@@UAE@XZ",
+       "target_section": 538,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 673,
+       "retail_target": "0x10061360"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T81069",
+       "target_section": 530,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 678,
+       "retail_target": "0x100e5278"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 683,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1LegoTranInfoListCursor@@UAE@XZ",
+       "target_section": 550,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 691,
+       "retail_target": "0x100614e0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeCalculated@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 697,
+       "retail_target": "0x10101414"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 721,
+       "retail_target": "0x00000000"
+      }
+     ],
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "register_bijections": [
+       {
+        "mapping": {
+         "esi": "edi",
+         "edi": "esi"
+        },
+        "region_start": 176,
+        "region_end": 337,
+        "expected_region_instruction_count": 51,
+        "expected_rewritten_offsets": [
+         177,
+         180,
+         183,
+         194,
+         200,
+         209,
+         275,
+         278,
+         333,
+         336
+        ],
+        "debug_s_register_map": [
+         {
+          "name": "flagsPtr",
+          "record_offset": 351,
+          "donor_register": "edi",
+          "image_register": "esi"
+         }
+        ]
+       }
+      ],
+      "slot_bijections": [
+       {
+        "mapping": {
+         "-20": -24,
+         "-24": -20
+        },
+        "expected_rewritten_offsets": [
+         34,
+         46,
+         169,
+         178,
+         195,
+         198,
+         221,
+         349,
+         433,
+         476,
+         513,
+         630,
+         706
+        ],
+        "debug_s_bprel_offsets": [
+         262,
+         315
+        ]
+       }
+      ],
+      "expected_instruction_count": 211,
+      "expected_changed_offsets": [
+       34,
+       46,
+       169,
+       177,
+       178,
+       180,
+       183,
+       194,
+       195,
+       198,
+       200,
+       209,
+       221,
+       275,
+       278,
+       333,
+       336,
+       349,
+       433,
+       476,
+       513,
+       630,
+       706
+      ],
+      "expected_procedure_range": [
+       731,
+       37,
+       716
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$S",
+        "$L80974",
+        677
+       ],
+       [
+        ".debug$S",
+        "$L80974",
+        677
+       ],
+       [
+        ".debug$S",
+        "$L80975",
+        687
+       ],
+       [
+        ".debug$S",
+        "$L80975",
+        687
+       ],
+       [
+        ".debug$S",
+        "$L80976",
+        605
+       ],
+       [
+        ".debug$S",
+        "$L80976",
+        605
+       ],
+       [
+        ".debug$S",
+        "$L80994",
+        669
+       ],
+       [
+        ".debug$S",
+        "$L80994",
+        669
+       ],
+       [
+        ".debug$S",
+        "$L80996",
+        661
+       ],
+       [
+        ".debug$S",
+        "$L80996",
+        661
+       ],
+       [
+        ".debug$S",
+        "$L80998",
+        653
+       ],
+       [
+        ".debug$S",
+        "$L80998",
+        653
+       ],
+       [
+        ".debug$S",
+        "$L81012",
+        597
+       ],
+       [
+        ".debug$S",
+        "$L81012",
+        597
+       ],
+       [
+        ".debug$S",
+        "$L81014",
+        589
+       ],
+       [
+        ".debug$S",
+        "$L81014",
+        589
+       ],
+       [
+        ".debug$S",
+        "$L81016",
+        581
+       ],
+       [
+        ".debug$S",
+        "$L81016",
+        581
+       ],
+       [
+        ".debug$S",
+        "$L81048",
+        568
+       ],
+       [
+        ".debug$S",
+        "$L81048",
+        568
+       ],
+       [
+        ".debug$S",
+        "?FUN_10061010@LegoAnimationManager@@QAEXE@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?FUN_10061010@LegoAnimationManager@@QAEXE@Z",
+        0
+       ],
+       [
+        ".xdata$x",
+        "$L80975",
+        687
+       ],
+       [
+        ".xdata$x",
+        "$L80976",
+        605
+       ],
+       [
+        ".xdata$x",
+        "$L80994",
+        669
+       ],
+       [
+        ".xdata$x",
+        "$L80996",
+        661
+       ],
+       [
+        ".xdata$x",
+        "$L80998",
+        653
+       ],
+       [
+        ".xdata$x",
+        "$L81012",
+        597
+       ],
+       [
+        ".xdata$x",
+        "$L81014",
+        589
+       ],
+       [
+        ".xdata$x",
+        "$L81016",
+        581
+       ],
+       [
+        ".xdata$x",
+        "$L81048",
+        568
+       ]
+      ],
+      "expected_external_entries": [
+       568,
+       581,
+       589,
+       597,
+       605,
+       653,
+       661,
+       669,
+       677,
+       687
+      ],
+      "expected_seed_debug_s_sha256": "0546825c91f1bc4f2025f830cb5e0c06676d20064f4e875fcaf47445938a9961",
+      "expected_image_debug_s_sha256": "516d155432a694f6be0c906a341b8063056440ec39b0255661f36c057580c63f",
+      "authenticity_rationale": "A register mirror and a two-slot frame exchange between compiler-equivalent allocations; every byte of the image is the seed body under the two proved bijections."
+     }
+    },
+    {
+     "mangled": "?DeleteAnimations@LegoAnimationManager@@AAEXXZ",
+     "donor": "d_0003e04e9d35",
+     "expected_body_sha256": "68ccdd154ee3a6b708baa0194da1374ea20c6b5807a7192d86623c86a0cc937b",
+     "expected_body_length": 191,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?FUN_10060540@LegoAnimationManager@@QAEXE@Z",
+     "donor": "d_0003e04e9d35",
+     "expected_body_sha256": "245311769ce7ec68d7ec8efdc8a3c1f9833e6e90ed52941506ac6d59ec75b4c4",
+     "expected_body_length": 42,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?FUN_10062650@LegoAnimationManager@@AAEEAAVMx3DPointFloat@@MPAVLegoROI@@@Z",
+     "donor": "d_0003e04e9d35",
+     "expected_body_sha256": "9f3da5a2d43f9e550d53d46a7d0c02a5cf01c46a06799a2feed55d46b1d63203",
+     "expected_body_length": 188,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       111,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?ReadAnimInfo@LegoAnimationManager@@QAEJPAVLegoStorage@@PAUAnimInfo@@@Z",
+     "donor": "d_3173bd1315cc",
+     "expected_body_sha256": "bbc6b72af732d0f4a679a470c49b0195bd78c92778723131557492596d762773",
+     "expected_body_length": 392,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?ReadModelInfo@LegoAnimationManager@@QAEJPAVLegoStorage@@PAUModelInfo@@@Z",
+     "donor": "d_eeb034c30c40",
+     "expected_body_sha256": "50c33378a84d2f84befaebfd73bd5d88c4be4a30b7db3e379dde07d177d7266b",
+     "expected_body_length": 172,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?FUN_100617c0@LegoAnimationManager@@AAEJHAAG0@Z",
+     "donor": "d_ef778b37e301",
+     "splice_class": "equal_body_strict",
+     "expected_body_sha256": "7a1e91c52148df955a249c9bdaa8d0c664004a11f8d110174cf4c2fa00098c82",
+     "expected_body_length": 289,
+     "expected_changed_offsets": []
+    },
+    {
+     "mangled": "?FUN_10063d10@LegoAnimationManager@@AAEXXZ",
+     "donor": "d_3173bd1315cc",
+     "expected_body_sha256": "06a439b7aa7a2583848b3cb876f5c1cf3439e52bd51fd4e401ee88d97c92a810",
+     "expected_body_length": 302,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_code_renames": [
+      [
+       179,
+       "T"
+      ],
+      [
+       185,
+       "T"
+      ],
+      [
+       191,
+       "T"
+      ],
+      [
+       212,
+       "T"
+      ],
+      [
+       218,
+       "T"
+      ],
+      [
+       224,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?FUN_10064120@LegoAnimationManager@@AAEEPAUBoundary@LegoLocation@@EE@Z",
+     "donor": "d_ad512bc8d4c5",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_sha256": "bd1fa6efd2792dfe4d8320843d44c35416d60c6c897eeb8e56170c38427a0426",
+     "expected_body_length": 594,
+     "expected_changed_offsets": [],
+     "expected_code_renames": [
+      [
+       34,
+       "T"
+      ],
+      [
+       40,
+       "T"
+      ],
+      [
+       46,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?InitFromAnims@AnimState@@QAEXIPAUAnimInfo@@I@Z",
+     "donor": "d_3173bd1315cc",
+     "expected_body_sha256": "7d9e58f37b8c99a2cc4535be3bd17d47db5ffb8257ba2c4ab897bd313ef4fabb",
+     "expected_body_length": 138,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?Reset@AnimState@@UAEEXZ",
+     "donor": "d_3173bd1315cc",
+     "expected_body_sha256": "f5c11b17d113d39df2bf48cbb75b972a4e4e0e74c88042c0de04448c0b510f59",
+     "expected_body_length": 83,
+     "expected_changed_offsets": [],
+     "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?AddExtra@LegoAnimationManager@@QAEXHE@Z",
+     "donor": "d_0003e04e9d35",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_sha256": "495dbc157f4c73d19a0c8d3e202a4f168d1ca5cba55ddc0ccc6567e54402153e",
+     "expected_body_length": 1136,
+     "expected_changed_offsets": [],
+     "expected_code_renames": [
+      [
+       977,
+       "T"
+      ],
+      [
+       983,
+       "T"
+      ],
+      [
+       989,
+       "T"
+      ],
+      [
+       1010,
+       "T"
+      ],
+      [
+       1016,
+       "T"
+      ],
+      [
+       1022,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
      "mangled": "?FUN_10062e20@LegoAnimationManager@@AAEEPAVLegoROI@@PAVLegoAnimPresenter@@@Z",
-     "donor": "d_6303786cde97",
+     "donor": "d_338669d89f79",
      "expected_section_number": 690,
      "expected_section_count": 834,
      "expected_characteristics": 1615859744,
@@ -7278,7 +8520,7 @@
      "expected_seed_body_sha256": "898dae6d8c839afe3958e0599616372a6144fca60b0be6036ad8bfdb02002599",
      "expected_donor_body_sha256": "57f41fee973de995146aebaf85b7f6aa0fc74b310b4033ec9d4b2a1d17879919",
      "expected_seed_metadata_sha256": "8a29a519c1fcd39ea629b342a48c36dacdf4f769de3636e0ff1160d8fddcbb56",
-     "expected_donor_metadata_sha256": "d851b6d73ad65958368e149696c147450e122fd2d7d02b6aeef301c20675c2c2",
+     "expected_donor_metadata_sha256": "7f8ad413bd35c9872303dd324bc3c7ca3b781429c41a2ae0509e9648616b997e",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -7879,222 +9121,149 @@
      "expected_donor_section_count": 834
     },
     {
-     "mangled": "?FUN_100609f0@LegoAnimationManager@@AAEJIPAVMxMatrix@@EE@Z",
-     "donor": "d_f19236fd3b65",
-     "expected_section_number": 517,
+     "mangled": "?Tickle@LegoAnimationManager@@UAEJXZ",
+     "donor": "d_e65005fc7a06",
+     "splice_class": "retail_exact_donor_rewriting",
+     "expected_section_number": 595,
      "expected_section_count": 834,
-     "expected_body_length": 769,
+     "expected_donor_section_count": 834,
+     "expected_seed_length": 1095,
+     "expected_donor_length": 1095,
      "expected_characteristics": 1615859744,
      "expected_selection": 1,
-     "expected_relocation_count": 34,
-     "expected_seed_line_count": 35,
-     "expected_donor_line_count": 35,
+     "expected_relocation_count": 39,
+     "expected_seed_line_count": 70,
+     "expected_donor_line_count": 70,
      "expected_function_count": 211,
      "expected_comdat_count": 407,
-     "expected_seed_body_sha256": "1bb50abe6bc190dfd8823b28de671638055d1b5c842d477d159dead2564ba359",
-     "expected_donor_body_sha256": "1bb50abe6bc190dfd8823b28de671638055d1b5c842d477d159dead2564ba359",
-     "expected_seed_metadata_sha256": "a5df5c20512d4824cd251e699fce7c423a2500dfe8716ea1d11034ff8a1a43f0",
-     "expected_donor_metadata_sha256": "0af0798ac9569e5652a2133b6fc469ac146a598f46bc3aab76a8c85b9b076147",
+     "expected_seed_body_sha256": "245e2e2e95a4bd0967b7669934f326bb7595e2acfd16465e355c206dfa11f807",
+     "expected_donor_body_sha256": "025aba94d40e72be8b861cf1a42f56f048a22a11b2e59b1340b44077d709d963",
+     "expected_body_sha256": "e8b2ece54eb7a9658d3f345b68b19fc5fe3b4095dbd1f9786c2c0406c94a27e6",
+     "expected_seed_metadata_sha256": "75177b0c2d7213e0f22749e64eb176ba4c2aead438defcb90d68211696376549",
+     "expected_donor_metadata_sha256": "0a8c02774d2e35db0f8bdf9475641e0c25cb4c56d868f5780c83206a1c757e8e",
      "expected_closure": [
-      ".debug$S",
-      ".xdata$x"
+      ".debug$F",
+      ".debug$S"
      ],
+     "expected_linked_span": 1104,
      "retail_oracle": {
       "image": "LEGO1.DLL",
-      "address": "0x100609f0",
-      "verdict": "MATCH",
-      "length": 769
+      "address": "0x10061cc0",
+      "length": 1095,
+      "verdict": "MATCH"
      },
      "retail_relocations": [
       {
-       "offset": 2,
-       "type": 6,
-       "addend": 0,
-       "target": "__except_list",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x00000000"
-      },
-      {
-       "offset": 12,
-       "type": 6,
-       "addend": 0,
-       "target": "$L80872",
-       "target_section": 517,
-       "target_value": 748,
-       "target_type": 0,
-       "target_storage": 6,
-       "retail_target": "0x10060cdc"
-      },
-      {
-       "offset": 20,
-       "type": 6,
-       "addend": 0,
-       "target": "__except_list",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x00000000"
-      },
-      {
-       "offset": 53,
        "type": 20,
        "addend": 0,
-       "target": "??0MxDSAction@@QAE@XZ",
+       "target": "?FUN_10061530@LegoAnimationManager@@AAEXXZ",
+       "target_section": 553,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 13,
+       "retail_target": "0x10061530"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?UserActor@@YAPAVLegoPathActor@@XZ",
        "target_section": 0,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
-       "retail_target": "0x100ad810"
+       "offset": 40,
+       "retail_target": "0x10015790"
       },
       {
-       "offset": 65,
        "type": 20,
        "addend": 0,
-       "target": "?PurgeExtra@LegoAnimationManager@@QAEXE@Z",
-       "target_section": 684,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x100627d0"
-      },
-      {
-       "offset": 72,
-       "type": 20,
-       "addend": 0,
-       "target": "??2@YAPAXI@Z",
+       "target": "?CharacterManager@@YAPAVLegoCharacterManager@@XZ",
        "target_section": 0,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
-       "retail_target": "0x10086240"
+       "offset": 129,
+       "retail_target": "0x100157b0"
       },
       {
-       "offset": 104,
-       "type": 6,
+       "type": 20,
        "addend": 0,
-       "target": "??_7Matrix4@@6B@",
-       "target_section": 159,
+       "target": "?GetExtraActor@LegoCharacterManager@@QAEPAVLegoExtraActor@@PBD@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 136,
+       "retail_target": "0x10084c40"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?RemoveActor@LegoPathController@@QAEJPAVLegoPathActor@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 170,
+       "retail_target": "0x10046770"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?CharacterManager@@YAPAVLegoCharacterManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 186,
+       "retail_target": "0x100157b0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?ReleaseActor@LegoCharacterManager@@QAEXPAVLegoROI@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 193,
+       "retail_target": "0x10083db0"
+      },
+      {
+       "type": 6,
+       "addend": 5,
+       "target": "?g_characters@@3PAUCharacter@LegoAnimationManager@@A",
+       "target_section": 152,
+       "target_value": 808,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 216,
+       "retail_target": "0x100f7048"
+      },
+      {
+       "type": 6,
+       "addend": 5,
+       "target": "?g_vehicles@@3PAUVehicle@LegoAnimationManager@@A",
+       "target_section": 152,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
-       "retail_target": "0x100d4350"
+       "offset": 229,
+       "retail_target": "0x100f6d20"
       },
       {
-       "offset": 113,
        "type": 6,
        "addend": 0,
-       "target": "??_7MxMatrix@@6B@",
-       "target_section": 162,
+       "target": "?g_vehicles@@3PAUVehicle@LegoAnimationManager@@A",
+       "target_section": 152,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
-       "retail_target": "0x100d4300"
-      },
-      {
        "offset": 236,
-       "type": 20,
-       "addend": 0,
-       "target": "??2@YAPAXI@Z",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x10086240"
+       "retail_target": "0x100f6d20"
       },
       {
-       "offset": 269,
-       "type": 6,
-       "addend": 0,
-       "target": "??_7Matrix4@@6B@",
-       "target_section": 159,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x100d4350"
-      },
-      {
-       "offset": 278,
-       "type": 6,
-       "addend": 0,
-       "target": "??_7MxMatrix@@6B@",
-       "target_section": 162,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x100d4300"
-      },
-      {
-       "offset": 311,
-       "type": 20,
-       "addend": 0,
-       "target": "?FUN_10062770@LegoAnimationManager@@QAEXXZ",
-       "target_section": 678,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x10062770"
-      },
-      {
-       "offset": 364,
-       "type": 20,
-       "addend": 0,
-       "target": "??2@YAPAXI@Z",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x10086240"
-      },
-      {
-       "offset": 408,
-       "type": 20,
-       "addend": 0,
-       "target": "??3@YAXPAX@Z",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x10086260"
-      },
-      {
-       "offset": 444,
-       "type": 6,
-       "addend": 0,
-       "target": "?g_strANIMMAN_ID@@3PBDB",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x101020d4"
-      },
-      {
-       "offset": 460,
-       "type": 6,
-       "addend": 0,
-       "target": "??_C@_05HDAD@?$CFs?3?$CFd?$AA@",
-       "target_section": 515,
-       "target_value": 0,
-       "target_type": 0,
-       "target_storage": 2,
-       "retail_target": "0x100f7558"
-      },
-      {
-       "offset": 466,
-       "type": 20,
-       "addend": 0,
-       "target": "_sprintf",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x1008b5a0"
-      },
-      {
-       "offset": 481,
        "type": 20,
        "addend": 0,
        "target": "?Lego@@YAPAVLegoOmni@@XZ",
@@ -8102,76 +9271,43 @@
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
+       "offset": 242,
        "retail_target": "0x10015700"
       },
       {
-       "offset": 488,
        "type": 20,
        "addend": 0,
-       "target": "?GetWorldAtom@LegoOmni@@QAEPAVMxAtomId@@W4World@1@@Z",
+       "target": "?FindROI@LegoOmni@@QAEPAVLegoROI@@PBD@Z",
        "target_section": 0,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
-       "retail_target": "0x1005b460"
+       "offset": 249,
+       "retail_target": "0x1005b270"
       },
       {
-       "offset": 512,
-       "type": 20,
-       "addend": 0,
-       "target": "??4MxAtomId@@QAEAAV0@ABV0@@Z",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
+       "type": 6,
+       "addend": 4,
+       "target": "?g_characters@@3PAUCharacter@LegoAnimationManager@@A",
+       "target_section": 152,
+       "target_value": 808,
+       "target_type": 0,
        "target_storage": 2,
-       "retail_target": "0x100ad1c0"
+       "offset": 276,
+       "retail_target": "0x100f7048"
       },
       {
-       "offset": 571,
-       "type": 20,
-       "addend": 0,
-       "target": "?AppendExtra@MxDSAction@@QAEXGPBD@Z",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
+       "type": 6,
+       "addend": 7,
+       "target": "?g_characters@@3PAUCharacter@LegoAnimationManager@@A",
+       "target_section": 152,
+       "target_value": 808,
+       "target_type": 0,
        "target_storage": 2,
-       "retail_target": "0x100ade60"
+       "offset": 289,
+       "retail_target": "0x100f7048"
       },
       {
-       "offset": 583,
-       "type": 20,
-       "addend": 0,
-       "target": "?StartActionIfInitialized@@YAJAAVMxDSAction@@@Z",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x10015890"
-      },
-      {
-       "offset": 595,
-       "type": 20,
-       "addend": 0,
-       "target": "?BackgroundAudioManager@@YAPAVMxBackgroundAudioManager@@XZ",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x10015730"
-      },
-      {
-       "offset": 602,
-       "type": 20,
-       "addend": 0,
-       "target": "?LowerVolume@MxBackgroundAudioManager@@QAEXXZ",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x1007f570"
-      },
-      {
-       "offset": 621,
        "type": 20,
        "addend": 0,
        "target": "?Timer@@YAPAVMxTimer@@XZ",
@@ -8179,10 +9315,10 @@
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
+       "offset": 331,
        "retail_target": "0x100aced0"
       },
       {
-       "offset": 632,
        "type": 6,
        "addend": 0,
        "target": "?g_lastTimeTimerStarted@MxTimer@@0JA",
@@ -8190,21 +9326,10 @@
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
+       "offset": 342,
        "retail_target": "0x10101418"
       },
       {
-       "offset": 660,
-       "type": 20,
-       "addend": 0,
-       "target": "??3@YAXPAX@Z",
-       "target_section": 0,
-       "target_value": 0,
-       "target_type": 32,
-       "target_storage": 2,
-       "retail_target": "0x10086260"
-      },
-      {
-       "offset": 670,
        "type": 6,
        "addend": 0,
        "target": "?g_lastTimeCalculated@MxTimer@@0JA",
@@ -8212,10 +9337,408 @@
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
+       "offset": 354,
        "retail_target": "0x10101414"
       },
       {
-       "offset": 714,
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
+       "target_section": 773,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 384,
+       "retail_target": "0x10064b50"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_unk0x100f74b0@@3PAY02MA",
+       "target_section": 152,
+       "target_value": 1936,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 425,
+       "retail_target": "0x100f74b0"
+      },
+      {
+       "type": 6,
+       "addend": 60,
+       "target": "?g_unk0x100f74b0@@3PAY02MA",
+       "target_section": 152,
+       "target_value": 1936,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 446,
+       "retail_target": "0x100f74b0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 596,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 492,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?GameState@@YAPAVLegoGameState@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 566,
+       "retail_target": "0x10015760"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "_g_unk0x100d8b28$S72148",
+       "target_section": 153,
+       "target_value": 24,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 583,
+       "retail_target": "0x100d8b28"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10062110@LegoAnimationManager@@AAEGPAVLegoROI@@AAVVector3@@1PAVLegoPathBoundary@@MEE@Z",
+       "target_section": 635,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 635,
+       "retail_target": "0x10062110"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 163,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 665,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "type": 6,
+       "addend": 40,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 163,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 675,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_100605e0@LegoAnimationManager@@AAEJIEPAVMxMatrix@@EPAVLegoROI@@EEEE@Z",
+       "target_section": 513,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 710,
+       "retail_target": "0x100605e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10063d10@LegoAnimationManager@@AAEXXZ",
+       "target_section": 731,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 751,
+       "retail_target": "0x10063d10"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 820,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?AddExtra@LegoAnimationManager@@QAEXHE@Z",
+       "target_section": 687,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 890,
+       "retail_target": "0x100629b0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?VideoManager@@YAPAVLegoVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 895,
+       "retail_target": "0x10015720"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T81638",
+       "target_section": 153,
+       "target_value": 64,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 942,
+       "retail_target": "0x100d8b50"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_unk0x100f7500@@3MA",
+       "target_section": 152,
+       "target_value": 2016,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 955,
+       "retail_target": "0x100f7500"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T81639",
+       "target_section": 153,
+       "target_value": 72,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 961,
+       "retail_target": "0x100d8b58"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T81640",
+       "target_section": 153,
+       "target_value": 80,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 971,
+       "retail_target": "0x100d8b60"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_unk0x100f7500@@3MA",
+       "target_section": 152,
+       "target_value": 2016,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 977,
+       "retail_target": "0x100f7500"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T81641",
+       "target_section": 153,
+       "target_value": 88,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 987,
+       "retail_target": "0x100d8b68"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_unk0x100f7500@@3MA",
+       "target_section": 152,
+       "target_value": 2016,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1031,
+       "retail_target": "0x100f7500"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T81642",
+       "target_section": 153,
+       "target_value": 96,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 1037,
+       "retail_target": "0x100d8b70"
+      }
+     ],
+     "expected_relocation_divergences": [
+      [
+       22,
+       "_g_unk0x100d8b28$S72146",
+       "_g_unk0x100d8b28$S72148"
+      ],
+      [
+       31,
+       "$T81634",
+       "$T81638"
+      ],
+      [
+       33,
+       "$T81635",
+       "$T81639"
+      ],
+      [
+       34,
+       "$T81636",
+       "$T81640"
+      ],
+      [
+       36,
+       "$T81637",
+       "$T81641"
+      ],
+      [
+       38,
+       "$T81638",
+       "$T81642"
+      ]
+     ],
+     "donor_rewriting": {
+      "kind": "donor_fp_bijection_rewriting_v1",
+      "windows": [
+       {
+        "start": 862,
+        "end": 870,
+        "source_instruction_lengths": [
+         2,
+         6
+        ],
+        "target_order": [
+         1,
+         0
+        ],
+        "expected_line_rows": [
+         [
+          868,
+          101,
+          0
+         ]
+        ],
+        "expected_dependence_edges": []
+       }
+      ],
+      "register_bijections": [
+       {
+        "mapping": {
+         "esi": "ebx",
+         "ebx": "esi"
+        },
+        "region_start": 591,
+        "region_end": 731,
+        "expected_region_instruction_count": 50,
+        "expected_rewritten_offsets": [
+         592,
+         597,
+         599,
+         631,
+         654,
+         700,
+         721,
+         723
+        ]
+       }
+      ],
+      "expected_instruction_count": 319,
+      "expected_changed_offsets": [
+       592,
+       597,
+       599,
+       631,
+       654,
+       700,
+       721,
+       723,
+       862,
+       863,
+       864,
+       865,
+       866,
+       867,
+       868,
+       869
+      ],
+      "expected_procedure_range": [
+       1095,
+       10,
+       1085
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?Tickle@LegoAnimationManager@@UAEJXZ",
+        0
+       ],
+       [
+        ".debug$S",
+        "?Tickle@LegoAnimationManager@@UAEJXZ",
+        0
+       ],
+       [
+        ".debug$S",
+        "?Tickle@LegoAnimationManager@@UAEJXZ",
+        0
+       ]
+      ],
+      "expected_external_entries": [],
+      "authenticity_rationale": "The pre-image is a declaration-only extern-run compiler-state carrier over the shipped source.  Retail's body is ours with the presenter-scan loop's index and record pointer carrying swapped colours (a register mirror between compiler-equivalent allocations) and one two-store schedule window whose dependence edges prove the transposition sound."
+     }
+    },
+    {
+     "mangled": "?FUN_100609f0@LegoAnimationManager@@AAEJIPAVMxMatrix@@EE@Z",
+     "donor": "d_338669d89f79",
+     "splice_class": "retail_exact_donor_rewriting",
+     "expected_section_number": 517,
+     "expected_section_count": 834,
+     "expected_donor_section_count": 834,
+     "expected_seed_length": 769,
+     "expected_donor_length": 769,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 34,
+     "expected_seed_line_count": 35,
+     "expected_donor_line_count": 35,
+     "expected_function_count": 211,
+     "expected_comdat_count": 407,
+     "expected_seed_body_sha256": "8817b0d0fe1346e2fb3237867fd669ef8f41aebd8eb62d2fd3cbdb551c73a52d",
+     "expected_donor_body_sha256": "1bb50abe6bc190dfd8823b28de671638055d1b5c842d477d159dead2564ba359",
+     "expected_body_sha256": "fb066b9e47dcce9adb706e837279e086d5ddf4a30a7f2980ba2bbe6502bd6972",
+     "expected_seed_metadata_sha256": "da61e21b4921c959ca3bafc6a53cd2f5d55fea209c7325a13bddbf0b859fb38d",
+     "expected_donor_metadata_sha256": "1167de1f5f971efe868fe1d88322c3533c42a6d7f5eb2f74ec7a3e632d289fd2",
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "expected_linked_span": 784,
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100609f0",
+      "length": 769,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
        "type": 6,
        "addend": 0,
        "target": "__except_list",
@@ -8223,21 +9746,142 @@
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
+       "offset": 2,
        "retail_target": "0x00000000"
       },
       {
-       "offset": 731,
+       "type": 6,
+       "addend": 0,
+       "target": "$L80898",
+       "target_section": 517,
+       "target_value": 748,
+       "target_type": 0,
+       "target_storage": 6,
+       "offset": 12,
+       "retail_target": "0x10060cdc"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 20,
+       "retail_target": "0x00000000"
+      },
+      {
        "type": 20,
        "addend": 0,
-       "target": "??1MxAtomId@@QAE@XZ",
+       "target": "??0MxDSAction@@QAE@XZ",
        "target_section": 0,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
-       "retail_target": "0x100acfd0"
+       "offset": 53,
+       "retail_target": "0x100ad810"
       },
       {
-       "offset": 740,
+       "type": 20,
+       "addend": 0,
+       "target": "?PurgeExtra@LegoAnimationManager@@QAEXE@Z",
+       "target_section": 684,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 65,
+       "retail_target": "0x100627d0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 72,
+       "retail_target": "0x10086240"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Matrix4@@6B@",
+       "target_section": 160,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 104,
+       "retail_target": "0x100d4350"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 163,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 113,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 236,
+       "retail_target": "0x10086240"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Matrix4@@6B@",
+       "target_section": 160,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 269,
+       "retail_target": "0x100d4350"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7MxMatrix@@6B@",
+       "target_section": 163,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 278,
+       "retail_target": "0x100d4300"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10062770@LegoAnimationManager@@QAEXXZ",
+       "target_section": 678,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 311,
+       "retail_target": "0x10062770"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 364,
+       "retail_target": "0x10086240"
+      },
+      {
        "type": 20,
        "addend": 0,
        "target": "??3@YAXPAX@Z",
@@ -8245,21 +9889,208 @@
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
+       "offset": 408,
        "retail_target": "0x10086260"
       },
       {
-       "offset": 749,
        "type": 6,
        "addend": 0,
-       "target": "$T80926",
+       "target": "?g_strANIMMAN_ID@@3PBDB",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 444,
+       "retail_target": "0x101020d4"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_C@_05HDAD@?$CFs?3?$CFd?$AA@",
+       "target_section": 515,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 460,
+       "retail_target": "0x100f7558"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "_sprintf",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 466,
+       "retail_target": "0x1008b5a0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?Lego@@YAPAVLegoOmni@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 481,
+       "retail_target": "0x10015700"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?GetWorldAtom@LegoOmni@@QAEPAVMxAtomId@@W4World@1@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 488,
+       "retail_target": "0x1005b460"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??4MxAtomId@@QAEAAV0@ABV0@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 512,
+       "retail_target": "0x100ad1c0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?AppendExtra@MxDSAction@@QAEXGPBD@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 571,
+       "retail_target": "0x100ade60"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?StartActionIfInitialized@@YAJAAVMxDSAction@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 583,
+       "retail_target": "0x10015890"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?BackgroundAudioManager@@YAPAVMxBackgroundAudioManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 595,
+       "retail_target": "0x10015730"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?LowerVolume@MxBackgroundAudioManager@@QAEXXZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 602,
+       "retail_target": "0x1007f570"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?Timer@@YAPAVMxTimer@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 621,
+       "retail_target": "0x100aced0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeTimerStarted@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 632,
+       "retail_target": "0x10101418"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 660,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_lastTimeCalculated@MxTimer@@0JA",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 670,
+       "retail_target": "0x10101414"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 714,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxAtomId@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 731,
+       "retail_target": "0x100acfd0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 740,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T80952",
        "target_section": 518,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 3,
+       "offset": 749,
        "retail_target": "0x100e5230"
       },
       {
-       "offset": 754,
        "type": 20,
        "addend": 0,
        "target": "___CxxFrameHandler",
@@ -8267,10 +10098,10 @@
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
+       "offset": 754,
        "retail_target": "0x1008b020"
       },
       {
-       "offset": 765,
        "type": 20,
        "addend": 0,
        "target": "??1MxDSAction@@UAE@XZ",
@@ -8278,86 +10109,43 @@
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
+       "offset": 765,
        "retail_target": "0x100ada80"
       }
      ],
-     "splice_class": "retail_exact_web_recolour",
-     "expected_body_sha256": "fb066b9e47dcce9adb706e837279e086d5ddf4a30a7f2980ba2bbe6502bd6972",
-     "web_recolour": {
-      "kind": "web_recolour_v1",
-      "expected_internal_relocation_targets": [
-       748
+     "expected_relocation_divergences": [
+      [
+       1,
+       "$L80886",
+       "$L80898"
       ],
-      "webs": [
+      [
+       31,
+       "$T80940",
+       "$T80952"
+      ]
+     ],
+     "donor_rewriting": {
+      "kind": "donor_fp_bijection_rewriting_v1",
+      "register_bijections": [
        {
-        "source_register": "esi",
-        "image_register": "ecx",
-        "definitions": [
-         378
-        ],
-        "uses": [
-         380,
-         387,
-         389,
-         [
-          391,
-          1
-         ],
-         394
-        ],
-        "expected_rewritten_offsets": [
-         379,
-         381,
-         388,
-         390,
-         392,
-         395
-        ]
-       },
-       {
-        "source_register": "edi",
-        "image_register": "esi",
-        "definitions": [
-         358
-        ],
-        "uses": [
-         [
-          391,
-          0
-         ],
-         422,
-         430
-        ],
+        "mapping": {
+         "esi": "edi",
+         "edi": "esi"
+        },
+        "region_start": 358,
+        "region_end": 433,
+        "expected_region_instruction_count": 25,
         "expected_rewritten_offsets": [
          359,
-         392,
-         423,
-         431
-        ]
-       },
-       {
-        "source_register": "ecx",
-        "image_register": "edi",
-        "definitions": [
-         378
-        ],
-        "uses": [
-         380,
-         387,
-         389,
-         [
-          391,
-          1
-         ],
-         394
-        ],
-        "expected_rewritten_offsets": [
          379,
          381,
          388,
          390,
          392,
-         395
+         395,
+         423,
+         431
         ]
        }
       ],
@@ -8373,7 +10161,6 @@
        423,
        431
       ],
-      "authenticity_rationale": "Retail's body is ours with the append-site pair recoloured: the list tail (`last`) and the fresh entry (`newEntry`) carry swapped colours, an exchange of two overlapping live ranges expressed as sequential coalesces through ECX, which the liveness proves dead across the exchange; the unwind funclet heads the xdata table declares are derived entries of the same walk.",
       "expected_procedure_range": [
        769,
        44,
@@ -8382,62 +10169,62 @@
       "expected_code_symbol_references": [
        [
         ".debug$S",
-        "$L80872",
+        "$L80898",
         748
        ],
        [
         ".debug$S",
-        "$L80872",
+        "$L80898",
         748
-       ],
-       [
-        ".debug$S",
-        "$L80873",
-        758
-       ],
-       [
-        ".debug$S",
-        "$L80873",
-        758
-       ],
-       [
-        ".debug$S",
-        "$L80874",
-        735
-       ],
-       [
-        ".debug$S",
-        "$L80874",
-        735
-       ],
-       [
-        ".debug$S",
-        "$L80877",
-        403
-       ],
-       [
-        ".debug$S",
-        "$L80877",
-        403
-       ],
-       [
-        ".debug$S",
-        "$L80886",
-        727
-       ],
-       [
-        ".debug$S",
-        "$L80886",
-        727
        ],
        [
         ".debug$S",
         "$L80899",
+        758
+       ],
+       [
+        ".debug$S",
+        "$L80899",
+        758
+       ],
+       [
+        ".debug$S",
+        "$L80900",
+        735
+       ],
+       [
+        ".debug$S",
+        "$L80900",
+        735
+       ],
+       [
+        ".debug$S",
+        "$L80903",
+        403
+       ],
+       [
+        ".debug$S",
+        "$L80903",
+        403
+       ],
+       [
+        ".debug$S",
+        "$L80912",
+        727
+       ],
+       [
+        ".debug$S",
+        "$L80912",
+        727
+       ],
+       [
+        ".debug$S",
+        "$L80925",
         655
        ],
        [
         ".debug$S",
-        "$L80899",
+        "$L80925",
         655
        ],
        [
@@ -8452,217 +10239,430 @@
        ],
        [
         ".xdata$x",
-        "$L80873",
+        "$L80899",
         758
        ],
        [
         ".xdata$x",
-        "$L80874",
+        "$L80900",
         735
        ],
        [
         ".xdata$x",
-        "$L80877",
+        "$L80903",
         403
        ],
        [
         ".xdata$x",
-        "$L80886",
+        "$L80912",
         727
        ],
        [
         ".xdata$x",
-        "$L80899",
+        "$L80925",
         655
        ]
       ],
-      "expected_debug_s_registers": []
-     },
-     "expected_changed_offsets": [
-      359,
-      379,
-      381,
-      388,
-      390,
-      392,
-      395,
-      423,
-      431
-     ]
+      "expected_external_entries": [
+       403,
+       655,
+       727,
+       735,
+       748,
+       758
+      ],
+      "authenticity_rationale": "The pre-image is a declaration-only extern-run compiler-state carrier over the shipped source.  Retail's body is ours with the append site's tail record and fresh entry carrying swapped colours, a register mirror between compiler-equivalent allocations whose region liveness -- including the unwind funclet the xdata table declares -- is proved by the closed decoder."
+     }
     },
     {
-     "mangled": "?DeleteAnimations@LegoAnimationManager@@AAEXXZ",
-     "donor": "d_0003e04e9d35",
-     "expected_body_sha256": "68ccdd154ee3a6b708baa0194da1374ea20c6b5807a7192d86623c86a0cc937b",
-     "expected_body_length": 191,
-     "expected_changed_offsets": [
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      14,
-      20,
-      39,
-      47,
-      62,
-      81,
-      83,
-      86,
-      95,
-      107,
-      120,
-      142,
-      155,
-      167,
-      178,
-      179,
-      180,
-      181,
-      182,
-      184
-     ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?FUN_10060540@LegoAnimationManager@@QAEXE@Z",
-     "donor": "d_0003e04e9d35",
-     "expected_body_sha256": "245311769ce7ec68d7ec8efdc8a3c1f9833e6e90ed52941506ac6d59ec75b4c4",
-     "expected_body_length": 42,
+     "mangled": "?FindVehicle@LegoAnimationManager@@QAEEPBDAAI@Z",
+     "donor": "d_bd4f5c3defa3",
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 486,
+     "expected_section_count": 834,
+     "expected_body_length": 64,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 3,
+     "expected_seed_line_count": 8,
+     "expected_donor_line_count": 8,
+     "expected_function_count": 211,
+     "expected_comdat_count": 407,
+     "expected_seed_body_sha256": "2fdb110f538d84a19821f9f7a431bc52c3d73c708409ec217cc2e9e2ff7cc654",
+     "expected_donor_body_sha256": "2fdb110f538d84a19821f9f7a431bc52c3d73c708409ec217cc2e9e2ff7cc654",
+     "expected_body_sha256": "64645c14c141578ec59eac0a5c523d8d34080a856261aa85d2258d6b8322fed2",
+     "expected_seed_metadata_sha256": "7d157a9ffc1bb55da9d24e069857b25ea0857488a742954501ec06c5aa5387ee",
+     "expected_donor_metadata_sha256": "20a50b6a6394b6c13a37a1a39a1d3eee393f2ecd08a1238a51c6ea82fdd6c7c5",
      "expected_changed_offsets": [
       3,
-      5,
-      8,
-      20,
-      22,
-      25,
-      34
+      11,
+      15,
+      17,
+      31,
+      35
      ],
-     "splice_class": "equal_body_strict"
+     "expected_code_renames": [],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10060140",
+      "length": 64,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "?g_vehicles@@3PAUVehicle@LegoAnimationManager@@A",
+       "target_section": 152,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 4,
+       "retail_target": "0x100f6d20"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "_strcmpi",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 19,
+       "retail_target": "0x1008c110"
+      },
+      {
+       "type": 6,
+       "addend": 56,
+       "target": "?g_vehicles@@3PAUVehicle@LegoAnimationManager@@A",
+       "target_section": 152,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 36,
+       "retail_target": "0x100f6d20"
+      }
+     ],
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "esi": "ebx",
+       "ebx": "esi"
+      },
+      "region_start": 3,
+      "region_end": 42,
+      "expected_region_instruction_count": 14,
+      "expected_rewritten_offsets": [
+       3,
+       11,
+       15,
+       17,
+       31,
+       35
+      ],
+      "expected_instruction_count": 29,
+      "expected_seed_debug_s_sha256": "8bc7e2cc2bad4ebc35444c6215242a430451946adf61a4fdd98b313836e2a849",
+      "expected_image_debug_s_sha256": "8bc7e2cc2bad4ebc35444c6215242a430451946adf61a4fdd98b313836e2a849",
+      "debug_s_register_map": [],
+      "authenticity_rationale": "A register mirror between compiler-equivalent allocations of the scan cursor; every byte of the image is the seed body under the proved bijection."
+     }
     },
     {
-     "mangled": "?FUN_100623a0@LegoAnimationManager@@AAEEAAUAnimInfo@@@Z",
+     "mangled": "?FUN_10063780@LegoAnimationManager@@QAEXPAVLegoROIList@@@Z",
      "donor": "d_0003e04e9d35",
-     "expected_body_sha256": "1547949de2e61afd0ab63ecf65a3778184fff18e0c8eca5b4f114ea1add688b3",
-     "expected_body_length": 384,
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 718,
+     "expected_section_count": 834,
+     "expected_body_length": 453,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 19,
+     "expected_seed_line_count": 12,
+     "expected_donor_line_count": 12,
+     "expected_function_count": 211,
+     "expected_comdat_count": 407,
+     "expected_seed_body_sha256": "d67ac225978542948fa2488bd675a6562bed978855ffc8dcddbad16b140ffdcb",
+     "expected_donor_body_sha256": "d67ac225978542948fa2488bd675a6562bed978855ffc8dcddbad16b140ffdcb",
+     "expected_body_sha256": "98d4478db59e6702b4d625a4341d69b248bedd5b11d5ee41d3c9dbcca8645d4c",
+     "expected_seed_metadata_sha256": "62c30368e5e17e4f21cd2080e404645d3a07621ec710696b85e1c9ff02b0efd4",
+     "expected_donor_metadata_sha256": "761c741705c77d869fda33e5230223e75e375ec9d0e2137a8bd386d150799652",
      "expected_changed_offsets": [
-      217
+      213,
+      219,
+      255,
+      269,
+      273,
+      278,
+      281,
+      284
      ],
-     "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
       [
        12,
        "L"
       ],
       [
-       367,
+       436,
        "T"
       ]
      ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36,
-      44,
-      52,
-      60
-     ]
-    },
-    {
-     "mangled": "?FUN_10062650@LegoAnimationManager@@AAEEAAVMx3DPointFloat@@MPAVLegoROI@@@Z",
-     "donor": "d_0003e04e9d35",
-     "expected_body_sha256": "9f3da5a2d43f9e550d53d46a7d0c02a5cf01c46a06799a2feed55d46b1d63203",
-     "expected_body_length": 188,
-     "expected_changed_offsets": [
-      76,
-      80,
-      84,
-      87,
-      89,
-      90,
-      91,
-      92,
-      97,
-      98,
-      99,
-      100
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
      ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       111,
-       "T"
-      ]
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10063780",
+      "length": 453,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$L82175",
+       "target_section": 718,
+       "target_value": 435,
+       "target_type": 0,
+       "target_storage": 6,
+       "offset": 12,
+       "retail_target": "0x10063933"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 20,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0MxCore@@QAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 61,
+       "retail_target": "0x100ae1a0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxListCursor@PAVLegoROI@@@@6B@",
+       "target_section": 698,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 83,
+       "retail_target": "0x100d8d68"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7?$MxPtrListCursor@VLegoROI@@@@6B@",
+       "target_section": 696,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 104,
+       "retail_target": "0x100d8d38"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7LegoROIListCursor@@6B@",
+       "target_section": 697,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 118,
+       "retail_target": "0x100d8d50"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?CharacterManager@@YAPAVLegoCharacterManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 190,
+       "retail_target": "0x100157b0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?IsActor@LegoCharacterManager@@SAEPBD@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 196,
+       "retail_target": "0x10084c00"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 222,
+       "retail_target": "0x10086240"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 346,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 386,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??3@YAXPAX@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 403,
+       "retail_target": "0x10086260"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1MxCore@@UAE@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 415,
+       "retail_target": "0x100ae1e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxListCursor@PAVLegoROI@@@@UAE@XZ",
+       "target_section": 712,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 423,
+       "retail_target": "0x100636e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$MxPtrListCursor@VLegoROI@@@@UAE@XZ",
+       "target_section": 703,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 431,
+       "retail_target": "0x100635b0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T82295",
+       "target_section": 719,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 436,
+       "retail_target": "0x100e5658"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 441,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1LegoROIListCursor@@UAE@XZ",
+       "target_section": 715,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 449,
+       "retail_target": "0x10063730"
+      }
      ],
-     "expected_xdata_rename_offsets": []
-    },
-    {
-     "mangled": "?FUN_100605e0@LegoAnimationManager@@AAEJIEPAVMxMatrix@@EPAVLegoROI@@EEEE@Z",
-     "donor": "d_d180a5b6acdd",
-     "expected_body_sha256": "54c7d63b4811f31e90bf069f62c492c50d1a4b236a95400ff1969f31bffb5f28",
-     "expected_body_length": 1037,
-     "expected_changed_offsets": [
-      105,
-      126,
-      268,
-      280,
-      284,
-      287,
-      296,
-      305,
-      308,
-      311,
-      314,
-      318,
-      323,
-      326,
-      329,
-      332,
-      335,
-      338,
-      341,
-      344,
-      352,
-      407,
-      548,
-      551,
-      555,
-      575,
-      577,
-      584,
-      586,
-      588,
-      591,
-      619,
-      627,
-      630,
-      633,
-      741,
-      742,
-      743,
-      744,
-      747,
-      748,
-      749,
-      750,
-      752,
-      756,
-      757,
-      853
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       12,
-       "L"
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "esi": "ebx",
+       "ebx": "esi"
+      },
+      "region_start": 212,
+      "region_end": 286,
+      "expected_region_instruction_count": 23,
+      "expected_rewritten_offsets": [
+       213,
+       219,
+       255,
+       269,
+       273,
+       278,
+       281,
+       284
       ],
-      [
-       1017,
-       "T"
-      ]
-     ],
+      "expected_instruction_count": 130,
+      "expected_seed_debug_s_sha256": "686ebf5fdbb331f7cadd46af1d46bd7bf725e7adb521c88c191e2c58aea38b28",
+      "expected_image_debug_s_sha256": "b8c3985a88a78e0993f329594f5d91be79eafc505f1d5a200ed8e3e7f5ff5c4a",
+      "debug_s_register_map": [
+       {
+        "name": "name",
+        "record_offset": 249,
+        "donor_register": "esi",
+        "image_register": "ebx"
+       }
+      ],
+      "authenticity_rationale": "A register mirror between compiler-equivalent allocations of the record pointer pair; every byte of the image is the seed body under the proved bijection."
+     },
      "expected_xdata_rename_offsets": [
       8,
       36,
@@ -8670,583 +10670,220 @@
       52,
       60,
       68
-     ]
-    },
-    {
-     "mangled": "??1LegoAnimationManager@@UAE@XZ",
-     "donor": "d_ef778b37e301",
-     "expected_body_sha256": "601b52ff5bb74fad64cd334acd8fb94504140329f6bf2d032b4a803b9bdaec13",
-     "expected_body_length": 330,
-     "expected_changed_offsets": [
-      69,
-      70,
-      71,
-      72,
-      74,
-      76,
-      79,
-      81,
-      85,
-      167,
-      181
      ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
+     "expected_code_rename_symbols": [
       [
        12,
-       "L"
+       "$L82175",
+       "$L82563"
       ],
       [
-       313,
-       "T"
+       436,
+       "$T82295",
+       "$T82683"
       ]
-     ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36
      ]
     },
     {
-     "mangled": "?ReadAnimInfo@LegoAnimationManager@@QAEJPAVLegoStorage@@PAUAnimInfo@@@Z",
-     "donor": "d_3173bd1315cc",
-     "expected_body_sha256": "bbc6b72af732d0f4a679a470c49b0195bd78c92778723131557492596d762773",
-     "expected_body_length": 392,
+     "mangled": "?CameraTriggerFire@LegoAnimationManager@@QAEXPAVLegoPathActor@@EIE@Z",
+     "donor": "d_0003e04e9d35",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 526,
+     "expected_donor_section_number": 526,
+     "expected_section_count": 834,
+     "expected_donor_section_count": 834,
+     "expected_body_length": 341,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 7,
+     "expected_seed_line_count": 18,
+     "expected_donor_line_count": 18,
+     "expected_function_count": 211,
+     "expected_comdat_count": 407,
+     "expected_seed_body_sha256": "07b81c17430aa94b65d7929bad8f1d21602c5b68ffdb59c3c858abe9674c5ea6",
+     "expected_donor_body_sha256": "07b81c17430aa94b65d7929bad8f1d21602c5b68ffdb59c3c858abe9674c5ea6",
+     "expected_body_sha256": "8fa98f56b4ef68300c38c1dd8b83b00270623cd34a39520352bbdc88b312194a",
+     "expected_seed_metadata_sha256": "107d488a559e1dfede0de6234c8e8b1b7b015096b8d868c6c15b12406b776793",
+     "expected_donor_metadata_sha256": "997039cb2a6f453f4c3e2196291f4940e753233e389a67dd28d0de77db13a7d1",
      "expected_changed_offsets": [
-      236,
-      238,
-      246,
-      254,
-      256,
-      258
+      224,
+      225,
+      263,
+      267
      ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?ReadModelInfo@LegoAnimationManager@@QAEJPAVLegoStorage@@PAUModelInfo@@@Z",
-     "donor": "d_eeb034c30c40",
-     "expected_body_sha256": "50c33378a84d2f84befaebfd73bd5d88c4be4a30b7db3e379dde07d177d7266b",
-     "expected_body_length": 172,
-     "expected_changed_offsets": [
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      26,
-      27,
-      28,
-      29,
-      31,
-      50,
-      57,
-      65,
-      69,
-      71,
-      79,
-      87,
-      95,
-      97,
-      105,
-      109,
-      111,
-      119,
-      123,
-      125,
-      133,
-      137,
-      139,
-      147,
-      149,
-      151,
-      153
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
      ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?FUN_100604f0@LegoAnimationManager@@QAEXQAHI@Z",
-     "donor": "d_ef778b37e301",
-     "expected_body_sha256": "a35af4a87bcead6a8edfa5177464acaf6192bbe72247f3c08c745801fa59da26",
-     "expected_body_length": 69,
-     "expected_changed_offsets": [
-      13,
-      17,
-      20,
-      25,
-      30,
-      32,
-      43,
-      45,
-      53,
-      57
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10060eb0",
+      "length": 341,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?Lego@@YAPAVLegoOmni@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 10,
+       "retail_target": "0x10015700"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?GetLocation@LegoNavController@@SAPAULegoLocation@@I@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 53,
+       "retail_target": "0x10055720"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "_rand",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 86,
+       "retail_target": "0x1008b640"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_100617c0@LegoAnimationManager@@AAEJHAAG0@Z",
+       "target_section": 559,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 124,
+       "retail_target": "0x100617c0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_100623a0@LegoAnimationManager@@AAEEAAUAnimInfo@@@Z",
+       "target_section": 641,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 190,
+       "retail_target": "0x100623a0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10062710@LegoAnimationManager@@AAEEAAUAnimInfo@@@Z",
+       "target_section": 675,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 202,
+       "retail_target": "0x10062710"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_100605e0@LegoAnimationManager@@AAEJIEPAVMxMatrix@@EPAVLegoROI@@EEEE@Z",
+       "target_section": 513,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 319,
+       "retail_target": "0x100605e0"
+      }
      ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?StartEntityAction@LegoAnimationManager@@QAEJAAVMxDSAction@@PAVLegoEntity@@@Z",
-     "donor": "d_ef778b37e301",
-     "expected_body_sha256": "a8fba4814437118e6aaba2d6e77ff5ccf6d225b45170692a6731f9569fbc6422",
-     "expected_body_length": 192,
-     "expected_changed_offsets": [
-      83,
-      85,
-      98,
-      102,
-      104,
-      106,
-      114
-     ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?LoadWorldInfo@LegoAnimationManager@@QAEJW4World@LegoOmni@@@Z",
-     "donor": "d_46208d2c51ac",
-     "expected_body_sha256": "9658b167a71b425e104ac0c6be56de7fefdb92b69356ead39d35407272d255d3",
-     "expected_body_length": 1733,
-     "expected_changed_offsets": [
-      107,
-      116,
-      118,
-      122,
-      124,
-      1010,
-      1011,
-      1012,
-      1013,
-      1014,
-      1015,
-      1021,
-      1022,
-      1108,
-      1113,
-      1126,
-      1146,
-      1170,
-      1178,
-      1180,
-      1184,
-      1189
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       12,
-       "L"
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "relational_sites": [
+       {
+        "compare_offset": 223,
+        "branch_offset": 225,
+        "seed_condition": "be",
+        "image_condition": "ae",
+        "expected_rewritten_offsets": [
+         224,
+         225
+        ],
+        "reencode": true
+       },
+       {
+        "compare_offset": 262,
+        "branch_offset": 267,
+        "seed_condition": "be",
+        "image_condition": "ae",
+        "expected_rewritten_offsets": [
+         263,
+         267
+        ]
+       }
       ],
-      [
-       1716,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36,
-      44,
-      52,
-      60,
-      68,
-      76,
-      84,
-      92,
-      100,
-      108,
-      116
-     ]
-    },
-    {
-     "mangled": "?FUN_100617c0@LegoAnimationManager@@AAEJHAAG0@Z",
-     "donor": "d_da1547df0cb0",
-     "expected_body_sha256": "7a1e91c52148df955a249c9bdaa8d0c664004a11f8d110174cf4c2fa00098c82",
-     "expected_body_length": 289,
-     "expected_changed_offsets": [
-      208,
-      209
-     ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?FUN_10063d10@LegoAnimationManager@@AAEXXZ",
-     "donor": "d_3173bd1315cc",
-     "expected_body_sha256": "06a439b7aa7a2583848b3cb876f5c1cf3439e52bd51fd4e401ee88d97c92a810",
-     "expected_body_length": 302,
-     "expected_changed_offsets": [
-      6,
-      7,
-      8,
-      34,
-      42,
-      48,
-      51,
-      53,
-      59,
-      70,
-      79,
-      100,
-      102,
-      113,
-      145,
-      159,
-      285,
-      287
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       179,
-       "T"
-      ],
-      [
-       185,
-       "T"
-      ],
-      [
-       191,
-       "T"
-      ],
-      [
-       212,
-       "T"
-      ],
-      [
-       218,
-       "T"
-      ],
-      [
+      "expected_instruction_count": 113,
+      "expected_changed_offsets": [
        224,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": []
+       225,
+       263,
+       267
+      ],
+      "expected_procedure_range": [
+       341,
+       9,
+       331
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?CameraTriggerFire@LegoAnimationManager@@QAEXPAVLegoPathActor@@EIE@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?CameraTriggerFire@LegoAnimationManager@@QAEXPAVLegoPathActor@@EIE@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?CameraTriggerFire@LegoAnimationManager@@QAEXPAVLegoPathActor@@EIE@Z",
+        0
+       ]
+      ],
+      "expected_external_entries": [],
+      "expected_seed_debug_s_sha256": "132fa3603606cf3f3abf0d276be995be82d81c89e89c6c8b04e444d50d7c207a",
+      "expected_image_debug_s_sha256": "132fa3603606cf3f3abf0d276be995be82d81c89e89c6c8b04e444d50d7c207a",
+      "authenticity_rationale": "Two comparisons carry their operands in the reversed order with mirrored branches; the closed relational table proves each exchange."
+     }
     },
     {
-     "mangled": "?FUN_10064120@LegoAnimationManager@@AAEEPAUBoundary@LegoLocation@@EE@Z",
-     "donor": "d_9ecbc41dc277",
-     "expected_body_sha256": "bd1fa6efd2792dfe4d8320843d44c35416d60c6c897eeb8e56170c38427a0426",
-     "expected_body_length": 594,
+     "mangled": "?FUN_100648f0@LegoAnimationManager@@AAEXPAULegoTranInfo@@J@Z",
+     "donor": "d_da1547df0cb0",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 761,
+     "expected_donor_section_number": 761,
+     "expected_section_count": 834,
+     "expected_donor_section_count": 834,
+     "expected_body_length": 553,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 14,
+     "expected_seed_line_count": 25,
+     "expected_donor_line_count": 25,
+     "expected_function_count": 211,
+     "expected_comdat_count": 407,
+     "expected_seed_body_sha256": "a53d539c0846ad5328ec3b3a0ffa52cd9abaeed83da0f3f3c34e0d9f29721a8d",
+     "expected_donor_body_sha256": "a53d539c0846ad5328ec3b3a0ffa52cd9abaeed83da0f3f3c34e0d9f29721a8d",
+     "expected_body_sha256": "fc329d6aa96c6bf57348113a0b10e8950e05443be7e26cc056a8bc325a492781",
+     "expected_seed_metadata_sha256": "1f7f817e7027677b864980c0506c8c24d4a0ea0e9c6d3ca42ff1dfa10d0b9c21",
+     "expected_donor_metadata_sha256": "59f405a033e147a41f0bee4f99194f01ff12bb03873bed0a1f1590e12281c80a",
      "expected_changed_offsets": [
-      451,
-      489,
-      493,
-      549,
-      558
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       34,
-       "T"
-      ],
-      [
-       40,
-       "T"
-      ],
-      [
-       46,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": []
-    },
-    {
-     "mangled": "?FUN_10064880@LegoAnimationManager@@QAEJPBDHH@Z",
-     "donor": "d_eeb034c30c40",
-     "expected_body_sha256": "56acde105dc693bb96afd2bd76154952d1796aa6cd3900824e499f212e1f6328",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 111,
-     "expected_donor_length": 110,
-     "expected_linked_span": 112
-    },
-    {
-     "mangled": "?InitFromAnims@AnimState@@QAEXIPAUAnimInfo@@I@Z",
-     "donor": "d_3173bd1315cc",
-     "expected_body_sha256": "7d9e58f37b8c99a2cc4535be3bd17d47db5ffb8257ba2c4ab897bd313ef4fabb",
-     "expected_body_length": 138,
-     "expected_changed_offsets": [
-      57,
-      64,
-      69,
-      73,
-      77,
-      84,
-      86,
-      89,
-      91,
-      93
-     ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?Reset@AnimState@@UAEEXZ",
-     "donor": "d_3173bd1315cc",
-     "expected_body_sha256": "f5c11b17d113d39df2bf48cbb75b972a4e4e0e74c88042c0de04448c0b510f59",
-     "expected_body_length": 83,
-     "expected_changed_offsets": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      12,
-      15,
-      20,
-      25,
-      30,
-      34,
-      36
-     ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?AddExtra@LegoAnimationManager@@QAEXHE@Z",
-     "donor": "d_3173bd1315cc",
-     "expected_body_sha256": "495dbc157f4c73d19a0c8d3e202a4f168d1ca5cba55ddc0ccc6567e54402153e",
-     "expected_body_length": 1136,
-     "expected_changed_offsets": [
-      90,
-      98,
-      106,
-      109,
-      114,
-      116,
-      118,
-      122
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       977,
-       "T"
-      ],
-      [
-       983,
-       "T"
-      ],
-      [
-       989,
-       "T"
-      ],
-      [
-       1010,
-       "T"
-      ],
-      [
-       1016,
-       "T"
-      ],
-      [
-       1022,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": []
-    },
-    {
-     "mangled": "?FUN_10062580@LegoAnimationManager@@AAEXAAUAnimInfo@@@Z",
-     "donor": "d_11eccce8f834",
-     "expected_body_sha256": "14a002b2b9545d949f7eb0fdb9aa49db0a77605918acc9b224491057bafe2661",
-     "expected_body_length": 206,
-     "expected_changed_offsets": [
-      11,
-      12,
-      13,
-      14,
-      15,
-      20,
-      64,
-      115,
-      150
-     ],
-     "splice_class": "equal_body_strict"
-    },
-    {
-     "mangled": "?FUN_10064380@LegoAnimationManager@@AAEJPBD0HMHMIHIHM@Z",
-     "donor": "d_11eccce8f834",
-     "expected_body_sha256": "ed5f3d54cb293b053cd22b39265a4a2a385f47059e9126eb044e0fe57f62c88a",
-     "expected_body_length": 746,
-     "expected_changed_offsets": [
-      12,
-      14,
-      58,
-      88,
-      90,
-      110,
-      112,
-      116,
-      122,
-      134,
-      151,
-      158,
-      168,
-      175,
-      183,
-      198,
-      202,
-      228,
-      238,
-      295,
-      313,
-      325,
-      359,
-      362,
-      369,
-      382,
-      386,
-      393,
-      438,
-      510,
-      565,
-      569,
-      576,
-      621,
-      625,
-      632,
-      704,
-      705,
-      706,
-      707,
-      710,
-      711,
-      712,
-      713,
-      716,
-      717,
-      718,
-      719,
-      722
-     ],
-     "splice_class": "equal_body_eh_reloc_layout",
-     "expected_relocation_moves": [
-      [
-       706,
-       707
-      ],
-      [
-       712,
-       713
-      ],
-      [
-       718,
-       719
-      ]
-     ],
-     "expected_xdata_rename_offsets": []
-    },
-    {
-     "mangled": "?Tickle@LegoAnimationManager@@UAEJXZ",
-     "donor": "d_892a7e395c44",
-     "expected_body_sha256": "e8b2ece54eb7a9658d3f345b68b19fc5fe3b4095dbd1f9786c2c0406c94a27e6",
-     "expected_body_length": 1095,
-     "expected_changed_offsets": [
-      420,
-      421,
-      422,
-      423,
-      424,
-      425,
-      426,
-      427,
-      428,
-      433,
-      435,
-      441,
-      442,
-      443,
-      444,
-      445,
-      446,
-      447,
-      448,
-      449,
-      454,
-      456,
-      594,
-      597,
-      599,
-      603,
-      631,
-      654,
-      700,
-      719
-     ],
-     "splice_class": "equal_body_eh_reloc_layout",
-     "expected_relocation_moves": [
-      [
-       421,
-       425
-      ],
-      [
-       442,
-       446
-      ]
-     ],
-     "expected_xdata_rename_offsets": []
-    },
-    {
-     "mangled": "?FUN_10062110@LegoAnimationManager@@AAEGPAVLegoROI@@AAVVector3@@1PAVLegoPathBoundary@@MEE@Z",
-     "donor": "d_b947f8fa52f1",
-     "expected_body_sha256": "c5bf3f2a9eab7ebf6bcf1fac6f3042755452eb2c21f0fe0ea953dce943d9c705",
-     "expected_body_length": 592,
-     "expected_changed_offsets": [
-      219,
-      223,
-      227,
-      230,
-      232,
-      233,
-      234,
-      235,
-      240,
-      241,
-      242,
-      243,
-      410,
-      414,
-      415,
-      421,
-      430,
-      434,
-      437,
-      440,
-      442,
-      457
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       151,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": []
-    },
-    {
-     "mangled": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
-     "donor": "d_51a894016b80",
-     "expected_body_sha256": "bc020d8dbf54db1aebec21a9d5bf907479f7042d0d42709cc13b9dd72ebddfff",
-     "expected_body_length": 912,
-     "expected_changed_offsets": [
-      21,
-      27,
-      34,
-      37,
-      38,
-      39,
       40,
       41,
       42,
@@ -9262,32 +10899,379 @@
       52,
       53,
       54,
+      55,
+      56,
       57,
       58,
-      500,
-      506,
-      527,
-      535,
-      815,
-      838,
-      846,
-      857,
-      870,
-      873,
-      875,
-      877,
-      884,
-      887,
-      891
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      68
      ],
-     "splice_class": "equal_body_eh_reloc_layout",
-     "expected_relocation_moves": [
-      [
-       38,
-       55
-      ]
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
      ],
-     "expected_xdata_rename_offsets": []
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100648f0",
+      "length": 553,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?VideoManager@@YAPAVLegoVideoManager@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 81,
+       "retail_target": "0x10015720"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?UserActor@@YAPAVLegoPathActor@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 110,
+       "retail_target": "0x10015790"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?NavController@@YAPAVLegoNavController@@XZ",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 138,
+       "retail_target": "0x10015780"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?GetLocation@LegoNavController@@SAPAULegoLocation@@I@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 148,
+       "retail_target": "0x10055720"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Vector3@@6B@",
+       "target_section": 691,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 177,
+       "retail_target": "0x100d4518"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?CalcLocalTransform@@YAXABVVector3@@00AAVMatrix4@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 230,
+       "retail_target": "0x100a5b40"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 764,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 306,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx4DPointFloat@@6B@",
+       "target_section": 160,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 322,
+       "retail_target": "0x100d41e8"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 764,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 334,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx4DPointFloat@@6B@",
+       "target_section": 160,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 347,
+       "retail_target": "0x100d41e8"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??4Vector3@@QAEAAV0@ABV0@@Z",
+       "target_section": 767,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 352,
+       "retail_target": "0x10010be0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??4Mx4DPointFloat@@QAEAAV0@ABV0@@Z",
+       "target_section": 770,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 400,
+       "retail_target": "0x10064b20"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 596,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 507,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?SetWorldVelocity@OrientableROI@@QAEXABVVector3@@@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 539,
+       "retail_target": "0x100a5a30"
+      }
+     ],
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "simulated_region_rewrites": [
+       {
+        "region_start": 40,
+        "region_end": 69,
+        "target_order": [
+         3,
+         1,
+         2,
+         4,
+         0
+        ],
+        "field_rewrites": [],
+        "dead_registers": [],
+        "dead_slots": [],
+        "expected_rewritten_offsets": [
+         40,
+         41,
+         42,
+         43,
+         44,
+         45,
+         46,
+         47,
+         48,
+         49,
+         50,
+         51,
+         52,
+         53,
+         54,
+         55,
+         56,
+         57,
+         58,
+         59,
+         60,
+         61,
+         62,
+         63,
+         64,
+         65,
+         66,
+         68
+        ],
+        "relocation_reseat": []
+       }
+      ],
+      "expected_instruction_count": 160,
+      "expected_changed_offsets": [
+       40,
+       41,
+       42,
+       43,
+       44,
+       45,
+       46,
+       47,
+       48,
+       49,
+       50,
+       51,
+       52,
+       53,
+       54,
+       55,
+       56,
+       57,
+       58,
+       59,
+       60,
+       61,
+       62,
+       63,
+       64,
+       65,
+       66,
+       68
+      ],
+      "expected_procedure_range": [
+       553,
+       9,
+       543
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?FUN_100648f0@LegoAnimationManager@@AAEXPAULegoTranInfo@@J@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?FUN_100648f0@LegoAnimationManager@@AAEXPAULegoTranInfo@@J@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?FUN_100648f0@LegoAnimationManager@@AAEXPAULegoTranInfo@@J@Z",
+        0
+       ]
+      ],
+      "expected_external_entries": [],
+      "expected_seed_debug_s_sha256": "a713a195e78fdbb92947b0a3114633eb3fdac3a53281db7b25172d352ce4e3f4",
+      "expected_image_debug_s_sha256": "a713a195e78fdbb92947b0a3114633eb3fdac3a53281db7b25172d352ce4e3f4",
+      "authenticity_rationale": "Five independent field initialisations are emitted in a different order, proved by symbolic execution over the tracked frame and object slots."
+     }
+    },
+    {
+     "mangled": "?CopyToAnims@AnimState@@QAEXIPAUAnimInfo@@AAI@Z",
+     "donor": "d_31e36d131642",
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 822,
+     "expected_section_count": 834,
+     "expected_body_length": 98,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 1,
+     "expected_seed_line_count": 12,
+     "expected_donor_line_count": 12,
+     "expected_function_count": 211,
+     "expected_comdat_count": 407,
+     "expected_seed_body_sha256": "6e332f588844147d4d31d41dce6acc71c9a8db70355f1186da93232a3134f75c",
+     "expected_donor_body_sha256": "6e332f588844147d4d31d41dce6acc71c9a8db70355f1186da93232a3134f75c",
+     "expected_body_sha256": "9bf2e6dc58dffa609a1dd15bf2f3bcb3cc6763210cc5f7b6fbbdcb9fe67cf462",
+     "expected_seed_metadata_sha256": "1697f72ddd3faf1572a28457945e5e612cac16cc234482b8044eeb14ca1ceda3",
+     "expected_donor_metadata_sha256": "77b07eddf4072fc4ddf932dda40d22b5da0d6160b19c85a3983e0d9787d43f4f",
+     "expected_changed_offsets": [
+      12,
+      19,
+      23,
+      37,
+      41,
+      43,
+      45
+     ],
+     "expected_code_renames": [],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x100651d0",
+      "length": 98,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?GetLocation@LegoNavController@@SAPAULegoLocation@@I@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 67,
+       "retail_target": "0x10055720"
+      }
+     ],
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "ecx": "edx",
+       "edx": "ecx"
+      },
+      "region_start": 11,
+      "region_end": 49,
+      "expected_region_instruction_count": 13,
+      "expected_rewritten_offsets": [
+       12,
+       19,
+       23,
+       37,
+       41,
+       43,
+       45
+      ],
+      "expected_instruction_count": 39,
+      "expected_seed_debug_s_sha256": "02069ea45f45f91aeea0f571a28da7e2f4a365a21f4add4296e103cd93767d3a",
+      "expected_image_debug_s_sha256": "73ee04f7c45c3eaccc06823cab55790401e24eeca7eb8fda88a96847d8b318ff",
+      "debug_s_register_map": [
+       {
+        "name": "i",
+        "record_offset": 154,
+        "donor_register": "edx",
+        "image_register": "ecx"
+       }
+      ],
+      "authenticity_rationale": "A register mirror between compiler-equivalent allocations of the copy loop counter pair; every byte of the image is the seed body under the proved bijection."
+     }
     }
    ],
    "completion": {
@@ -44434,8 +46418,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4933,
-    "accepted_row_identity_sha256": "8782dd5ef2722158e47b5097dd72ad3b8e4558172ce0d47211d83ba1736c3fd7",
+    "exact_raw_1_0_count": 4934,
+    "accepted_row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",
@@ -47448,9 +49432,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-    "clean": "433d3bec9baf53c8dea1f14cd568bf624e6de5bad3d55f1b40c31c38464b5e65",
-    "effective": "69e46b8b4dd2dee13a80a0c0a22fc66aa638457f2a2a60e76d21ca07f7f98436",
-    "size": 75708,
+    "clean": "f27b4cee688c180dbe618f73f642568d90cff6ee9a0eb85a82268d8f550640b9",
+    "effective": "1c1727a4d521bcb05239db274a61f89a85f36994a79bb73d6ab54d7806d8cb91",
+    "size": 76027,
     "ops": [
      {
       "op": "insert",
@@ -48095,6 +50079,28 @@
           "rkzZZ0_0"
          ],
          "line": 12
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "9a4442acca84614f39d975c73b3ad1e9c3def1ad2e288a6e31fbbc2141547e52",
+       "line_before": "16a179aee3eb4b57dadbda2eb4f261e91c17415f6c8fb2bca1578b030a3c543e",
+       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 8,
+       "items": [
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecVE",
+         "first": 0,
+         "count": 8,
+         "line": 1,
+         "width": 1
         }
        ]
       }

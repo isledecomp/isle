@@ -459,13 +459,22 @@ class DeliberateRefusalTests(unittest.TestCase):
         with self.assertRaises(byte_identity.ByteIdentityError):
             byte_identity.decode_ia32_bijection_body(body, "zeros")
 
-    def test_movzx_and_movsx_from_a_byte_source_stay_refused(self):
-        """`0F B6`/`0F BE` have a 32-bit destination field and an 8-bit
-        source field.  One `width` cannot describe both, and offering the
-        r/m8 field for rewriting would be a bijection applied to AL..BH."""
-        for encoding in ("0fb6c0", "0fbec0", "0fb64608", "0fbe06"):
-            self.assertIn("outside the register-bijection table",
-                          refusal(self, encoding))
+    def test_movzx_and_movsx_from_a_byte_source_are_admitted_asymmetrically(self):
+        """`0F B6`/`0F BE` became load-bearing on 2026-08-22: Tickle's
+        mirror region decodes one.  The 32-bit destination field is
+        rewritable and kills; the r/m8 source is a frozen AL..BH field,
+        recorded through the form's `rm_width`; a memory source freezes
+        nothing (its base and index are 32-bit address registers)."""
+        decoded = decode("0fbec3")          # movsx eax, bl
+        self.assertEqual(decoded["writes"], frozenset({"eax"}))
+        self.assertEqual(decoded["frozen"], frozenset({"ebx"}))
+        self.assertEqual(sorted(decoded["fields"]), [(2, 3)])
+        self.assertIn("ebx.l", decoded["read_atoms"])
+        decoded = decode("0fb64608")        # movzx eax, byte [esi+8]
+        self.assertEqual(decoded["writes"], frozenset({"eax"}))
+        self.assertEqual(decoded["frozen"], frozenset())
+        self.assertIn("esi.w", decoded["read_atoms"])
+        self.assertEqual(sorted(decoded["fields"]), [(2, 0), (2, 3)])
 
     def test_the_word_source_move_extends_are_still_admitted(self):
         """`0F B7`/`0F BF` are the siblings that DO work: a mod 3 r/m16 is
@@ -567,10 +576,11 @@ class TableIntegrityTests(unittest.TestCase):
     def test_the_admitted_table_matches_its_hardware_verified_digest(self):
         self.assertEqual(
             self.digest(),
-            # Re-pinned 2026-08-22 for the deliberate SETcc admission; every
-            # prior row of the corpus digests identically (only the sixteen
-            # 0F 90..9F rows moved from refused to decoded).
-            "5dc6ba5b570ae6cf8dba4118ee7f0b9fed4d9c5b5fd0eac1b1b2c6b209501e10")
+            # Re-pinned 2026-08-22 (second pin that day) for the deliberate
+            # byte-source MOVZX/MOVSX admission (0F B6/0F BE, asymmetric
+            # rm_width); the prior pin was the SETcc admission.  Every other
+            # row of the corpus digests identically.
+            "7339e65b9630ffd6dcf5ee5a2eafe74269be97317439d26a4d5f3fbb242cb0cd")
 
     def test_the_corpus_covers_every_admitted_opcode(self):
         admitted = set()

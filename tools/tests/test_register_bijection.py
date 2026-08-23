@@ -359,18 +359,24 @@ class RegisterBijectionImageTests(unittest.TestCase):
         self.assertEqual(image[11:13], bytes.fromhex("3b1d"))
 
     def test_refuses_a_bijection_that_cannot_preserve_a_length(self):
-        """EBP/ESP encodings carry ModRM/SIB structure.
+        """ESP encodings carry ModRM/SIB structure and stay refused.
 
-        `mov ebx, [_Nil]` is `8b 1d D32`; renaming EBX to EBP would turn
-        `mov ebx, [ebx]` into a disp32 form and `[esp]` into a SIB form, so
-        every such mapping is refused before a single byte is rewritten.
+        EBP became admissible on 2026-08-23 (AddExtra's frame-pointer-free
+        mirror needs it): its mapping proceeds to the ordinary obligations,
+        where this fixture refuses on liveness -- and any rewrite that WOULD
+        change an instruction's length ([ebp]'s mod-00 quirk) is refused by
+        the image re-decode grid instead of being emitted.
         """
-        for mapping in ({"ebx": "ebp", "ebp": "ebx"},
-                        {"esi": "esp", "esp": "esi"}):
-            with self.assertRaises(byte_identity.ByteIdentityError) as caught:
-                byte_identity.apply_register_bijection(
-                    BODY, mapping, REGION, relocation_set(), "fixture")
-            self.assertIn("ESP or EBP", str(caught.exception))
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                BODY, {"esi": "esp", "esp": "esi"}, REGION,
+                relocation_set(), "fixture")
+        self.assertIn("ESP", str(caught.exception))
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_register_bijection(
+                BODY, {"ebx": "ebp", "ebp": "ebx"}, REGION,
+                relocation_set(), "fixture")
+        self.assertIn("live on entry", str(caught.exception))
 
     def test_refuses_an_instruction_with_an_implicit_operand(self):
         """CDQ writes EDX and IDIV reads/writes EDX:EAX implicitly.
@@ -416,7 +422,7 @@ class RegisterBijectionImageTests(unittest.TestCase):
         """Widening a group does not admit the members it did not name."""
         for encoding, name in ((b"\xf6\xe1", "mul r/m8"),
                                (b"\xff\xe8", "far jmp"),
-                               (b"\x0f\xb6\xc1", "movzx r32, r/m8"),
+                               (b"\x0f\xaf\xc1", "imul r32, r/m32"),
                                (b"\xaa\x90", "stosb")):
             body = (bytes.fromhex("53" "8b0d00000000") + encoding
                     + bytes.fromhex("e800000000" "5b" "c3"))

@@ -1089,6 +1089,15 @@ class ByteIdentityTests(unittest.TestCase):
                 ),
                 "keep_compile_debug": "/Zi",
                 "max_child_seconds": 3,
+                "codegen_path_contract": {
+                    "schema": "msvc42_arena_path_length_v1",
+                    "rationale": "fixture seats: the fixture's pins were "
+                                 "measured under these exact roots",
+                    "source_root": str(self.source_dir.resolve()),
+                    "build_root": str(self.build_dir.resolve()),
+                    "compiler": str(byte_identity.lexical_absolute_path(
+                        self.compiler)),
+                },
                 "compiler_root_parent_levels": 2,
                 "compiler_support_files": [
                     {
