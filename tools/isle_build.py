@@ -1374,6 +1374,21 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                 probe = (build.parent / "donors"
                          / f"{marker.stem}-{donor['id']}")
                 probe.mkdir(parents=True, exist_ok=True)
+                # Same obligation the seed compile carries, for the same
+                # reason: MSVC 4.2 /Zi type indices depend on what the PDB
+                # already holds, so a donor compiled into a REUSED probe
+                # directory emits different .debug$S/.debug$T bytes -- and
+                # therefore a different pinned metadata digest -- from the
+                # identical compile in a fresh one.  The cross-TU and
+                # Extension A branches rmtree their probe; this one is
+                # reused, so unlink the by-products explicitly.  Without
+                # this, a *_metadata_sha256 pin records whatever the
+                # directory happened to hold and a cold checkout cannot
+                # reproduce it.
+                for stale in ("o.obj", "o.pdb"):
+                    leftover = probe / stale
+                    if leftover.exists():
+                        leftover.unlink()
                 shadow_bytes = donor_source_path.read_bytes()
                 if placement == "prefix_forward_after_includes_extern":
                     rendered_source = (

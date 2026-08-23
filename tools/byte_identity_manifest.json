@@ -9909,7 +9909,7 @@
      "expected_donor_body_sha256": "d67ac225978542948fa2488bd675a6562bed978855ffc8dcddbad16b140ffdcb",
      "expected_body_sha256": "98d4478db59e6702b4d625a4341d69b248bedd5b11d5ee41d3c9dbcca8645d4c",
      "expected_seed_metadata_sha256": "62c30368e5e17e4f21cd2080e404645d3a07621ec710696b85e1c9ff02b0efd4",
-     "expected_donor_metadata_sha256": "761c741705c77d869fda33e5230223e75e375ec9d0e2137a8bd386d150799652",
+     "expected_donor_metadata_sha256": "bfcdfc1828c1ffda2f1c4516652cfb2fcf7d9694b2fc50985d3c8c7e402c1a90",
      "expected_changed_offsets": [
       213,
       219,
@@ -10224,7 +10224,7 @@
      "expected_donor_body_sha256": "07b81c17430aa94b65d7929bad8f1d21602c5b68ffdb59c3c858abe9674c5ea6",
      "expected_body_sha256": "8fa98f56b4ef68300c38c1dd8b83b00270623cd34a39520352bbdc88b312194a",
      "expected_seed_metadata_sha256": "107d488a559e1dfede0de6234c8e8b1b7b015096b8d868c6c15b12406b776793",
-     "expected_donor_metadata_sha256": "997039cb2a6f453f4c3e2196291f4940e753233e389a67dd28d0de77db13a7d1",
+     "expected_donor_metadata_sha256": "5d5598519fc90fdfb256ef93a556a5b9967cd88c0b0129e69277560f49b8a509",
      "expected_changed_offsets": [
       224,
       225,
