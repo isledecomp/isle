@@ -13036,7 +13036,7 @@
    },
    "donors": [
     {
-     "id": "d_613e82f21601",
+     "id": "d_e0364d1e12cf",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -13047,7 +13047,7 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-        "clean_sha256": "7ab03caf1e9093306072edc9d4d648a07bbcb99e04cca12d22d8da9db0130bf3",
+        "clean_sha256": "26914ebb45e68a756bb742bd6e15e3f13f1d9ba16b420a62675de12783e22c9b",
         "rendered_sha256": "b139d1413c56ecf17a945474821f5b4ead807eb4506f40c0d7d89d674bacdbd6",
         "operations": [
          {
@@ -13089,7 +13089,7 @@
       "canonical_overlay_replay": "owning_translation_unit_v1",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "A typed fixed-array shuffle compiles a pointer countdown over the same pinned array extent; only authenticated complete target instructions may supplement the seed object, whose metadata and all non-target bytes remain authoritative.",
-      "rendering_identity_sha256": "613e82f21601cbcd402434a74805e45b6491dc88e45f8957bc0297872678c5bc"
+      "rendering_identity_sha256": "e0364d1e12cf7f5eaa0750215fd9885501f5b093b5d2f7cd9af22a2edb822578"
      }
     },
     {
@@ -13114,7 +13114,7 @@
    "functions": [
     {
      "mangled": "?DissolveTransition@MxTransitionManager@@AAEXXZ",
-     "donor": "d_613e82f21601",
+     "donor": "d_e0364d1e12cf",
      "splice_class": "retail_exact_source_equal_body",
      "expected_section_number": 55,
      "expected_section_count": 79,
@@ -30845,7 +30845,7 @@
    },
    "donors": [
     {
-     "id": "d_d7e9aacdf068",
+     "id": "d_2021227204a9",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -30856,7 +30856,7 @@
       "renderings": [
        {
         "path": "LEGO1/omni/src/stream/mxdsbuffer.cpp",
-        "clean_sha256": "a8b32a03f348cc3023337b38bd541ae6d6424beaf10bc66a1b543d181eff1cfa",
+        "clean_sha256": "ecf78cd234dc18ee1534cd40320cbeed5847d1305c48caa91d42ee7a4b3e874a",
         "rendered_sha256": "9535f9e21f9dee42f1f962bcd01d952db00316820fe8d54464ce5a476cd4c140",
         "operations": [
          {
@@ -30902,52 +30902,52 @@
           },
           "gen": {
            "k": "seq",
-           "lines": 11,
+           "lines": 10,
            "items": [
             {
              "k": "lines",
-             "n": 2,
+             "n": 1,
              "line": 1
             },
             {
              "k": "empty_class",
              "id": "RkC0",
-             "line": 3
+             "line": 2
             },
             {
              "k": "empty_class",
              "id": "RkC1",
-             "line": 4
+             "line": 3
             },
             {
              "k": "empty_class",
              "id": "RkC2",
-             "line": 5
+             "line": 4
             },
             {
              "k": "empty_class",
              "id": "RkC3",
-             "line": 6
+             "line": 5
             },
             {
              "k": "empty_class",
              "id": "RkC4",
-             "line": 7
+             "line": 6
             },
             {
              "k": "empty_class",
              "id": "RkC5",
-             "line": 8
+             "line": 7
             },
             {
              "k": "empty_class",
              "id": "RkC6",
-             "line": 9
+             "line": 8
             },
             {
              "k": "empty_class",
              "id": "RkC7",
-             "line": 10
+             "line": 9
             }
            ]
           }
@@ -31050,14 +31050,14 @@
       ],
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "A typed captured-pointer tail-return refactor compiles the same logic privately; only its authenticated same-function instruction sequence may supplement the seed object.",
-      "rendering_identity_sha256": "d7e9aacdf068359399be28bc35f0165d5b51f16874624cbc1d18e1ee0975685c"
+      "rendering_identity_sha256": "2021227204a97c8336c881358ad2b54b40762864d671f363838f516aa90c3f7b"
      }
     }
    ],
    "functions": [
     {
      "mangled": "?FUN_100c6fa0@MxDSBuffer@@QAEPAEPAE@Z",
-     "donor": "d_d7e9aacdf068",
+     "donor": "d_2021227204a9",
      "splice_class": "retail_exact_instruction_mosaic",
      "expected_section_number": 72,
      "expected_section_count": 81,
@@ -54618,7 +54618,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
-    "clean": "7ab03caf1e9093306072edc9d4d648a07bbcb99e04cca12d22d8da9db0130bf3",
+    "clean": "26914ebb45e68a756bb742bd6e15e3f13f1d9ba16b420a62675de12783e22c9b",
     "effective": "86c4bdd31cbdc2bae7db761a481f1230e5d8fe49d2061976ba322d6a3b789c41",
     "size": 15861,
     "ops": [
@@ -54735,27 +54735,27 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 6,
+       "lines": 5,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "RkC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "empty_class",
          "id": "RkC1",
-         "line": 4
+         "line": 3
         },
         {
          "k": "empty_class",
          "id": "RkC2",
-         "line": 5
+         "line": 4
         }
        ]
       }
@@ -67956,7 +67956,7 @@
    },
    {
     "path": "LEGO1/omni/src/stream/mxdsbuffer.cpp",
-    "clean": "a8b32a03f348cc3023337b38bd541ae6d6424beaf10bc66a1b543d181eff1cfa",
+    "clean": "ecf78cd234dc18ee1534cd40320cbeed5847d1305c48caa91d42ee7a4b3e874a",
     "effective": "06199991151200e8907af46396418b245ce2e7442102fae34f9d0d56ef3e2fec",
     "size": 12772,
     "ops": [
@@ -68003,52 +68003,52 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 11,
+       "lines": 10,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "RkC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "empty_class",
          "id": "RkC1",
-         "line": 4
+         "line": 3
         },
         {
          "k": "empty_class",
          "id": "RkC2",
-         "line": 5
+         "line": 4
         },
         {
          "k": "empty_class",
          "id": "RkC3",
-         "line": 6
+         "line": 5
         },
         {
          "k": "empty_class",
          "id": "RkC4",
-         "line": 7
+         "line": 6
         },
         {
          "k": "empty_class",
          "id": "RkC5",
-         "line": 8
+         "line": 7
         },
         {
          "k": "empty_class",
          "id": "RkC6",
-         "line": 9
+         "line": 8
         },
         {
          "k": "empty_class",
          "id": "RkC7",
-         "line": 10
+         "line": 9
         }
        ]
       }

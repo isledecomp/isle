@@ -9,6 +9,7 @@
 #include "mxstreamcontroller.h"
 #include "mxstreamer.h"
 #include "mxstreamprovider.h"
+
 DECOMP_SIZE_ASSERT(MxDSBuffer, 0x34);
 
 // FUNCTION: LEGO1 0x100c6470

@@ -11,6 +11,7 @@
 #include "mxparam.h"
 #include "mxticklemanager.h"
 #include "mxvideopresenter.h"
+
 DECOMP_SIZE_ASSERT(MxTransitionManager, 0x900)
 
 // GLOBAL: LEGO1 0x100f4378
