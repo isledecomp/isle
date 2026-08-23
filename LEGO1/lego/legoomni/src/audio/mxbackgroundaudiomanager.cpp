@@ -1,5 +1,13 @@
 #include "mxbackgroundaudiomanager.h"
 
+// These two must be parsed in this order and before the rest: it decides
+// which of Tgl::Constant::Pi and rotateIndex[] this unit seats first in its
+// .rdata constant pool.
+// clang-format off
+#include "mxgeometry/mxmatrix.h"
+#include "tgl/tglvector.h"
+// clang-format on
+
 #include "legomain.h"
 #include "misc.h"
 #include "mxaudiopresenter.h"
