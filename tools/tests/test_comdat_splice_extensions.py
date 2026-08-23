@@ -2954,6 +2954,60 @@ class DonorSourceOverlayTests(unittest.TestCase):
                                     "donor object"):
             byte_identity.validate_donor_object_excluded(donor, [donor])
 
+    def test_force_included_shape_carrier_is_closed_and_seats_no_text(self):
+        """The seatless carrier: pinned shape, no byte of the rendering moves."""
+        shape = byte_identity.entropy_generator.generate_shape(
+            3, 12).encode("ascii")
+        carrier = {
+            "kind": "force_included_shape_v1",
+            "placement": "force_include_v1",
+            "classes": 3,
+            "functions": 12,
+            "generated_declarations_sha256": hashlib.sha256(
+                shape).hexdigest(),
+        }
+        normalized = (
+            byte_identity.validate_donor_source_compiler_state_carrier(
+                carrier, "fixture.carrier")
+        )
+        self.assertEqual(normalized["classes"], 3)
+        self.assertEqual(normalized["functions"], 12)
+        self.assertEqual(normalized["placement"], "force_include_v1")
+
+        unit = b"int fixture;\n"
+        self.assertEqual(
+            byte_identity.render_donor_source_compiler_state_carrier(
+                unit, normalized),
+            unit,
+        )
+
+        recipe = self._recipe(compiler_state_carrier=carrier)
+        self.assertEqual(
+            byte_identity.donor_source_overlay_force_include_payload(recipe),
+            shape,
+        )
+        self.assertIsNone(
+            byte_identity.donor_source_overlay_force_include_payload(
+                self._recipe()))
+
+        for key, value in (
+            ("generated_declarations_sha256", "0" * 64),
+            ("placement", "prefix"),
+            ("classes", 0),
+            ("functions", 0),
+        ):
+            bad = copy.deepcopy(carrier)
+            bad[key] = value
+            with self.subTest(key=key), self.assertRaises(
+                    byte_identity.ByteIdentityError):
+                byte_identity.validate_donor_source_compiler_state_carrier(
+                    bad, "fixture.carrier")
+        extra = copy.deepcopy(carrier)
+        extra["prefix"] = "MxUnkRec"
+        with self.assertRaises(byte_identity.ByteIdentityError):
+            byte_identity.validate_donor_source_compiler_state_carrier(
+                extra, "fixture.carrier")
+
     def test_rejects_final_source_component_symlink(self):
         payload = b"int source_overlay_fixture;\n"
         with tempfile.TemporaryDirectory() as temporary:

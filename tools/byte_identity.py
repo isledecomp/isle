@@ -25136,6 +25136,17 @@ DONOR_SOURCE_CARRIER_SEATS = {
 }
 
 
+# The seatless half of the same vocabulary: a carrier that changes no byte of
+# the rendered translation unit and is force-included ahead of it instead.
+# The shape is the framework's own declaration-only entropy shape -- classes
+# of inline void members that are never called -- so it emits no code, data,
+# strings, vtables or linker directives, exactly as the `declaration_shape`
+# recipe's force-included carrier does.
+DONOR_SOURCE_FORCE_INCLUDE_CARRIERS = {
+    "force_included_shape_v1": "force_include_v1",
+}
+
+
 def validate_donor_source_compiler_state_carrier(
     value: object, context: str,
 ) -> dict:
@@ -25151,6 +25162,38 @@ def validate_donor_source_compiler_state_carrier(
     """
     require(isinstance(value, dict), f"{context} must be an object")
     kind = value.get("kind")
+    if kind in DONOR_SOURCE_FORCE_INCLUDE_CARRIERS:
+        placement = DONOR_SOURCE_FORCE_INCLUDE_CARRIERS[kind]
+        exact_audit_keys(value, {
+            "kind", "placement", "classes", "functions",
+            "generated_declarations_sha256",
+        }, context)
+        require(value.get("placement") == placement,
+                f"{context} kind or placement differs")
+        classes = require_exact_int(
+            value.get("classes"), context + ".classes",
+            minimum=1, maximum=64,
+        )
+        functions = require_exact_int(
+            value.get("functions"), context + ".functions",
+            minimum=1, maximum=4096,
+        )
+        try:
+            generated = entropy_generator.generate_shape(
+                classes, functions).encode("ascii")
+        except ValueError as error:
+            raise ByteIdentityError(
+                f"{context} declaration shape is invalid: {error}"
+            ) from error
+        require(
+            require_sha(value.get("generated_declarations_sha256"),
+                        context + ".generated_declarations_sha256")
+            == sha256_bytes(generated),
+            f"{context} generated declarations differ from their pin",
+        )
+        return {"kind": kind, "placement": placement, "classes": classes,
+                "functions": functions,
+                "generated_declarations_sha256": sha256_bytes(generated)}
     require(kind in DONOR_SOURCE_CARRIER_SEATS,
             f"{context} kind or placement differs")
     placement, roles = DONOR_SOURCE_CARRIER_SEATS[kind]
@@ -25212,6 +25255,12 @@ def render_donor_source_compiler_state_carrier(
 ) -> bytes:
     """Seat a validated declaration-only carrier at its exact seats."""
     kind = carrier["kind"]
+    if kind in DONOR_SOURCE_FORCE_INCLUDE_CARRIERS:
+        require(carrier["placement"]
+                == DONOR_SOURCE_FORCE_INCLUDE_CARRIERS[kind],
+                "donor source compiler-state carrier differs")
+        # Force-included ahead of the unit: the rendered text is untouched.
+        return data
     require(kind in DONOR_SOURCE_CARRIER_SEATS
             and carrier["placement"]
             == DONOR_SOURCE_CARRIER_SEATS[kind][0],
@@ -25246,6 +25295,30 @@ def render_donor_source_compiler_state_carrier(
         runs["pre"] + lines[:insert_at] + runs["post"]
         + lines[insert_at:] + runs["eof"]
     )
+
+
+def donor_source_overlay_force_include_payload(recipe: object) -> bytes | None:
+    """The bytes a donor recipe's force-included carrier stages, if any.
+
+    Extension A's donors stage their private renderings as files the compile
+    can see; a force-include carrier is the one piece of donor-private
+    compiler state that is not part of the rendered text, so the build asks
+    for it separately and seats it with /FI.  Returns None when the recipe
+    carries no such carrier, so the ordinary path is unchanged.
+    """
+    if not isinstance(recipe, dict):
+        return None
+    carrier = recipe.get("compiler_state_carrier")
+    if not isinstance(carrier, dict):
+        return None
+    if carrier.get("kind") not in DONOR_SOURCE_FORCE_INCLUDE_CARRIERS:
+        return None
+    validated = validate_donor_source_compiler_state_carrier(
+        carrier, "donor source overlay compiler-state carrier"
+    )
+    return entropy_generator.generate_shape(
+        validated["classes"], validated["functions"]
+    ).encode("ascii")
 
 
 def render_donor_source_overlay(

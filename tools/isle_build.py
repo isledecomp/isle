@@ -1177,6 +1177,19 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                                     parents=True, exist_ok=True
                                 )
                                 projected.write_bytes(payload)
+                    # The one piece of donor-private compiler state that is
+                    # not part of the rendered text: a force-included
+                    # declaration-only shape, staged beside the rendering and
+                    # seated on this compile alone (A6c), exactly as the
+                    # ordinary carrier recipes seat theirs.
+                    carrier_payload = (
+                        byte_identity
+                        .donor_source_overlay_force_include_payload(recipe)
+                    )
+                    force_include = []
+                    if carrier_payload is not None:
+                        (probe / "run.h").write_bytes(carrier_payload)
+                        force_include = ["/FIrun.h"]
                     define = recipe["compile_lane"]["required_define"]
                     lane_entry = lane(
                         lambda command: f"-D{define}" in shlex.split(command),
@@ -1207,6 +1220,7 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                                     f"{token[:2]}{private_shadow / relative}"
                                 )
                         if token.startswith(("/Fo", "-Fo")):
+                            donor_command.extend(force_include)
                             donor_command.append("/Foo.obj")
                             continue
                         if token.startswith(("/Fd", "-Fd")):

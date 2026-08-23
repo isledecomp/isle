@@ -39352,7 +39352,7 @@
   {
    "target": "viewmanager",
    "source": "LEGO1/viewmanager/viewlodlist.cpp",
-   "source_sha256": "81db6c0c32353794a44d84448752bfa41fcab7dec053c86a560ff0b7c1f5b962",
+   "source_sha256": "e46f94a9b4b997143d83f8a2046583cb6c229e0a803a7d4cdd3d665f03af44ff",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -39368,70 +39368,1488 @@
    },
    "donors": [
     {
-     "id": "d_9a9237af6ead",
+     "id": "d_d4ed398c1dde",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "after_includes",
-      "prefix": "MxUnkRecVB",
-      "count": 21,
-      "width": 3,
-      "generated_header_sha256": "9a9237af6ead32d8f53f1a819f540e4b9856280840751e0b0496d8dc933d5e8f",
+      "kind": "donor_source_overlay",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated forward-declaration run seated immediately after the translation unit's last #include; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+      "renderings": [
+       {
+        "path": "LEGO1/viewmanager/viewlodlist.cpp",
+        "clean_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
+        "rendered_sha256": "81db6c0c32353794a44d84448752bfa41fcab7dec053c86a560ff0b7c1f5b962",
+        "operations": [
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 12,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord000",
+             "line": 5
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord001",
+             "line": 6
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord002",
+             "line": 7
+            },
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecord",
+             "first": 3,
+             "count": 4,
+             "line": 8,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "b": 16,
+           "at": "before_token"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 83,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "class",
+             "id": "QqP0",
+             "members": [
+              "qqp0a",
+              "qqp0b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 3
+            },
+            {
+             "k": "class",
+             "id": "QqP1",
+             "members": [
+              "qqp1a",
+              "qqp1b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 8
+            },
+            {
+             "k": "class",
+             "id": "QqP2",
+             "members": [
+              "qqp2a",
+              "qqp2b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 13
+            },
+            {
+             "k": "class",
+             "id": "QqP3",
+             "members": [
+              "qqp3a",
+              "qqp3b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 18
+            },
+            {
+             "k": "class",
+             "id": "QqP4",
+             "members": [
+              "qqp4a",
+              "qqp4b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 23
+            },
+            {
+             "k": "class",
+             "id": "QqP5",
+             "members": [
+              "qqp5a",
+              "qqp5b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 28
+            },
+            {
+             "k": "class",
+             "id": "QqP6",
+             "members": [
+              "qqp6a",
+              "qqp6b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 33
+            },
+            {
+             "k": "class",
+             "id": "QqP7",
+             "members": [
+              "qqp7a",
+              "qqp7b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 38
+            },
+            {
+             "k": "class",
+             "id": "QqP8",
+             "members": [
+              "qqp8a",
+              "qqp8b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 43
+            },
+            {
+             "k": "class",
+             "id": "QqP9",
+             "members": [
+              "qqp9a",
+              "qqp9b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 48
+            },
+            {
+             "k": "class",
+             "id": "QqP10",
+             "members": [
+              "qqp10a",
+              "qqp10b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 53
+            },
+            {
+             "k": "class",
+             "id": "QqP11",
+             "members": [
+              "qqp11a",
+              "qqp11b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 58
+            },
+            {
+             "k": "class",
+             "id": "QqP12",
+             "members": [
+              "qqp12a",
+              "qqp12b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 63
+            },
+            {
+             "k": "class",
+             "id": "QqP13",
+             "members": [
+              "qqp13a",
+              "qqp13b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 68
+            },
+            {
+             "k": "class",
+             "id": "QqP14",
+             "members": [
+              "qqp14a",
+              "qqp14b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 73
+            },
+            {
+             "k": "class",
+             "id": "QqP15",
+             "members": [
+              "qqp15a",
+              "qqp15b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 78
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "2803699f75b8a4a382ee5cfbd0c57c3989d14b42b3a154efd45ac61e9c465bad",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "482c0b5b70ef783431d4c0fe20b8347caf57a8cffa55da0ea6151874bfe77786"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 6,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordSK",
+             "line": 5
+            }
+           ]
+          }
+         }
+        ]
+       }
+      ],
+      "rendering_identity_sha256": "d4ed398c1dde5484b29d25c17f096e5cb01234ac358372ddf14cb867fc8519ce",
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. No carrier is stacked on it."
      }
     },
     {
-     "id": "d_0e5600837ca9",
+     "id": "d_2795d057cee6",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "prefix",
-      "prefix": "MxUnkRecVA",
-      "count": 38,
-      "width": 3,
-      "generated_header_sha256": "0e5600837ca943e5308dfea6b76baf6d8605ed7113ace8791b8e5efbddb21354",
+      "kind": "donor_source_overlay",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated forward-declaration run prepended to the rendered translation unit; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables, or linker directives."
+      "renderings": [
+       {
+        "path": "LEGO1/viewmanager/viewlodlist.cpp",
+        "clean_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
+        "rendered_sha256": "854071869d8e55e05fc18ddc8499c81598407803fec9f6f144c6ada6fb05b930",
+        "operations": [
+         {
+          "op": "insert",
+          "id": "op_c_prefix_mxunkrecva_38",
+          "anchor": {
+           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 38,
+           "items": [
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecVA",
+             "first": 0,
+             "count": 38,
+             "line": 1,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 12,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord000",
+             "line": 5
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord001",
+             "line": 6
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord002",
+             "line": 7
+            },
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecord",
+             "first": 3,
+             "count": 4,
+             "line": 8,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "b": 16,
+           "at": "before_token"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 83,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "class",
+             "id": "QqP0",
+             "members": [
+              "qqp0a",
+              "qqp0b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 3
+            },
+            {
+             "k": "class",
+             "id": "QqP1",
+             "members": [
+              "qqp1a",
+              "qqp1b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 8
+            },
+            {
+             "k": "class",
+             "id": "QqP2",
+             "members": [
+              "qqp2a",
+              "qqp2b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 13
+            },
+            {
+             "k": "class",
+             "id": "QqP3",
+             "members": [
+              "qqp3a",
+              "qqp3b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 18
+            },
+            {
+             "k": "class",
+             "id": "QqP4",
+             "members": [
+              "qqp4a",
+              "qqp4b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 23
+            },
+            {
+             "k": "class",
+             "id": "QqP5",
+             "members": [
+              "qqp5a",
+              "qqp5b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 28
+            },
+            {
+             "k": "class",
+             "id": "QqP6",
+             "members": [
+              "qqp6a",
+              "qqp6b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 33
+            },
+            {
+             "k": "class",
+             "id": "QqP7",
+             "members": [
+              "qqp7a",
+              "qqp7b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 38
+            },
+            {
+             "k": "class",
+             "id": "QqP8",
+             "members": [
+              "qqp8a",
+              "qqp8b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 43
+            },
+            {
+             "k": "class",
+             "id": "QqP9",
+             "members": [
+              "qqp9a",
+              "qqp9b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 48
+            },
+            {
+             "k": "class",
+             "id": "QqP10",
+             "members": [
+              "qqp10a",
+              "qqp10b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 53
+            },
+            {
+             "k": "class",
+             "id": "QqP11",
+             "members": [
+              "qqp11a",
+              "qqp11b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 58
+            },
+            {
+             "k": "class",
+             "id": "QqP12",
+             "members": [
+              "qqp12a",
+              "qqp12b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 63
+            },
+            {
+             "k": "class",
+             "id": "QqP13",
+             "members": [
+              "qqp13a",
+              "qqp13b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 68
+            },
+            {
+             "k": "class",
+             "id": "QqP14",
+             "members": [
+              "qqp14a",
+              "qqp14b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 73
+            },
+            {
+             "k": "class",
+             "id": "QqP15",
+             "members": [
+              "qqp15a",
+              "qqp15b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 78
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "2803699f75b8a4a382ee5cfbd0c57c3989d14b42b3a154efd45ac61e9c465bad",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "482c0b5b70ef783431d4c0fe20b8347caf57a8cffa55da0ea6151874bfe77786"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 6,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordSK",
+             "line": 5
+            }
+           ]
+          }
+         }
+        ]
+       }
+      ],
+      "rendering_identity_sha256": "2795d057cee6329b2abc01ba458d51be0391afb87c134a8ce59e3ab000d2f662",
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. A framework-generated forward-declaration run is seated at the head of the rendering; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables or linker directives."
      }
     },
     {
-     "id": "d_a9709b0b6698",
+     "id": "d_f1cbb700dffc",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_run_with_shape",
-      "placement": "suffix",
-      "prefix": "MxUnkRecVC",
-      "count": 96,
-      "width": 3,
-      "classes": 6,
-      "functions": 60,
-      "generated_header_sha256": "a9709b0b66989825f1e2cf9e7825bfe4d0a8c2d75e15052cd42271056ac467ae",
+      "kind": "donor_source_overlay",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a forward-declaration run seated at the stated placement plus a declaration shape rendered as a force-include; it contributes no code, data, strings, vtables, or linker directives."
+      "renderings": [
+       {
+        "path": "LEGO1/viewmanager/viewlodlist.cpp",
+        "clean_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
+        "rendered_sha256": "cc61b62c4e5477d5d1c5a723a79fdec9ea88bad859741dba9c3fbf6281cb6a94",
+        "operations": [
+         {
+          "op": "insert",
+          "id": "op_c_afterinc_mxunkrecvb_21",
+          "anchor": {
+           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "b": 16,
+           "line_before": "1e839e32685d525d4c1965f9ba99267582bb562cbb1d9eba94b1c8058cde2f2e",
+           "line_after": "a1af698b3a1b61f2464b83159a20c5227dd576939c430131e191397bcc284972"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 21,
+           "items": [
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecVB",
+             "first": 0,
+             "count": 21,
+             "line": 1,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 12,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord000",
+             "line": 5
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord001",
+             "line": 6
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord002",
+             "line": 7
+            },
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecord",
+             "first": 3,
+             "count": 4,
+             "line": 8,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "b": 16,
+           "at": "before_token"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 83,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "class",
+             "id": "QqP0",
+             "members": [
+              "qqp0a",
+              "qqp0b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 3
+            },
+            {
+             "k": "class",
+             "id": "QqP1",
+             "members": [
+              "qqp1a",
+              "qqp1b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 8
+            },
+            {
+             "k": "class",
+             "id": "QqP2",
+             "members": [
+              "qqp2a",
+              "qqp2b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 13
+            },
+            {
+             "k": "class",
+             "id": "QqP3",
+             "members": [
+              "qqp3a",
+              "qqp3b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 18
+            },
+            {
+             "k": "class",
+             "id": "QqP4",
+             "members": [
+              "qqp4a",
+              "qqp4b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 23
+            },
+            {
+             "k": "class",
+             "id": "QqP5",
+             "members": [
+              "qqp5a",
+              "qqp5b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 28
+            },
+            {
+             "k": "class",
+             "id": "QqP6",
+             "members": [
+              "qqp6a",
+              "qqp6b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 33
+            },
+            {
+             "k": "class",
+             "id": "QqP7",
+             "members": [
+              "qqp7a",
+              "qqp7b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 38
+            },
+            {
+             "k": "class",
+             "id": "QqP8",
+             "members": [
+              "qqp8a",
+              "qqp8b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 43
+            },
+            {
+             "k": "class",
+             "id": "QqP9",
+             "members": [
+              "qqp9a",
+              "qqp9b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 48
+            },
+            {
+             "k": "class",
+             "id": "QqP10",
+             "members": [
+              "qqp10a",
+              "qqp10b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 53
+            },
+            {
+             "k": "class",
+             "id": "QqP11",
+             "members": [
+              "qqp11a",
+              "qqp11b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 58
+            },
+            {
+             "k": "class",
+             "id": "QqP12",
+             "members": [
+              "qqp12a",
+              "qqp12b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 63
+            },
+            {
+             "k": "class",
+             "id": "QqP13",
+             "members": [
+              "qqp13a",
+              "qqp13b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 68
+            },
+            {
+             "k": "class",
+             "id": "QqP14",
+             "members": [
+              "qqp14a",
+              "qqp14b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 73
+            },
+            {
+             "k": "class",
+             "id": "QqP15",
+             "members": [
+              "qqp15a",
+              "qqp15b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 78
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "2803699f75b8a4a382ee5cfbd0c57c3989d14b42b3a154efd45ac61e9c465bad",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "482c0b5b70ef783431d4c0fe20b8347caf57a8cffa55da0ea6151874bfe77786"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 6,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordSK",
+             "line": 5
+            }
+           ]
+          }
+         }
+        ]
+       }
+      ],
+      "rendering_identity_sha256": "f1cbb700dffc05015b482ba84136a1480d2ed1c9b50c5bd8f7eaa9a557a128fa",
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. A framework-generated forward-declaration run is seated immediately after the last include of the rendering; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables or linker directives."
+     }
+    },
+    {
+     "id": "d_4421870d5bb5",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "donor_source_overlay",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "renderings": [
+       {
+        "path": "LEGO1/viewmanager/viewlodlist.cpp",
+        "clean_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
+        "rendered_sha256": "5cf034bbcb2e5a8bff838c9ebe4fe5488b43dc686912ace5ec2e86a3ec5e508f",
+        "operations": [
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "b": 0,
+           "at": "start"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 12,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord000",
+             "line": 5
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord001",
+             "line": 6
+            },
+            {
+             "k": "empty_class",
+             "id": "MxUnkRecord002",
+             "line": 7
+            },
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecord",
+             "first": 3,
+             "count": 4,
+             "line": 8,
+             "width": 3
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "b": 16,
+           "at": "before_token"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 83,
+           "items": [
+            {
+             "k": "lines",
+             "n": 2,
+             "line": 1
+            },
+            {
+             "k": "class",
+             "id": "QqP0",
+             "members": [
+              "qqp0a",
+              "qqp0b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 3
+            },
+            {
+             "k": "class",
+             "id": "QqP1",
+             "members": [
+              "qqp1a",
+              "qqp1b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 8
+            },
+            {
+             "k": "class",
+             "id": "QqP2",
+             "members": [
+              "qqp2a",
+              "qqp2b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 13
+            },
+            {
+             "k": "class",
+             "id": "QqP3",
+             "members": [
+              "qqp3a",
+              "qqp3b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 18
+            },
+            {
+             "k": "class",
+             "id": "QqP4",
+             "members": [
+              "qqp4a",
+              "qqp4b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 23
+            },
+            {
+             "k": "class",
+             "id": "QqP5",
+             "members": [
+              "qqp5a",
+              "qqp5b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 28
+            },
+            {
+             "k": "class",
+             "id": "QqP6",
+             "members": [
+              "qqp6a",
+              "qqp6b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 33
+            },
+            {
+             "k": "class",
+             "id": "QqP7",
+             "members": [
+              "qqp7a",
+              "qqp7b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 38
+            },
+            {
+             "k": "class",
+             "id": "QqP8",
+             "members": [
+              "qqp8a",
+              "qqp8b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 43
+            },
+            {
+             "k": "class",
+             "id": "QqP9",
+             "members": [
+              "qqp9a",
+              "qqp9b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 48
+            },
+            {
+             "k": "class",
+             "id": "QqP10",
+             "members": [
+              "qqp10a",
+              "qqp10b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 53
+            },
+            {
+             "k": "class",
+             "id": "QqP11",
+             "members": [
+              "qqp11a",
+              "qqp11b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 58
+            },
+            {
+             "k": "class",
+             "id": "QqP12",
+             "members": [
+              "qqp12a",
+              "qqp12b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 63
+            },
+            {
+             "k": "class",
+             "id": "QqP13",
+             "members": [
+              "qqp13a",
+              "qqp13b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 68
+            },
+            {
+             "k": "class",
+             "id": "QqP14",
+             "members": [
+              "qqp14a",
+              "qqp14b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 73
+            },
+            {
+             "k": "class",
+             "id": "QqP15",
+             "members": [
+              "qqp15a",
+              "qqp15b"
+             ],
+             "access": [
+              {
+               "access": "public",
+               "before_member_index": 0
+              }
+             ],
+             "line": 78
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "anchor": {
+           "ctx": "2803699f75b8a4a382ee5cfbd0c57c3989d14b42b3a154efd45ac61e9c465bad",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "482c0b5b70ef783431d4c0fe20b8347caf57a8cffa55da0ea6151874bfe77786"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 6,
+           "items": [
+            {
+             "k": "lines",
+             "n": 4,
+             "line": 1
+            },
+            {
+             "k": "fwd",
+             "id": "MxUnkRecordSK",
+             "line": 5
+            }
+           ]
+          }
+         },
+         {
+          "op": "insert",
+          "id": "op_c_suffix_mxunkrecvc_96",
+          "anchor": {
+           "ctx": "70de4605aa878b72683fd10a1aee9533e2cb5c103638e25dd63728d5b3414570",
+           "a": 0,
+           "at": "end"
+          },
+          "gen": {
+           "k": "seq",
+           "lines": 97,
+           "items": [
+            {
+             "k": "lines",
+             "n": 1,
+             "line": 1
+            },
+            {
+             "k": "fwd_run",
+             "stem": "MxUnkRecVC",
+             "first": 0,
+             "count": 96,
+             "line": 2,
+             "width": 3
+            }
+           ]
+          }
+         }
+        ]
+       }
+      ],
+      "rendering_identity_sha256": "4421870d5bb50dbc53a4795f5ce0b7aa839d9feebf4b7b7c07ea92ba82f3ff2b",
+      "emission_policy": "donor_private_rendering_only",
+      "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. A framework-generated forward-declaration run is seated at the end of the rendering and a declaration-only shape of never-called inline void members is force-included ahead of it; both contribute compiler name records only and can emit no code, data, strings, vtables or linker directives.",
+      "compiler_state_carrier": {
+       "kind": "force_included_shape_v1",
+       "placement": "force_include_v1",
+       "classes": 6,
+       "functions": 60,
+       "generated_declarations_sha256": "b1bca8d999d475d179430411bb44094bd978d8beadfa209e7df897a03732f8fb"
+      }
      }
     }
    ],
    "functions": [
     {
      "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_9a9237af6ead",
+     "donor": "d_f1cbb700dffc",
      "splice_class": "retail_exact_register_bijection_reencoding",
      "expected_section_number": 19,
      "expected_section_count": 71,
-     "expected_seed_length": 1101,
+     "expected_seed_length": 1098,
      "expected_preimage_length": 1098,
      "expected_body_length": 1100,
      "expected_donor_length": 1100,
@@ -39443,10 +40861,10 @@
      "expected_donor_line_count": 80,
      "expected_function_count": 20,
      "expected_comdat_count": 26,
-     "expected_seed_body_sha256": "d264935c3e26ad362c95e994708f17220354d517aa8ea32fe450689c0509f654",
+     "expected_seed_body_sha256": "f10d7001dae95ba891ebc8c61356f303522507f0e282b2b39064da272cbd72ce",
      "expected_donor_body_sha256": "6e5334ac7dd100c79b19583274b449c51a3cc21bb067c5ea4fd6fd87b96fdb9f",
      "expected_body_sha256": "fe97c21bf4bd14b00d4f2baaea9fa2a2b0858b8c82ab68f67033d588d4336ebe",
-     "expected_seed_metadata_sha256": "53a39c677154b18e71f8aaec90c00cfe3daba64997899f280f7c1531daea00d6",
+     "expected_seed_metadata_sha256": "0961e7e4d1927a6a975e53d7274df02d51d8076a87c0cc6dfed6e63a7b0cb915",
      "expected_donor_metadata_sha256": "5ca9bce481495d2feaa0b7facf512e84c0f6ed1021aa1d550edc68780f3cdc38",
      "expected_closure": [
       ".debug$F",
@@ -39759,7 +41177,7 @@
     },
     {
      "mangled": "?_Erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@IAEXPAU_Node@1@@Z",
-     "donor": "d_0e5600837ca9",
+     "donor": "d_2795d057cee6",
      "splice_class": "equal_body_strict",
      "expected_body_length": 57,
      "expected_body_sha256": "f4152ee5515dc9f2555f11464d3f277b18a146e04f11aa557934316a9f236749",
@@ -39769,7 +41187,7 @@
     },
     {
      "mangled": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAEXXZ",
-     "donor": "d_0e5600837ca9",
+     "donor": "d_2795d057cee6",
      "splice_class": "equal_body_strict",
      "expected_body_length": 75,
      "expected_body_sha256": "03b6f0fc982674474151dd895db59cdbe4ee5f6ee181e918749740d5cafc5daf",
@@ -39789,7 +41207,69 @@
      "expected_seed_length": 395,
      "expected_donor_length": 398,
      "expected_linked_span": 400,
-     "donor": "d_a9709b0b6698"
+     "donor": "d_4421870d5bb5"
+    },
+    {
+     "mangled": "??1?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE@XZ",
+     "donor": "d_d4ed398c1dde",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 196,
+     "expected_body_sha256": "2e8942a80d86cb168f84d6b842d2cb7ef360b40a0df1b6ccc61a8ec1cbe8413d",
+     "expected_changed_offsets": [
+      40,
+      43,
+      45,
+      53,
+      64,
+      65,
+      67
+     ]
+    },
+    {
+     "mangled": "?Create@ViewLODListManager@@QAEPAVViewLODList@@ABQBDH@Z",
+     "donor": "d_d4ed398c1dde",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 746,
+     "expected_body_sha256": "22323602eca10ecbfa355a9ec8289453f2fa8473750792d223a41c2810b7465b",
+     "expected_changed_offsets": [
+      450,
+      523
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       724,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52
+     ]
+    },
+    {
+     "mangled": "?Destroy@ViewLODListManager@@QAEEPAVViewLODList@@@Z",
+     "donor": "d_d4ed398c1dde",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 189,
+     "expected_body_sha256": "45e3a11cdcf99e10f61d23c53bfb798385ade654a8b18ebb3e7211b2fec94374",
+     "expected_changed_offsets": [
+      19
+     ]
+    },
+    {
+     "mangled": "?_Insert@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPAVViewLODList@@@@@Z",
+     "donor": "d_d4ed398c1dde",
+     "splice_class": "same_slot_resize",
+     "expected_body_sha256": "6bb3fb8ed5ec491043fe18c170dd1861026d31b0fac5d7215ea8d962527757b6",
+     "expected_seed_length": 678,
+     "expected_donor_length": 681,
+     "expected_linked_span": 688
     }
    ],
    "completion": {
@@ -46652,7 +48132,7 @@
     ],
     "expected_absolute_fixups": [
      {
-      "site_va": "0x100dd1c0",
+      "site_va": "0x100dd1d0",
       "old": "0x100d3850",
       "new": "0x100d3840"
      }
@@ -69785,8 +71265,8 @@
    {
     "path": "LEGO1/viewmanager/viewlodlist.cpp",
     "clean": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
-    "effective": "81db6c0c32353794a44d84448752bfa41fcab7dec053c86a560ff0b7c1f5b962",
-    "size": 4850,
+    "effective": "e46f94a9b4b997143d83f8a2046583cb6c229e0a803a7d4cdd3d665f03af44ff",
+    "size": 4884,
     "ops": [
      {
       "op": "insert",
@@ -70110,6 +71590,24 @@
          "id": "MxUnkRecordSK",
          "line": 5
         }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "id": "op_9020_rdata_viewlodlist",
+      "anchor": {
+       "ctx": "781a157d35d32c32b6cf721c0da6bf1214ce2edb24ba9a16a788c5500a65f4d4",
+       "b": 3,
+       "at": "before_token"
+      },
+      "gen": {
+       "k": "include",
+       "header": "mxgeometry/mxmatrix.h",
+       "style": "quote",
+       "lines": 2,
+       "at": [
+        1
        ]
       }
      }
