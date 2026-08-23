@@ -3,7 +3,25 @@
 // constant pool, and clang-format would sort them back.
 // clang-format off
 #include "legoanim.h"
+// clang-format on
 
+// GLOBAL: LEGO1 0x100db830
+// Retail seats this constant ahead of Tgl::Constant::Pi in the unit's .rdata
+// pool.  MSVC 4.2 orders a pool by internal symbol number and numbers named
+// file-scope statics at parse time, ahead of every function-body literal, so it
+// can only be a named const declared before tgl/tglvector.h is parsed -- no
+// expression inside a function can produce it there.  Nothing in the retail
+// image reads it and BETA10 does not carry it at all, so the 1997 declaration
+// that named it is not recoverable; the helper below exists only to keep the
+// constant emitted, and is never called, so no code of it reaches the image.
+static const double g_unk0x100db830 = 0.5;
+
+inline double UnkGet0x100db830()
+{
+	return g_unk0x100db830;
+}
+
+// clang-format off
 #include "tgl/tglvector.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxgeometry/mxquaternion.h"

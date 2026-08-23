@@ -47776,7 +47776,7 @@
     ],
     "expected_absolute_fixups": [
      {
-      "site_va": "0x100dd238",
+      "site_va": "0x100dd240",
       "old": "0x100d3850",
       "new": "0x100d3840"
      }
@@ -63569,9 +63569,9 @@
    },
    {
     "path": "LEGO1/lego/sources/anim/legoanimscene.cpp",
-    "clean": "b9cfcdedca80cabd92333a51201136fa07542f1d3aa4be541efe980b779e9922",
-    "effective": "96560d272db67910d6443513691df0396a6020f6f13bba3e605b45e9e39b70af",
-    "size": 7827,
+    "clean": "2a19364cf1d5e5c63bc425a154277eef68eaf5c82e2979281c4f01e3458b9775",
+    "effective": "adbd131d524d6a2e107f01bae2136ba19c564af04c5a0aaed44ff3c53d894f53",
+    "size": 8626,
     "ops": [
      {
       "op": "insert",
