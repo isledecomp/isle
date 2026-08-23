@@ -3,6 +3,7 @@
 #include "decomp.h"
 #include "mxdsaction.h"
 #include "mxdssubscriber.h"
+
 DECOMP_SIZE_ASSERT(MxLoopingFlcPresenter, 0x6c);
 
 // FUNCTION: LEGO1 0x100b4310

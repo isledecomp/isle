@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdio.h> // for vsprintf
+
 DECOMP_SIZE_ASSERT(MxAssignedDevice, 0xe4)
 DECOMP_SIZE_ASSERT(Direct3DDeviceInfo, 0x1a4)
 DECOMP_SIZE_ASSERT(MxDisplayMode, 0x0c)

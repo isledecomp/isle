@@ -1,6 +1,7 @@
 #include "legospline.h"
 
 #include "mxgeometry/mxmatrix.h"
+
 DECOMP_SIZE_ASSERT(LegoSpline, 0x50)
 
 // FUNCTION: LEGO1 0x1009a0f0

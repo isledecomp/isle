@@ -3,6 +3,7 @@
 #include "mxbitmap.h"
 
 #include <string.h>
+
 DECOMP_SIZE_ASSERT(SmackTag, 0x390);
 DECOMP_SIZE_ASSERT(MxSmk, 0x6b8);
 

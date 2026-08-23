@@ -7,6 +7,7 @@
 #include "mxmisc.h"
 #include "mxregion.h"
 #include "mxvideomanager.h"
+
 DECOMP_SIZE_ASSERT(MxVideoPresenter, 0x64);
 DECOMP_SIZE_ASSERT(MxVideoPresenter::AlphaMask, 0x0c);
 

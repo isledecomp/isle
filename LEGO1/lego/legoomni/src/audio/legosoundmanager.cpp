@@ -5,6 +5,7 @@
 #include "mxmain.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoSoundManager, 0x44)
 
 // FUNCTION: LEGO1 0x100298a0

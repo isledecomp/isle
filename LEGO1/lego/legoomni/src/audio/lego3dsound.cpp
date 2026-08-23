@@ -9,6 +9,7 @@
 
 #include <assert.h>
 #include <vec.h>
+
 DECOMP_SIZE_ASSERT(Lego3DSound, 0x30)
 
 // FUNCTION: LEGO1 0x10011630

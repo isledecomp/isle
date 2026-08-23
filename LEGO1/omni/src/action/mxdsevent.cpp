@@ -1,4 +1,5 @@
 #include "mxdsevent.h"
+
 DECOMP_SIZE_ASSERT(MxDSEvent, 0xb8)
 
 // FUNCTION: LEGO1 0x100c95f0

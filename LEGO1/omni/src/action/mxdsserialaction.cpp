@@ -2,6 +2,7 @@
 
 #include "mxdebug.h"
 #include "mxdsmediaaction.h"
+
 DECOMP_SIZE_ASSERT(MxDSSerialAction, 0xa8)
 
 // FUNCTION: LEGO1 0x100ca9d0

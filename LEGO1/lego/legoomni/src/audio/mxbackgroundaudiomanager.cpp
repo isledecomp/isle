@@ -11,6 +11,7 @@
 #include "mxticklemanager.h"
 #include "mxutilities.h"
 #include "mxwavepresenter.h"
+
 DECOMP_SIZE_ASSERT(MxBackgroundAudioManager, 0x150)
 
 // FUNCTION: LEGO1 0x1007ea90

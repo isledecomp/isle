@@ -8,6 +8,7 @@
 #include "mxnotificationmanager.h"
 #include "mxstreamchunk.h"
 #include "mxtimer.h"
+
 DECOMP_SIZE_ASSERT(MxMediaPresenter, 0x50);
 DECOMP_SIZE_ASSERT(MxStreamChunkList, 0x18);
 DECOMP_SIZE_ASSERT(MxStreamChunkListCursor, 0x10);

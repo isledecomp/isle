@@ -26,6 +26,7 @@
 #include "mxvideomanager.h"
 #include "realtime/realtime.h"
 #include "viewmanager/viewmanager.h"
+
 DECOMP_SIZE_ASSERT(LegoAnimPresenter, 0xbc)
 DECOMP_SIZE_ASSERT(LegoLoopingAnimPresenter, 0xc0)
 DECOMP_SIZE_ASSERT(LegoLocomotionAnimPresenter, 0xd8)

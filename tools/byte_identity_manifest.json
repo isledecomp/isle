@@ -33637,7 +33637,7 @@
        "width": 2,
        "generated_declarations_sha256": "e5f44f6a786e0263062f9b409b3c2263b22cfff0bc7c9b8df5d51f2b2e1bce76"
       },
-      "clean_source_sha256": "e3f1630791908b84c51645269fcc88dbb25efb6ef402ad53d1d631c64e423864",
+      "clean_source_sha256": "4e3fab5f96d87476d59da70515ff62e443f978a4120cf5182c997878d99d4a39",
       "effective_source_sha256": "8090c765eeba095b615bf0a31461aa595e202dedc7921d1e198c454a1a8c19e5",
       "rendered_source_sha256": "c0e6b4d3ee9f4294c4a9ba46dea17b124ace1b51f5a10451ce0ef74c5885ac6c",
       "rendered_source_size": 12776,
@@ -50559,7 +50559,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/audio/lego3dsound.cpp",
-    "clean": "e2b00861cfd1d3cfa6fc8362db51f0c7ce86863de334956e41f2b8066a027d9b",
+    "clean": "b9eaa3706ed6ab6bcc7fbacc0eb4f830ba503b631855e0eea159488c4fd36496",
     "effective": "358cbbc5f38d45b46b7d600769f45a38e4fa8f457784ed5e995af651b122d5e1",
     "size": 7202,
     "ops": [
@@ -50603,22 +50603,22 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 5,
+       "lines": 4,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "RkC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "empty_class",
          "id": "RkC1",
-         "line": 4
+         "line": 3
         }
        ]
       }
@@ -50841,7 +50841,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp",
-    "clean": "c6ffaf1bc01d68b2a75c07e6efc9983b13738777c2da0b9d05bfbef358120286",
+    "clean": "6c6839508dcdffb016e96b4156f1116b48c233627014987f0c421e32fb04f441",
     "effective": "8f7b7adf16c981403d21044d4dd707235808150aaaae4604374331698ddf12ec",
     "size": 3607,
     "ops": [
@@ -50886,17 +50886,17 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 4,
+       "lines": 3,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "RkC0",
-         "line": 3
+         "line": 2
         }
        ]
       }
@@ -50937,7 +50937,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp",
-    "clean": "eaa0ee028a485e3cd838f8de8abcf6ea1fe79742f8d027e5c2d80fb7d2a53bd6",
+    "clean": "98eaf1dd219378c682a174cbdfcf43cd876d0620890764bc07fd34c504e30911",
     "effective": "f2aff7e10bdc6a3398b558ed94b11ad66748ea20f6272481e49f5adaaab8ef21",
     "size": 9592,
     "ops": [
@@ -50978,11 +50978,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 23,
+       "lines": 22,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -50997,7 +50997,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "class",
@@ -51011,7 +51011,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 7
+         "line": 6
         },
         {
          "k": "class",
@@ -51025,7 +51025,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 11
+         "line": 10
         },
         {
          "k": "class",
@@ -51039,7 +51039,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "class",
@@ -51053,7 +51053,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 19
+         "line": 18
         }
        ]
       }
@@ -52043,7 +52043,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legobuildingmanager.cpp",
-    "clean": "663e21ef69ff3b67cb6d238e0421c0b1a248d012af13375d2c9c2f3d6e0de9ab",
+    "clean": "fbe950fbb591b1e72da6ffb44df0931374bc64539a3b26989b5828b4f467be08",
     "effective": "d8665bb8b4283adc354360a4651f7d011530ab370140eb2027c3ffff4f4f646e",
     "size": 20699,
     "ops": [
@@ -52084,11 +52084,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 19,
+       "lines": 18,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -52096,14 +52096,14 @@
          "stem": "RkF",
          "first": 0,
          "count": 10,
-         "line": 3
+         "line": 2
         },
         {
          "k": "fwd_run",
          "stem": "RkF",
          "first": 10,
          "count": 6,
-         "line": 13
+         "line": 12
         }
        ]
       }
@@ -55984,7 +55984,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/input/legoinputmanager.cpp",
-    "clean": "08ec404ec1e90be0505f85679d61f87f3b41915dad6db5b57e2aedcb9bd30c00",
+    "clean": "9c8ff63a449b8ed39b4f2806272867d551c212b8bdf7c8d4659d7c7447cc61c8",
     "effective": "8f9724f57ca386bfe2c479d883cdb1481c1f21dbde5f2256641ca22ed9cf775b",
     "size": 14286,
     "ops": [
@@ -55996,11 +55996,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 15,
+       "lines": 14,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -56008,17 +56008,17 @@
          "stem": "QqF",
          "first": 0,
          "count": 10,
-         "line": 3
+         "line": 2
         },
         {
          "k": "fwd",
          "id": "QqF10",
-         "line": 13
+         "line": 12
         },
         {
          "k": "fwd",
          "id": "QqF11",
-         "line": 14
+         "line": 13
         }
        ]
       }
@@ -61023,7 +61023,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/race/raceskel.cpp",
-    "clean": "89f053e3c22ac62830ccb4c122b2037eb3a9f9fc73b6d059ca4474447576bd91",
+    "clean": "60af4b7a04e6260e8db8b106d7aca84ef5374e6ab30fc692a19850f72d2fa6d6",
     "effective": "80c069af26f6081edb9755b5c4456538fa5bb635471a15c62f98d3c273921789",
     "size": 1572,
     "ops": [
@@ -61036,11 +61036,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 6,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -61048,7 +61048,7 @@
          "stem": "QqF",
          "first": 0,
          "count": 4,
-         "line": 3
+         "line": 2
         }
        ]
       }
@@ -61057,7 +61057,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-    "clean": "0f45323f6ab4f80af5c03d64c6081b3cbe0d630e59006bb091217e6f92ef1384",
+    "clean": "708e04c815c4a898176ced6b8d1a52eee27d5306f5a2fc355654ba91ff6a32eb",
     "effective": "6bb52e5ba9684af91942cd285bb13ade761af4dd6d6f01948dc9754a164ff45e",
     "size": 51347,
     "ops": [
@@ -61138,11 +61138,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 69,
+       "lines": 68,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -61150,7 +61150,7 @@
          "stem": "RkF",
          "first": 0,
          "count": 4,
-         "line": 3
+         "line": 2
         },
         {
          "k": "class",
@@ -61164,7 +61164,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 7
+         "line": 6
         },
         {
          "k": "class",
@@ -61178,7 +61178,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 11
+         "line": 10
         },
         {
          "k": "class",
@@ -61192,12 +61192,12 @@
            "before_member_index": 0
           }
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "lines",
          "n": 2,
-         "line": 19
+         "line": 18
         },
         {
          "k": "class",
@@ -61211,7 +61211,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 21
+         "line": 20
         },
         {
          "k": "class",
@@ -61225,7 +61225,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 25
+         "line": 24
         },
         {
          "k": "class",
@@ -61239,7 +61239,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 29
+         "line": 28
         },
         {
          "k": "class",
@@ -61253,7 +61253,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 33
+         "line": 32
         },
         {
          "k": "class",
@@ -61267,7 +61267,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 37
+         "line": 36
         },
         {
          "k": "class",
@@ -61281,7 +61281,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 41
+         "line": 40
         },
         {
          "k": "class",
@@ -61295,7 +61295,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 45
+         "line": 44
         },
         {
          "k": "class",
@@ -61309,7 +61309,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 49
+         "line": 48
         },
         {
          "k": "class",
@@ -61323,7 +61323,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 53
+         "line": 52
         },
         {
          "k": "class",
@@ -61337,7 +61337,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 57
+         "line": 56
         },
         {
          "k": "class",
@@ -61351,7 +61351,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 61
+         "line": 60
         },
         {
          "k": "class",
@@ -61365,7 +61365,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 65
+         "line": 64
         }
        ]
       }
@@ -62560,7 +62560,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legovideomanager.cpp",
-    "clean": "5c3fb23801a1c148075099204593c26d0bc6a89166fa99447a8eb74a3fe7bb5e",
+    "clean": "64fa0e9eeadf9ff0e72d178e2a2356676fa96f90810bcc6b47c07eca15d85863",
     "effective": "48815b50840e4771e3ab9392274c91496a840d808f530dea2534b5992be73a84",
     "size": 20516,
     "ops": [
@@ -62572,22 +62572,22 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 26,
+       "lines": 25,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "RkC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "lines",
          "n": 4,
-         "line": 4
+         "line": 3
         },
         {
          "k": "class",
@@ -62600,12 +62600,12 @@
            "count": 5
           }
          ],
-         "line": 8
+         "line": 7
         },
         {
          "k": "lines",
          "n": 4,
-         "line": 16
+         "line": 15
         },
         {
          "k": "class",
@@ -62614,17 +62614,17 @@
          "members": [
           "Record0"
          ],
-         "line": 20
+         "line": 19
         },
         {
          "k": "fwd",
          "id": "MxUnkRecordLV0",
-         "line": 24
+         "line": 23
         },
         {
          "k": "fwd",
          "id": "MxUnkRecordLW0",
-         "line": 25
+         "line": 24
         }
        ]
       }
@@ -63121,7 +63121,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/infocenter.cpp",
-    "clean": "25cd9754ed88ba9edf2ef1fcf548e1eb80fa4dc083bc85d4c51399affdc5ec69",
+    "clean": "762472e7afebba461f48ae27ec5f4003156467b220d152a8cf07c45b3f271582",
     "effective": "9a2763f779fd504187b8dc4923c678b047ddaa896ac228b20996af1c6c1b254d",
     "size": 49661,
     "ops": [
@@ -63133,11 +63133,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 23,
+       "lines": 22,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -63152,7 +63152,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "class",
@@ -63166,7 +63166,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 7
+         "line": 6
         },
         {
          "k": "class",
@@ -63180,7 +63180,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 11
+         "line": 10
         },
         {
          "k": "class",
@@ -63194,7 +63194,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "class",
@@ -63208,7 +63208,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 19
+         "line": 18
         }
        ]
       }
@@ -63796,7 +63796,7 @@
    },
    {
     "path": "LEGO1/lego/sources/3dmanager/lego3dview.cpp",
-    "clean": "d2c6aaf50818bdd2e42e5321e0c067f29a8bf14afbc4226dc745d728f6e4425e",
+    "clean": "604901748a3d8bdb27ef260abdacc8b70b17b62d658e09c4c2fb5b066fdef158",
     "effective": "2518e163024a4f424af9a0e1dfa21c0d770ca29bd22c24f437d712a0b18ce524",
     "size": 3466,
     "ops": [
@@ -63809,11 +63809,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 8,
+       "lines": 7,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -63821,7 +63821,7 @@
          "stem": "QqF",
          "first": 0,
          "count": 5,
-         "line": 3
+         "line": 2
         }
        ]
       }
@@ -64024,7 +64024,7 @@
    },
    {
     "path": "LEGO1/lego/sources/misc/legoimage.cpp",
-    "clean": "0b0c133aaa57532d602c1662970237f4ad43aa77bc88f6f91826cf310d0e4299",
+    "clean": "2099cb4160cf0e4865e0344e3d454074ecf04396652d6ddd6217802fdd5a328d",
     "effective": "9ebaf69ced752925980658dfe30f6252ee3f1f6d6033f7d22f0fee1f3e99760c",
     "size": 4031,
     "ops": [
@@ -64037,92 +64037,92 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 19,
+       "lines": 18,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "QqC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "empty_class",
          "id": "QqC1",
-         "line": 4
+         "line": 3
         },
         {
          "k": "empty_class",
          "id": "QqC2",
-         "line": 5
+         "line": 4
         },
         {
          "k": "empty_class",
          "id": "QqC3",
-         "line": 6
+         "line": 5
         },
         {
          "k": "empty_class",
          "id": "QqC4",
-         "line": 7
+         "line": 6
         },
         {
          "k": "empty_class",
          "id": "QqC5",
-         "line": 8
+         "line": 7
         },
         {
          "k": "empty_class",
          "id": "QqC6",
-         "line": 9
+         "line": 8
         },
         {
          "k": "empty_class",
          "id": "QqC7",
-         "line": 10
+         "line": 9
         },
         {
          "k": "empty_class",
          "id": "QqC8",
-         "line": 11
+         "line": 10
         },
         {
          "k": "empty_class",
          "id": "QqC9",
-         "line": 12
+         "line": 11
         },
         {
          "k": "empty_class",
          "id": "QqC10",
-         "line": 13
+         "line": 12
         },
         {
          "k": "empty_class",
          "id": "QqC11",
-         "line": 14
+         "line": 13
         },
         {
          "k": "empty_class",
          "id": "QqC12",
-         "line": 15
+         "line": 14
         },
         {
          "k": "empty_class",
          "id": "QqC13",
-         "line": 16
+         "line": 15
         },
         {
          "k": "empty_class",
          "id": "QqC14",
-         "line": 17
+         "line": 16
         },
         {
          "k": "empty_class",
          "id": "QqC15",
-         "line": 18
+         "line": 17
         }
        ]
       }
@@ -64131,7 +64131,7 @@
    },
    {
     "path": "LEGO1/lego/sources/misc/legospline.cpp",
-    "clean": "efa33a37c71d0a17ee551c04b1e5af25d16be9c7132828c655227fc707e1088a",
+    "clean": "75b127151593f7c6f925f8d0fcb551c49597610e95cdbb7fbc48f960361a77ef",
     "effective": "3fd3d23b3f5ee075e190178b0376be49e5fb03f7ec1d07123dcc5969e5207115",
     "size": 2747,
     "ops": [
@@ -64178,11 +64178,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 59,
+       "lines": 58,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -64197,7 +64197,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "class",
@@ -64211,7 +64211,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 7
+         "line": 6
         },
         {
          "k": "class",
@@ -64225,7 +64225,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 11
+         "line": 10
         },
         {
          "k": "class",
@@ -64239,7 +64239,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "class",
@@ -64253,7 +64253,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 19
+         "line": 18
         },
         {
          "k": "class",
@@ -64267,7 +64267,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 23
+         "line": 22
         },
         {
          "k": "class",
@@ -64281,7 +64281,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 27
+         "line": 26
         },
         {
          "k": "class",
@@ -64295,7 +64295,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 31
+         "line": 30
         },
         {
          "k": "class",
@@ -64309,7 +64309,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 35
+         "line": 34
         },
         {
          "k": "class",
@@ -64323,7 +64323,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 39
+         "line": 38
         },
         {
          "k": "class",
@@ -64337,7 +64337,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 43
+         "line": 42
         },
         {
          "k": "class",
@@ -64351,7 +64351,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 47
+         "line": 46
         },
         {
          "k": "class",
@@ -64365,7 +64365,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 51
+         "line": 50
         },
         {
          "k": "class",
@@ -64379,7 +64379,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 55
+         "line": 54
         }
        ]
       }
@@ -64614,7 +64614,7 @@
    },
    {
     "path": "LEGO1/lego/sources/roi/legoroi.cpp",
-    "clean": "1f4c5a32dd783fd0ac8f5b69ad38795db66c30536586298051d94c01216b6ba4",
+    "clean": "63098fe500e4cb3afed9b8ca22e25e17b32b9619bfb16a034e8254973c661be9",
     "effective": "3de9abdd4500c3a2a07cad38a1970364cef1879a36509a149040fe2a619a4bd4",
     "size": 23949,
     "ops": [
@@ -64626,67 +64626,67 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 15,
+       "lines": 14,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "QqC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "empty_class",
          "id": "QqC1",
-         "line": 4
+         "line": 3
         },
         {
          "k": "empty_class",
          "id": "QqC2",
-         "line": 5
+         "line": 4
         },
         {
          "k": "empty_class",
          "id": "QqC3",
-         "line": 6
+         "line": 5
         },
         {
          "k": "empty_class",
          "id": "QqC4",
-         "line": 7
+         "line": 6
         },
         {
          "k": "empty_class",
          "id": "QqC5",
-         "line": 8
+         "line": 7
         },
         {
          "k": "empty_class",
          "id": "QqC6",
-         "line": 9
+         "line": 8
         },
         {
          "k": "empty_class",
          "id": "QqC7",
-         "line": 10
+         "line": 9
         },
         {
          "k": "empty_class",
          "id": "QqC8",
-         "line": 11
+         "line": 10
         },
         {
          "k": "empty_class",
          "id": "QqC9",
-         "line": 12
+         "line": 11
         },
         {
          "k": "lines",
          "n": 2,
-         "line": 14
+         "line": 13
         }
        ]
       }
@@ -65514,7 +65514,7 @@
    },
    {
     "path": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-    "clean": "95cd2160a7b2e15ebb3c3c62c6c7e3fa731468ed0d79e4397f48b64db97db4c9",
+    "clean": "453cab6d6301d0a35f836806968d429dc90794cbb4e4353bb1e53591f630a633",
     "effective": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
     "size": 21313,
     "ops": [
@@ -65609,37 +65609,37 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 10,
+       "lines": 9,
        "items": [
         {
          "k": "lines",
-         "n": 4,
+         "n": 3,
          "line": 1
         },
         {
          "k": "fwd",
          "id": "MxUnkRecordUL",
-         "line": 5
+         "line": 4
         },
         {
          "k": "fwd",
          "id": "MxUnkRecordUM",
-         "line": 6
+         "line": 5
         },
         {
          "k": "fwd",
          "id": "MxUnkRecordUN",
-         "line": 7
+         "line": 6
         },
         {
          "k": "fwd",
          "id": "MxUnkRecordUO",
-         "line": 8
+         "line": 7
         },
         {
          "k": "fwd",
          "id": "MxUnkRecordUP",
-         "line": 9
+         "line": 8
         }
        ]
       }
@@ -66056,7 +66056,7 @@
    },
    {
     "path": "LEGO1/omni/src/action/mxdsevent.cpp",
-    "clean": "cb903f3a71689784fb7239c14cceb9a8fa4183766dd726e08e04aeb4425837ce",
+    "clean": "695f0486539c83c2c5e6940e651f78c684b2c820bcd0ee4bfbe61af3841aaf59",
     "effective": "2b2ebb03168536456df2a41970bd1840d5a308f21e2614fb37c940ea5d7e1493",
     "size": 1140,
     "ops": [
@@ -66069,11 +66069,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 30,
+       "lines": 29,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -66082,7 +66082,7 @@
          "members": [
           "qqe0_0"
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "enum",
@@ -66090,7 +66090,7 @@
          "members": [
           "qqe1_0"
          ],
-         "line": 6
+         "line": 5
         },
         {
          "k": "enum",
@@ -66098,7 +66098,7 @@
          "members": [
           "qqe2_0"
          ],
-         "line": 9
+         "line": 8
         },
         {
          "k": "enum",
@@ -66106,7 +66106,7 @@
          "members": [
           "qqe3_0"
          ],
-         "line": 12
+         "line": 11
         },
         {
          "k": "enum",
@@ -66114,7 +66114,7 @@
          "members": [
           "qqe4_0"
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "enum",
@@ -66122,7 +66122,7 @@
          "members": [
           "qqe5_0"
          ],
-         "line": 18
+         "line": 17
         },
         {
          "k": "enum",
@@ -66130,7 +66130,7 @@
          "members": [
           "qqe6_0"
          ],
-         "line": 21
+         "line": 20
         },
         {
          "k": "enum",
@@ -66138,7 +66138,7 @@
          "members": [
           "qqe7_0"
          ],
-         "line": 24
+         "line": 23
         },
         {
          "k": "enum",
@@ -66146,7 +66146,7 @@
          "members": [
           "qqe8_0"
          ],
-         "line": 27
+         "line": 26
         }
        ]
       }
@@ -66399,7 +66399,7 @@
    },
    {
     "path": "LEGO1/omni/src/action/mxdsserialaction.cpp",
-    "clean": "ce2062a78c3a0d8837cc5a625516da14587530604720f5c1c066b59787861e6f",
+    "clean": "b35ec0189b587e25a65d4bdec09caf580a6f50d27e145ea43f195c4af9dc5822",
     "effective": "9891424f476e945dddf60c18176d747e62a8788848bb7dd83a94f59249aa0694",
     "size": 2314,
     "ops": [
@@ -66412,11 +66412,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 18,
+       "lines": 17,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -66424,14 +66424,14 @@
          "stem": "QqF",
          "first": 0,
          "count": 10,
-         "line": 3
+         "line": 2
         },
         {
          "k": "fwd_run",
          "stem": "QqF",
          "first": 10,
          "count": 5,
-         "line": 13
+         "line": 12
         }
        ]
       }
@@ -66440,7 +66440,7 @@
    },
    {
     "path": "LEGO1/omni/src/action/mxdssound.cpp",
-    "clean": "4f85fe73dd6302652f5b3cb590e2b47a779b9f59d735282f6a03a19dac1cc5f0",
+    "clean": "2adf5ad2ea0e7021cc751de6780c1e350372cc57aa2edcb886090b67863c07e9",
     "effective": "6f435fc19543721089d1dfabb5665da1a5b700de62b705ee85969ba89360517d",
     "size": 1665,
     "ops": [
@@ -66453,11 +66453,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 16,
+       "lines": 15,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -66465,14 +66465,14 @@
          "stem": "QqF",
          "first": 0,
          "count": 10,
-         "line": 3
+         "line": 2
         },
         {
          "k": "fwd_run",
          "stem": "QqF",
          "first": 10,
          "count": 3,
-         "line": 13
+         "line": 12
         }
        ]
       }
@@ -66528,7 +66528,7 @@
    },
    {
     "path": "LEGO1/omni/src/audio/mxmidipresenter.cpp",
-    "clean": "eafc7a50124b47a3a12eb4fbe8ed2ec7cd3a5ddf0e83c5502d3df35bed449d85",
+    "clean": "eebe30a873cc2c91180587bdf8d9ba4c396b6c644389cfd3d2fb7f36a94b5413",
     "effective": "a581d35191ff07125b3fedf04c50de70f46017348aa5459b2986801db15279f6",
     "size": 2412,
     "ops": [
@@ -66541,11 +66541,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 6,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -66553,7 +66553,7 @@
          "stem": "QqF",
          "first": 0,
          "count": 4,
-         "line": 3
+         "line": 2
         }
        ]
       }
@@ -66864,7 +66864,7 @@
    },
    {
     "path": "LEGO1/omni/src/common/mxcompositepresenter.cpp",
-    "clean": "5d0406bf440b39e228051e08df48d3c6932512cabff230dd4fcc0ff19b4bc921",
+    "clean": "bb977844039a8db57af9cdf1557f166308b31caa6419de3f0abf1a7529e4a609",
     "effective": "8059e42efed3d67e47cb60dcb9631ff5538e1deeb085a203091b7f28c0c1669f",
     "size": 6863,
     "ops": [
@@ -66877,27 +66877,27 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 6,
+       "lines": 5,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "RkC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "empty_class",
          "id": "RkC1",
-         "line": 4
+         "line": 3
         },
         {
          "k": "empty_class",
          "id": "RkC2",
-         "line": 5
+         "line": 4
         }
        ]
       }
@@ -66970,7 +66970,7 @@
    },
    {
     "path": "LEGO1/omni/src/common/mxmediapresenter.cpp",
-    "clean": "975aafda1dae0bb34d66a7896e80cd17fe1651f3c6a5ea07f2b9bba4cfb5b2aa",
+    "clean": "41998b334efc9b47c5339cca7b5f59b69f4607fa0ed0c601ccfb41cd3609f4f8",
     "effective": "bd291b10eea32c8f5a2c9dd40222c3bdd1f022aae3b9e68e6ae8fd13a583b05a",
     "size": 7329,
     "ops": [
@@ -67069,11 +67069,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 38,
+       "lines": 37,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -67081,13 +67081,13 @@
          "stem": "RkN",
          "first": 0,
          "count": 25,
-         "line": 3,
+         "line": 2,
          "width": 3
         },
         {
          "k": "lines",
          "n": 2,
-         "line": 28
+         "line": 27
         },
         {
          "k": "class",
@@ -67101,7 +67101,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 30
+         "line": 29
         },
         {
          "k": "class",
@@ -67115,7 +67115,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 34
+         "line": 33
         }
        ]
       }
@@ -67828,7 +67828,7 @@
    },
    {
     "path": "LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp",
-    "clean": "e66bd0f66c7006d8396e1ec816fe239472b8fe1554bb18ac9f084f6f65313172",
+    "clean": "29af93104cd3290dc754f11154f5bdf69b85c40b9b82f8ccd0e06a9eb4ba4feb",
     "effective": "6218a76292933173916df79738adc9f6aa7284afde238e355310e5a7b23947ac",
     "size": 11701,
     "ops": [
@@ -67859,11 +67859,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 87,
+       "lines": 86,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -67878,7 +67878,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "class",
@@ -67892,7 +67892,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 7
+         "line": 6
         },
         {
          "k": "class",
@@ -67906,7 +67906,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 11
+         "line": 10
         },
         {
          "k": "class",
@@ -67920,7 +67920,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "class",
@@ -67934,7 +67934,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 19
+         "line": 18
         },
         {
          "k": "class",
@@ -67948,7 +67948,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 23
+         "line": 22
         },
         {
          "k": "class",
@@ -67962,7 +67962,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 27
+         "line": 26
         },
         {
          "k": "class",
@@ -67976,7 +67976,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 31
+         "line": 30
         },
         {
          "k": "class",
@@ -67990,7 +67990,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 35
+         "line": 34
         },
         {
          "k": "class",
@@ -68004,7 +68004,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 39
+         "line": 38
         },
         {
          "k": "class",
@@ -68018,7 +68018,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 43
+         "line": 42
         },
         {
          "k": "class",
@@ -68032,7 +68032,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 47
+         "line": 46
         },
         {
          "k": "class",
@@ -68046,7 +68046,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 51
+         "line": 50
         },
         {
          "k": "class",
@@ -68060,7 +68060,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 55
+         "line": 54
         },
         {
          "k": "class",
@@ -68074,7 +68074,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 59
+         "line": 58
         },
         {
          "k": "class",
@@ -68088,32 +68088,32 @@
            "before_member_index": 0
           }
          ],
-         "line": 63
+         "line": 62
         },
         {
          "k": "lines",
          "n": 2,
-         "line": 68
+         "line": 67
         },
         {
          "k": "empty_class",
          "id": "ZzC0",
-         "line": 70
+         "line": 69
         },
         {
          "k": "empty_class",
          "id": "ZzC1",
-         "line": 71
+         "line": 70
         },
         {
          "k": "empty_class",
          "id": "ZzC2",
-         "line": 72
+         "line": 71
         },
         {
          "k": "lines",
          "n": 5,
-         "line": 74
+         "line": 73
         },
         {
          "k": "class",
@@ -68126,7 +68126,7 @@
            "count": 6
           }
          ],
-         "line": 79
+         "line": 78
         }
        ]
       }
@@ -68826,7 +68826,7 @@
    },
    {
     "path": "LEGO1/omni/src/stream/mxstreamer.cpp",
-    "clean": "52643165d7e9a045c2029a6e5fba78a33e64dc8abc95a96d842b92b9ad49bd1e",
+    "clean": "668dd2ab9a921a03c6829f084c6ba4de06fe2531dc5eeef381505f5890ba06fc",
     "effective": "b2796b1a888e3bbb249b8902da4687a24fc59a94e0b1c39c326819fab844c589",
     "size": 8208,
     "ops": [
@@ -68838,11 +68838,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 80,
+       "lines": 79,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -68858,7 +68858,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "class",
@@ -68873,7 +68873,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 8
+         "line": 7
         },
         {
          "k": "class",
@@ -68888,7 +68888,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 13
+         "line": 12
         },
         {
          "k": "class",
@@ -68903,7 +68903,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 18
+         "line": 17
         },
         {
          "k": "class",
@@ -68918,7 +68918,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 23
+         "line": 22
         },
         {
          "k": "class",
@@ -68933,7 +68933,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 28
+         "line": 27
         },
         {
          "k": "class",
@@ -68948,7 +68948,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 33
+         "line": 32
         },
         {
          "k": "class",
@@ -68963,7 +68963,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 38
+         "line": 37
         },
         {
          "k": "class",
@@ -68978,7 +68978,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 43
+         "line": 42
         },
         {
          "k": "class",
@@ -68993,7 +68993,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 48
+         "line": 47
         },
         {
          "k": "class",
@@ -69008,7 +69008,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 53
+         "line": 52
         },
         {
          "k": "class",
@@ -69023,7 +69023,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 58
+         "line": 57
         },
         {
          "k": "class",
@@ -69038,7 +69038,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 63
+         "line": 62
         },
         {
          "k": "class",
@@ -69053,7 +69053,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 68
+         "line": 67
         },
         {
          "k": "class",
@@ -69068,12 +69068,12 @@
            "before_member_index": 0
           }
          ],
-         "line": 73
+         "line": 72
         },
         {
          "k": "lines",
          "n": 2,
-         "line": 79
+         "line": 78
         }
        ]
       }
@@ -69647,7 +69647,7 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxflcpresenter.cpp",
-    "clean": "31def60f6f53fe7061e618b12482d021e4a3341b4a43a8c69ae96a572202b284",
+    "clean": "28bb73c2845610b3a5f47f29ea79fa9e0e482c28872724ded446c429736c74d7",
     "effective": "510f5cd15c3c5cdc2d4ed4f75a8292e20f23520da23e4f706236bf8cd4bcb8b8",
     "size": 2070,
     "ops": [
@@ -69660,11 +69660,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 33,
+       "lines": 32,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -69673,7 +69673,7 @@
          "members": [
           "qqe0_0"
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "enum",
@@ -69681,7 +69681,7 @@
          "members": [
           "qqe1_0"
          ],
-         "line": 6
+         "line": 5
         },
         {
          "k": "enum",
@@ -69689,7 +69689,7 @@
          "members": [
           "qqe2_0"
          ],
-         "line": 9
+         "line": 8
         },
         {
          "k": "enum",
@@ -69697,7 +69697,7 @@
          "members": [
           "qqe3_0"
          ],
-         "line": 12
+         "line": 11
         },
         {
          "k": "enum",
@@ -69705,7 +69705,7 @@
          "members": [
           "qqe4_0"
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "enum",
@@ -69713,7 +69713,7 @@
          "members": [
           "qqe5_0"
          ],
-         "line": 18
+         "line": 17
         },
         {
          "k": "enum",
@@ -69721,7 +69721,7 @@
          "members": [
           "qqe6_0"
          ],
-         "line": 21
+         "line": 20
         },
         {
          "k": "enum",
@@ -69729,7 +69729,7 @@
          "members": [
           "qqe7_0"
          ],
-         "line": 24
+         "line": 23
         },
         {
          "k": "enum",
@@ -69737,7 +69737,7 @@
          "members": [
           "qqe8_0"
          ],
-         "line": 27
+         "line": 26
         },
         {
          "k": "enum",
@@ -69745,7 +69745,7 @@
          "members": [
           "qqe9_0"
          ],
-         "line": 30
+         "line": 29
         }
        ]
       }
@@ -69754,7 +69754,7 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxloopingflcpresenter.cpp",
-    "clean": "3a04ee4b5e7eb3329d2f9e8b2d86859850fbaf606c509f6a9b7fc045bbd2f12b",
+    "clean": "cb8f806816078265e4f879628290ef91b262810439d65f0d1a8c9384cc8bfaa1",
     "effective": "91c07bd045263e5596fd2bde5d5545b952d606f1e48caf645eebb187a7400b4a",
     "size": 2599,
     "ops": [
@@ -69767,17 +69767,17 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 4,
+       "lines": 3,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "fwd",
          "id": "QqF0",
-         "line": 3
+         "line": 2
         }
        ]
       }
@@ -69927,7 +69927,7 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxsmk.cpp",
-    "clean": "de84744a94ad25bf96645c86a6faa5df1956cb17492b7ca7355a224e714d124a",
+    "clean": "37b563328cd2e77b2f1ad420aae787d2d426986323ab9c83b23c2d2152ea8746",
     "effective": "2366031b3c0988ca16b01c5a6965a044d8fbc9bda608260291e2fbe532705db1",
     "size": 6995,
     "ops": [
@@ -69940,11 +69940,11 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 51,
+       "lines": 50,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
@@ -69959,7 +69959,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 3
+         "line": 2
         },
         {
          "k": "class",
@@ -69973,7 +69973,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 7
+         "line": 6
         },
         {
          "k": "class",
@@ -69987,7 +69987,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 11
+         "line": 10
         },
         {
          "k": "class",
@@ -70001,7 +70001,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 15
+         "line": 14
         },
         {
          "k": "class",
@@ -70015,7 +70015,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 19
+         "line": 18
         },
         {
          "k": "class",
@@ -70029,7 +70029,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 23
+         "line": 22
         },
         {
          "k": "class",
@@ -70043,7 +70043,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 27
+         "line": 26
         },
         {
          "k": "class",
@@ -70057,7 +70057,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 31
+         "line": 30
         },
         {
          "k": "class",
@@ -70071,7 +70071,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 35
+         "line": 34
         },
         {
          "k": "class",
@@ -70085,7 +70085,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 39
+         "line": 38
         },
         {
          "k": "class",
@@ -70099,7 +70099,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 43
+         "line": 42
         },
         {
          "k": "class",
@@ -70113,7 +70113,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 47
+         "line": 46
         }
        ]
       }
@@ -70122,7 +70122,7 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxstillpresenter.cpp",
-    "clean": "a6fa00f4064e3ddacc08da941e949d334862a79627b70ce9c94745b1243ae33e",
+    "clean": "e16efd462b33a04b9113872fb3cc849bff656ed34e1d781119235baa5f1e8cf6",
     "effective": "16c0abaf500e00b1e23892615ff3bc356995a2b6226c3beb1f8bb7f2fe58a7ef",
     "size": 6669,
     "ops": [
@@ -70225,17 +70225,17 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 4,
+       "lines": 3,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "fwd",
          "id": "RkF0",
-         "line": 3
+         "line": 2
         }
        ]
       }
@@ -70310,7 +70310,7 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxvideopresenter.cpp",
-    "clean": "e3f1630791908b84c51645269fcc88dbb25efb6ef402ad53d1d631c64e423864",
+    "clean": "4e3fab5f96d87476d59da70515ff62e443f978a4120cf5182c997878d99d4a39",
     "effective": "8090c765eeba095b615bf0a31461aa595e202dedc7921d1e198c454a1a8c19e5",
     "size": 12452,
     "ops": [
@@ -70355,77 +70355,77 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 16,
+       "lines": 15,
        "items": [
         {
          "k": "lines",
-         "n": 2,
+         "n": 1,
          "line": 1
         },
         {
          "k": "empty_class",
          "id": "RkC0",
-         "line": 3
+         "line": 2
         },
         {
          "k": "empty_class",
          "id": "RkC1",
-         "line": 4
+         "line": 3
         },
         {
          "k": "empty_class",
          "id": "RkC2",
-         "line": 5
+         "line": 4
         },
         {
          "k": "empty_class",
          "id": "RkC3",
-         "line": 6
+         "line": 5
         },
         {
          "k": "empty_class",
          "id": "RkC4",
-         "line": 7
+         "line": 6
         },
         {
          "k": "empty_class",
          "id": "RkC5",
-         "line": 8
+         "line": 7
         },
         {
          "k": "empty_class",
          "id": "RkC6",
-         "line": 9
+         "line": 8
         },
         {
          "k": "empty_class",
          "id": "RkC7",
-         "line": 10
+         "line": 9
         },
         {
          "k": "empty_class",
          "id": "RkC8",
-         "line": 11
+         "line": 10
         },
         {
          "k": "empty_class",
          "id": "RkC9",
-         "line": 12
+         "line": 11
         },
         {
          "k": "empty_class",
          "id": "RkC10",
-         "line": 13
+         "line": 12
         },
         {
          "k": "empty_class",
          "id": "RkC11",
-         "line": 14
+         "line": 13
         },
         {
          "k": "empty_class",
          "id": "RkC12",
-         "line": 15
+         "line": 14
         }
        ]
       }

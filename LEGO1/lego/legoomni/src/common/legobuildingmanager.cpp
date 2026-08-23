@@ -15,6 +15,7 @@
 #include "mxtimer.h"
 
 #include <vec.h>
+
 DECOMP_SIZE_ASSERT(LegoBuildingManager, 0x30)
 DECOMP_SIZE_ASSERT(LegoBuildingInfo, 0x2c)
 DECOMP_SIZE_ASSERT(LegoBuildingManager::AnimEntry, 0x14)

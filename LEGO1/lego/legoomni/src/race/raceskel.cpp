@@ -5,6 +5,7 @@
 #include "misc.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(RaceSkel, 0x178)
 
 // FUNCTION: LEGO1 0x100719b0

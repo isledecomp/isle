@@ -9,6 +9,7 @@
 #include "mxobjectfactory.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxCompositePresenter, 0x4c);
 
 // FUNCTION: LEGO1 0x100b60b0

@@ -11,6 +11,7 @@
 #include "mxpalette.h"
 #include "mxutilities.h"
 #include "mxvideomanager.h"
+
 DECOMP_SIZE_ASSERT(MxStillPresenter, 0x6c);
 
 // FUNCTION: LEGO1 0x100b9c70
