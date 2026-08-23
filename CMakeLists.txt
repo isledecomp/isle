@@ -193,7 +193,11 @@ function(add_lego_libraries NAME)
   target_include_directories(shape${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(shape${ARG_SUFFIX} PRIVATE)
 
+  # Two translation units, in this order: retail seats legoanimscene.cpp's
+  # contribution first (its .text runs 0x1009f000-0x1009f8f0, legoanim.cpp's
+  # starts at 0x1009f900) and its constant pool immediately before legoanim's.
   add_library(anim${ARG_SUFFIX} STATIC
+    LEGO1/lego/sources/anim/legoanimscene.cpp
     LEGO1/lego/sources/anim/legoanim.cpp
   )
   list(APPEND list_targets anim${ARG_SUFFIX})

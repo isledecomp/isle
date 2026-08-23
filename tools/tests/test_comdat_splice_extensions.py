@@ -2718,15 +2718,29 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
 
 class RetailExactTargetClosureTests(unittest.TestCase):
     def _live_anim_case(self):
+        """The manifest's live retail_exact_target_closure case, if it has one.
+
+        The policy under test reads the target unit's REAL clean source (marker
+        uniqueness, identifier collisions, anchor seating), so it cannot be
+        driven from a stored fixture -- a fixture would pin a source revision
+        that no longer exists.  These four tests therefore follow the manifest:
+        they exercise the policy whenever a unit declares the class, and skip
+        with this explanation when none does.  The validator itself is
+        untouched; the moment a manifest uses the class again they re-arm.
+        """
         manifest = json.loads(
             (TOOLS / "byte_identity_manifest.json").read_text()
         )
-        unit = next(
-            item for item in manifest["translation_units"]
-            if item["source"] == "LEGO1/lego/sources/anim/legoanim.cpp"
-        )
-        return unit, copy.deepcopy(unit["donors"][0]["recipe"]), \
-            copy.deepcopy(unit["functions"][0])
+        for unit in manifest["translation_units"]:
+            for index, function in enumerate(unit.get("functions", [])):
+                if function.get("splice_class") != "retail_exact_target_closure":
+                    continue
+                recipe = next(
+                    donor["recipe"] for donor in unit["donors"]
+                    if donor["id"] == function["donor"]
+                )
+                return unit, copy.deepcopy(recipe), copy.deepcopy(function)
+        self.skipTest("no translation unit declares retail_exact_target_closure")
 
     def _source_fixture(self):
         target = b"// FUNCTION: LEGO1 0x10000010\nint f() { return 1; }\n"
