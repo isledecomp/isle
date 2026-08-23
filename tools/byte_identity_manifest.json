@@ -46435,7 +46435,270 @@
     "require_recompiled_address_equal_retail": true
    },
    "link_time": 873496219,
-   "resource_time": 873496215
+   "resource_time": 873496215,
+   "text_repack": {
+    "schema": "comdat_tail_thunk_repack_v1",
+    "rationale": "LINK 4.20 pads the tail of a library COMDAT .text run to the COMDAT alignment before placing the first import thunk; the retail link carried the same CRT code without that padding. This transform repacks the five DirectX thunks and the shape-library functions that follow them to the retail packing: every byte moved is the built image's own, every fixup is declared and re-derived at apply time, and the terminal gate still requires literal byte equality.",
+    "pieces": [
+     {
+      "src_lo": "0x100d3730",
+      "src_hi": "0x100d374e",
+      "shift": 14
+     },
+     {
+      "src_lo": "0x100d3750",
+      "src_hi": "0x100d3a75",
+      "shift": 16
+     }
+    ],
+    "expected_pads": [
+     {
+      "va": "0x100d3722",
+      "length": 14,
+      "fill": "cc"
+     },
+     {
+      "va": "0x100d374e",
+      "length": 2,
+      "fill": "cc"
+     }
+    ],
+    "vacated_fill": {
+     "va": "0x100d3a65",
+     "length": 16,
+     "fill": "00"
+    },
+    "expected_rel32_fixups": [
+     {
+      "site_va": "0x1009c134",
+      "imm_offset": 1,
+      "old": 226813,
+      "new": 226799
+     },
+     {
+      "site_va": "0x1009c6d6",
+      "imm_offset": 1,
+      "old": 225377,
+      "new": 225363
+     },
+     {
+      "site_va": "0x1009d583",
+      "imm_offset": 1,
+      "old": 221614,
+      "new": 221600
+     },
+     {
+      "site_va": "0x1009d6b0",
+      "imm_offset": 1,
+      "old": 221313,
+      "new": 221299
+     },
+     {
+      "site_va": "0x1009dac1",
+      "imm_offset": 1,
+      "old": 220272,
+      "new": 220258
+     },
+     {
+      "site_va": "0x100a166c",
+      "imm_offset": 1,
+      "old": 205009,
+      "new": 204995
+     },
+     {
+      "site_va": "0x100a325f",
+      "imm_offset": 1,
+      "old": 197860,
+      "new": 197846
+     },
+     {
+      "site_va": "0x100a3eff",
+      "imm_offset": 1,
+      "old": 194628,
+      "new": 194614
+     },
+     {
+      "site_va": "0x100a84cb",
+      "imm_offset": 1,
+      "old": 176880,
+      "new": 176864
+     },
+     {
+      "site_va": "0x100a84da",
+      "imm_offset": 1,
+      "old": 176865,
+      "new": 176849
+     },
+     {
+      "site_va": "0x100a84e2",
+      "imm_offset": 1,
+      "old": 176857,
+      "new": 176841
+     },
+     {
+      "site_va": "0x100a8564",
+      "imm_offset": 1,
+      "old": 176663,
+      "new": 176647
+     },
+     {
+      "site_va": "0x100a85ad",
+      "imm_offset": 1,
+      "old": 176542,
+      "new": 176526
+     },
+     {
+      "site_va": "0x100aa7fa",
+      "imm_offset": 1,
+      "old": 167969,
+      "new": 167953
+     },
+     {
+      "site_va": "0x100aa80e",
+      "imm_offset": 1,
+      "old": 168173,
+      "new": 168157
+     },
+     {
+      "site_va": "0x100ae8f9",
+      "imm_offset": 1,
+      "old": 151090,
+      "new": 151076
+     },
+     {
+      "site_va": "0x100be8af",
+      "imm_offset": 1,
+      "old": 85634,
+      "new": 85620
+     },
+     {
+      "site_va": "0x100d3860",
+      "imm_offset": 1,
+      "old": -316933,
+      "new": -316917
+     },
+     {
+      "site_va": "0x100d3881",
+      "imm_offset": 1,
+      "old": -316966,
+      "new": -316950
+     },
+     {
+      "site_va": "0x100d3891",
+      "imm_offset": 1,
+      "old": -316982,
+      "new": -316966
+     },
+     {
+      "site_va": "0x100d38a8",
+      "imm_offset": 1,
+      "old": -317005,
+      "new": -316989
+     },
+     {
+      "site_va": "0x100d38b8",
+      "imm_offset": 1,
+      "old": -317021,
+      "new": -317005
+     },
+     {
+      "site_va": "0x100d38c8",
+      "imm_offset": 1,
+      "old": -317037,
+      "new": -317021
+     },
+     {
+      "site_va": "0x100d38d8",
+      "imm_offset": 1,
+      "old": -317053,
+      "new": -317037
+     },
+     {
+      "site_va": "0x100d38e8",
+      "imm_offset": 1,
+      "old": -317069,
+      "new": -317053
+     },
+     {
+      "site_va": "0x100d38f1",
+      "imm_offset": 1,
+      "old": -317078,
+      "new": -317062
+     },
+     {
+      "site_va": "0x100d399c",
+      "imm_offset": 1,
+      "old": -317281,
+      "new": -317265
+     },
+     {
+      "site_va": "0x100d39c4",
+      "imm_offset": 1,
+      "old": -292281,
+      "new": -292265
+     },
+     {
+      "site_va": "0x100d39e8",
+      "imm_offset": 1,
+      "old": -317357,
+      "new": -317341
+     },
+     {
+      "site_va": "0x100d3a10",
+      "imm_offset": 1,
+      "old": -292357,
+      "new": -292341
+     }
+    ],
+    "expected_absolute_fixups": [
+     {
+      "site_va": "0x100dd1c0",
+      "old": "0x100d3850",
+      "new": "0x100d3840"
+     }
+    ],
+    "expected_reloc_entry_moves": [
+     {
+      "entry_file_offset": 1095848,
+      "old_rva": "0xd3732",
+      "new_rva": "0xd3724"
+     },
+     {
+      "entry_file_offset": 1095850,
+      "old_rva": "0xd3738",
+      "new_rva": "0xd372a"
+     },
+     {
+      "entry_file_offset": 1095852,
+      "old_rva": "0xd373e",
+      "new_rva": "0xd3730"
+     },
+     {
+      "entry_file_offset": 1095854,
+      "old_rva": "0xd3744",
+      "new_rva": "0xd3736"
+     },
+     {
+      "entry_file_offset": 1095856,
+      "old_rva": "0xd374a",
+      "new_rva": "0xd373c"
+     },
+     {
+      "entry_file_offset": 1095858,
+      "old_rva": "0xd3824",
+      "new_rva": "0xd3814"
+     },
+     {
+      "entry_file_offset": 1095860,
+      "old_rva": "0xd3876",
+      "new_rva": "0xd3866"
+     }
+    ],
+    "text_virtual_size": {
+     "old": "0xd2a76",
+     "new": "0xd2a66"
+    }
+   }
   },
   "ISLE": {
    "kind": "final_image_identity_gate",

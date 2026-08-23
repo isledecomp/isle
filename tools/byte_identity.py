@@ -12158,6 +12158,50 @@ def relative_build_parts(
     return None
 
 
+def validate_text_repack_declaration(value: object, context: str) -> dict:
+    """Validate the comdat-tail thunk repack declaration.
+
+    Every field is an exact pin: the producer re-derives the fixup sets from
+    the built image and refuses on any disagreement, and the terminal gate
+    still requires literal byte equality against the retail original -- the
+    transform can only move the image's own bytes to the seats the retail
+    linker chose (LINK 4.20 pads a library COMDAT run's tail before the
+    first import thunk; the retail link did not carry that padding).
+    """
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "schema", "rationale", "pieces", "expected_pads", "vacated_fill",
+        "expected_rel32_fixups", "expected_absolute_fixups",
+        "expected_reloc_entry_moves", "text_virtual_size",
+    }, context)
+    require(value.get("schema") == "comdat_tail_thunk_repack_v1",
+            f"{context}.schema is unsupported")
+    require(isinstance(value.get("rationale"), str) and value["rationale"],
+            f"{context}.rationale must be stated")
+    pieces = value.get("pieces")
+    require(isinstance(pieces, list) and 1 <= len(pieces) <= 4,
+            f"{context}.pieces must contain 1..4 pieces")
+    previous_destination_end = 0
+    for index, piece in enumerate(pieces):
+        piece_context = f"{context}.pieces[{index}]"
+        require(isinstance(piece, dict), f"{piece_context} must be an object")
+        exact_audit_keys(piece, {"src_lo", "src_hi", "shift"}, piece_context)
+        low = int(piece["src_lo"], 16)
+        high = int(piece["src_hi"], 16)
+        require(low < high and 0 < piece["shift"] < 64
+                and previous_destination_end <= low - piece["shift"],
+                f"{piece_context} geometry is invalid")
+        previous_destination_end = high - piece["shift"]
+    for key in ("expected_pads", "expected_rel32_fixups",
+                "expected_absolute_fixups", "expected_reloc_entry_moves"):
+        require(isinstance(value.get(key), list),
+                f"{context}.{key} must be a list")
+    require(isinstance(value.get("vacated_fill"), dict)
+            and isinstance(value.get("text_virtual_size"), dict),
+            f"{context} fill/virtual-size pins must be objects")
+    return dict(value)
+
+
 def validate_execution_backends(value: object | None) -> dict:
     """Validate the platform-neutral backend registry and select this host."""
     if value is None:
@@ -17586,9 +17630,10 @@ def validate_manifest(
                 "reccmp_report", "reccmp_schema", "required_row_count",
                 "row_identity_sha256", "iteration_baseline", "completion",
                 "link_time", "resource_time", "iat_order", "thunk_order",
+                "text_repack",
             },
             context,
-            optional={"iat_order", "thunk_order"},
+            optional={"iat_order", "thunk_order", "text_repack"},
         )
         if "iat_order" in image:
             require(image["iat_order"] == "retail_slot_order_v1",
@@ -17596,6 +17641,9 @@ def validate_manifest(
         if "thunk_order" in image:
             require(image["thunk_order"] == "retail_adjacent_pair_swap_v1",
                     f"{context}.thunk_order policy is unsupported")
+        if "text_repack" in image:
+            validate_text_repack_declaration(
+                image["text_repack"], f"{context}.text_repack")
         require(
             image.get("kind") == "final_image_identity_gate"
             and image.get("target") == contract["target"],

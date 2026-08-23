@@ -474,6 +474,15 @@ def terminal_lane(manifest: dict, source_overlay: dict, gates: dict,
                 stamped, (ROOT / gate["original"]).read_bytes()
             )
             stamped_path.write_bytes(stamped)
+        if gate.get("text_repack"):
+            declaration_path = terminal_build / f"text-repack-{identity}.json"
+            declaration_path.write_text(
+                json.dumps(gate["text_repack"], indent=1))
+            run([sys.executable, str(ROOT / "tools/pe_textrepack.py"),
+                 str(stamped_path), str(declaration_path)],
+                timeout_seconds=link_timeout,
+                log=build_root / f"textrepack-{identity}.log")
+            stamped = stamped_path.read_bytes()
         original = (ROOT / gate["original"]).read_bytes()
         md5 = hashlib.md5(stamped).hexdigest()
         sha256 = hashlib.sha256(stamped).hexdigest()
