@@ -48132,7 +48132,7 @@
     ],
     "expected_absolute_fixups": [
      {
-      "site_va": "0x100dd1e0",
+      "site_va": "0x100dd1f0",
       "old": "0x100d3850",
       "new": "0x100d3840"
      }
@@ -63831,11 +63831,12 @@
    {
     "path": "LEGO1/lego/sources/3dmanager/tglsurface.cpp",
     "clean": "b6e19dc8b0098e5dbcf588b5ed2f121805caca746cafd5b35b95795ca59fe9ec",
-    "effective": "b1dd36d0f0f61953fe945a97abe4218907c342dc5b030e1cb39dd090a2e2b12f",
-    "size": 4940,
+    "effective": "97ab669d75612481c886de8706e1c5bec2b47362b11112ce06f1f3efdbe9aa56",
+    "size": 5660,
     "ops": [
      {
       "op": "insert",
+      "id": "op_9023_state_tglsurface",
       "anchor": {
        "ctx": "03a5140a5d250f94a61383bed5377ddb2038fc4c10cae8ec41e609b46289c8bd",
        "a": 0,
@@ -63843,7 +63844,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 8,
+       "lines": 39,
        "items": [
         {
          "k": "lines",
@@ -63851,25 +63852,31 @@
          "line": 1
         },
         {
-         "k": "fwd",
-         "id": "MxUnkRecordFU",
-         "line": 5
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordFV",
-         "line": 6
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordFW",
-         "line": 7
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordFX",
-         "line": 8
+         "k": "fwd_run",
+         "stem": "MxUnkRecordF",
+         "first": 0,
+         "count": 35,
+         "line": 5,
+         "width": 2
         }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "id": "op_9022_rdata_tglsurface",
+      "anchor": {
+       "ctx": "154846dafc9c7c0bed3db5ef80740cacd47aa87e943632529220eb19391d4fbb",
+       "b": 3,
+       "at": "before_token"
+      },
+      "gen": {
+       "k": "include",
+       "header": "mxgeometry/mxmatrix.h",
+       "style": "quote",
+       "lines": 2,
+       "at": [
+        1
        ]
       }
      }
