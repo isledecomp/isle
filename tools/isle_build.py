@@ -516,6 +516,67 @@ def terminal_lane(manifest: dict, source_overlay: dict, gates: dict,
     return results
 
 
+def check_callee_oracle_bindings(manifest, report_bytes):
+    """Every callee oracle a simulated-elision certificate names must be the
+    function the accepted comparison itself binds to that retail address:
+    the report row at the oracle's address must score 1.0 (our body IS the
+    simulated bytes) and carry the declared row name, and the declared
+    mangled symbol must demangle to that row name.  A wrong binding fails
+    the gate, never degrades it."""
+    oracles = []
+    for unit in manifest.get("translation_units") or []:
+        for function in unit.get("functions") or []:
+            if function.get("splice_class") \
+                    != byte_identity.SIMULATED_ELISION_CLASS:
+                continue
+            spec = function.get("simulated_elision") or {}
+            for oracle in spec.get("callee_oracles") or []:
+                oracles.append((function["mangled"], oracle))
+    if not oracles:
+        return
+    site_packages = os.environ.get(
+        "ISLE_BYTE_IDENTITY_RECCMP_SITE_PACKAGES")
+    package_root = os.environ.get("ISLE_BYTE_IDENTITY_RECCMP_PACKAGE_ROOT")
+    if site_packages and site_packages not in sys.path:
+        sys.path.insert(0, site_packages)
+    if package_root:
+        parent = str(Path(package_root).parent)
+        if parent not in sys.path:
+            sys.path.insert(0, parent)
+    from reccmp.cvdump.demangler import msvc_demangle
+    report = json.loads(report_bytes)
+    rows = report.get("data") if isinstance(report, dict) else report
+    by_address = {row["address"]: row for row in rows
+                  if isinstance(row, dict) and row.get("address")}
+    for owner, oracle in oracles:
+        row = by_address.get(oracle["address"])
+        if row is None:
+            fail(f"callee oracle for {owner}: no comparison row at "
+                 f"{oracle['address']}")
+        if row.get("matching") != 1.0:
+            fail(f"callee oracle for {owner}: the row at "
+                 f"{oracle['address']} is not at 1.0")
+        if row.get("name") != oracle["row_name"]:
+            fail(f"callee oracle for {owner}: the row at "
+                 f"{oracle['address']} is '{row.get('name')}', not the "
+                 f"declared '{oracle['row_name']}'")
+        demangled = msvc_demangle(oracle["symbol"])
+        if not demangled:
+            fail(f"callee oracle for {owner}: '{oracle['symbol']}' does "
+                 "not demangle")
+        if not demangled.endswith(oracle["row_name"]):
+            # A signature-less row name (a constructor row) binds only when
+            # it is unambiguous: exactly one comparison row carries it.
+            claimants = [row for row in rows
+                         if isinstance(row, dict)
+                         and row.get("name") == oracle["row_name"]]
+            if not (oracle["row_name"] in demangled
+                    and len(claimants) == 1):
+                fail(f"callee oracle for {owner}: '{oracle['symbol']}' "
+                     f"does not demangle to '{oracle['row_name']}', and "
+                     "the row name is not a unique signature-less match")
+
+
 def gains_losses(report: dict, baseline_bytes: bytes | None) -> str:
     if baseline_bytes is None:
         return ""
@@ -734,6 +795,9 @@ def main() -> int:
             if delta:
                 print(delta)
             fail(f"{identity}: {error}")
+
+        if identity == "LEGO1":
+            check_callee_oracle_bindings(manifest, report_bytes)
 
         verdict["images"][identity] = {
             "raw_1_0_count": result["raw_1_0_count"],
@@ -1878,6 +1942,16 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                     # result is refused unless it equals the pinned retail
                     # oracle.  Installation is the same-slot resize.
                     retail = function["retail_oracle"]
+                    spec = function["simulated_elision"]
+                    oracle_bodies = {}
+                    for oracle in ((spec.get("callee_oracles") or [])
+                                   + (spec.get("vtable_oracles") or [])):
+                        oracle_bodies[oracle["symbol"]] = (
+                            byte_identity.retail_image_body(
+                                manifest, retail["image"],
+                                int(oracle["address"], 16),
+                                oracle["length"],
+                            ))
                     composed, detail = (
                         byte_identity
                         .compose_retail_exact_simulated_elision(
@@ -1887,6 +1961,7 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                                 manifest, retail["image"],
                                 int(retail["address"], 16), retail["length"],
                             ),
+                            oracle_bodies=oracle_bodies or None,
                         ))
                     byte_identity.validate_donor_object_excluded(
                         composed, [donor_objects[function["donor"]]])

@@ -15007,7 +15007,26 @@ def validate_manifest(
                     }
                     if "retail_image_target" in function:
                         elision_keys.add("retail_image_target")
+                    for optional in ("expected_pre_image_length",
+                                     "expected_donor_relocation_count"):
+                        if optional in function:
+                            elision_keys.add(optional)
                     exact_keys(function, elision_keys, function_context)
+                    donor_mode = (function.get("simulated_elision") or {}) \
+                        .get("pre_image") == "donor"
+                    require(donor_mode == (
+                                "expected_pre_image_length" in function)
+                            == ("expected_donor_relocation_count"
+                                in function),
+                            f"{function_context}: the donor pre-image pins "
+                            "and the pre_image declaration must appear "
+                            "together")
+                    if donor_mode:
+                        for name in ("expected_pre_image_length",
+                                     "expected_donor_relocation_count"):
+                            require_exact_int(function.get(name),
+                                              f"{function_context}.{name}",
+                                              minimum=1)
                     for name in (
                         "expected_section_number",
                         "expected_donor_section_number",
@@ -15030,14 +15049,29 @@ def validate_manifest(
                                  "expected_donor_metadata_sha256"):
                         require_sha(function.get(name),
                                     f"{function_context}.{name}")
-                    require(function["expected_seed_body_sha256"]
-                            == function["expected_donor_body_sha256"],
-                            f"{function_context}: the simulated-elision "
-                            "witness must reproduce the seed's body")
-                    require(function["expected_body_sha256"]
-                            != function["expected_seed_body_sha256"],
-                            f"{function_context}: the image pin does not "
-                            "move the seed body")
+                    if (function.get("simulated_elision") or {}) \
+                            .get("pre_image") == "donor":
+                        # The donor IS the pre-image; its body pin must
+                        # differ from the seed's (otherwise the witness
+                        # mode applies) and the image must move it.
+                        require(function["expected_seed_body_sha256"]
+                                != function["expected_donor_body_sha256"],
+                                f"{function_context}: a donor pre-image "
+                                "that reproduces the seed belongs to the "
+                                "witness mode")
+                        require(function["expected_body_sha256"]
+                                != function["expected_donor_body_sha256"],
+                                f"{function_context}: the image pin does "
+                                "not move the pre-image body")
+                    else:
+                        require(function["expected_seed_body_sha256"]
+                                == function["expected_donor_body_sha256"],
+                                f"{function_context}: the simulated-elision "
+                                "witness must reproduce the seed's body")
+                        require(function["expected_body_sha256"]
+                                != function["expected_seed_body_sha256"],
+                                f"{function_context}: the image pin does "
+                                "not move the seed body")
                     require(function["expected_seed_length"]
                             != function["expected_donor_length"],
                             f"{function_context}: an elision whose image "
@@ -15098,12 +15132,88 @@ def validate_manifest(
                         "expected_external_entries",
                     }
                     for optional in ("expected_code_length",
-                                     "expected_internal_relocation_targets"):
+                                     "expected_internal_relocation_targets",
+                                     "callee_oracles", "vtable_oracles",
+                                     "pre_image", "line_row_positions"):
                         if optional in spec:
                             spec_keys.add(optional)
                     exact_keys(spec, spec_keys, spec_context)
+                    oracle_symbols = set()
+                    for name in ("callee_oracles", "vtable_oracles"):
+                        for oindex, oracle in enumerate(spec.get(name) or []):
+                            oracle_context = f"{spec_context}.{name}[{oindex}]"
+                            oracle_keys = {"symbol", "address", "length",
+                                           "body_sha256", "row_name"}
+                            if name == "vtable_oracles":
+                                oracle_keys.add("slots")
+                                oracle_keys.discard("row_name")
+                            require(isinstance(oracle, dict),
+                                    f"{oracle_context} is not an object")
+                            exact_keys(oracle, oracle_keys, oracle_context)
+                            symbol = oracle.get("symbol")
+                            require(isinstance(symbol, str)
+                                    and symbol.startswith("?")
+                                    and symbol not in oracle_symbols,
+                                    f"{oracle_context}.symbol is invalid or "
+                                    "duplicated")
+                            oracle_symbols.add(symbol)
+                            address = oracle.get("address")
+                            require(isinstance(address, str)
+                                    and address.startswith("0x")
+                                    and int(address, 16) > 0,
+                                    f"{oracle_context}.address is invalid")
+                            require_exact_int(oracle.get("length"),
+                                              f"{oracle_context}.length",
+                                              minimum=1, maximum=4096)
+                            digest = oracle.get("body_sha256")
+                            require(isinstance(digest, str)
+                                    and len(digest) == 64
+                                    and all(ch in "0123456789abcdef"
+                                            for ch in digest),
+                                    f"{oracle_context}.body_sha256 is "
+                                    "invalid")
+                            if name == "callee_oracles":
+                                row_name = oracle.get("row_name")
+                                require(isinstance(row_name, str)
+                                        and "::" in row_name,
+                                        f"{oracle_context}.row_name is "
+                                        "invalid")
+                            else:
+                                table = oracle.get("slots")
+                                require(isinstance(table, dict) and table
+                                        and all(
+                                            type(slot_key) is str
+                                            and slot_key.isdigit()
+                                            and isinstance(slot_target, str)
+                                            and slot_target.startswith("?")
+                                            for slot_key, slot_target
+                                            in table.items()),
+                                        f"{oracle_context}.slots is invalid")
+                    callee_symbols = {oracle["symbol"] for oracle
+                                      in spec.get("callee_oracles") or []}
+                    for oracle in spec.get("vtable_oracles") or []:
+                        for slot_target in oracle["slots"].values():
+                            require(slot_target in callee_symbols,
+                                    f"{spec_context}: vtable slot target "
+                                    f"'{slot_target}' has no callee oracle")
                     require(spec.get("kind") == SIMULATED_ELISION_KIND,
                             f"{spec_context}.kind differs")
+                    if "pre_image" in spec:
+                        require(spec["pre_image"] == "donor",
+                                f"{spec_context}.pre_image is invalid")
+                    if "line_row_positions" in spec:
+                        positions = spec["line_row_positions"]
+                        require(isinstance(positions, list) and positions
+                                and all(isinstance(pair, list)
+                                        and len(pair) == 2
+                                        and all(type(item) is int
+                                                and item >= 0
+                                                for item in pair)
+                                        for pair in positions)
+                                and [pair[0] for pair in positions]
+                                == sorted(pair[0] for pair in positions),
+                                f"{spec_context}.line_row_positions is "
+                                "invalid")
                     require(isinstance(spec.get("regions"), list)
                             and spec["regions"],
                             f"{spec_context}.regions is empty")
@@ -15112,7 +15222,8 @@ def validate_manifest(
                         region_context = f"{spec_context}.regions[{index}]"
                         region_keys = {"region_start", "region_end",
                                        "image_start", "image_length"}
-                        for optional in ("dead_registers", "dead_slots"):
+                        for optional in ("dead_registers", "dead_slots",
+                                         "relocation_pairs", "entry_loads"):
                             if optional in region:
                                 region_keys.add(optional)
                         require(isinstance(region, dict),
@@ -15123,9 +15234,13 @@ def validate_manifest(
                             require_exact_int(region.get(name),
                                               f"{region_context}.{name}",
                                               minimum=0)
+                        pre_image_length = (
+                            function["expected_pre_image_length"]
+                            if spec.get("pre_image") == "donor"
+                            else function["expected_seed_length"])
                         require(previous_end <= region["region_start"]
                                 < region["region_end"]
-                                <= function["expected_seed_length"],
+                                <= pre_image_length,
                                 f"{region_context} bounds are invalid")
                         previous_end = region["region_end"]
                         for name in ("dead_registers",):
@@ -15140,6 +15255,24 @@ def validate_manifest(
                                 and all(type(item) is int for item in slots)
                                 and slots == sorted(set(slots)),
                                 f"{region_context}.dead_slots is invalid")
+                        pairs = region.get("relocation_pairs")
+                        if pairs is not None:
+                            require(isinstance(pairs, list) and pairs
+                                    and all(isinstance(pair, list)
+                                            and len(pair) == 2
+                                            and all(type(item) is int
+                                                    and item >= 0
+                                                    for item in pair)
+                                            for pair in pairs)
+                                    and [pair[0] for pair in pairs]
+                                    == sorted(pair[0] for pair in pairs),
+                                    f"{region_context}.relocation_pairs "
+                                    "is invalid")
+                            for pair in pairs:
+                                require(region["region_start"] <= pair[0]
+                                        < region["region_end"],
+                                        f"{region_context}: a relocation "
+                                        "pair leaves the region")
                     widenings = spec.get("branch_widenings")
                     require(isinstance(widenings, list)
                             and all(type(item) is int and item >= 0
@@ -37840,6 +37973,58 @@ SIMULATED_ELISION_KIND = "simulated_elision_v1"
 SIMULATED_ELISION_CLASS = "retail_exact_simulated_elision"
 
 
+def _srr_entry_load_proof(
+    decoded: list, branch_targets: set, at_offset: int, register: str,
+    disp: int, context: str,
+) -> None:
+    """Prove a region entry condition: REGISTER holds [ebp+DISP] on entry.
+
+    The proof is a backward scan from the region start over the dominating
+    straight-line run: the defining instruction must be `mov reg, [ebp+disp]`
+    and nothing between it and the region may redefine the register, write
+    memory, call, branch, or be branched into.  Anything else refuses."""
+    index = None
+    for position, item in enumerate(decoded):
+        if item["offset"] == at_offset:
+            index = position
+            break
+    require(index is not None,
+            f"{context}: the region start is not an instruction boundary")
+    atoms = _IA32_ATOMS_OF[register]
+    number = _IA32_REGISTER_NUMBERS[register]
+    for position in range(index - 1, -1, -1):
+        item = decoded[position]
+        memory = item.get("memory")
+        encoding = item.get("encoding") or {}
+        if item["opcode"] == 0x8B and memory \
+                and memory.get("base") == "ebp" \
+                and memory.get("displacement") == disp \
+                and encoding.get("reg") == number \
+                and encoding.get("mode") != 3:
+            # The defining load itself may be a branch target: entering AT
+            # the definition still executes it before the region.
+            return item["offset"]
+        require(item["offset"] not in branch_targets,
+                f"{context}: a branch target interrupts the entry-load "
+                f"scan at {item['offset']}")
+        # A conditional branch may sit between the load and the region: its
+        # fallthrough edge is the only path that reaches the region from
+        # here, and it writes nothing.  Anything without a fallthrough --
+        # or with an effect -- refuses.
+        require(item["flow"] in ("fall", "jcc"),
+                f"{context}: control flow interrupts the entry-load scan "
+                f"at {item['offset']}")
+        require(not (frozenset(item["write_atoms"]) & atoms),
+                f"{context}: {register} is redefined at {item['offset']} "
+                "before the region without the declared load")
+        require(not (memory and memory.get("write")),
+                f"{context}: a memory write at {item['offset']} interrupts "
+                "the entry-load scan")
+    require(False,
+            f"{context}: no dominating `mov {register}, [ebp{disp:+#x}]` "
+            "was found")
+
+
 def apply_simulated_elision(
     body: bytes, regions: list, relocation_offsets: frozenset,
     context: str, retail_body: bytes,
@@ -37848,6 +38033,8 @@ def apply_simulated_elision(
     external_entries: frozenset | None = None,
     internal_targets: frozenset | None = None,
     branch_widenings: list | None = None,
+    image_relocations: dict | None = None,
+    oracles: dict | None = None,
 ) -> tuple[bytes, dict]:
     """Replace declared regions with the RETAIL ORACLE's own bytes, each
     replacement proved equivalent to the seed's region by symbolic execution.
@@ -37903,6 +38090,7 @@ def apply_simulated_elision(
     delta = 0
     proved = []
     replacements = {}
+    paired_reseat = {}
     for ordinal, item in enumerate(regions):
         item_context = f"{context} region {ordinal}"
         start, end = item["region_start"], item["region_end"]
@@ -37932,17 +38120,147 @@ def apply_simulated_elision(
         require(not any(start < target < end
                         for target in (internal_targets or frozenset())),
                 f"{item_context}: a relocated target lies inside the region")
-        require(not any(start <= offset < end
-                        for offset in relocation_offsets),
-                f"{item_context}: a relocation lies inside the region; the "
-                "elision does not reseat relocations it replaces")
+        pairs = item.get("relocation_pairs")
+        region_reloc_offsets = sorted(
+            offset for offset in (relocations or {})
+            if start <= offset < end)
+        if pairs is None:
+            require(not any(start <= offset < end
+                            for offset in relocation_offsets),
+                    f"{item_context}: a relocation lies inside the region; "
+                    "the elision does not reseat relocations it replaces")
+            paired = []
+        else:
+            # A region MAY carry relocations when every one is paired with
+            # its position in the image and the image position names the
+            # SAME symbol in the declared retail relocation table.  The
+            # simulator then reads both fields as that symbol, so the two
+            # versions' relocated values compare by identity, and the
+            # reseat below moves each seed record to its paired position.
+            require([pair[0] for pair in pairs] == region_reloc_offsets,
+                    f"{item_context}: relocation_pairs do not cover the "
+                    "region's relocations exactly")
+            paired = []
+            for seed_offset, image_offset in pairs:
+                row = (relocations or {})[seed_offset]
+                width = row["width"] if isinstance(row, dict) else 4
+                require(image_start <= image_offset
+                        and image_offset + width
+                        <= image_start + image_length,
+                        f"{item_context}: a paired relocation leaves the "
+                        "image slice")
+                seed_target = row["target"] if isinstance(row, dict) \
+                    else row
+                image_target = (image_relocations or {}).get(image_offset)
+                require(image_target is not None
+                        and image_target == seed_target,
+                        f"{item_context}: the relocation at {seed_offset} "
+                        f"names '{seed_target}' but the image position "
+                        f"{image_offset} names '{image_target}'")
+                paired.append((seed_offset, image_offset, width))
+                paired_reseat[seed_offset] = (start,
+                                              image_offset - image_start)
+        entry_loads = item.get("entry_loads") or {}
+        if entry_loads:
+            require(isinstance(entry_loads, dict)
+                    and all(name in _IA32_REGISTER_NUMBERS
+                            and name not in _IA32_STRUCTURAL_REGISTERS
+                            and type(value) is int
+                            for name, value in entry_loads.items()),
+                    f"{item_context}.entry_loads is invalid")
+            # The image side has no relocations to mark its funclet tail,
+            # so the strict decoder cannot walk it; the proof instead rides
+            # the seed's: the image's dominating window must be BYTE-EQUAL
+            # to the seed's proved window, and a tolerant linear scan of
+            # the whole image must show no branch targeting the window's
+            # interior (which would bypass the defining load).
+            image_branch_targets = set()
+            cursor = 0
+            while cursor < len(retail_body):
+                step = supported_ia32_instruction_length(
+                    retail_body[cursor:], f"{item_context} image scan")
+                lead = retail_body[cursor]
+                follow = retail_body[cursor + 1] if step >= 2 else None
+                relative = None
+                if lead == 0xEB or 0x70 <= lead <= 0x7F:
+                    relative = int.from_bytes(
+                        retail_body[cursor + 1:cursor + 2], "little",
+                        signed=True)
+                elif lead == 0xE9 or (lead == 0x0F and follow is not None
+                                      and 0x80 <= follow <= 0x8F):
+                    relative = int.from_bytes(
+                        retail_body[cursor + step - 4:cursor + step],
+                        "little", signed=True)
+                if relative is not None:
+                    image_branch_targets.add(cursor + step + relative)
+                cursor += step
+            for name, value in entry_loads.items():
+                definition = _srr_entry_load_proof(
+                    instructions, branch_targets, start, name, value,
+                    f"{item_context} seed entry {name}")
+                image_definition = image_start - (start - definition)
+                require(image_definition >= 0,
+                        f"{item_context} image entry {name}: the image's "
+                        "dominating window leaves the body")
+                # A conditional branch inside the window may aim elsewhere
+                # in each version (the elision re-derives every crossing
+                # displacement): the fallthrough state that reaches the
+                # region does not depend on where the taken edge goes, and
+                # the target-interior check above rules out entries that
+                # would bypass the load.  So the comparison masks exactly
+                # the branch displacement bytes and nothing else.
+                for entry in instructions:
+                    if not (definition <= entry["offset"] < start):
+                        continue
+                    seed_raw = body[entry["offset"]:
+                                    entry["offset"] + entry["length"]]
+                    shifted = image_definition + (entry["offset"]
+                                                  - definition)
+                    image_raw = retail_body[shifted:
+                                            shifted + entry["length"]]
+                    if entry["flow"] in ("jcc", "jmp"):
+                        width = _reencoding_branch_width(
+                            entry, seed_raw,
+                            f"{item_context} image entry width")
+                        seed_raw = seed_raw[:len(seed_raw) - width]
+                        image_raw = image_raw[:len(image_raw) - width]
+                    require(seed_raw == image_raw,
+                            f"{item_context} image entry {name}: the "
+                            "image's dominating window differs from the "
+                            f"seed's at {entry['offset']}")
+                require(not any(
+                            image_definition < target <= image_start - 1
+                            for target in image_branch_targets),
+                        f"{item_context} image entry {name}: a branch "
+                        "targets the image window's interior")
         image_slice = bytes(retail_body[image_start:
                                         image_start + image_length])
+        installed_slice = bytearray(image_slice)
+        for _, image_offset, width in paired:
+            # The retail bytes carry the linker-resolved operand; the
+            # derived OBJECT must carry a zero addend there so the next
+            # link resolves the paired symbol cleanly.  The final
+            # retail-equality comparison masks exactly these fields.
+            base_at = image_offset - image_start
+            installed_slice[base_at:base_at + width] = b"\0" * width
+        seed_region_map = {
+            offset: (relocations or {})[offset]
+            for offset in region_reloc_offsets}
+        image_region_map = {
+            image_offset - image_start:
+                {"target": (image_relocations or {})[image_offset],
+                 "width": width}
+            for _, image_offset, width in paired}
         # Both versions execute symbolically; the closed simulator set is
         # the guard against any branch inside either version.
-        seed_state = _srr_simulate(body, start, end, f"{item_context} seed")
+        seed_state = _srr_simulate(body, start, end,
+                                   f"{item_context} seed",
+                                   seed_region_map, oracles,
+                                   entry_loads or None)
         image_state = _srr_simulate(image_slice, 0, image_length,
-                                    f"{item_context} image")
+                                    f"{item_context} image",
+                                    image_region_map, oracles,
+                                    entry_loads or None)
         for label, seed_part, image_part in (
                 ("FP stack", seed_state[1], image_state[1]),
                 ("push sequence", seed_state[2], image_state[2])):
@@ -37974,9 +38292,39 @@ def apply_simulated_elision(
                     f"{item_context}: the two versions reach the terminal "
                     "call with a different target or argument sequence")
         elif seed_flags != image_flags:
-            require(end in walk_index and not flag_live[walk_index[end]],
-                    f"{item_context}: the two versions leave different flag "
-                    "state and a flag is live at the exit")
+            symmetric = (
+                isinstance(seed_flags, tuple)
+                and isinstance(image_flags, tuple)
+                and len(seed_flags) == 3 and len(image_flags) == 3
+                and seed_flags[0] == "cmp" and image_flags[0] == "cmp"
+                and seed_flags[1] == image_flags[2]
+                and seed_flags[2] == image_flags[1])
+            if symmetric:
+                # A mirrored compare: ZF is symmetric under operand
+                # exchange, the other arithmetic flags are not.  The
+                # divergence is sound exactly when the region's exit
+                # instruction is an equality branch -- the only consumer,
+                # and it reads ZF alone -- and no flag survives past it on
+                # either successor edge.
+                require(end in walk_index,
+                        f"{item_context}: the mirrored compare's exit is "
+                        "not a flow boundary")
+                opcode = body[end] if end < len(body) else None
+                equality = (opcode in (0x74, 0x75)
+                            or (opcode == 0x0F and end + 1 < len(body)
+                                and body[end + 1] in (0x84, 0x85)))
+                require(equality,
+                        f"{item_context}: the mirrored compare's consumer "
+                        "is not an equality branch")
+                for edge in successors[walk_index[end]]:
+                    require(not flag_live[edge],
+                            f"{item_context}: a flag outlives the mirrored "
+                            "compare's equality branch")
+            else:
+                require(end in walk_index
+                        and not flag_live[walk_index[end]],
+                        f"{item_context}: the two versions leave different "
+                        "flag state and a flag is live at the exit")
         differing = sorted(name for name in _SIMULATOR_REGS
                            if seed_state[0][name] != image_state[0][name])
         declared_dead = item.get("dead_registers") or []
@@ -38001,14 +38349,17 @@ def apply_simulated_elision(
             _srr_slot_scratch_proof(instructions, walk_items, successors,
                                     entries, end, disp,
                                     f"{item_context} slot {disp:#x}", body)
-        replacements[start] = (end, image_slice)
+        replacements[start] = (end, bytes(installed_slice))
         delta += image_length - (end - start)
-        proved.append({
+        entry = {
             "region_start": start, "region_end": end,
             "image_start": image_start, "image_length": image_length,
             "dead_registers": sorted(declared_dead),
             "dead_slots": sorted(dead_slots),
-        })
+        }
+        if pairs is not None:
+            entry["relocation_pairs"] = [list(pair[:2]) for pair in paired]
+        proved.append(entry)
 
     # Rebuild the body: one piece per instruction outside every region, one
     # opaque piece per region.  Then the branch-displacement fixpoint.
@@ -38124,6 +38475,15 @@ def apply_simulated_elision(
     offset_map[limit] = image_limit
     reseat = []
     for offset in sorted(relocations or {}):
+        if offset in paired_reseat:
+            region_offset, slice_delta = paired_reseat[offset]
+            piece_index = next(
+                index for index, owner_item in enumerate(piece_owner)
+                if owner_item == ("region", region_offset))
+            moved_to = starts[piece_index] + slice_delta
+            if moved_to != offset:
+                reseat.append([offset, moved_to])
+            continue
         width = (relocations or {})[offset]["width"]
         owner = None
         for piece_index, piece_owner_item in enumerate(piece_owner):
@@ -38165,6 +38525,7 @@ def compose_retail_exact_simulated_elision(
     donor_bytes: bytes,
     function: dict,
     retail_body: bytes,
+    oracle_bodies: dict | None = None,
 ) -> tuple[bytes, dict]:
     """Install the elision image after proving it is retail's own code.
 
@@ -38211,18 +38572,37 @@ def compose_retail_exact_simulated_elision(
             and sum(seed_comdats.values())
             == function["expected_comdat_count"],
             "simulated-elision witness COMDAT identity set differs")
-    require(
-        sp["raw_size"] == dp["raw_size"]
-        == function["expected_seed_length"]
-        and sp["relocation_count"] == dp["relocation_count"]
-        == function["expected_relocation_count"]
-        and sp["line_count"] == function["expected_seed_line_count"]
-        and dp["line_count"] == function["expected_donor_line_count"]
-        and sp["name"] == dp["name"]
-        and sp["characteristics"] == dp["characteristics"]
-        == function["expected_characteristics"],
-        "simulated-elision target header/count pins changed",
-    )
+    donor_pre_image = function["simulated_elision"].get("pre_image") \
+        == "donor"
+    if donor_pre_image:
+        require(
+            sp["raw_size"] == function["expected_seed_length"]
+            and dp["raw_size"]
+            == function["expected_pre_image_length"]
+            and sp["relocation_count"]
+            == function["expected_relocation_count"]
+            and dp["relocation_count"]
+            == function["expected_donor_relocation_count"]
+            and sp["line_count"] == function["expected_seed_line_count"]
+            and dp["line_count"] == function["expected_donor_line_count"]
+            and sp["name"] == dp["name"]
+            and sp["characteristics"] == dp["characteristics"]
+            == function["expected_characteristics"],
+            "simulated-elision target header/count pins changed",
+        )
+    else:
+        require(
+            sp["raw_size"] == dp["raw_size"]
+            == function["expected_seed_length"]
+            and sp["relocation_count"] == dp["relocation_count"]
+            == function["expected_relocation_count"]
+            and sp["line_count"] == function["expected_seed_line_count"]
+            and dp["line_count"] == function["expected_donor_line_count"]
+            and sp["name"] == dp["name"]
+            and sp["characteristics"] == dp["characteristics"]
+            == function["expected_characteristics"],
+            "simulated-elision target header/count pins changed",
+        )
     require(
         section_definitions(seed)[sp["number"]]["selection"]
         == section_definitions(donor)[dp["number"]]["selection"]
@@ -38248,10 +38628,23 @@ def compose_retail_exact_simulated_elision(
             and sha256_bytes(donor_body)
             == function["expected_donor_body_sha256"],
             "simulated-elision seed/witness body differs from its pin")
-    require(donor_body == seed_body,
-            "simulated-elision witness does not reproduce the seed's body")
+    if donor_pre_image:
+        # The DONOR is the pre-image: an authentic compiler object rendered
+        # from its own declared recipe over the seed source, transformed in
+        # place of the seed's body.  Its relocation table and record
+        # geometry carry through the boundary map below, exactly as the
+        # seed's do in the witness mode.
+        pre_image_bytes = donor_bytes
+        pre_image_object, pre_image_section = donor, dp
+    else:
+        require(donor_body == seed_body,
+                "simulated-elision witness does not reproduce the seed's "
+                "body")
+        pre_image_bytes = seed_bytes
+        pre_image_object, pre_image_section = seed, sp
+    pre_image_body = bytes(coff_body(pre_image_object, pre_image_section))
 
-    seed_rows = detailed_relocations(seed, sp)
+    seed_rows = detailed_relocations(pre_image_object, pre_image_section)
     relocation_offsets = frozenset(
         row["offset"] + byte
         for row in seed_rows for byte in range(row["width"]))
@@ -38260,22 +38653,95 @@ def compose_retail_exact_simulated_elision(
         for row in seed_rows}
     internal_targets = frozenset(
         row["target_value"] for row in seed_rows
-        if row["target_section"] == sp["number"])
+        if row["target_section"] == pre_image_section["number"])
     declared_targets = spec.get("expected_internal_relocation_targets")
     if declared_targets is not None:
         require(sorted(internal_targets) == declared_targets,
                 "simulated-elision in-body relocated target set changed")
     external_entries = relational_form_external_entries(
-        seed, sp, "simulated-elision external entries")
+        pre_image_object, pre_image_section,
+        "simulated-elision external entries")
     require(sorted(external_entries) == spec["expected_external_entries"],
             "simulated-elision external entry set differs from its "
             "declaration")
 
+    callee_specs = spec.get("callee_oracles") or []
+    vtable_specs = spec.get("vtable_oracles") or []
+    oracles = None
+    if callee_specs or vtable_specs:
+        # Every oracle body is pinned by length and digest; a vtable
+        # oracle's slots must each hold the retail ADDRESS of a declared
+        # callee oracle, so a devirtualised call can only reach a body this
+        # certificate proves.  The symbol/address binding itself is
+        # re-checked against the accepted comparison rows after the link.
+        provided = oracle_bodies or {}
+        callees = {}
+        for oracle in callee_specs:
+            blob = provided.get(oracle["symbol"])
+            require(blob is not None,
+                    "simulated-elision callee oracle "
+                    f"'{oracle['symbol']}' has no fetched body")
+            require(len(blob) == oracle["length"]
+                    and sha256_bytes(bytes(blob))
+                    == oracle["body_sha256"],
+                    "simulated-elision callee oracle "
+                    f"'{oracle['symbol']}' differs from its pin")
+            callees[oracle["symbol"]] = bytes(blob)
+        callee_addresses = {oracle["symbol"]: int(oracle["address"], 16)
+                           for oracle in callee_specs}
+        vtables = {}
+        for oracle in vtable_specs:
+            blob = provided.get(oracle["symbol"])
+            require(blob is not None,
+                    "simulated-elision vtable oracle "
+                    f"'{oracle['symbol']}' has no fetched body")
+            require(len(blob) == oracle["length"]
+                    and sha256_bytes(bytes(blob))
+                    == oracle["body_sha256"],
+                    "simulated-elision vtable oracle "
+                    f"'{oracle['symbol']}' differs from its pin")
+            table = {}
+            for key, target in oracle["slots"].items():
+                slot = int(key)
+                require(slot + 4 <= len(blob),
+                        "simulated-elision vtable oracle "
+                        f"'{oracle['symbol']}' slot {slot} leaves the "
+                        "table")
+                word = int.from_bytes(blob[slot:slot + 4], "little")
+                require(word == callee_addresses.get(target),
+                        "simulated-elision vtable slot "
+                        f"{slot} of '{oracle['symbol']}' holds "
+                        f"{word:#x}, not its declared callee "
+                        f"'{target}'")
+                table[slot] = target
+            vtables[oracle["symbol"]] = table
+        oracles = {"callees": callees, "vtables": vtables}
+        # The retail image's own displacements are the address authority:
+        # every relocation row naming an oracle symbol must resolve to the
+        # oracle's declared address, so the simulated bodies are the bytes
+        # retail itself reaches from this very function.
+        declared_addresses = dict(callee_addresses)
+        for oracle in vtable_specs:
+            declared_addresses[oracle["symbol"]] = int(oracle["address"],
+                                                       16)
+        for row in function["retail_relocations"]:
+            target = row.get("target")
+            if target in declared_addresses:
+                require(int(row["retail_target"], 16)
+                        == declared_addresses[target],
+                        "simulated-elision oracle address for "
+                        f"'{target}' contradicts the retail relocation "
+                        "table")
+    image_relocation_targets = {
+        row["offset"]: row["target"]
+        for row in function["retail_relocations"]}
+
     image, proof = apply_simulated_elision(
-        bytes(seed_body), spec["regions"], relocation_offsets,
+        pre_image_body, spec["regions"], relocation_offsets,
         "simulated-elision image", bytes(retail_body), relocation_symbols,
         spec.get("expected_code_length"), frozenset(external_entries),
-        internal_targets, spec.get("branch_widenings") or [])
+        internal_targets, spec.get("branch_widenings") or [],
+        image_relocation_targets, oracles)
     require(proof["branch_repairs"] == spec["expected_branch_repairs"]
             and proof["branch_widenings"]
             == spec["expected_branch_widenings"]
@@ -38297,6 +38763,48 @@ def compose_retail_exact_simulated_elision(
     moved = dict(proof["relocation_reseat"])
     offset_map = {int(key): value
                   for key, value in proof["offset_map"].items()}
+    for pair in spec.get("line_row_positions") or []:
+        seed_offset, image_offset = pair
+        # A COFF line row inside a rewritten region: its statement moved
+        # WITHIN the region, so its image position is declared, and the
+        # declaration is checked -- it must fall inside the very region
+        # that holds the row, and it must land on an instruction boundary
+        # of that region's image slice.  Line rows carry no semantics; the
+        # obligation is object plausibility, and both halves of it are
+        # enforced here.
+        owner = None
+        for region in proof["regions"]:
+            if region["region_start"] < seed_offset \
+                    < region["region_end"]:
+                owner = region
+                break
+        require(owner is not None,
+                "simulated-elision line row position at "
+                f"{seed_offset} is not inside any region")
+        image_span_start = offset_map[owner["region_start"]]
+        require(image_span_start <= image_offset
+                < image_span_start + owner["image_length"],
+                "simulated-elision line row position at "
+                f"{seed_offset} leaves its region's image")
+        cursor = image_span_start
+        boundary = False
+        while cursor < image_span_start + owner["image_length"]:
+            if cursor == image_offset:
+                boundary = True
+                break
+            cursor += supported_ia32_instruction_length(
+                image[cursor:], "simulated-elision line row")
+        require(boundary,
+                "simulated-elision line row position at "
+                f"{seed_offset} is not an instruction boundary of the "
+                "image")
+        require(seed_offset not in offset_map,
+                "simulated-elision line row position at "
+                f"{seed_offset} collides with the boundary map")
+        offset_map[seed_offset] = image_offset
+    proof = {**proof,
+             "offset_map": {str(key): value
+                            for key, value in offset_map.items()}}
     installed_rows = []
     for row in seed_rows:
         installed = {**row, "offset": moved.get(row["offset"],
@@ -38330,8 +38838,8 @@ def compose_retail_exact_simulated_elision(
             "byte(s) differ under the relocation mask")
 
     derived, derived_detail = _reencoded_donor_object(
-        seed_bytes, mangled, image, proof, "simulated-elision derived",
-        fpo_required=False)
+        pre_image_bytes, mangled, image, proof,
+        "simulated-elision derived", fpo_required=False)
     effective = {
         "mangled": mangled,
         "splice_class": "retail_exact_reloc_divergent",
@@ -38340,7 +38848,9 @@ def compose_retail_exact_simulated_elision(
         "expected_linked_span": function["expected_linked_span"],
         "expected_body_sha256": function["expected_body_sha256"],
         "expected_seed_line_count": function["expected_seed_line_count"],
-        "expected_donor_line_count": function["expected_seed_line_count"],
+        "expected_donor_line_count": (
+            function["expected_donor_line_count"] if donor_pre_image
+            else function["expected_seed_line_count"]),
         "retail_oracle": function["retail_oracle"],
         "retail_relocations": function["retail_relocations"],
     }
@@ -38351,12 +38861,26 @@ def compose_retail_exact_simulated_elision(
     cp = checked.function_section(mangled)
     require(coff_body(checked, cp) == image,
             "simulated-elision composed body differs from the image")
-    require([row["offset"] for row in detailed_relocations(checked, cp)]
-            == [row["offset"] for row in installed_rows]
-            and [row["target"] for row in detailed_relocations(checked, cp)]
-            == [row["target"] for row in installed_rows],
+    composed_rows = detailed_relocations(checked, cp)
+    require(len(composed_rows) == len(installed_rows),
             "simulated-elision composed relocation table is not the proved "
             "reseat")
+    for composed_row, proved_row in zip(composed_rows, installed_rows):
+        # A compiler-numbered local ($L label, $T constant) is its LOCATION:
+        # the number restarts with the witness's extra declarations, the
+        # seat and value do not.  Everything else is its name.
+        renumbered = (
+            composed_row["target_storage"] in (3, 6)
+            and proved_row["target_storage"] in (3, 6)
+            and composed_row["target"].startswith("$")
+            and proved_row["target"].startswith("$")
+            and composed_row["target_type"] == proved_row["target_type"]
+            and composed_row["target_value"] == proved_row["target_value"])
+        require(composed_row["offset"] == proved_row["offset"]
+                and (composed_row["target"] == proved_row["target"]
+                     or renumbered),
+                "simulated-elision composed relocation table is not the "
+                "proved reseat")
     return composed, {
         **detail,
         "splice_class": SIMULATED_ELISION_CLASS,
@@ -38372,14 +38896,45 @@ def compose_retail_exact_simulated_elision(
 
 
 
-def _srr_simulate(body: bytes, start: int, end: int, context: str):
-    """Symbolically execute [start, end); return the end state."""
+def _srr_simulate(body: bytes, start: int, end: int, context: str,
+                  relocations: dict | None = None,
+                  oracles: dict | None = None,
+                  entry_loads: dict | None = None):
+    """Symbolically execute [start, end); return the end state.
+
+    `relocations` maps a byte offset (of a relocated field inside the
+    executed bytes) to its target symbol, so a relocated immediate reads as
+    the SYMBOL rather than its raw bytes and two versions that name the same
+    target through different encodings still compare equal.  `oracles`, when
+    present, carries verified callee bodies ({"callees": {symbol: bytes}})
+    and vtable slot maps ({"vtables": {symbol: {slot: symbol}}}); a direct
+    call whose relocation names an oracle callee -- or an indirect call
+    through a register holding an oracle vtable symbol -- is executed by
+    stepping INTO the callee's own bytes, so the region's proof carries the
+    callee's real effect instead of an assumption about it.  Everything
+    outside the closed set still refuses.
+    """
+    relocations = relocations or {}
+    oracles = oracles or {}
+    oracle_callees = oracles.get("callees") or {}
+    oracle_vtables = oracles.get("vtables") or {}
     regs = {name: ("reg0", name) for name in _SIMULATOR_REGS}
+    for name, disp in (entry_loads or {}).items():
+        # A verified entry condition: the caller proved (by scanning the
+        # instructions dominating the region in BOTH versions) that this
+        # register holds the value of an EBP frame slot on entry, so the
+        # two simulations can name it by the slot and their derived
+        # expressions unify.
+        regs[name] = ("load", ("addr", ("reg0", "ebp"), disp))
     stack = []            # FP stack (unknown base below)
     pushes = []           # integer push sequence, in order
     slots = {}            # ebp-relative dword stores: disp -> value expr
+    widths = {}           # store widths per slot key, for overlap refusal
     last_flags = None
-    offset = start
+    frames = []           # inlined-callee return frames
+    cur_body, offset, cur_end = body, start, end
+    reloc_base = 0        # offset bias of cur_body inside its reloc space
+    reloc_maps = [relocations]
 
     def norm_isub(left, right):
         # x - a - b == x - b - a over the integers, always: an integer
@@ -38416,17 +38971,59 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
                 parts.append(item)
         return ("fsum", tuple(sorted(parts, key=repr)))
 
-    while offset < end:
-        length = supported_ia32_instruction_length(body[offset:], context)
-        require(offset + length <= end,
+    def flatten_add(value):
+        # Normalise an address-arithmetic chain to (base, int-displacement).
+        total = 0
+        while isinstance(value, tuple) and value[0] == "add" \
+                and isinstance(value[2], int):
+            total += value[2]
+            value = value[1]
+        return value, total
+
+    def frame_address(value):
+        # A register value that names a frame slot: ("lea", (addr, ebp, d))
+        # possibly wrapped in integer add chains.
+        base, extra = flatten_add(value)
+        if isinstance(base, tuple) and base[0] == "lea":
+            addr = base[1]
+            if addr[1] == ("reg0", "ebp") and isinstance(addr[2], int):
+                return addr[2] + extra
+        return None
+
+    while True:
+        if offset >= cur_end:
+            require(offset == cur_end,
+                    f"{context}: the region does not end on an instruction "
+                    "boundary")
+            require(not frames,
+                    f"{context}: an inlined callee runs past its body "
+                    "without returning")
+            intervals = sorted(
+                (key, key + widths[key])
+                for key in slots if isinstance(key, int))
+            for former, latter in zip(intervals, intervals[1:]):
+                require(former[1] <= latter[0],
+                        f"{context}: the frame stores at {former[0]:#x} "
+                        f"and {latter[0]:#x} overlap; the slot map cannot "
+                        "represent their order")
+            break
+        length = supported_ia32_instruction_length(cur_body[offset:], context)
+        require(offset + length <= cur_end,
                 f"{context}: an instruction straddles the region boundary "
                 f"at {offset}")
-        encoded = body[offset:offset + length]
+        encoded = cur_body[offset:offset + length]
         op = encoded[0]
         modrm = encoded[1] if length >= 2 else None
         mod = modrm >> 6 if modrm is not None else None
         reg_field = (modrm >> 3) & 7 if modrm is not None else None
         rm = modrm & 7 if modrm is not None else None
+        cur_relocs = reloc_maps[-1]
+
+        def reloc_symbol(field_offset):
+            entry = cur_relocs.get(reloc_base + field_offset)
+            if entry is None:
+                return None
+            return entry["target"] if isinstance(entry, dict) else entry
 
         def mem_operand(cursor_base):
             require(not (mod == 0 and rm == 5),
@@ -38470,17 +39067,84 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
                         f"stack pointer at {offset} aliases the push "
                         "sequence")
                 return ("esp", addr[2])
+            # A pointer that provably names a frame slot keeps the frame
+            # map exact: writes through a lea-derived register ARE frame
+            # stores, and refusing them would hide the callee's effect.
+            pointed = frame_address(addr[1])
+            if pointed is not None:
+                return pointed + addr[2]
             return None
 
+        def read_disp(addr):
+            # The non-raising read-side twin of frame_disp: a read below
+            # the entry stack pointer is the push list's business, never an
+            # error.
+            if addr[1] == ("reg0", "ebp"):
+                return addr[2]
+            if addr[1] == ("reg0", "esp"):
+                return ("esp", addr[2]) if addr[2] >= 0 else None
+            pointed = frame_address(addr[1])
+            if pointed is not None:
+                return pointed + addr[2]
+            return None
+
+        def read_slot(addr):
+            disp = read_disp(addr)
+            if disp is not None and disp in slots:
+                return slots[disp]
+            return None
+
+        def resolve_pushed(addr):
+            # A callee load of its stack arguments: [esp + k] where the
+            # canonical displacement runs from the CURRENT esp expression.
+            base, extra = flatten_add(regs["esp"])
+            if base != ("reg0", "esp") or addr[1] != ("reg0", "esp"):
+                return None
+            # addr[2] is already normalised against the entry esp; the
+            # push list holds the values below it.  addr[2] < 0 indexes
+            # the pushes: -4 is the last push, -8 the one before it.
+            if addr[2] >= 0 or addr[2] % 4 != 0:
+                return None
+            index = -(addr[2] // 4) - 1
+            if 0 <= index < len(pushes):
+                return pushes[index]
+            return None
+
+        def do_push(value):
+            pushes.append(value)
+            esp = regs["esp"]
+            if isinstance(esp, tuple) and esp[0] == "add" \
+                    and isinstance(esp[2], int):
+                regs["esp"] = ("add", esp[1], esp[2] - 4)
+            else:
+                regs["esp"] = ("add", esp, -4)
+
+        def enter_callee(symbol):
+            callee = oracle_callees.get(symbol)
+            require(callee is not None,
+                    f"{context}: the call at {offset} names '{symbol}', "
+                    "which no verified callee oracle covers")
+            require(len(frames) < 4,
+                    f"{context}: callee inlining exceeds the depth bound")
+            do_push(("return_to", len(frames), offset + length))
+            frames.append((cur_body, offset + length, cur_end,
+                           reloc_base))
+            reloc_maps.append(
+                (oracles.get("callee_relocations") or {}).get(symbol, {}))
+            return callee
+
+        advanced = False
         if op == 0x8B and mod != 3:            # mov r32, m32
             addr = mem_operand(2)
-            if (addr[1] in (("reg0", "ebp"), ("reg0", "esp"))
-                    and frame_disp(addr) in slots):
-                addr = ("addr", addr[1], addr[2])
+            pushed = resolve_pushed(addr)
+            forwarded = read_slot(addr) if pushed is None else None
+            if forwarded is not None:
                 # Store-to-load forwarding: the frame is only written
                 # through tracked slot keys inside the closed set, so a
                 # tracked slot's last store IS the loaded value.
-                regs[_SIMULATOR_REGS[reg_field]] = slots[frame_disp(addr)]
+                regs[_SIMULATOR_REGS[reg_field]] = forwarded
+            elif pushed is not None:
+                regs[_SIMULATOR_REGS[reg_field]] = pushed
             else:
                 regs[_SIMULATOR_REGS[reg_field]] = ("load", addr)
         elif op in (0x8B, 0x89) and mod == 3:  # mov r32, r32
@@ -38494,16 +39158,39 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
             require(disp is not None,
                     f"{context}: a non-frame store at {offset} is outside "
                     "the simulator set")
+            require(widths.get(disp, 4) == 4,
+                    f"{context}: the store at {offset} resizes a slot")
             slots[disp] = regs[_SIMULATOR_REGS[reg_field]]
+            widths[disp] = 4
+        elif op == 0x8A and mod != 3:          # mov r8, m8
+            addr = mem_operand(2)
+            disp = read_disp(addr)
+            forwarded = slots.get(disp) \
+                if disp is not None and widths.get(disp) == 1 else None
+            name = _SIMULATOR_REGS[reg_field & 3]
+            value = forwarded if forwarded is not None else ("load8", addr)
+            regs[name] = ("setbyte", regs[name], reg_field >> 2, value)
+        elif op == 0x88 and mod != 3:          # mov m8, r8
+            addr = mem_operand(2)
+            disp = frame_disp(addr)
+            require(disp is not None,
+                    f"{context}: a non-frame byte store at {offset} is "
+                    "outside the simulator set")
+            require(widths.get(disp, 1) == 1,
+                    f"{context}: the byte store at {offset} resizes a slot")
+            slots[disp] = ("byte", regs[_SIMULATOR_REGS[reg_field & 3]],
+                           reg_field >> 2)
+            widths[disp] = 1
         elif 0xB8 <= op <= 0xBF:               # mov r32, imm32
             require(length == 5,
                     f"{context}: an operand-size-prefixed immediate move at "
                     f"{offset} is outside the simulator set")
-            # A relocated immediate reads as its raw bytes; the relocation's
-            # target identity is enforced by the reseat validation, which
-            # pairs every moved relocation with its instruction.
+            # A relocated immediate reads as its target symbol; an
+            # unrelocated one as its raw bytes.
+            symbol = reloc_symbol(offset + 1)
             regs[_SIMULATOR_REGS[op - 0xB8]] = (
-                "imm", int.from_bytes(encoded[1:5], "little"))
+                ("sym", symbol) if symbol is not None
+                else ("imm", int.from_bytes(encoded[1:5], "little")))
         elif op == 0xC7 and mod != 3 and reg_field == 0:   # mov m32, imm32
             addr = mem_operand(2)
             disp = frame_disp(addr)
@@ -38511,9 +39198,40 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
                     f"{context}: a non-frame store at {offset} is outside "
                     "the simulator set")
             imm_at = length - 4
-            slots[disp] = ("imm", bytes(encoded[imm_at:imm_at + 4]))
+            require(widths.get(disp, 4) == 4,
+                    f"{context}: the store at {offset} resizes a slot")
+            symbol = reloc_symbol(offset + imm_at)
+            slots[disp] = (("sym", symbol) if symbol is not None
+                           else ("imm", bytes(encoded[imm_at:imm_at + 4])))
+            widths[disp] = 4
         elif op == 0x8D and mod != 3:          # lea r32, m
             regs[_SIMULATOR_REGS[reg_field]] = ("lea", mem_operand(2))
+        elif op == 0x83 and mod != 3 and reg_field == 0:   # add m32, imm8
+            addr = mem_operand(2)
+            disp = frame_disp(addr)
+            require(disp is not None,
+                    f"{context}: a non-frame read-modify-write at {offset} "
+                    "is outside the simulator set")
+            require(widths.get(disp, 4) == 4,
+                    f"{context}: the add at {offset} resizes a slot")
+            current = slots.get(disp, ("load", addr))
+            value = int.from_bytes(encoded[length - 1:length], "little",
+                                   signed=True)
+            slots[disp] = norm_iadd(current, value)
+            widths[disp] = 4
+            last_flags = ("addflags", slots[disp])
+        elif op == 0xFF and mod != 3 and reg_field == 0:   # inc m32
+            addr = mem_operand(2)
+            disp = frame_disp(addr)
+            require(disp is not None,
+                    f"{context}: a non-frame increment at {offset} is "
+                    "outside the simulator set")
+            require(widths.get(disp, 4) == 4,
+                    f"{context}: the increment at {offset} resizes a slot")
+            current = slots.get(disp, ("load", addr))
+            slots[disp] = norm_iadd(current, 1)
+            widths[disp] = 4
+            last_flags = ("incflags", slots[disp])
         elif op == 0x83 and mod == 3 and reg_field == 0:   # add r32, imm8
             value = int.from_bytes(encoded[2:3], "little", signed=True)
             name = _SIMULATOR_REGS[rm]
@@ -38529,6 +39247,23 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
                           regs[_SIMULATOR_REGS[reg_field]])
         elif op == 0x80 and mod != 3 and reg_field == 7:   # cmp r/m8, imm8
             last_flags = ("cmp8", mem_operand(2), encoded[length - 1])
+        elif op == 0x39 and mod == 3:          # cmp r/m32, r32 (reg form)
+            last_flags = ("cmp", regs[_SIMULATOR_REGS[rm]],
+                          regs[_SIMULATOR_REGS[reg_field]])
+        elif op == 0x39 and mod != 3:          # cmp m32, r32
+            addr = mem_operand(2)
+            left = read_slot(addr)
+            last_flags = ("cmp",
+                          left if left is not None else ("load", addr),
+                          regs[_SIMULATOR_REGS[reg_field]])
+        elif op == 0x3B and mod == 3:          # cmp r32, r/m32 (reg form)
+            last_flags = ("cmp", regs[_SIMULATOR_REGS[reg_field]],
+                          regs[_SIMULATOR_REGS[rm]])
+        elif op == 0x3B and mod != 3:          # cmp r32, m32
+            addr = mem_operand(2)
+            right = read_slot(addr)
+            last_flags = ("cmp", regs[_SIMULATOR_REGS[reg_field]],
+                          right if right is not None else ("load", addr))
         elif op == 0x2B and mod != 3:          # sub r32, m32
             name = _SIMULATOR_REGS[reg_field]
             regs[name] = norm_isub(regs[name], ("load", mem_operand(2)))
@@ -38558,32 +39293,134 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
             regs[name] = ("imm", 0)
             last_flags = ("zeroflags",)
         elif 0x50 <= op <= 0x57:               # push r32
-            pushes.append(regs[_SIMULATOR_REGS[op - 0x50]])
-            # ESP moves with the push, so later [esp+d] operands name the
-            # frame slot they actually read.  Kept flat so depth compares
-            # across versions that push at different points.
-            esp = regs["esp"]
-            if isinstance(esp, tuple) and esp[0] == "add" \
-                    and isinstance(esp[2], int):
-                regs["esp"] = ("add", esp[1], esp[2] - 4)
+            do_push(regs[_SIMULATOR_REGS[op - 0x50]])
+        elif op == 0x6A:                       # push imm8
+            do_push(("imm", int.from_bytes(encoded[1:2], "little",
+                                           signed=True)))
+        elif op == 0x68:                       # push imm32
+            symbol = reloc_symbol(offset + 1)
+            do_push(("sym", symbol) if symbol is not None
+                    else ("imm", int.from_bytes(encoded[1:5], "little")))
+        elif op == 0xE8:                       # call rel32 (oracle callee)
+            symbol = reloc_symbol(offset + 1)
+            require(symbol is not None,
+                    f"{context}: a direct call at {offset} carries no "
+                    "relocation to name its target")
+            callee = enter_callee(symbol)
+            cur_body, offset, cur_end = callee, 0, len(callee)
+            reloc_base = 0
+            advanced = True
+        elif op == 0xFF and mod != 3 and reg_field == 2:   # call [mem]
+            operand = mem_operand(2)
+            base_probe, extra_probe = flatten_add(operand[1])
+            covered = (isinstance(base_probe, tuple)
+                       and base_probe[0] == "sym"
+                       and base_probe[1] in oracle_vtables)
+            if not covered and offset + length == cur_end and not frames:
+                # The terminal-call exit: caller-saved registers are
+                # clobbered; the callee restores the stack per its
+                # convention.  Both versions get the same fresh post-call
+                # state, so only callee-saved differences survive to the
+                # exit comparison.
+                last_flags = ("terminal_call", operand, tuple(pushes))
+                for name in ("eax", "ecx", "edx"):
+                    regs[name] = ("call_clobber", name)
+                regs["esp"] = ("call_balanced", regs["esp"])
             else:
-                regs["esp"] = ("add", esp, -4)
-        elif op == 0xFF and mod != 3 and reg_field == 2 \
-                and offset + length == end:    # terminal call [mem]
-            last_flags = ("terminal_call", mem_operand(2), tuple(pushes))
-            # Caller-saved registers are clobbered; the callee restores the
-            # stack per its convention.  Both versions get the same fresh
-            # post-call state, so only callee-saved differences survive to
-            # the exit comparison.
-            for name in ("eax", "ecx", "edx"):
-                regs[name] = ("call_clobber", name)
-            regs["esp"] = ("call_balanced", regs["esp"])
+                # A mid-region virtual call devirtualises through the
+                # tracked vtable symbol: the base register must hold the
+                # vtable ("sym", ...) value the object's constructor
+                # installed, and the slot map is the verified oracle.
+                base_value, extra = flatten_add(operand[1])
+                slot = operand[2] + extra
+                require(isinstance(base_value, tuple)
+                        and base_value[0] == "sym"
+                        and base_value[1] in oracle_vtables,
+                        f"{context}: the indirect call at {offset} does "
+                        "not dispatch through a verified vtable oracle")
+                table = oracle_vtables[base_value[1]]
+                target = table.get(slot) or table.get(str(slot))
+                require(target is not None,
+                        f"{context}: vtable slot {slot} of "
+                        f"'{base_value[1]}' has no verified target")
+                callee = enter_callee(target)
+                cur_body, offset, cur_end = callee, 0, len(callee)
+                reloc_base = 0
+                advanced = True
+        elif op in (0xC2, 0xC3):               # ret [imm16] (inlined callee)
+            require(frames,
+                    f"{context}: a return at {offset} outside any inlined "
+                    "callee")
+            popped = int.from_bytes(encoded[1:3], "little") \
+                if op == 0xC2 else 0
+            require(popped % 4 == 0,
+                    f"{context}: the callee pops a non-dword argument size")
+            count = popped // 4 + 1        # the arguments plus return slot
+            require(len(pushes) >= count,
+                    f"{context}: the callee at {offset} pops more than was "
+                    "pushed")
+            ret_slot = pushes[-1]
+            require(isinstance(ret_slot, tuple)
+                    and ret_slot[0] == "return_to",
+                    f"{context}: the callee's return slot was overwritten")
+            del pushes[-count:]
+            base_value, extra = flatten_add(regs["esp"])
+            new_extra = extra + 4 * count
+            regs["esp"] = base_value if new_extra == 0 \
+                else ("add", base_value, new_extra)
+            cur_body, ret_offset, cur_end, reloc_base = frames.pop()
+            reloc_maps.pop()
+            require(ret_slot[1] == len(frames)
+                    and ret_slot[2] == ret_offset,
+                    f"{context}: the callee returns somewhere else than "
+                    "its call site")
+            offset = ret_offset
+            advanced = True
         elif op == 0xD9 and mod != 3 and reg_field == 0:   # fld m32
-            stack.append(("load32", mem_operand(2)))
+            addr = mem_operand(2)
+            forwarded = read_slot(addr)
+            stack.append(forwarded if forwarded is not None
+                         else ("load32", addr))
+        elif op == 0xD9 and mod != 3 and reg_field == 3:   # fstp m32
+            require(stack, f"{context}: fstp at {offset} pops the unknown "
+                    "stack base")
+            addr = mem_operand(2)
+            disp = frame_disp(addr)
+            require(disp is not None,
+                    f"{context}: a non-frame fstp at {offset} is outside "
+                    "the simulator set")
+            require(widths.get(disp, 4) == 4,
+                    f"{context}: the fstp at {offset} resizes a slot")
+            slots[disp] = ("f32", stack.pop())
+            widths[disp] = 4
+        elif op == 0xD9 and mod == 3 and encoded[:2] == b"\xd9\xfa":
+            require(stack, f"{context}: fsqrt at {offset} reads the "
+                    "unknown stack base")           # fsqrt
+            stack[-1] = ("fsqrt", stack[-1])
+        elif op == 0xD8 and mod != 3 and reg_field == 0:   # fadd m32
+            require(stack, f"{context}: fadd at {offset} adds to the "
+                    "unknown stack base")
+            addr = mem_operand(2)
+            forwarded = read_slot(addr)
+            stack[-1] = norm_sum(stack[-1],
+                                 forwarded if forwarded is not None
+                                 else ("load32", addr))
+        elif op == 0xD8 and mod != 3 and reg_field == 4:   # fsub m32
+            require(stack, f"{context}: fsub at {offset} subtracts from "
+                    "the unknown stack base")
+            addr = mem_operand(2)
+            forwarded = read_slot(addr)
+            stack[-1] = ("fsub", stack[-1],
+                         forwarded if forwarded is not None
+                         else ("load32", addr))
         elif op == 0xD8 and mod != 3 and reg_field == 1:   # fmul m32
             require(stack, f"{context}: fmul at {offset} multiplies the "
                     "unknown stack base")
-            stack[-1] = ("fmul", stack[-1], ("load32", mem_operand(2)))
+            addr = mem_operand(2)
+            forwarded = read_slot(addr)
+            stack[-1] = ("fmul", stack[-1],
+                         forwarded if forwarded is not None
+                         else ("load32", addr))
         elif op == 0xDD and mod != 3 and reg_field == 0:   # fld m64
             stack.append(("load64", mem_operand(2)))
         elif op == 0xDC and mod != 3 and reg_field == 1:   # fmul m64
@@ -38600,9 +39437,8 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str):
             require(False,
                     f"{context}: the instruction at {offset} is outside "
                     "the simulator's closed set")
-        offset += length
-    require(offset == end,
-            f"{context}: the region does not end on an instruction boundary")
+        if not advanced:
+            offset += length
     return regs, stack, pushes, slots, last_flags
 
 

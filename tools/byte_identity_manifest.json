@@ -39869,6 +39869,27 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_752ac41b0443",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_run_triple",
+      "width": 3,
+      "pre_prefix": "MxUnkRecVA",
+      "pre_count": 654,
+      "post_prefix": "MxUnkRecVB",
+      "post_count": 0,
+      "eof_prefix": "PcE",
+      "eof_count": 32,
+      "generated_header_sha256": "752ac41b04436853a487d93b860a635b480ef2ef86aaaf2b7ac08ac39eaced0b",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -40907,6 +40928,900 @@
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_a5c3d15c0ad1"
+    },
+    {
+     "mangled": "?FindPath@LegoPathController@@QAEJPAULegoPathEdgeContainer@@ABVVector3@@1PAVLegoPathBoundary@@112EPAM@Z",
+     "donor": "d_752ac41b0443",
+     "splice_class": "retail_exact_simulated_elision",
+     "expected_section_number": 452,
+     "expected_donor_section_number": 452,
+     "expected_section_count": 556,
+     "expected_donor_section_count": 556,
+     "expected_seed_length": 2337,
+     "expected_pre_image_length": 2338,
+     "expected_donor_length": 2338,
+     "expected_linked_span": 2352,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 1,
+     "expected_relocation_count": 50,
+     "expected_donor_relocation_count": 50,
+     "expected_seed_line_count": 88,
+     "expected_donor_line_count": 89,
+     "expected_function_count": 172,
+     "expected_comdat_count": 207,
+     "expected_seed_body_sha256": "fbf5fc785b6d23cef164eff564e3233ea498d44ffd216dc62a38666851b27b60",
+     "expected_donor_body_sha256": "518c3d4768bcde12d9b39ab6af93c2e329fb1939ce0d96457c5f68a86b5522a2",
+     "expected_body_sha256": "3fcccc69abdf18643ec5dcbd8e8014188c163d783ae758873e596b7474176599",
+     "expected_seed_metadata_sha256": "ecf010361eb9f6bbfd98695f5587206ab2ef2b88e699991bd8f2a93ad46a3b12",
+     "expected_donor_metadata_sha256": "b5a4fef38f4943b68497faf670d225ac69e4209650946fb2ca16a5dee59c5de2",
+     "expected_closure": [
+      ".debug$S",
+      ".xdata$x"
+     ],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10048310",
+      "length": 2338,
+      "verdict": "MATCH"
+     },
+     "retail_relocations": [
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 2,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$L70224",
+       "target_section": 452,
+       "target_value": 2320,
+       "target_type": 0,
+       "target_storage": 6,
+       "offset": 12,
+       "retail_target": "0x10048c20"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 20,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "__except_list",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 103,
+       "retail_target": "0x00000000"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?_Buynode@?$list@ULegoBEWithMidpoint@@V?$allocator@ULegoBEWithMidpoint@@@@@@IAEPAU_Node@1@PAU21@0@Z",
+       "target_section": 495,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 129,
+       "retail_target": "0x10049470"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?_Init@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAEXXZ",
+       "target_section": 520,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 176,
+       "retail_target": "0x10049d50"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAE@ABV0@@Z",
+       "target_section": 465,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 192,
+       "retail_target": "0x10048fc0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 455,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 378,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 116,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 388,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 455,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 501,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 116,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 511,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?LenSquared@Vector3@@UBEMXZ",
+       "target_section": 264,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 611,
+       "retail_target": "0x10003bd0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?LenSquared@Vector3@@UBEMXZ",
+       "target_section": 264,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 627,
+       "retail_target": "0x10003bd0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@@Z",
+       "target_section": 486,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 693,
+       "retail_target": "0x10048f70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?insert@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@ABULegoBoundaryEdge@@@Z",
+       "target_section": 483,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 743,
+       "retail_target": "0x10048f10"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Mx3DPointFloat@@QAE@ABVVector3@@@Z",
+       "target_section": 459,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 763,
+       "retail_target": "0x10048ed0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?LenSquared@Vector3@@UBEMXZ",
+       "target_section": 264,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 838,
+       "retail_target": "0x10003bd0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?insert@?$list@ULegoBEWithMidpoint@@V?$allocator@ULegoBEWithMidpoint@@@@@@QAE?AViterator@1@V21@ABULegoBEWithMidpoint@@@Z",
+       "target_section": 492,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 894,
+       "retail_target": "0x10049410"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?insert@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@H@@ABQAULegoBEWithMidpoint@@@Z",
+       "target_section": 505,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 925,
+       "retail_target": "0x100495b0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAEIABQAULegoPathCtrlEdge@@@Z",
+       "target_section": 468,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 940,
+       "retail_target": "0x10049160"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?_Inc@iterator@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAEXXZ",
+       "target_section": 498,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1055,
+       "retail_target": "0x100494a0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Vector3@@QAE@PAM@Z",
+       "target_section": 455,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1196,
+       "retail_target": "0x1001d150"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "??_7Mx3DPointFloat@@6B@",
+       "target_section": 116,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 2,
+       "offset": 1206,
+       "retail_target": "0x100d4488"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?LenSquared@Vector3@@UBEMXZ",
+       "target_section": 264,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1312,
+       "retail_target": "0x10003bd0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@@Z",
+       "target_section": 486,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1417,
+       "retail_target": "0x10048f70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?insert@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@ABULegoBoundaryEdge@@@Z",
+       "target_section": 483,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1477,
+       "retail_target": "0x10048f10"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?find@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QBE?AVconst_iterator@1@ABQAULegoPathCtrlEdge@@@Z",
+       "target_section": 471,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1554,
+       "retail_target": "0x10049290"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Mx3DPointFloat@@QAE@ABVVector3@@@Z",
+       "target_section": 459,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1591,
+       "retail_target": "0x10048ed0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??0Mx3DPointFloat@@QAE@ABVVector3@@@Z",
+       "target_section": 459,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1606,
+       "retail_target": "0x10048ed0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?LenSquared@Vector3@@UBEMXZ",
+       "target_section": 264,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1729,
+       "retail_target": "0x10003bd0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE?AViterator@1@V21@@Z",
+       "target_section": 511,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1873,
+       "retail_target": "0x10049890"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?_Inc@iterator@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAEXXZ",
+       "target_section": 498,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1895,
+       "retail_target": "0x100494a0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAEIABQAULegoPathCtrlEdge@@@Z",
+       "target_section": 468,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1934,
+       "retail_target": "0x10049160"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?insert@?$list@ULegoBEWithMidpoint@@V?$allocator@ULegoBEWithMidpoint@@@@@@QAE?AViterator@1@V21@ABULegoBEWithMidpoint@@@Z",
+       "target_section": 492,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1960,
+       "retail_target": "0x10049410"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?insert@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@H@@ABQAULegoBEWithMidpoint@@@Z",
+       "target_section": 505,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 1991,
+       "retail_target": "0x100495b0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?begin@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@XZ",
+       "target_section": 480,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2068,
+       "retail_target": "0x10048f00"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10048c40@LegoOrientedEdge@@QAEKABVVector3@@@Z",
+       "target_section": 462,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2082,
+       "retail_target": "0x10048c40"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@@Z",
+       "target_section": 486,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2104,
+       "retail_target": "0x10048f70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?FUN_10048c40@LegoOrientedEdge@@QAEKABVVector3@@@Z",
+       "target_section": 462,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2133,
+       "retail_target": "0x10048c40"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "?erase@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@@Z",
+       "target_section": 486,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2204,
+       "retail_target": "0x10048f70"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAE@XZ",
+       "target_section": 57,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2262,
+       "retail_target": "0x100451a0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAE@XZ",
+       "target_section": 78,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2273,
+       "retail_target": "0x10045830"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$Set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@@@QAE@XZ",
+       "target_section": 72,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2284,
+       "retail_target": "0x100457e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE@XZ",
+       "target_section": 502,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2292,
+       "retail_target": "0x100494e0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE@XZ",
+       "target_section": 538,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2300,
+       "retail_target": "0x1004a1f0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$Multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@@@QAE@XZ",
+       "target_section": 535,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2308,
+       "retail_target": "0x1004a1a0"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$list@ULegoBEWithMidpoint@@V?$allocator@ULegoBEWithMidpoint@@@@@@QAE@XZ",
+       "target_section": 489,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2316,
+       "retail_target": "0x100493a0"
+      },
+      {
+       "type": 6,
+       "addend": 0,
+       "target": "$T70809",
+       "target_section": 453,
+       "target_value": 0,
+       "target_type": 0,
+       "target_storage": 3,
+       "offset": 2321,
+       "retail_target": "0x100e3318"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "___CxxFrameHandler",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2326,
+       "retail_target": "0x1008b020"
+      },
+      {
+       "type": 20,
+       "addend": 0,
+       "target": "??1?$List@ULegoBEWithMidpoint@@@@QAE@XZ",
+       "target_section": 532,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "offset": 2334,
+       "retail_target": "0x1004a150"
+      }
+     ],
+     "simulated_elision": {
+      "kind": "simulated_elision_v1",
+      "pre_image": "donor",
+      "regions": [
+       {
+        "region_start": 85,
+        "region_end": 88,
+        "image_start": 85,
+        "image_length": 3
+       },
+       {
+        "region_start": 147,
+        "region_end": 175,
+        "image_start": 147,
+        "image_length": 28
+       },
+       {
+        "region_start": 361,
+        "region_end": 604,
+        "image_start": 361,
+        "image_length": 243,
+        "entry_loads": {
+         "edi": -16
+        },
+        "dead_registers": [
+         "eax",
+         "ecx",
+         "edx"
+        ],
+        "relocation_pairs": [
+         [
+          378,
+          378
+         ],
+         [
+          388,
+          388
+         ],
+         [
+          501,
+          501
+         ],
+         [
+          511,
+          511
+         ]
+        ]
+       },
+       {
+        "region_start": 662,
+        "region_end": 673,
+        "image_start": 662,
+        "image_length": 8
+       },
+       {
+        "region_start": 1012,
+        "region_end": 1046,
+        "image_start": 1009,
+        "image_length": 37
+       },
+       {
+        "region_start": 1071,
+        "region_end": 1089,
+        "image_start": 1071,
+        "image_length": 18
+       },
+       {
+        "region_start": 1163,
+        "region_end": 1166,
+        "image_start": 1163,
+        "image_length": 3
+       },
+       {
+        "region_start": 1172,
+        "region_end": 1210,
+        "image_start": 1172,
+        "image_length": 38,
+        "relocation_pairs": [
+         [
+          1196,
+          1196
+         ],
+         [
+          1206,
+          1206
+         ]
+        ]
+       },
+       {
+        "region_start": 1254,
+        "region_end": 1276,
+        "image_start": 1254,
+        "image_length": 22
+       },
+       {
+        "region_start": 1338,
+        "region_end": 1354,
+        "image_start": 1338,
+        "image_length": 16
+       },
+       {
+        "region_start": 1421,
+        "region_end": 1424,
+        "image_start": 1421,
+        "image_length": 3
+       },
+       {
+        "region_start": 1558,
+        "region_end": 1564,
+        "image_start": 1558,
+        "image_length": 6,
+        "dead_registers": [
+         "ecx"
+        ]
+       },
+       {
+        "region_start": 1570,
+        "region_end": 1586,
+        "image_start": 1570,
+        "image_length": 16
+       },
+       {
+        "region_start": 1629,
+        "region_end": 1645,
+        "image_start": 1629,
+        "image_length": 16
+       },
+       {
+        "region_start": 1674,
+        "region_end": 1690,
+        "image_start": 1674,
+        "image_length": 16
+       },
+       {
+        "region_start": 1831,
+        "region_end": 1840,
+        "image_start": 1831,
+        "image_length": 9
+       },
+       {
+        "region_start": 2182,
+        "region_end": 2185,
+        "image_start": 2182,
+        "image_length": 3
+       }
+      ],
+      "callee_oracles": [
+       {
+        "symbol": "??0Vector3@@QAE@PAM@Z",
+        "address": "0x1001d150",
+        "length": 24,
+        "body_sha256": "a84af0c061e61675ba19469c2f1bff3d6b997da8cc006fa56e7aedf8a6393f95",
+        "row_name": "Vector3::Vector3"
+       },
+       {
+        "symbol": "?AddImpl@Vector3@@MAEXPBM@Z",
+        "address": "0x10003a60",
+        "length": 42,
+        "body_sha256": "0fb47b7384219a18c0d57a8353f7d8a7ca4be04feca9ac89c6b322b914eecea1",
+        "row_name": "Vector3::AddImpl(float const *)"
+       },
+       {
+        "symbol": "?SubImpl@Vector3@@MAEXPBM@Z",
+        "address": "0x10003ac0",
+        "length": 42,
+        "body_sha256": "9654e407beb386a3da845582279aab7d3cf240a724a10a04974da58af32dc197",
+        "row_name": "Vector3::SubImpl"
+       },
+       {
+        "symbol": "?MulImpl@Vector3@@MAEXABM@Z",
+        "address": "0x10003b20",
+        "length": 40,
+        "body_sha256": "75682e1a630e8bbe110bf8bb8c4f005122e2e362bc222d94a3cdae6c7ee72818",
+        "row_name": "Vector3::MulImpl(float const &)"
+       },
+       {
+        "symbol": "?operator+=@Vector2@@UAEXABV1@@Z",
+        "address": "0x100021e0",
+        "length": 16,
+        "body_sha256": "d16c53d9294c0eba86a16ecce53b3a3878c9704828612afedd3ded34bd34bce5",
+        "row_name": "Vector2::operator+=(class Vector2 const &)"
+       },
+       {
+        "symbol": "?operator-=@Vector2@@UAEXABV1@@Z",
+        "address": "0x10002200",
+        "length": 16,
+        "body_sha256": "2cdd0765dd20595a940253360dcd89a620d24c449b1892aa2bfd87de3ec0d814",
+        "row_name": "Vector2::operator-=(class Vector2 const &)"
+       },
+       {
+        "symbol": "?operator*=@Vector2@@UAEXABM@Z",
+        "address": "0x10002230",
+        "length": 13,
+        "body_sha256": "ef20b7f0f60cb7d15c9805415113619efb238db97f9c0df7f73b8ab6cd5bcfb6",
+        "row_name": "Vector2::operator*=(float const &)"
+       },
+       {
+        "symbol": "?LenSquared@Vector3@@UBEMXZ",
+        "address": "0x10003bd0",
+        "length": 24,
+        "body_sha256": "3bdc39da4cc80b6bf22e061e2bacf63e56c01cf6e9c62783c00f3fdeabef9ee7",
+        "row_name": "Vector3::LenSquared"
+       }
+      ],
+      "vtable_oracles": [
+       {
+        "symbol": "??_7Mx3DPointFloat@@6B@",
+        "address": "0x100d4488",
+        "length": 96,
+        "body_sha256": "8918306affe8162182caf9d14990a25952a90fc9da3a7c9c17c1f0b930423d8e",
+        "slots": {
+         "4": "?AddImpl@Vector3@@MAEXPBM@Z",
+         "8": "?SubImpl@Vector3@@MAEXPBM@Z",
+         "12": "?MulImpl@Vector3@@MAEXABM@Z",
+         "72": "?operator+=@Vector2@@UAEXABV1@@Z",
+         "84": "?operator-=@Vector2@@UAEXABV1@@Z",
+         "92": "?operator*=@Vector2@@UAEXABM@Z"
+        }
+       }
+      ],
+      "branch_widenings": [],
+      "expected_branch_repairs": [
+       236,
+       261,
+       281,
+       316,
+       325,
+       343,
+       355,
+       647,
+       951,
+       963,
+       973,
+       1999
+      ],
+      "expected_branch_widenings": [],
+      "expected_relocation_reseat": [
+       [
+        696,
+        693
+       ],
+       [
+        746,
+        743
+       ],
+       [
+        766,
+        763
+       ],
+       [
+        841,
+        838
+       ],
+       [
+        897,
+        894
+       ],
+       [
+        928,
+        925
+       ],
+       [
+        943,
+        940
+       ]
+      ],
+      "expected_instruction_count": 646,
+      "expected_image_code_length": 2338,
+      "expected_external_entries": [
+       2255,
+       2266,
+       2277,
+       2288,
+       2296,
+       2304,
+       2312,
+       2320,
+       2330
+      ],
+      "line_row_positions": [
+       [
+        157,
+        150
+       ],
+       [
+        665,
+        665
+       ],
+       [
+        1022,
+        1009
+       ],
+       [
+        1029,
+        1016
+       ],
+       [
+        1191,
+        1172
+       ],
+       [
+        1344,
+        1338
+       ]
+      ]
+     }
     }
    ],
    "completion": {
@@ -43519,8 +44434,8 @@
    "row_identity_sha256": "e05ce11a77f901e3023e650edb43ec871eb8ad7f51af5908de9f38360e02afe7",
    "iteration_baseline": {
     "state": "accepted_raw_score_set_pinned_v2_source_true",
-    "exact_raw_1_0_count": 4932,
-    "accepted_row_identity_sha256": "ebcf8d2923f01d7bf941b90322d93fc6abdf6a1c6ae4248102a79b3523b1b015",
+    "exact_raw_1_0_count": 4933,
+    "accepted_row_identity_sha256": "8782dd5ef2722158e47b5097dd72ad3b8e4558172ce0d47211d83ba1736c3fd7",
     "require_zero_losses": true,
     "reference_target": {
      "note": "The historical 4816 accepted set includes retained-corpus donor objects without manifest source recipes. The fixed universe is now 4934 after the LegoROI::Intersect annotation correction; the current source-true accepted set is authoritative.",

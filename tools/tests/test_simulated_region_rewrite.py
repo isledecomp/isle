@@ -90,7 +90,7 @@ class RewriteTests(unittest.TestCase):
         with self.assertRaises(byte_identity.ByteIdentityError) as raised:
             apply(items=[declaration(region_end=18,
                                      target_order=[1, 0, 2, 3, 4, 5, 6])])
-        self.assertIn("outside the simulator's closed set",
+        self.assertIn("a return at 17 outside any inlined callee",
                       str(raised.exception))
 
     def test_a_non_permutation_order_is_refused(self):
