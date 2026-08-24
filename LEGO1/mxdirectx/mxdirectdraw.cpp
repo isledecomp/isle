@@ -20,6 +20,9 @@ DECOMP_SIZE_ASSERT(MxDirectDraw, 0x880)
 // GLOBAL: BETA10 0x101ff1c4
 BOOL g_isPaletteIndexed8 = 0;
 
+// GLOBAL: LEGO1 0x10100c6c
+undefined4 g_unk0x10100c6c = 0;
+
 // FUNCTION: LEGO1 0x1009d490
 // FUNCTION: BETA10 0x1012036a
 MxDirectDraw::MxDirectDraw()
