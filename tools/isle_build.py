@@ -365,6 +365,45 @@ def run(command: list[str], *, timeout_seconds: float,
     )
 
 
+def run_rdata_pool_repack(obj: Path, declaration: dict, build: Path) -> str:
+    """Apply the declared .rdata pool repack to one pre-link object.
+
+    Idempotent by digest: an object already carrying the declared post-image is
+    left alone, so a re-gate without an intervening recompile is a no-op.  Any
+    other state is a refusal -- the applier itself re-verifies every pin.
+    """
+    if not obj.is_file():
+        fail(f"rdata_pool_repack: {declaration['object']} was not produced")
+    coff = byte_identity.CoffObject(obj.read_bytes())
+    section = declaration["section"]
+    pools = [
+        entry for entry in coff.sections
+        if entry["name"] == section["name"]
+        and not entry["characteristics"] & 0x1000
+    ]
+    if len(pools) != 1:
+        fail(f"rdata_pool_repack: {declaration['object']} has "
+             f"{len(pools)} non-COMDAT {section['name']} sections, expected 1")
+    entry = pools[0]
+    pool = bytes(coff.data[entry["raw_offset"]:
+                           entry["raw_offset"] + entry["raw_size"]])
+    digest = byte_identity.sha256_bytes(pool)
+    if digest == declaration["post_image"]["sha256"]:
+        return ""
+    if digest != declaration["pre_image"]["sha256"]:
+        fail(f"rdata_pool_repack: {declaration['object']} pool digest "
+             f"{digest[:12]} is neither the declared pre-image nor post-image")
+    declaration_path = build.parent / "rdata-pool-repack.json"
+    declaration_path.write_text(json.dumps(declaration, indent=1) + "\n")
+    run([sys.executable, str(TOOLS / "pe_rdatarepack.py"),
+         str(obj), str(declaration_path)],
+        timeout_seconds=120, env=os.environ.copy(),
+        log=build.parent / "rdata-repack.log")
+    return (f"[isle_build] repacked the .rdata pool in "
+            f"{declaration['object']} ({declaration['pre_image']['size']} -> "
+            f"{declaration['post_image']['size']} bytes)")
+
+
 def build_environment(compiler: Path) -> dict:
     environment = dict(os.environ)
     environment["PATH"] = (
@@ -2077,6 +2116,16 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
             for pending in futures:
                 pending.cancel()
             raise
+    # The .rdata pool repack is a pre-link object transform: it must run after
+    # composition has settled every object and before the final link reads them.
+    repack = manifest["images"].get("LEGO1", {}).get("rdata_pool_repack")
+    if repack is not None:
+        obj = build / repack["object"]
+        message = run_rdata_pool_repack(obj, repack, build)
+        if message:
+            print(message)
+        relink_targets.add("lego1")
+
     # A composed library-member target relinks its library and the LEGO1
     # image that consumes it.
     if any(target not in image_by_target for target in relink_targets):

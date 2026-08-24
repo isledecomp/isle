@@ -48051,7 +48051,7 @@
     ],
     "expected_absolute_fixups": [
      {
-      "site_va": "0x100dd230",
+      "site_va": "0x100dd228",
       "old": "0x100d3850",
       "new": "0x100d3840"
      }
@@ -48096,6 +48096,147 @@
     "text_virtual_size": {
      "old": "0xd2a76",
      "new": "0xd2a66"
+    }
+   },
+   "rdata_pool_repack": {
+    "schema": "rdata_pool_repack_v1",
+    "rationale": "SYNTHETIC CONSTRUCT, declared as such and standing in for a source structure that could not be recovered. MSVC 4.2 numbers a translation unit's $T pool literals at codegen, in the order the bodies that reference them are emitted, and lays them out in that number order with each literal aligned to its own width. viewmanager.cpp emits retail's thirteen literals in a different order, which costs three alignment pads where retail's object paid one: eight bytes of .rdata that no source change sheds. Deleting a constant cannot work (the compiler emits in numbering order and pads to 8 before a double without backfilling, probe-proven), and the only source shape that reproduces retail's order needs a mid-file #include between two function definitions, which moves helicopter.cpp's FromQuaternion from 308 to 310 bytes in an object whose copies the image keeps. This transform therefore re-seats the pool in the pre-link object instead. It invents nothing: every byte it writes is a byte the object already held, the $S block stays exactly where the compiler put it, the 26 .text references reach these literals through their own symbols so only the symbol values move, and the terminal gate still requires literal byte equality against the retail original. It is a one-off exception and is not precedent for any other seat.",
+    "object": "CMakeFiles/viewmanager.dir/LEGO1/viewmanager/viewmanager.cpp.obj",
+    "translation_unit": "LEGO1/viewmanager/viewmanager.cpp",
+    "section": {
+     "index": 4,
+     "name": ".rdata",
+     "characteristics": "0x40400040",
+     "relocation_count": 0,
+     "line_number_count": 0
+    },
+    "pad_fill": "00",
+    "pre_image": {
+     "size": 280,
+     "sha256": "8ff1bc16b2f9ea81b1b5a0f79d6a507a7b2873d341d5c5551e270949c120b45a",
+     "fixed_prefix": {
+      "size": 192,
+      "sha256": "a69c3b485c612935ad4a181ec4bd4399e99da11c63199439ee1a4863b697a67e",
+      "symbols": [
+       {
+        "symbol": "_Pi$S1209",
+        "offset": 0,
+        "size": 8
+       },
+       {
+        "symbol": "_rotateIndex$S33437",
+        "offset": 8,
+        "size": 16
+       },
+       {
+        "symbol": "_g_boundingBoxCornerMap$S49574",
+        "offset": 24,
+        "size": 96
+       },
+       {
+        "symbol": "_g_planePointIndexMap$S49575",
+        "offset": 120,
+        "size": 72
+       }
+      ]
+     }
+    },
+    "permutation": [
+     {
+      "symbol": "$T51930",
+      "old_offset": 192,
+      "new_offset": 192,
+      "size": 4,
+      "references": 0
+     },
+     {
+      "symbol": "$T51931",
+      "old_offset": 196,
+      "new_offset": 196,
+      "size": 4,
+      "references": 7
+     },
+     {
+      "symbol": "$T51932",
+      "old_offset": 200,
+      "new_offset": 200,
+      "size": 4,
+      "references": 3
+     },
+     {
+      "symbol": "$T52791",
+      "old_offset": 224,
+      "new_offset": 204,
+      "size": 4,
+      "references": 0
+     },
+     {
+      "symbol": "$T52862",
+      "old_offset": 232,
+      "new_offset": 208,
+      "size": 8,
+      "references": 0
+     },
+     {
+      "symbol": "$T51989",
+      "old_offset": 216,
+      "new_offset": 216,
+      "size": 4,
+      "references": 5
+     },
+     {
+      "symbol": "$T52863",
+      "old_offset": 240,
+      "new_offset": 220,
+      "size": 4,
+      "references": 1
+     },
+     {
+      "symbol": "$T52864",
+      "old_offset": 248,
+      "new_offset": 224,
+      "size": 8,
+      "references": 0
+     },
+     {
+      "symbol": "$T53020",
+      "old_offset": 256,
+      "new_offset": 232,
+      "size": 8,
+      "references": 1
+     },
+     {
+      "symbol": "$T53046",
+      "old_offset": 264,
+      "new_offset": 240,
+      "size": 8,
+      "references": 1
+     },
+     {
+      "symbol": "$T51988",
+      "old_offset": 208,
+      "new_offset": 248,
+      "size": 8,
+      "references": 1
+     },
+     {
+      "symbol": "$T52004",
+      "old_offset": 220,
+      "new_offset": 256,
+      "size": 4,
+      "references": 1
+     },
+     {
+      "symbol": "$T53073",
+      "old_offset": 272,
+      "new_offset": 264,
+      "size": 8,
+      "references": 1
+     }
+    ],
+    "post_image": {
+     "size": 272,
+     "sha256": "a19dad4245ebeb831c66906152aeaaad9e22ec4ddb6d39a1e830a5b68ce801cf"
     }
    }
   },

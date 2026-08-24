@@ -12202,6 +12202,369 @@ def validate_text_repack_declaration(value: object, context: str) -> dict:
     return dict(value)
 
 
+RDATA_POOL_REPACK_SCHEMA = "rdata_pool_repack_v1"
+RDATA_POOL_REPACK_SECTION_NAMES = (".rdata",)
+RDATA_POOL_REPACK_LITERAL_SIZES = (4, 8)
+RDATA_POOL_REPACK_PAD_FILLS = ("00",)
+RDATA_POOL_REPACK_LITERAL_RE = re.compile(r"^\$T[0-9]{1,10}$")
+RDATA_POOL_REPACK_STATIC_RE = re.compile(
+    r"^_[A-Za-z_][A-Za-z0-9_]*\$S[0-9]{1,10}$"
+)
+COFF_CHARACTERISTICS_RE = re.compile(r"^0x[0-9a-f]{8}$")
+COFF_SCN_CNT_INITIALIZED_DATA = 0x00000040
+COFF_SCN_LNK_COMDAT = 0x00001000
+COFF_SCN_ALIGN_MASK = 0x00F00000
+COFF_SCN_MEM_READ = 0x40000000
+COFF_SCN_MEM_WRITE = 0x80000000
+
+
+def coff_section_alignment(characteristics: int, context: str) -> int:
+    """Decode a COFF section alignment field, refusing an unset one."""
+    encoded = (characteristics & COFF_SCN_ALIGN_MASK) >> 20
+    require(1 <= encoded <= 14,
+            f"{context} declares no COFF section alignment")
+    return 1 << (encoded - 1)
+
+
+def rdata_pool_repack_seats(
+    entries: list[dict], key: str, start: int, context: str,
+) -> int:
+    """Re-derive the seats an ordered run of pool literals must occupy.
+
+    MSVC 4.2 emits one constant after another and aligns each to its own
+    width before it lands, so an ordered list of sizes fixes every offset
+    and every pad in the run.  Nothing here is chosen: a declared offset the
+    sizes do not produce is a refusal, which is what stops a permutation
+    from inventing a layout its own sizes cannot hold.  Returns the offset
+    one past the last literal.
+    """
+    cursor = start
+    for index, entry in enumerate(entries):
+        size = entry["size"]
+        seat = (cursor + size - 1) & ~(size - 1)
+        require(
+            entry[key] == seat,
+            f"{context}[{index}].{key} seats {entry['symbol']} at "
+            f"{entry[key]}, but the declared sizes seat it at {seat}: the "
+            "permutation's alignment does not match what its sizes imply",
+        )
+        cursor = seat + size
+    return cursor
+
+
+def rdata_pool_repack_image(
+    declaration: dict, pool: bytes, context: str,
+) -> bytes:
+    """Rebuild the declared pool section out of its own pre-image bytes.
+
+    Every byte of the result is a byte of ``pool``: the fixed ``$S`` prefix
+    verbatim, each declared literal copied to its declared seat, and the
+    alignment pads the new seat order implies.  The declared post-image
+    digest is then required of the result, so a declaration whose pins
+    disagree with what applying it actually produces refuses here instead of
+    reaching the link.
+    """
+    pre = declaration["pre_image"]
+    prefix = pre["fixed_prefix"]
+    post = declaration["post_image"]
+    fill = bytes.fromhex(declaration["pad_fill"])
+    require(
+        len(pool) == pre["size"],
+        f"{context} pre-image is {len(pool)} bytes, not the declared "
+        f"{pre['size']}",
+    )
+    require(
+        sha256_bytes(pool) == pre["sha256"],
+        f"{context} pre-image digest differs from its declaration",
+    )
+    require(
+        sha256_bytes(pool[:prefix["size"]]) == prefix["sha256"],
+        f"{context} fixed $S prefix differs from its declaration",
+    )
+    ordered = sorted(declaration["permutation"],
+                     key=lambda entry: entry["old_offset"])
+    cursor = prefix["size"]
+    for entry in ordered:
+        gap = pool[cursor:entry["old_offset"]]
+        require(
+            gap == fill * len(gap),
+            f"{context} pre-image pad at {cursor} before {entry['symbol']} "
+            f"is not the declared 0x{declaration['pad_fill']} filler",
+        )
+        cursor = entry["old_offset"] + entry["size"]
+    require(cursor == pre["size"],
+            f"{context} pre-image literals do not reach its declared end")
+    packed = bytearray(fill * post["size"])
+    packed[:prefix["size"]] = pool[:prefix["size"]]
+    for entry in declaration["permutation"]:
+        old, new = entry["old_offset"], entry["new_offset"]
+        size = entry["size"]
+        require(
+            old + size <= len(pool) and new + size <= post["size"],
+            f"{context} seats {entry['symbol']} outside the pool it declares",
+        )
+        packed[new:new + size] = pool[old:old + size]
+    require(len(packed) == post["size"],
+            f"{context} produced a pool of the wrong length")
+    result = bytes(packed)
+    require(
+        sha256_bytes(result) == post["sha256"],
+        f"{context} post-image digest differs from the image the declared "
+        "permutation actually produces",
+    )
+    return result
+
+
+def validate_rdata_pool_repack_declaration(
+    value: object, context: str, *, pool_bytes: bytes | None = None,
+) -> dict:
+    """Validate the object-level constant-pool repack declaration.
+
+    THIS DECLARES A SYNTHETIC CONSTRUCT, not a recovered source fact, and the
+    manifest must say so in its own rationale.  It permutes the ``$T``
+    literal run of one non-COMDAT ``.rdata`` pool in one pre-link object into
+    the emission order the retail object carried, because the source shape
+    that would have produced that order was measured unrecoverable.
+
+    Every field is an exact pin and every one of them is re-derived, never
+    trusted: the target object and section identity, the pre-image size and
+    digest, the ``$S`` prefix that must not move (declared symbol by symbol
+    and required to tile that prefix exactly), the ordered permutation with
+    the reference count each literal carries, and the post-image size and
+    digest.  The permutation must be a bijection of the literals it
+    declares, must not name or reach a ``$S`` symbol, and must seat every
+    literal exactly where its own declared sizes place it.  When the
+    pre-image bytes are supplied the declaration is additionally applied
+    here, and a post-image digest that disagrees with what applying it
+    produces refuses.
+
+    The transform can only move the object's own bytes, and the terminal
+    gate still requires literal byte equality against the retail original,
+    so this declaration can never mask an error -- only re-seat our own pool.
+    """
+    require(isinstance(value, dict), f"{context} must be an object")
+    exact_audit_keys(value, {
+        "schema", "rationale", "object", "translation_unit", "section",
+        "pad_fill", "pre_image", "permutation", "post_image",
+    }, context)
+    require(value.get("schema") == RDATA_POOL_REPACK_SCHEMA,
+            f"{context}.schema is unsupported")
+    rationale = value.get("rationale")
+    require(isinstance(rationale, str) and rationale,
+            f"{context}.rationale must be stated")
+    require(
+        "synthetic" in rationale.lower(),
+        f"{context}.rationale must name this construct as synthetic: it is "
+        "not a recovered source fact and may not be declared as one",
+    )
+    for key, suffix in (("object", ".obj"), ("translation_unit", ".cpp")):
+        declared = value.get(key)
+        require(isinstance(declared, str) and declared,
+                f"{context}.{key} must be a non-empty path")
+        pure = PurePosixPath(declared)
+        require(
+            "\\" not in declared and "\0" not in declared
+            and not pure.is_absolute() and pure.as_posix() == declared
+            and all(part not in ("", ".", "..") for part in pure.parts)
+            and declared.endswith(suffix),
+            f"{context}.{key} must be one canonical relative {suffix} path",
+        )
+    require(value.get("pad_fill") in RDATA_POOL_REPACK_PAD_FILLS,
+            f"{context}.pad_fill is unsupported")
+
+    section = value.get("section")
+    require(isinstance(section, dict), f"{context}.section must be an object")
+    section_context = f"{context}.section"
+    exact_audit_keys(section, {
+        "index", "name", "characteristics", "relocation_count",
+        "line_number_count",
+    }, section_context)
+    require_exact_int(section.get("index"), f"{section_context}.index",
+                      minimum=1, maximum=0xFFFF)
+    require(section.get("name") in RDATA_POOL_REPACK_SECTION_NAMES,
+            f"{section_context}.name is unsupported")
+    characteristics = section.get("characteristics")
+    require(
+        isinstance(characteristics, str)
+        and COFF_CHARACTERISTICS_RE.fullmatch(characteristics) is not None,
+        f"{section_context}.characteristics must be one lowercase 0x-prefixed "
+        "32-bit COFF section characteristics word",
+    )
+    flags = int(characteristics, 16)
+    require(
+        bool(flags & COFF_SCN_CNT_INITIALIZED_DATA)
+        and bool(flags & COFF_SCN_MEM_READ)
+        and not flags & COFF_SCN_MEM_WRITE
+        and not flags & COFF_SCN_LNK_COMDAT,
+        f"{section_context}.characteristics must describe a read-only, "
+        "initialized, non-COMDAT data section",
+    )
+    alignment = coff_section_alignment(
+        flags, f"{section_context}.characteristics")
+    require(
+        section.get("relocation_count") == 0
+        and section.get("line_number_count") == 0
+        and type(section.get("relocation_count")) is int
+        and type(section.get("line_number_count")) is int,
+        f"{section_context} must carry no relocations and no line numbers: a "
+        "repacked pool may not have references seated inside it",
+    )
+
+    pre = value.get("pre_image")
+    require(isinstance(pre, dict), f"{context}.pre_image must be an object")
+    pre_context = f"{context}.pre_image"
+    exact_audit_keys(pre, {"size", "sha256", "fixed_prefix"}, pre_context)
+    pre_size = require_exact_int(pre.get("size"), f"{pre_context}.size",
+                                 minimum=1, maximum=1 << 24)
+    require_sha(pre.get("sha256"), f"{pre_context}.sha256")
+
+    prefix = pre.get("fixed_prefix")
+    require(isinstance(prefix, dict),
+            f"{pre_context}.fixed_prefix must be an object")
+    prefix_context = f"{pre_context}.fixed_prefix"
+    exact_audit_keys(prefix, {"size", "sha256", "symbols"}, prefix_context)
+    prefix_size = require_exact_int(prefix.get("size"),
+                                    f"{prefix_context}.size",
+                                    minimum=0, maximum=pre_size)
+    require_sha(prefix.get("sha256"), f"{prefix_context}.sha256")
+    statics = prefix.get("symbols")
+    require(isinstance(statics, list) and 1 <= len(statics) <= 256,
+            f"{prefix_context}.symbols must contain 1..256 named statics")
+    fixed_names: list[str] = []
+    cursor = 0
+    for position, static in enumerate(statics):
+        static_context = f"{prefix_context}.symbols[{position}]"
+        require(isinstance(static, dict),
+                f"{static_context} must be an object")
+        exact_audit_keys(static, {"symbol", "offset", "size"}, static_context)
+        name = static.get("symbol")
+        require(
+            isinstance(name, str)
+            and RDATA_POOL_REPACK_STATIC_RE.fullmatch(name) is not None,
+            f"{static_context}.symbol must be one MSVC 4.2 $S named static",
+        )
+        require(name not in fixed_names,
+                f"{static_context}.symbol is declared twice: {name}")
+        offset = require_exact_int(static.get("offset"),
+                                   f"{static_context}.offset", minimum=0)
+        size = require_exact_int(static.get("size"),
+                                 f"{static_context}.size", minimum=1)
+        require(
+            offset == cursor,
+            f"{static_context}.offset is {offset}, but the declared statics "
+            f"tile up to {cursor}: the fixed $S block must be contiguous",
+        )
+        fixed_names.append(name)
+        cursor = offset + size
+    require(
+        cursor == prefix_size,
+        f"{prefix_context}.symbols tile {cursor} bytes, not the declared "
+        f"prefix size {prefix_size}",
+    )
+
+    entries = value.get("permutation")
+    require(isinstance(entries, list) and 2 <= len(entries) <= 256,
+            f"{context}.permutation must contain 2..256 pool literals")
+    permutation_context = f"{context}.permutation"
+    symbols: list[str] = []
+    old_offsets: list[int] = []
+    new_offsets: list[int] = []
+    for position, entry in enumerate(entries):
+        entry_context = f"{permutation_context}[{position}]"
+        require(isinstance(entry, dict), f"{entry_context} must be an object")
+        exact_audit_keys(
+            entry,
+            {"symbol", "old_offset", "new_offset", "size", "references"},
+            entry_context,
+        )
+        name = entry.get("symbol")
+        require(
+            isinstance(name, str)
+            and RDATA_POOL_REPACK_LITERAL_RE.fullmatch(name) is not None,
+            f"{entry_context}.symbol must be one MSVC 4.2 $T pool literal",
+        )
+        require(
+            name not in fixed_names,
+            f"{entry_context}.symbol names the fixed static {name}: a $S "
+            "symbol may never be permuted",
+        )
+        size = entry.get("size")
+        require(type(size) is int and size in RDATA_POOL_REPACK_LITERAL_SIZES,
+                f"{entry_context}.size is not an admitted literal width")
+        require(size <= alignment,
+                f"{entry_context}.size exceeds the declared section "
+                f"alignment {alignment}")
+        old = require_exact_int(entry.get("old_offset"),
+                                f"{entry_context}.old_offset",
+                                minimum=0, maximum=pre_size - size)
+        new = require_exact_int(entry.get("new_offset"),
+                                f"{entry_context}.new_offset",
+                                minimum=0, maximum=pre_size - size)
+        require(
+            old >= prefix_size and new >= prefix_size,
+            f"{entry_context} seats {name} inside the fixed $S prefix "
+            f"(offsets {old} -> {new}, the prefix ends at {prefix_size}): "
+            "the $S block may never move",
+        )
+        require_exact_int(entry.get("references"),
+                          f"{entry_context}.references", minimum=0)
+        symbols.append(name)
+        old_offsets.append(old)
+        new_offsets.append(new)
+    require(
+        len(set(symbols)) == len(symbols),
+        f"{permutation_context} is not a bijection: it names a symbol twice",
+    )
+    require(
+        len(set(old_offsets)) == len(old_offsets),
+        f"{permutation_context} is not a bijection: two literals share one "
+        "pre-image offset",
+    )
+    require(
+        len(set(new_offsets)) == len(new_offsets),
+        f"{permutation_context} is not a bijection: two literals share one "
+        "post-image offset",
+    )
+    require(
+        new_offsets == sorted(new_offsets),
+        f"{permutation_context} must be declared in post-image seat order",
+    )
+
+    pre_end = rdata_pool_repack_seats(
+        sorted(entries, key=lambda entry: entry["old_offset"]),
+        "old_offset", prefix_size, permutation_context,
+    )
+    require(
+        pre_end == pre_size,
+        f"{permutation_context} accounts for {pre_end} pre-image bytes, not "
+        f"the declared {pre_size}",
+    )
+    post_end = rdata_pool_repack_seats(
+        entries, "new_offset", prefix_size, permutation_context,
+    )
+
+    post = value.get("post_image")
+    require(isinstance(post, dict), f"{context}.post_image must be an object")
+    post_context = f"{context}.post_image"
+    exact_audit_keys(post, {"size", "sha256"}, post_context)
+    post_size = require_exact_int(post.get("size"), f"{post_context}.size",
+                                  minimum=1, maximum=pre_size)
+    require_sha(post.get("sha256"), f"{post_context}.sha256")
+    require(
+        post_end == post_size,
+        f"{permutation_context} accounts for {post_end} post-image bytes, "
+        f"not the declared {post_size}",
+    )
+    require(
+        post["sha256"] != pre["sha256"],
+        f"{context} declares an identical pre- and post-image: a repack that "
+        "moves nothing has no standing",
+    )
+    if pool_bytes is not None:
+        rdata_pool_repack_image(value, pool_bytes, context)
+    return dict(value)
+
+
 def validate_execution_backends(value: object | None) -> dict:
     """Validate the platform-neutral backend registry and select this host."""
     if value is None:
@@ -17630,10 +17993,13 @@ def validate_manifest(
                 "reccmp_report", "reccmp_schema", "required_row_count",
                 "row_identity_sha256", "iteration_baseline", "completion",
                 "link_time", "resource_time", "iat_order", "thunk_order",
-                "text_repack",
+                "text_repack", "rdata_pool_repack",
             },
             context,
-            optional={"iat_order", "thunk_order", "text_repack"},
+            optional={
+                "iat_order", "thunk_order", "text_repack",
+                "rdata_pool_repack",
+            },
         )
         if "iat_order" in image:
             require(image["iat_order"] == "retail_slot_order_v1",
@@ -17644,6 +18010,9 @@ def validate_manifest(
         if "text_repack" in image:
             validate_text_repack_declaration(
                 image["text_repack"], f"{context}.text_repack")
+        if "rdata_pool_repack" in image:
+            validate_rdata_pool_repack_declaration(
+                image["rdata_pool_repack"], f"{context}.rdata_pool_repack")
         require(
             image.get("kind") == "final_image_identity_gate"
             and image.get("target") == contract["target"],
