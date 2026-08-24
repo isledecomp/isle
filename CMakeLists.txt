@@ -430,7 +430,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp
     LEGO1/lego/legoomni/src/race/legoracespecial.cpp
     LEGO1/lego/legoomni/src/worlds/historybook.cpp
-    LEGO1/lego/legoomni/src/common/legoactors.cpp
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
   )
