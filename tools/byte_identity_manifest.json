@@ -64094,9 +64094,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/registrationbook.cpp",
-    "clean": "4aeec154f6b7c9323243cefdc53ec401adb60ab865607cf833da591fe6bc3014",
-    "effective": "8e61889c0f13058105809bb88559d3074769ad80cd8a83bc37032e97c918b183",
-    "size": 17496,
+    "clean": "68c16048be734545892161faae48de178be77e3557f050e113520e5dee4524c1",
+    "effective": "640dd6d45b586ca49233523e9dca0452459a96ebe3fa58677552f2f353a7bf39",
+    "size": 17598,
     "ops": [
      {
       "op": "insert",
@@ -64130,7 +64130,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "30579a7c57013561f6cfc0ea81fb6c7b30ef3a7cdebbeb6241458fc084e19d38",
+       "ctx": "6da7bd285a8c6bb2c7cbd113b969377eaf9f9e1868503a2fef6de47f8cbfa2ac",
        "at": "before_token"
       },
       "gen": {
@@ -64148,7 +64148,8 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1"
+          "Record1",
+          "Record2"
          ],
          "line": 3
         },
@@ -64158,9 +64159,10 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1"
+          "Record1",
+          "Record2"
          ],
-         "line": 7
+         "line": 8
         },
         {
          "k": "class",
@@ -64168,9 +64170,10 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1"
+          "Record1",
+          "Record2"
          ],
-         "line": 11
+         "line": 13
         },
         {
          "k": "class",
@@ -64178,19 +64181,10 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1"
+          "Record1",
+          "Record2"
          ],
-         "line": 15
-        },
-        {
-         "k": "class",
-         "id": "RkRbP4",
-         "inline": true,
-         "members": [
-          "Record0",
-          "Record1"
-         ],
-         "line": 19
+         "line": 18
         },
         {
          "k": "enum",

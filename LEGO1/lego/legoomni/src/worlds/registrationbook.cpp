@@ -35,6 +35,9 @@ DECOMP_SIZE_ASSERT(RegistrationBook, 0x2d0)
 // GLOBAL: BETA10 0x101bfb3c
 const char* const g_infoman = "infoman";
 
+// GLOBAL: LEGO1 0x100f7960
+MxU8 g_unk0x100f7960[] = {1, 2, 3, 4};
+
 // GLOBAL: LEGO1 0x100f7964
 MxLong g_checkboxBlinkTimer = 0;
 
