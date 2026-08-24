@@ -20,7 +20,7 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
         self.assertEqual(len(normalized["outputs"]), 173)
         self.assertEqual(
             sum(len(output["operations"]) for output in normalized["outputs"]),
-            429,
+            428,
         )
         self.assertEqual(
             len(normalized["graph"]["generated_translation_units"]), 18
@@ -102,9 +102,17 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
             b"// FUNCTION: LEGO1 0x10003bd0",
             rendered["LEGO1/realtime/vector3dtail.inl.h"],
         )
+        # g_ctrlEdgesB is defined by its ordinary owner: retail emits it inside
+        # legopathcontroller.cpp.obj's own .data blob at 0x100f435c.  The
+        # synthetic supplier that used to hold it is now a pool-only pad whose
+        # whole text is one include.
         self.assertIn(
             b"// GLOBAL: LEGO1 0x100f435c",
-            rendered["LEGO1/lego/legoomni/src/paths/legopathctrledge.cpp"],
+            rendered["LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp"],
+        )
+        self.assertEqual(
+            rendered["LEGO1/lego/legoomni/src/paths/legordatapad13.cpp"].split(b"\n")[0],
+            b'#include "legopathboundary.h"',
         )
 
 
