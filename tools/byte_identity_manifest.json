@@ -15189,7 +15189,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoutils.cpp",
-   "source_sha256": "0518b2d4e1be2f9b6d4daef057a75d8a4398ab2a56dcd9c9492e28de1bf6e260",
+   "source_sha256": "c7fccb4eeff8e3ff0c541b4adff3dee972e0728ddfbac27e46f44a01fc145285",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -15240,6 +15240,24 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_cc0b05aac0bd",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 16,
+      "width": 3,
+      "generated_header_sha256": "cc0b05aac0bd9593e54f6ddc9fe43c973770f77aebce9d4efe5d01a19e7de729",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -15284,6 +15302,24 @@
       44,
       52,
       60
+     ]
+    },
+    {
+     "mangled": "?GetTreeNode@@YAPAVLegoTreeNode@@PAV1@I@Z",
+     "donor": "d_cc0b05aac0bd",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 114,
+     "expected_body_sha256": "9d14eaca879d5162d224f81f3280cd07ff7e9b4d7fb187d6ce0b63870fd25fa6",
+     "expected_changed_offsets": [
+      16,
+      20,
+      45,
+      51,
+      65,
+      69,
+      71,
+      81,
+      85
      ]
     }
    ]
@@ -55462,9 +55498,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoutils.cpp",
-    "clean": "21653254247d296bb1c9adbae2e11f30bc1aff7f4438bf6722182b6605d15c56",
-    "effective": "0518b2d4e1be2f9b6d4daef057a75d8a4398ab2a56dcd9c9492e28de1bf6e260",
-    "size": 21360,
+    "clean": "9c8d96ff7beab058084177c1fe1edafc8c690836d1fc4c09878fdf6b8ff41e24",
+    "effective": "c7fccb4eeff8e3ff0c541b4adff3dee972e0728ddfbac27e46f44a01fc145285",
+    "size": 21421,
     "ops": [
      {
       "op": "insert",

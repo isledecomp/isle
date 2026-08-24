@@ -44,6 +44,9 @@ LegoROI* PickROI(MxLong p_x, MxLong p_y)
 	return (LegoROI*) view->Pick(p_x, p_y);
 }
 
+// GLOBAL: LEGO1 0x100f407c
+undefined4 g_unk0x100f407c = 2;
+
 // FUNCTION: LEGO1 0x1003dd90
 // FUNCTION: BETA10 0x100d3449
 LegoROI* PickRootROI(MxLong p_x, MxLong p_y)
