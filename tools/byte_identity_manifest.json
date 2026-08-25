@@ -14517,7 +14517,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legogamestate.cpp",
-   "source_sha256": "9a24da979d82c63fe7fecb547abcf97d691a6903dc5ab806d8af9335bf4af983",
+   "source_sha256": "a85c26113de68349e83204e2967678d6ba627045191a160a58f038d50bd87fae",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -48899,7 +48899,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT’s own FPO record declares FRAME_FPO.",
+    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT\u2019s own FPO record declares FRAME_FPO.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -54554,9 +54554,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legogamestate.cpp",
-    "clean": "5dbcf3f6da0421778e0814637636c6a17368ea89e55bc0544e39c736509a7379",
-    "effective": "9a24da979d82c63fe7fecb547abcf97d691a6903dc5ab806d8af9335bf4af983",
-    "size": 54191,
+    "clean": "c47a32db704741db964b93d9f2f33c537d15bb5f3f16f74ef9978e23e40f9477",
+    "effective": "a85c26113de68349e83204e2967678d6ba627045191a160a58f038d50bd87fae",
+    "size": 54752,
     "ops": [
      {
       "op": "insert",
@@ -54593,7 +54593,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 42,
+       "lines": 41,
        "items": [
         {
          "k": "lines",
@@ -54700,7 +54700,7 @@
          "k": "fwd_run",
          "stem": "RkSF",
          "first": 0,
-         "count": 3,
+         "count": 2,
          "line": 39
         }
        ]

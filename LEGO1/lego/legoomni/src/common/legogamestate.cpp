@@ -125,6 +125,16 @@ ColorStringStruct g_colorSaveData[43] = {
 // in that table is a special entry, the string "END_OF_VARIABLES"
 extern const char* g_endOfVariables;
 
+// A dead file-scope constant the release source carried here.  It is what
+// materialises the "disable" literal at PARSE time, ahead of g_set's
+// initialiser -- and since parse-phase literals are emitted in reverse
+// order of creation, that is what puts the three of them in retail's
+// order: "enable" 0x100f3be8, "set" 0x100f3bf0, "disable" 0x100f3bf4.
+// Retail holds no reference to it anywhere and it contributes no storage,
+// so its own spelling is unrecoverable; the name follows the literal.
+// STRING: LEGO1 0x100f3bf4
+const char* const g_disable = "disable";
+
 // GLOBAL: LEGO1 0x100f3fb0
 // STRING: LEGO1 0x100f3a18
 const char* g_delimiter = " \t";
