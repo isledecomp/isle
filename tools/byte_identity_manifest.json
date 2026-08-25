@@ -25640,7 +25640,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-   "source_sha256": "6bb52e5ba9684af91942cd285bb13ade761af4dd6d6f01948dc9754a164ff45e",
+   "source_sha256": "a2b27db3b2efa74992135e014585a15a10eba540728b807797d9c29b5e6d8d97",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -26176,9 +26176,9 @@
      "mangled": "?ParseExtra@LegoAnimPresenter@@UAEXXZ",
      "donor": "d_3cb38219c187",
      "splice_class": "retail_exact_donor_rewriting",
-     "expected_section_number": 563,
-     "expected_section_count": 826,
-     "expected_donor_section_count": 826,
+     "expected_section_number": 564,
+     "expected_section_count": 827,
+     "expected_donor_section_count": 827,
      "expected_characteristics": 1615859744,
      "expected_selection": 1,
      "expected_relocation_count": 63,
@@ -26189,8 +26189,8 @@
      "expected_seed_body_sha256": "8a6639b72fa9b8b68206564005a3f61e0bf207094847a885d6c93141126ec93d",
      "expected_donor_body_sha256": "cbd6119cac714161ccd18899726c9e169294dd2ff5902ba80a3e7137d927f7a3",
      "expected_body_sha256": "f59d95daed27138f4f3319d5fa7ddcfc8ad0e16eaa809aea997273de1ea99a9f",
-     "expected_seed_metadata_sha256": "34439e87779728df3284b1fd5f414bde6f1c743b507524eff0dee879f5b2f7db",
-     "expected_donor_metadata_sha256": "90f8799fe24d380917be52b05dd8157d68da3b335824ee4e6958aec03b93eba9",
+     "expected_seed_metadata_sha256": "8229a4b13c253e4fb4ecf74fbc9f7641b435af62c83ac50c554b61204f093119",
+     "expected_donor_metadata_sha256": "df02d5a9d8b102444946f7539dff782dcd9760e3a58833d12bc05dbeb5823dc7",
      "expected_closure": [
       ".debug$S",
       ".xdata$x"
@@ -26221,7 +26221,7 @@
        "type": 6,
        "addend": 0,
        "target": "$L89388",
-       "target_section": 563,
+       "target_section": 564,
        "target_value": 1745,
        "target_type": 0,
        "target_storage": 6,
@@ -26342,7 +26342,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@1PAU_Node@1@A",
-       "target_section": 279,
+       "target_section": 280,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -26364,7 +26364,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@1PAU_Node@1@A",
-       "target_section": 279,
+       "target_section": 280,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -26375,7 +26375,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@1PAU_Node@1@A",
-       "target_section": 279,
+       "target_section": 280,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -26386,7 +26386,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@1PAU_Node@1@A",
-       "target_section": 279,
+       "target_section": 280,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -26408,7 +26408,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1_Lockit@@QAE@XZ",
-       "target_section": 403,
+       "target_section": 404,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26419,7 +26419,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE@XZ",
-       "target_section": 284,
+       "target_section": 285,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26430,7 +26430,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE@XZ",
-       "target_section": 281,
+       "target_section": 282,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26507,7 +26507,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@1PAU_Node@1@A",
-       "target_section": 279,
+       "target_section": 280,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -26518,7 +26518,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@1PAU_Node@1@A",
-       "target_section": 279,
+       "target_section": 280,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -26529,7 +26529,7 @@
        "type": 20,
        "addend": 0,
        "target": "?_Insert@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPBD@@@Z",
-       "target_section": 569,
+       "target_section": 570,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26540,7 +26540,7 @@
        "type": 20,
        "addend": 0,
        "target": "?_Insert@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPBD@@@Z",
-       "target_section": 569,
+       "target_section": 570,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26551,7 +26551,7 @@
        "type": 20,
        "addend": 0,
        "target": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAEXXZ",
-       "target_section": 566,
+       "target_section": 567,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26562,7 +26562,7 @@
        "type": 20,
        "addend": 0,
        "target": "?_Insert@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPBD@@@Z",
-       "target_section": 569,
+       "target_section": 570,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26859,7 +26859,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1?$list@PADV?$allocator@PAD@@@@QAE@XZ",
-       "target_section": 572,
+       "target_section": 573,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -26870,7 +26870,7 @@
        "type": 6,
        "addend": 0,
        "target": "$T89977",
-       "target_section": 564,
+       "target_section": 565,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 3,
@@ -26892,7 +26892,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1?$List@PAD@@QAE@XZ",
-       "target_section": 575,
+       "target_section": 576,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -27113,9 +27113,9 @@
      "mangled": "?_Dec@iterator@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAEXXZ",
      "donor": "d_a20d0f73f4ac",
      "splice_class": "retail_exact_donor_rewriting",
-     "expected_section_number": 430,
-     "expected_section_count": 826,
-     "expected_donor_section_count": 826,
+     "expected_section_number": 431,
+     "expected_section_count": 827,
+     "expected_donor_section_count": 827,
      "expected_characteristics": 1615859744,
      "expected_selection": 2,
      "expected_relocation_count": 2,
@@ -27126,8 +27126,8 @@
      "expected_seed_body_sha256": "67f07a1c4cd768490e0be2a4668b22642336390754d0195d28ca45cce2a23115",
      "expected_donor_body_sha256": "2c0d31bed8dec54b6cd6b49a972272d9e0c2e5e8ab66fe4bd5748a15523b64c0",
      "expected_body_sha256": "fd0c8773e9de2b52ceeed4da95799c7eaab44cac469badf1ec15b05269bae328",
-     "expected_seed_metadata_sha256": "e2e34db4286538a804c9edba59b9cdf7227aa1ea40a5d8e0ac13b73c4a23000e",
-     "expected_donor_metadata_sha256": "c00bb3c659644cff95e9a50ff46f9426ca6077cb46e10b32333beca3a4f49560",
+     "expected_seed_metadata_sha256": "1aa07ed199972975ba6279ebc75ac839163c42d444962f11eb8d00a52f7d0940",
+     "expected_donor_metadata_sha256": "ca6ee7e07f3c919f0c5e9abfcd77f61c7b1e980fedc2d18a035bc9d90e6170a9",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -27147,7 +27147,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27158,7 +27158,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27255,9 +27255,9 @@
      "mangled": "?_Insert@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDULegoHideAnimStruct@@@@@Z",
      "donor": "d_1be8561e269b",
      "splice_class": "retail_exact_donor_rewriting",
-     "expected_section_number": 817,
-     "expected_section_count": 826,
-     "expected_donor_section_count": 826,
+     "expected_section_number": 818,
+     "expected_section_count": 827,
+     "expected_donor_section_count": 827,
      "expected_characteristics": 1615859744,
      "expected_selection": 2,
      "expected_relocation_count": 8,
@@ -27268,8 +27268,8 @@
      "expected_seed_body_sha256": "fe2c18202ee2fd30ee3f8a48bdd97174abde571dc93d90c9f3070cc38f352634",
      "expected_donor_body_sha256": "80386a56febf1d925e216950aaab88dbb92325be17ff990d7ed343f2f8b1a3c4",
      "expected_body_sha256": "ddecef55d9694dba9ba9ebff85009df03785bdb616e36878b9c2044bf061e561",
-     "expected_seed_metadata_sha256": "d85b131a69e9bf76461ac4b856f02b980da9cdbcd45a52fe379550e3793d3cb5",
-     "expected_donor_metadata_sha256": "f2b86cec0dba5643992a71ccb0ebe29bae2f9229dd19e67ddd26346187534427",
+     "expected_seed_metadata_sha256": "39c6de5dd1f1e0a04ba52c26447aad7e8b781c9fa486a51479bfe937139f99a5",
+     "expected_donor_metadata_sha256": "6ec8012779510e9de08464216a84aad8527566a9f60fa88a63fb1c8786fe3302",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -27300,7 +27300,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27311,7 +27311,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27322,7 +27322,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27333,7 +27333,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27344,7 +27344,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27355,7 +27355,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27366,7 +27366,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27490,9 +27490,9 @@
      "mangled": "?erase@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAE?AViterator@1@V21@@Z",
      "donor": "d_15d1f2ccd58a",
      "splice_class": "retail_exact_donor_rewriting",
-     "expected_section_number": 796,
-     "expected_section_count": 826,
-     "expected_donor_section_count": 826,
+     "expected_section_number": 797,
+     "expected_section_count": 827,
+     "expected_donor_section_count": 827,
      "expected_characteristics": 1615859744,
      "expected_selection": 2,
      "expected_relocation_count": 16,
@@ -27503,8 +27503,8 @@
      "expected_seed_body_sha256": "db70bae31501fb3ff4b2c63675de8dc82bf99c12c9bdc6d2719f9539b033060f",
      "expected_donor_body_sha256": "438286b1c93ccdf2057258fe621c5c82dbd940e8e48c32db5ca82eff739c2794",
      "expected_body_sha256": "dbe6fcb2f5ed34ed60b95e8c0fc56c053c00a72a3b5f1c946e229fc9f82720e6",
-     "expected_seed_metadata_sha256": "60150e9753a6bcaa14ab4e3ac408a21536e429db8b45124c9660d3ba14afa7d7",
-     "expected_donor_metadata_sha256": "5c688fa22a7b6e0161f124a0cecab7c87c8766bb5c16c96f00b2d09d60bcbe89",
+     "expected_seed_metadata_sha256": "773a7964dc03bf683a14a8adf75a3f39209f1489bd69d77e4a79c2a951e59d99",
+     "expected_donor_metadata_sha256": "d65dc0a0d453cfb0c08005ba5eabd5c30d71eda15157669ad8aaf8fb344e8372",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -27524,7 +27524,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27535,7 +27535,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27546,7 +27546,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27557,7 +27557,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27568,7 +27568,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27579,7 +27579,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27590,7 +27590,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27601,7 +27601,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27612,7 +27612,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27623,7 +27623,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27634,7 +27634,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27645,7 +27645,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27656,7 +27656,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27667,7 +27667,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27678,7 +27678,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 788,
+       "target_section": 789,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27801,9 +27801,9 @@
      "mangled": "?BuildROIMap@LegoAnimPresenter@@IAEXXZ",
      "donor": "d_dd09523423d2",
      "splice_class": "retail_exact_donor_rewriting",
-     "expected_section_number": 399,
-     "expected_section_count": 826,
-     "expected_donor_section_count": 826,
+     "expected_section_number": 400,
+     "expected_section_count": 827,
+     "expected_donor_section_count": 827,
      "expected_characteristics": 1615859744,
      "expected_selection": 1,
      "expected_relocation_count": 23,
@@ -27814,8 +27814,8 @@
      "expected_seed_body_sha256": "8e5034196e6f747fdae6218b451fe9e835fdb6c1abfad3e8cd39fdb48b709515",
      "expected_donor_body_sha256": "231cd52cfbe35cae6812e14e1a934f0cabc3a7bfccd74c10068ff6aa9f3257fb",
      "expected_body_sha256": "43e4ef651a4d79561d766737b64ff6597055163640bd6bd3484f2df8979d0373",
-     "expected_seed_metadata_sha256": "d4766e5142ae9f042089d2c84ee1129325f83292e92201d760f0f41ad07a18f6",
-     "expected_donor_metadata_sha256": "31e92e12d045e16a2594828e7ddbb7b88f415e0b43517c5e9df4adbc11179a5d",
+     "expected_seed_metadata_sha256": "e00f1ade9ca056cd85af10ed7803444bd27d4deb8d76dfee1ca2648f0c5fb7de",
+     "expected_donor_metadata_sha256": "bfd97aad9bdc7ecd257a9675e7141820e7e21d36b34874254cca42219928a62c",
      "expected_closure": [
       ".debug$S",
       ".xdata$x"
@@ -27846,7 +27846,7 @@
        "type": 6,
        "addend": 0,
        "target": "$L86767",
-       "target_section": 399,
+       "target_section": 400,
        "target_value": 599,
        "target_type": 0,
        "target_storage": 6,
@@ -27868,7 +27868,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27890,7 +27890,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27901,7 +27901,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27912,7 +27912,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -27934,7 +27934,7 @@
        "type": 20,
        "addend": 0,
        "target": "?UpdateStructMapAndROIIndex@LegoAnimPresenter@@IAEXAAV?$Map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@@@PAVLegoTreeNode@@PAVLegoROI@@@Z",
-       "target_section": 424,
+       "target_section": 425,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -27989,7 +27989,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -28000,7 +28000,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@1PAU_Node@1@A",
-       "target_section": 401,
+       "target_section": 402,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -28022,7 +28022,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1_Lockit@@QAE@XZ",
-       "target_section": 403,
+       "target_section": 404,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -28033,7 +28033,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAE@XZ",
-       "target_section": 406,
+       "target_section": 407,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -28044,7 +28044,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAE@XZ",
-       "target_section": 421,
+       "target_section": 422,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -28055,7 +28055,7 @@
        "type": 6,
        "addend": 0,
        "target": "$T87024",
-       "target_section": 400,
+       "target_section": 401,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 3,
@@ -28077,7 +28077,7 @@
        "type": 20,
        "addend": 0,
        "target": "??1?$Map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@@@QAE@XZ",
-       "target_section": 418,
+       "target_section": 419,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -62572,9 +62572,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-    "clean": "708e04c815c4a898176ced6b8d1a52eee27d5306f5a2fc355654ba91ff6a32eb",
-    "effective": "6bb52e5ba9684af91942cd285bb13ade761af4dd6d6f01948dc9754a164ff45e",
-    "size": 51347,
+    "clean": "3927702f07408fab13729b0b5ce08e3ae04b5d47c8fd152b22ad22f67327020a",
+    "effective": "a2b27db3b2efa74992135e014585a15a10eba540728b807797d9c29b5e6d8d97",
+    "size": 51574,
     "ops": [
      {
       "op": "insert",
@@ -62648,12 +62648,12 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "3bf0933275cc0eec59e0ac1aa960c1e0a32bf204c486115d6a100d2b3881160a",
+       "ctx": "01fb2092729ed215374f8e4dc2f63f1316caeb5523eb8f0c1e3eb78be4fffc6f",
        "at": "before_token"
       },
       "gen": {
        "k": "seq",
-       "lines": 68,
+       "lines": 67,
        "items": [
         {
          "k": "lines",
@@ -62664,7 +62664,7 @@
          "k": "fwd_run",
          "stem": "RkF",
          "first": 0,
-         "count": 4,
+         "count": 3,
          "line": 2
         },
         {
@@ -62679,7 +62679,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 6
+         "line": 5
         },
         {
          "k": "class",
@@ -62693,7 +62693,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 10
+         "line": 9
         },
         {
          "k": "class",
@@ -62707,12 +62707,12 @@
            "before_member_index": 0
           }
          ],
-         "line": 14
+         "line": 13
         },
         {
          "k": "lines",
          "n": 2,
-         "line": 18
+         "line": 17
         },
         {
          "k": "class",
@@ -62726,7 +62726,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 20
+         "line": 19
         },
         {
          "k": "class",
@@ -62740,7 +62740,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 24
+         "line": 23
         },
         {
          "k": "class",
@@ -62754,7 +62754,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 28
+         "line": 27
         },
         {
          "k": "class",
@@ -62768,7 +62768,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 32
+         "line": 31
         },
         {
          "k": "class",
@@ -62782,7 +62782,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 36
+         "line": 35
         },
         {
          "k": "class",
@@ -62796,7 +62796,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 40
+         "line": 39
         },
         {
          "k": "class",
@@ -62810,7 +62810,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 44
+         "line": 43
         },
         {
          "k": "class",
@@ -62824,7 +62824,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 48
+         "line": 47
         },
         {
          "k": "class",
@@ -62838,7 +62838,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 52
+         "line": 51
         },
         {
          "k": "class",
@@ -62852,7 +62852,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 56
+         "line": 55
         },
         {
          "k": "class",
@@ -62866,7 +62866,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 60
+         "line": 59
         },
         {
          "k": "class",
@@ -62880,7 +62880,7 @@
            "before_member_index": 0
           }
          ],
-         "line": 64
+         "line": 63
         }
        ]
       }

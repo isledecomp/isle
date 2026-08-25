@@ -224,9 +224,3 @@ void DuneBuggy::ActivateSceneActions()
 		);
 	}
 }
-
-// Unreferenced dword that retail keeps right after this object's
-// "DuneCarHorn_Sound" literal in .data (before legoanimpresenter's map statics),
-// initialised to 1.
-// GLOBAL: LEGO1 0x100f767c
-undefined4 g_unk0x100f767c = 1;

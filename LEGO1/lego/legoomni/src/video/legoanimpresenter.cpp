@@ -33,6 +33,12 @@ DECOMP_SIZE_ASSERT(LegoLocomotionAnimPresenter, 0xd8)
 DECOMP_SIZE_ASSERT(LegoHideAnimPresenter, 0xc4)
 DECOMP_SIZE_ASSERT(LegoHideAnimStruct, 0x08)
 
+// Unreferenced dword that retail keeps right after dunebuggy.cpp's
+// "DuneCarHorn_Sound" literal, immediately ahead of this unit's own
+// .data contribution, initialised to 1.
+// GLOBAL: LEGO1 0x100f767c
+undefined4 g_unk0x100f767c = 1;
+
 // FUNCTION: LEGO1 0x10068420
 // FUNCTION: BETA10 0x1004e5f0
 LegoAnimPresenter::LegoAnimPresenter()
