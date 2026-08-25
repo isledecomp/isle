@@ -36778,6 +36778,51 @@ def composed_rewriting_delegate(expected_closure: object) -> str:
     return "equal_body_eh_structural_local"
 
 
+def _validate_commutative_operand_forms(
+    value: object, context: str, body_length: int,
+) -> tuple[list, list]:
+    """Validate the `commutative_operand_forms` list of a seam declaration.
+
+    Shape only -- K1..K8 are discharged by `apply_commutative_operand_form`
+    on the measured body.  Returns (normalized_sites, rewritten_bytes)."""
+    normalized_forms = []
+    form_bytes = []
+    previous_offset = -1
+    for index, item in enumerate(
+            value.get("commutative_operand_forms") or []):
+        item_context = f"{context}.commutative_operand_forms[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "pair_offset", "operation", "expected_rewritten_offsets",
+        }, item_context)
+        at = require_exact_int(item.get("pair_offset"),
+                               f"{item_context}.pair_offset",
+                               minimum=0, maximum=body_length - 4)
+        require(at > previous_offset,
+                f"{item_context}: sites are unsorted")
+        previous_offset = at
+        require(item.get("operation") in ("fadd", "fmul"),
+                f"{item_context}.operation is not a commutative x87 binary "
+                "operation")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int
+                        # a pair is at most two 6-byte instructions
+                        and at <= offset < min(at + 12, body_length)
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        form_bytes.extend(offsets)
+        normalized_forms.append({
+            "pair_offset": at,
+            "operation": item["operation"],
+            "expected_rewritten_offsets": list(offsets),
+        })
+    require(len(set(form_bytes)) == len(form_bytes),
+            f"{context}: two commutative forms rewrite the same byte")
+    return normalized_forms, form_bytes
+
+
 def validate_composed_rewriting(
     value: object, context: str, body_length: int,
     lone_statement_ok: bool = False,
@@ -36787,6 +36832,7 @@ def validate_composed_rewriting(
     exact_audit_keys(value, {
         "kind", "windows", "register_bijections", "relational_sites",
         "fp_sum_rotations", "simulated_region_rewrites", "slot_bijections",
+        "commutative_operand_forms",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_seed_debug_s_sha256",
@@ -36795,6 +36841,7 @@ def validate_composed_rewriting(
     }, context, optional={"windows", "register_bijections",
                           "relational_sites", "fp_sum_rotations",
                           "simulated_region_rewrites", "slot_bijections",
+                          "commutative_operand_forms",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == COMPOSED_REWRITING_KIND,
@@ -37106,21 +37153,25 @@ def validate_composed_rewriting(
                     f"{site_context}.reencode must be true when present")
             normalized_site["reencode"] = True
         normalized_sites.append(normalized_site)
+    normalized_forms, form_bytes = _validate_commutative_operand_forms(
+        value, context, body_length)
     declared_slots = value.get("slot_bijections") or []
     require(normalized_windows or normalized_bijections or normalized_sites
             or normalized_rotations or normalized_region_rewrites
-            or declared_slots,
+            or normalized_forms or declared_slots,
             f"{context} declares no certificate")
     # A lone window, bijection, mirror or rotation belongs to its own
-    # class; the simulated region rewrite has no single-statement class, so
-    # one of those may stand alone.  A slot bijection is likewise a
-    # composition-only seam and counts toward the total.
+    # class; the simulated region rewrite and the commutative operand form
+    # have no single-statement class, so one of those may stand alone.  A
+    # slot bijection is likewise a composition-only seam and counts toward
+    # the total.
     # A lone statement normally belongs to its dedicated class.  The one
     # admitted exception is a lane-divergent witness (the entry pins a donor
     # seat different from the seed's): the dedicated classes require the
     # witness to reproduce the seed's section structure, which such a
     # witness cannot, so the composition context is the only sound home.
-    require(normalized_region_rewrites or lone_statement_ok
+    require(normalized_region_rewrites or normalized_forms
+            or lone_statement_ok
             or len(normalized_windows) + len(normalized_bijections)
             + len(normalized_sites) + len(normalized_rotations)
             + len(declared_slots) >= 2,
@@ -37142,13 +37193,19 @@ def validate_composed_rewriting(
             "reordered window")
     require(not (rotation_regions & (window_bytes | set(bijection_bytes)
                                      | set(relational_bytes)
+                                     | set(form_bytes)
                                      | region_rewrite_regions)),
             f"{context}: an fp-sum chain overlaps another certificate's "
             "bytes")
     require(not (region_rewrite_regions & (window_bytes
                                            | set(bijection_bytes)
+                                           | set(form_bytes)
                                            | set(relational_bytes))),
             f"{context}: a simulated region rewrite overlaps another "
+            "certificate's bytes")
+    require(not (set(form_bytes) & (window_bytes | set(bijection_bytes)
+                                    | set(relational_bytes))),
+            f"{context}: a commutative operand form overlaps another "
             "certificate's bytes")
     changed = value.get("expected_changed_offsets")
     require(isinstance(changed, list) and changed
@@ -37163,11 +37220,13 @@ def validate_composed_rewriting(
         if type(offset) is int}
     require(set(bijection_bytes) | set(relational_bytes)
             | set(rotation_bytes) | set(region_rewrite_bytes) | slot_bytes
+            | set(form_bytes)
             <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in window_bytes or offset in rotation_regions
                 or offset in region_rewrite_regions or offset in slot_bytes
                 or offset in set(bijection_bytes) | set(relational_bytes)
+                | set(form_bytes)
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
             "certificate can move")
@@ -37257,6 +37316,7 @@ def validate_composed_rewriting(
     normalized["fp_sum_rotations"] = normalized_rotations
     normalized["simulated_region_rewrites"] = normalized_region_rewrites
     normalized["slot_bijections"] = normalized_slots
+    normalized["commutative_operand_forms"] = normalized_forms
     if code_length is not None:
         normalized["expected_code_length"] = code_length
     if targets is not None:
@@ -37432,6 +37492,25 @@ def compose_retail_exact_composed_rewriting(
                     f"composed-rewriting simulated rewrite {index} rewrote "
                     "a different byte set from its declaration")
         region_rewrite_detail = region_proof["regions"]
+    # The commutative operand forms: byte-local, boundary-invariant (K3), and
+    # C2-disjoint from every other certificate's bytes, so their order here
+    # is free and is fixed as declared.
+    form_detail = []
+    if spec.get("commutative_operand_forms"):
+        image, form_proof = apply_commutative_operand_form(
+            image, spec["commutative_operand_forms"], relocation_offsets,
+            "composed-rewriting commutative form", relocation_symbols,
+            code_length, frozenset(external_entries), internal_targets)
+        for index, (item, site) in enumerate(
+                zip(spec["commutative_operand_forms"],
+                    form_proof["sites"])):
+            require(site["expected_rewritten_offsets"]
+                    == item["expected_rewritten_offsets"]
+                    and site["pair_offset"] == item["pair_offset"]
+                    and site["operation"] == item["operation"],
+                    f"composed-rewriting commutative form {index} rewrote a "
+                    "different site from its declaration")
+        form_detail = form_proof["sites"]
     # C1, second half: the byte-local certificates, measured on the image the
     # reordering produced.
     bijection_detail = []
@@ -37713,6 +37792,7 @@ def compose_retail_exact_composed_rewriting(
         "splice_class": COMPOSED_REWRITING_CLASS,
         "instruction_schedule": schedule_detail,
         "fp_sum_reassociation": fp_detail,
+        "commutative_operand_forms": form_detail,
         "simulated_region_rewrites": region_rewrite_detail,
         "register_bijections": bijection_detail,
         "slot_bijections": slot_detail,
@@ -37777,7 +37857,7 @@ def validate_donor_rewriting(
     exact_audit_keys(value, {
         "kind", "windows", "fp_sum_rotations", "register_bijections",
         "fp_pointer_exchanges", "simulated_region_rewrites",
-        "relational_sites",
+        "relational_sites", "commutative_operand_forms",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_code_length",
@@ -37785,6 +37865,7 @@ def validate_donor_rewriting(
     }, context, optional={"windows", "fp_sum_rotations",
                           "register_bijections", "fp_pointer_exchanges",
                           "simulated_region_rewrites", "relational_sites",
+                          "commutative_operand_forms",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == DONOR_REWRITING_KIND,
@@ -38064,9 +38145,11 @@ def validate_donor_rewriting(
                     f"{site_context}.reencode must be true when present")
             normalized_site["reencode"] = True
         normalized_sites.append(normalized_site)
+    normalized_forms, form_bytes = _validate_commutative_operand_forms(
+        value, context, body_length)
     require(normalized_windows or normalized_rotations
             or normalized_bijections or normalized_exchanges
-            or normalized_rewrites or normalized_sites,
+            or normalized_rewrites or normalized_sites or normalized_forms,
             f"{context} declares no certificate")
     window_bytes = {offset for window in normalized_windows
                     for offset in range(window["start"], window["end"])}
@@ -38076,19 +38159,27 @@ def validate_donor_rewriting(
             f"{context}: two relational sites rewrite the same byte")
     require(len({*bijection_bytes} & {*exchange_bytes}) == 0
             and len({*bijection_bytes} & {*relational_bytes}) == 0
-            and len({*exchange_bytes} & {*relational_bytes}) == 0,
+            and len({*bijection_bytes} & {*form_bytes}) == 0
+            and len({*exchange_bytes} & {*relational_bytes}) == 0
+            and len({*exchange_bytes} & {*form_bytes}) == 0
+            and len({*relational_bytes} & {*form_bytes}) == 0,
             f"{context}: two certificates rewrite the same byte")
     require(not (rotation_regions & (set(bijection_bytes)
                                      | set(exchange_bytes)
                                      | set(relational_bytes)
+                                     | set(form_bytes)
                                      | window_bytes
                                      | rewrite_regions)),
             f"{context}: another certificate reaches inside an fp-sum chain")
     require(not (rewrite_regions & (set(exchange_bytes)
                                     | set(relational_bytes)
+                                    | set(form_bytes)
                                     | window_bytes)),
             f"{context}: another certificate reaches inside a simulated "
             "region rewrite")
+    require(not (set(form_bytes) & window_bytes),
+            f"{context}: a commutative operand form rewrites a byte inside "
+            "a reordered window")
     require(not (window_bytes & set(relational_bytes)),
             f"{context}: a relational reversal rewrites a byte inside a "
             "reordered window")
@@ -38106,14 +38197,14 @@ def validate_donor_rewriting(
                            == site["image_condition"]
                            for offset in site["expected_rewritten_offsets"]}
     require(set(rotation_bytes) | set(bijection_bytes)
-            | set(exchange_bytes) | set(rewrite_bytes)
+            | set(exchange_bytes) | set(rewrite_bytes) | set(form_bytes)
             | (set(relational_bytes) - identity_relational)
             <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in rotation_regions or offset in window_bytes
                 or offset in rewrite_regions
                 or offset in set(bijection_bytes) | set(exchange_bytes)
-                | set(relational_bytes)
+                | set(relational_bytes) | set(form_bytes)
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
             "certificate can move")
@@ -38156,6 +38247,7 @@ def validate_donor_rewriting(
         "fp_pointer_exchanges": normalized_exchanges,
         "simulated_region_rewrites": normalized_rewrites,
         "relational_sites": normalized_sites,
+        "commutative_operand_forms": normalized_forms,
     }
     if code_length is not None:
         normalized["expected_code_length"] = code_length
@@ -38399,6 +38491,22 @@ def compose_retail_exact_donor_rewriting(
                     f"donor-rewriting fp-exchange {index} rewrote a "
                     "different byte set from its declaration")
         exchange_detail = exchange_proof["exchanges"]
+    form_detail = []
+    if spec.get("commutative_operand_forms"):
+        image, form_proof = apply_commutative_operand_form(
+            image, spec["commutative_operand_forms"], relocation_offsets,
+            "donor-rewriting commutative form", relocation_symbols,
+            code_length, frozenset(external_entries), internal_targets)
+        for index, (item, site) in enumerate(
+                zip(spec["commutative_operand_forms"],
+                    form_proof["sites"])):
+            require(site["expected_rewritten_offsets"]
+                    == item["expected_rewritten_offsets"]
+                    and site["pair_offset"] == item["pair_offset"]
+                    and site["operation"] == item["operation"],
+                    f"donor-rewriting commutative form {index} rewrote a "
+                    "different site from its declaration")
+        form_detail = form_proof["sites"]
     rewrite_detail = []
     relocation_moves = {}
     if spec.get("simulated_region_rewrites"):
@@ -38603,6 +38711,7 @@ def compose_retail_exact_donor_rewriting(
         "instruction_schedule": schedule_detail,
         "fp_sum_reassociation": fp_detail,
         "fp_pointer_exchanges": exchange_detail,
+        "commutative_operand_forms": form_detail,
         "simulated_region_rewrites": rewrite_detail,
         "register_bijections": bijection_detail,
         "relational_form": relational_detail,
@@ -38612,6 +38721,259 @@ def compose_retail_exact_donor_rewriting(
         "external_entries": sorted(external_entries),
         "retail_exact": True,
         **semantic_detail,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Commutative operand form: exchange the two MEMORY OPERANDS of one adjacent
+# x87 pair -- `fld X ; fmul Y` <-> `fld Y ; fmul X` (fadd likewise) -- and
+# nothing else.
+# ---------------------------------------------------------------------------
+#
+# MSVC 4.2 canonicalises which operand of a commutative x87 product is loaded
+# first as a function of the whole translation unit's parse state, so the same
+# written source renders either order (measured on Vector3::DotImpl: all 48
+# source forms x 3 carrier cells compile byte-identically, yet the parse-state
+# change of the v3+V4X relocation flips the pair).  The two orders compute one
+# rounding of the same two exact values.
+#
+# WHAT IT PROVES, per declared site (K1..K10; the declaration-scoped (B) shape
+# of [[project-commutative-operand-form]] -- deliberately NOT the alternative
+# of normalising fmul inside the shared simulator, which would silently widen
+# every certificate that uses it):
+#  K1  FORM.  The instruction at `pair_offset` decodes with the closed decoder
+#      to fld m32 (D9 /0) or fld m64 (DD /0), mod != 3, and the NEXT
+#      instruction by offset is a memory-form D8 (m32) or DC (m64) whose
+#      ModRM digit is /0 (fadd) or /1 (fmul), the SAME width, so no opcode
+#      byte is ever rewritten.  /2 /3 (fcom, fcomp) refuse -- they do not
+#      write ST(0); /4../7 (fsub, fsubr, fdiv, fdivr) refuse -- they are not
+#      commutative.  The declared `operation` must equal the decoded digit.
+#  K2  SINGLE PAIR.  A site is exactly two instructions, so the licence is
+#      structurally confined to COMMUTATIVITY -- it cannot regroup a product
+#      chain or reorder the addends of a sum (those are the fp-sum
+#      reassociation licence, a different, already-landed statement).
+#  K3  NO BOUNDARY MOVES.  len(fld) == len(op); the exchange is a splice of
+#      the two r/m encodings with each instruction's own /digit re-stamped,
+#      so every instruction boundary -- including the one inside the pair --
+#      is invariant, which is what licenses the hosting seam's demand that
+#      .debug$S and the COFF line table be byte-identical.
+#  K4  RELOCATIONS.  No relocation byte inside either instruction; absolute
+#      addressing (mod 0, r/m 5) refuses outright.  Nothing here can move a
+#      relocation record.
+#  K5  SINGLE ENTRY.  The operator's offset may be neither a branch target
+#      nor a derived external entry nor a relocated in-body target: entering
+#      the pair at its second instruction would apply the exchanged operand
+#      to a different ST(0).
+#  K6  SAME VALUES.  Adjacency discharges it structurally: fld and the memory
+#      form of fadd/fmul write only the x87 stack, so between the two
+#      instructions no general register and no memory location changes, and
+#      both versions read the SAME two addresses and values.  Aliasing is a
+#      non-issue -- aliased operands read the same bytes either way.
+#  K7  THE ARITHMETIC.  Same-width operands convert to the extended format
+#      exactly, so both versions perform ONE rounding of the exact
+#      sum/product of the same two exact values under the same RC/PC.
+#      Signed zeros and infinities are symmetric; x87 selects between two
+#      NaNs by significand magnitude (SDM Vol. 1 Table 4-7), not operand
+#      position; #IA/#D/#O/#U/#P are functions of the operand set and exact
+#      result.  The only residual difference is the reported EIP of an
+#      UNMASKED trap -- not a difference in computed state under the masked
+#      control word the CRT installs.  This licence is strictly weaker than
+#      fp-sum reassociation, which is not even value-preserving in IEEE.
+#  K8  IMAGE-DERIVED.  The image pair is re-decoded and each half must carry
+#      the other's r/m encoding; the rewritten offsets are derived from the
+#      byte difference and must equal `expected_rewritten_offsets`; the whole
+#      body is re-walked and every boundary, branch target and entry must
+#      equal the seed's.  No byte outside a declared site may change.
+#  K9  DEBUG FIDELITY is the hosting seam's: no instruction moves and no
+#      register changes role, so the seam's byte-identical .debug$S and line
+#      table checks apply unchanged.
+#  K10 SCOPE AND ORACLE.  Sites are sorted and non-overlapping; the seam's C2
+#      requires the rewritten byte set disjoint from every other
+#      certificate's; and composition still refuses unless the finished image
+#      is byte-identical to the pinned retail oracle under the relocation
+#      mask.  The class installs nothing of its own.
+
+
+COMMUTATIVE_OPERAND_FORM_KIND = "commutative_operand_form_v1"
+
+
+# The admitted (loader, operator) opcode pairs.  Both members must carry the
+# SAME operand width, so the exchange never rewrites an opcode byte.
+#   m32:  D9 /0 fld m32   with  D8 /0 fadd m32 | D8 /1 fmul m32
+#   m64:  DD /0 fld m64   with  DC /0 fadd m64 | DC /1 fmul m64
+_COMMUTATIVE_LOAD_WIDTH = {0xD9: "m32", 0xDD: "m64"}
+_COMMUTATIVE_OPERATOR_WIDTH = {0xD8: "m32", 0xDC: "m64"}
+# reg-field digit -> the commutative operation it names.  Everything absent
+# is REFUSED: fsub/fsubr/fdiv/fdivr are not commutative and fcom/fcomp write
+# the status word rather than ST(0).
+_COMMUTATIVE_DIGIT = {0: "fadd", 1: "fmul"}
+
+
+def _commutative_memory_operand(body, item, context):
+    """(modrm_at, end, rm_bytes) for a pure-memory x87 operand, or refuse."""
+    encoding = item["encoding"]
+    require(encoding is not None,
+            f"{context}: the instruction at {item['offset']} has no ModRM "
+            "operand")
+    require(encoding["mode"] != 3,
+            f"{context}: the operand at {item['offset']} is a register, not "
+            "memory")
+    require(not encoding["absolute"],
+            f"{context}: the operand at {item['offset']} is an absolute "
+            "address")
+    modrm_at = encoding["modrm_at"]
+    end = item["offset"] + item["length"]
+    return modrm_at, end, bytes(body[modrm_at:end])
+
+
+def apply_commutative_operand_form(
+    body: bytes, sites: list, relocation_offsets: frozenset, context: str,
+    relocations: dict | None = None, code_length: int | None = None,
+    external_entries: frozenset | None = None,
+    internal_targets: frozenset | None = None,
+) -> tuple[bytes, dict]:
+    """Exchange the two memory operands of each declared x87 pair, or refuse."""
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(sites, list) and sites,
+            f"{context}: no site is declared")
+    # K5/K8 (flow half): the whole body's boundaries, branch targets and
+    # entries, measured once on the seed.
+    items, successors, entries = ia32_relational_flow_walk(
+        body, relocations, context, code_length, external_entries)
+    branch_targets = {item["target"] for item in items
+                     if item.get("target") is not None}
+    entry_offsets = {items[entry]["offset"] for entry in entries[1:]}
+    decoded = decode_ia32_bijection_body(
+        body, f"{context} decode", relocations, code_length)
+    index_of = {item["offset"]: index for index, item in enumerate(decoded)}
+    image = bytearray(body)
+    proved = []
+    previous_end = 0
+    for ordinal, site in enumerate(sites):
+        site_context = f"{context} site {ordinal}"
+        at = site["pair_offset"]
+        require(type(at) is int and 0 <= at < len(body),
+                f"{site_context}: the pair offset is out of range")
+        require(previous_end <= at,
+                f"{site_context}: sites are unsorted or overlapping")
+        require(at in index_of,
+                f"{site_context}: the pair offset is not an instruction "
+                "boundary")
+        load = decoded[index_of[at]]
+        require(index_of[at] + 1 < len(decoded),
+                f"{site_context}: the pair runs past the body")
+        operator = decoded[index_of[at] + 1]
+        require(operator["offset"] == at + load["length"],
+                f"{site_context}: the two instructions are not adjacent")
+        end = operator["offset"] + operator["length"]
+        previous_end = end
+        # K1 FORM.
+        width = _COMMUTATIVE_LOAD_WIDTH.get(load["opcode"])
+        require(width is not None,
+                f"{site_context}: {load['opcode']:#x} is not an fld m32/m64")
+        require(load["encoding"] is not None
+                and load["encoding"]["reg"] == 0,
+                f"{site_context}: the first instruction is not fld (/0)")
+        require(_COMMUTATIVE_OPERATOR_WIDTH.get(operator["opcode"]) == width,
+                f"{site_context}: the operator at {operator['offset']} is "
+                f"not a {width} x87 memory binary operation")
+        digit = (operator["encoding"] or {}).get("reg")
+        operation = _COMMUTATIVE_DIGIT.get(digit)
+        require(operation is not None,
+                f"{site_context}: /{digit} is not a COMMUTATIVE x87 binary "
+                "operation")
+        require(site.get("operation") == operation,
+                f"{site_context}: the declared operation differs")
+        load_modrm, load_end, load_rm = _commutative_memory_operand(
+            body, load, site_context)
+        oper_modrm, oper_end, oper_rm = _commutative_memory_operand(
+            body, operator, site_context)
+        # K3 NO BOUNDARY MOVES.
+        require(load["length"] == operator["length"],
+                f"{site_context}: the two instructions differ in length; "
+                "the interior boundary would move")
+        # K4 RELOCATIONS.
+        require(not any(at <= offset < end for offset in relocation_offsets),
+                f"{site_context}: a relocation lies inside the pair")
+        # K5 SINGLE ENTRY.
+        require(operator["offset"] not in branch_targets,
+                f"{site_context}: a branch targets the operator, so the "
+                "pair can be entered without its fld")
+        require(operator["offset"] not in entry_offsets,
+                f"{site_context}: an external entry lies inside the pair")
+        require(not any(at < target < end
+                        for target in (internal_targets or frozenset())),
+                f"{site_context}: a relocated target lies inside the pair")
+        # K6 THE EXCHANGE is a splice of the two r/m encodings; the opcode
+        # and the ModRM /digit of each instruction are preserved verbatim.
+        def splice(rm_bytes, digit_value):
+            head = bytearray(rm_bytes)
+            head[0] = (head[0] & 0xC7) | (digit_value << 3)
+            return bytes(head)
+        require(splice(load_rm, 0) != splice(oper_rm, 0),
+                f"{site_context}: the two operands are already equal")
+        new_load = bytes([load["opcode"]]) + splice(oper_rm, 0)
+        new_operator = bytes([operator["opcode"]]) + splice(load_rm, digit)
+        require(len(new_load) == load["length"]
+                and len(new_operator) == operator["length"],
+                f"{site_context}: the exchange changed an instruction length")
+        image[at:end] = new_load + new_operator
+        # K8, pair half: THE IMAGE RE-DECODES to the same two forms with the
+        # operands exchanged -- derived from the image, never asserted.
+        check = decode_ia32_bijection_body(
+            bytes(image[at:end]), f"{site_context} image", None, None)
+        require(len(check) == 2
+                and check[0]["opcode"] == load["opcode"]
+                and check[1]["opcode"] == operator["opcode"]
+                and check[0]["length"] == load["length"]
+                and check[1]["length"] == operator["length"],
+                f"{site_context}: the image pair does not re-decode")
+        require(_commutative_memory_operand(bytes(image[at:end]), check[0],
+                                            f"{site_context} image")[2]
+                == splice(oper_rm, 0),
+                f"{site_context}: the image fld does not carry the "
+                "operator's operand")
+        require(_commutative_memory_operand(bytes(image[at:end]), check[1],
+                                            f"{site_context} image")[2]
+                == splice(load_rm, digit),
+                f"{site_context}: the image operator does not carry the "
+                "fld's operand")
+        rewritten = sorted(offset for offset in range(at, end)
+                           if body[offset] != image[offset])
+        declared = site.get("expected_rewritten_offsets")
+        require(list(declared or []) == rewritten,
+                f"{site_context}: the rewritten offsets {rewritten} are not "
+                f"the declared {list(declared or [])}")
+        proved.append({
+            "pair_offset": at, "pair_end": end, "operation": operation,
+            "width": width,
+            "expected_rewritten_offsets": rewritten,
+        })
+    image = bytes(image)
+    require(image != body, f"{context}: the image does not move the body")
+    changed = {offset for offset in range(len(body))
+               if body[offset] != image[offset]}
+    declared = {offset for site in proved
+                for offset in site["expected_rewritten_offsets"]}
+    require(changed <= declared,
+            f"{context}: the image changed a byte outside the declared sites")
+    # K8, whole-body half: every instruction boundary, branch target and
+    # entry is the seed's own.
+    image_items, _successors, image_entries = ia32_relational_flow_walk(
+        image, relocations, f"{context} image", code_length, external_entries)
+    require([item["offset"] for item in image_items]
+            == [item["offset"] for item in items]
+            and {item["target"] for item in image_items
+                 if item.get("target") is not None} == branch_targets
+            and image_entries == entries,
+            f"{context}: the image moved a boundary, a branch target or an "
+            "entry")
+    return image, {
+        "kind": COMMUTATIVE_OPERAND_FORM_KIND,
+        "sites": proved,
+        "instruction_count": len(image_items),
     }
 
 
