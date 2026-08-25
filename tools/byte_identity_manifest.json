@@ -1462,7 +1462,7 @@
   {
    "target": "isle",
    "source": "ISLE/isleapp.cpp",
-   "source_sha256": "a0ecb7c6e5038489544dec962eed8cd9613dc55eac994da6fa501d95f1511654",
+   "source_sha256": "3cda5ef6ed73a1b889b4c7ae4d612ae21e0c7794757e3e61f5a9eade3525c95c",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -14762,7 +14762,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp",
-   "source_sha256": "273c129463dacc942e1b092918f7d906d921c8240a4fa6c819f4edf3c5352e4f",
+   "source_sha256": "7f149f0975e10161992f9fc698246af66ed0c03e26a63771fd663c3c65e4239c",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -14820,7 +14820,8 @@
      "??_7ScoreState@@6B@",
      "??_7HelicopterState@@6B@",
      "??_7LegoAnimActor@@6BLegoPathActor@@@",
-     "??_7LegoAnimActor@@6B0@@"
+     "??_7LegoAnimActor@@6B0@@",
+     "??_7Pizzeria@@6B@"
     ],
     [
      "??_7Doors@@6B@",
@@ -15006,16 +15007,16 @@
      }
     },
     {
-     "id": "d_155e11dbed62",
+     "id": "d_d180a5b6acdd",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "prefix": "MxUnkRecVC",
-      "count": 16,
+      "count": 14,
       "width": 3,
       "placement": "suffix",
-      "generated_header_sha256": "155e11dbed627eafb0c2172ff67c82b864907ecb804db4451b205b2d145242c9",
+      "generated_header_sha256": "d180a5b6acdd3924a2636b698b346b110a122f6016c7e8e88237aa9d764bc2f1",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -15226,7 +15227,7 @@
     },
     {
      "mangled": "??1?$vector@PAULegoAnimActorStruct@@V?$allocator@PAULegoAnimActorStruct@@@@@@QAE@XZ",
-     "donor": "d_155e11dbed62",
+     "donor": "d_d180a5b6acdd",
      "expected_body_sha256": "69c0d19127c6af476665e38de531eb101ddec18db377149648088e74fd4cb76b",
      "expected_body_length": 54,
      "expected_changed_offsets": [
@@ -19693,7 +19694,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp",
-   "source_sha256": "98e01347f356fd15043c6bf6c587f74409ec9602fadd1179a4ddd8dc21b400b8",
+   "source_sha256": "759e323cefbe9ad378210077155fd295ee1946d4cc65dda7a180c9dbca570fb3",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -19714,14 +19715,14 @@
    },
    "donors": [
     {
-     "id": "d_af94bef4b4a1",
+     "id": "d_c6caf5d4ccba",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 25,
-      "functions_per_class": 6,
-      "generated_header_sha256": "af94bef4b4a140cebb40d1f274274deca105f6a7fe698a104e21e34e6c46908d",
+      "classes": 16,
+      "functions_per_class": 2,
+      "generated_header_sha256": "c6caf5d4ccba45582a5b3ad5e0a26ede7739ede0238ed5096f7490b4eb8bbbb8",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -19769,7 +19770,7 @@
    "functions": [
     {
      "mangled": "?LoadWorld@LegoWorldPresenter@@QAEJPADPAVLegoWorld@@@Z",
-     "donor": "d_af94bef4b4a1",
+     "donor": "d_c6caf5d4ccba",
      "expected_body_sha256": "9c976fbe3d530075103493efe8c1289ad8c4740431ddabdbc4b37317bf34bd8d",
      "expected_body_length": 1972,
      "expected_changed_offsets": [
@@ -28473,7 +28474,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp",
-   "source_sha256": "47cdb8b985102446d78a37d559bc4bcce607eca485da396531d3b82d21658da1",
+   "source_sha256": "74925e5897588d5ce7e0435fd4df90e902afd7ed3ddf200fb08caef467e95708",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -28489,14 +28490,14 @@
    },
    "donors": [
     {
-     "id": "d_b9e308c27cda",
+     "id": "d_8ac6b4ca0987",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
-      "classes": 9,
-      "functions": 45,
-      "generated_header_sha256": "b9e308c27cda94453543f0b9d9f01de8f78a24ed4f7b9fcc00b1d7f5c55371a1",
+      "classes": 2,
+      "functions": 2,
+      "generated_header_sha256": "8ac6b4ca098707dc7bedc9b71b551721555a9190abf0b72a3c05f21b9418da2d",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -28513,8 +28514,6 @@
      "expected_changed_offsets": [
       1105,
       1169,
-      1385,
-      1458,
       1704,
       1708
      ],
@@ -28540,7 +28539,7 @@
       84,
       92
      ],
-     "donor": "d_b9e308c27cda"
+     "donor": "d_8ac6b4ca0987"
     }
    ],
    "completion": {
@@ -50479,8 +50478,8 @@
    {
     "path": "ISLE/isleapp.cpp",
     "clean": "b55f9133f070316e3c2559fc8e98a881df2de99fb44c2ed8cad417b60c67dee6",
-    "effective": "a0ecb7c6e5038489544dec962eed8cd9613dc55eac994da6fa501d95f1511654",
-    "size": 22867,
+    "effective": "3cda5ef6ed73a1b889b4c7ae4d612ae21e0c7794757e3e61f5a9eade3525c95c",
+    "size": 22762,
     "ops": [
      {
       "op": "insert",
@@ -50519,7 +50518,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 13,
+       "lines": 8,
        "items": [
         {
          "k": "lines",
@@ -50530,7 +50529,7 @@
          "k": "fwd_run",
          "stem": "MxUnkRecordT",
          "first": 0,
-         "count": 7,
+         "count": 2,
          "line": 6
         }
        ]
@@ -54756,8 +54755,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp",
     "clean": "ad3ec7650202665c1129ea3460aee15e344b420b36153aa777a0c12e80d8953d",
-    "effective": "273c129463dacc942e1b092918f7d906d921c8240a4fa6c819f4edf3c5352e4f",
-    "size": 25353,
+    "effective": "7f149f0975e10161992f9fc698246af66ed0c03e26a63771fd663c3c65e4239c",
+    "size": 25406,
     "ops": [
      {
       "op": "insert",
@@ -56387,19 +56386,28 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 113,
+       "lines": 117,
        "items": [
         {
          "k": "lines",
          "n": 2,
-         "line": 2
+         "line": 1
         },
         {
          "k": "fwd_run",
          "stem": "MxUnkRecordSW",
          "first": 7000,
          "count": 110,
-         "line": 4
+         "line": 3
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordFF",
+         "members": [
+          "m0",
+          "m1"
+         ],
+         "line": 113
         }
        ]
       }
@@ -57962,8 +57970,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/entity/legoworldpresenter.cpp",
     "clean": "b659b0f1f56f6bdd826e2981f4a9099af7355096d410bc70d970fbb38c9f8da6",
-    "effective": "98e01347f356fd15043c6bf6c587f74409ec9602fadd1179a4ddd8dc21b400b8",
-    "size": 13851,
+    "effective": "759e323cefbe9ad378210077155fd295ee1946d4cc65dda7a180c9dbca570fb3",
+    "size": 13781,
     "ops": [
      {
       "op": "insert",
@@ -58008,13 +58016,13 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 14,
+       "lines": 9,
        "items": [
         {
          "k": "fwd_run",
          "stem": "WpL",
          "first": 77,
-         "count": 14,
+         "count": 9,
          "line": 1,
          "width": 3
         }
@@ -61298,26 +61306,6 @@
     ]
    },
    {
-    "path": "LEGO1/lego/legoomni/src/paths/legordatapad8.cpp",
-    "effective": "e9fd5921f15f15441bce4b1017a21a464aa832f80ac3758a949e652388a5c2a8",
-    "size": 38,
-    "ops": [
-     {
-      "op": "append",
-      "id": "op_rpool_08_padding_tu",
-      "gen": {
-       "k": "const_pool",
-       "include_identity": "legotextureinfo.h",
-       "logical_path": "LEGO1/lego/legoomni/src/paths/legordatapad8.cpp",
-       "lines": 10,
-       "at": [
-        1
-       ]
-      }
-     }
-    ]
-   },
-   {
     "path": "LEGO1/lego/legoomni/src/paths/legordatapad9.cpp",
     "effective": "e9fd5921f15f15441bce4b1017a21a464aa832f80ac3758a949e652388a5c2a8",
     "size": 38,
@@ -63521,8 +63509,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp",
     "clean": "b035d7e706b1bbe825ca14e964c46ba72344dab9c688c5d718cf3a54e9f3164f",
-    "effective": "47cdb8b985102446d78a37d559bc4bcce607eca485da396531d3b82d21658da1",
-    "size": 13544,
+    "effective": "74925e5897588d5ce7e0435fd4df90e902afd7ed3ddf200fb08caef467e95708",
+    "size": 13322,
     "ops": [
      {
       "op": "insert",
@@ -63559,7 +63547,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 8,
+       "lines": 34,
        "items": [
         {
          "k": "lines",
@@ -63580,6 +63568,136 @@
          "k": "fwd",
          "id": "MxUnkRecordYJ",
          "line": 7
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFG",
+         "line": 8
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFI",
+         "line": 9
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFJ",
+         "line": 10
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFK",
+         "line": 11
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFL",
+         "line": 12
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFM",
+         "line": 13
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFN",
+         "line": 14
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFO",
+         "line": 15
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFP",
+         "line": 16
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFQ",
+         "line": 17
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFR",
+         "line": 18
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFS",
+         "line": 19
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFT",
+         "line": 20
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFU",
+         "line": 21
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFV",
+         "line": 22
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFW",
+         "line": 23
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFX",
+         "line": 24
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFY",
+         "line": 25
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFZ",
+         "line": 26
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordGA",
+         "line": 27
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordGB",
+         "line": 28
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordGT",
+         "line": 29
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordGU",
+         "line": 30
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordGV",
+         "line": 31
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordGW",
+         "line": 32
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordGX",
+         "line": 33
         }
        ]
       }
@@ -63593,20 +63711,12 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 38,
+       "lines": 6,
        "items": [
         {
          "k": "lines",
          "n": 5,
-         "line": 2
-        },
-        {
-         "k": "fwd_run",
-         "stem": "MxUnkRecordMP",
-         "first": 0,
-         "count": 32,
-         "line": 7,
-         "width": 3
+         "line": 1
         }
        ]
       }
@@ -73622,38 +73732,32 @@
      "before": "LEGO1/lego/legoomni/src/main/scripts.cpp"
     },
     {
-     "path": "LEGO1/lego/legoomni/src/paths/legordatapad8.cpp",
-     "ordinal": 73,
-     "after": "LEGO1/lego/legoomni/src/main/scripts.cpp",
-     "before": "LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp"
-    },
-    {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad9.cpp",
-     "ordinal": 76,
+     "ordinal": 75,
      "after": "LEGO1/lego/legoomni/src/actors/act3ammo.cpp",
      "before": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad10.cpp",
-     "ordinal": 78,
+     "ordinal": 77,
      "after": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad11.cpp",
-     "ordinal": 108,
+     "ordinal": 107,
      "after": "LEGO1/lego/legoomni/src/actors/jetski.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad12.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad12.cpp",
-     "ordinal": 109,
+     "ordinal": 108,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad11.cpp",
      "before": "LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legorelocpad.cpp",
-     "ordinal": 116,
+     "ordinal": 115,
      "after": "LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp"
     }
    ],
