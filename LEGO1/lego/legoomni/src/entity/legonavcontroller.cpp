@@ -1181,6 +1181,13 @@ MxBool g_enableMusic = TRUE;
 // GLOBAL: LEGO1 0x100f66d4
 MxU32 g_fpsEnabled = TRUE;
 
+// The reverse-speed clamp, as a named file-scope constant.  MSVC 4.2 numbers
+// named file-scope statics at parse time, ahead of every function-body literal,
+// and that is the only way this value can sit at the front of the unit's .rdata
+// pool where retail keeps it.  The name follows the use.
+// GLOBAL: LEGO1 0x100d8544
+static const float g_maxReverseVelFactor = 0.4f;
+
 // FUNCTION: LEGO1 0x10054ac0
 LegoNavController::LegoNavController()
 {
@@ -1412,8 +1419,8 @@ MxBool LegoNavController::CalculateNewPosDir(
 		float rot_mat[3][3];
 		Mx3DPointFloat delta_pos, new_dir, new_pos;
 
-		if (m_linearVel < -(m_maxLinearVel * 0.4f)) {
-			m_linearVel = -(m_maxLinearVel * 0.4f);
+		if (m_linearVel < -(m_maxLinearVel * g_maxReverseVelFactor)) {
+			m_linearVel = -(m_maxLinearVel * g_maxReverseVelFactor);
 		}
 
 		VXS3(delta_pos, p_curDir, m_linearVel * deltaTime);
