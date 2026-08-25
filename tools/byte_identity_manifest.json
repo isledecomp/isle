@@ -15799,7 +15799,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/control/legometerpresenter.cpp",
-   "source_sha256": "4e685e385841a07955a5b8c9bf36899d0875b8c3678641052afa16040dbfc6c7",
+   "source_sha256": "e5cbe7fa34f06423fe0939480bb94973a3c6e91bef6d0119fb192e7ca6dfee2c",
    "mode": "restore_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -48740,7 +48740,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT’s own FPO record declares FRAME_FPO.",
+    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT\u2019s own FPO record declares FRAME_FPO.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -57182,14 +57182,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/control/legometerpresenter.cpp",
-    "clean": "4f126aed704f0c677a6a20d90934b2f48d5009aa0f3431df06694612549e9c35",
-    "effective": "4e685e385841a07955a5b8c9bf36899d0875b8c3678641052afa16040dbfc6c7",
-    "size": 4172,
+    "clean": "5f84514b2765841c35d6b818373d2e1eab91358e002391420bfc891d8f02a729",
+    "effective": "e5cbe7fa34f06423fe0939480bb94973a3c6e91bef6d0119fb192e7ca6dfee2c",
+    "size": 4357,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "b497cec90c6c9c62c7bf6635f35fae7f1e9a7fc2ccaa7e2454996a4cc84e567f",
+       "ctx": "d045d89ee0c3ec9bf65c764d8e3aeb3a12d516226f454b6ed1ee70938f5a01f7",
        "b": 0,
        "at": "start"
       },
@@ -61115,46 +61115,6 @@
        "k": "const_pool",
        "include_identity": "legopathboundary.h",
        "logical_path": "LEGO1/lego/legoomni/src/paths/legordatapad3.cpp",
-       "lines": 10,
-       "at": [
-        1
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "path": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp",
-    "effective": "e9fd5921f15f15441bce4b1017a21a464aa832f80ac3758a949e652388a5c2a8",
-    "size": 38,
-    "ops": [
-     {
-      "op": "append",
-      "id": "op_rpool_04_padding_tu",
-      "gen": {
-       "k": "const_pool",
-       "include_identity": "legotextureinfo.h",
-       "logical_path": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp",
-       "lines": 10,
-       "at": [
-        1
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "path": "LEGO1/lego/legoomni/src/paths/legordatapad5.cpp",
-    "effective": "e9fd5921f15f15441bce4b1017a21a464aa832f80ac3758a949e652388a5c2a8",
-    "size": 38,
-    "ops": [
-     {
-      "op": "append",
-      "id": "op_rpool_05_padding_tu",
-      "gen": {
-       "k": "const_pool",
-       "include_identity": "legotextureinfo.h",
-       "logical_path": "LEGO1/lego/legoomni/src/paths/legordatapad5.cpp",
        "lines": 10,
        "at": [
         1
@@ -73582,80 +73542,68 @@
      "before": "LEGO1/modeldb/modeldb.cpp"
     },
     {
-     "path": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp",
-     "ordinal": 50,
-     "after": "LEGO1/lego/legoomni/src/actors/act3actors.cpp",
-     "before": "LEGO1/lego/legoomni/src/paths/legordatapad5.cpp"
-    },
-    {
-     "path": "LEGO1/lego/legoomni/src/paths/legordatapad5.cpp",
-     "ordinal": 51,
-     "after": "LEGO1/lego/legoomni/src/paths/legordatapad4.cpp",
-     "before": "LEGO1/lego/legoomni/src/control/legometerpresenter.cpp"
-    },
-    {
      "path": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
-     "ordinal": 58,
+     "ordinal": 56,
      "after": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
-     "ordinal": 59,
+     "ordinal": 57,
      "after": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
-     "ordinal": 60,
+     "ordinal": 58,
      "after": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp",
-     "ordinal": 61,
+     "ordinal": 59,
      "after": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
      "before": "LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad6.cpp",
-     "ordinal": 67,
+     "ordinal": 65,
      "after": "LEGO1/lego/legoomni/src/entity/act2policestation.cpp",
      "before": "LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad7.cpp",
-     "ordinal": 71,
+     "ordinal": 69,
      "after": "LEGO1/lego/legoomni/src/worlds/legoact2.cpp",
      "before": "LEGO1/lego/legoomni/src/main/scripts.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad9.cpp",
-     "ordinal": 75,
+     "ordinal": 73,
      "after": "LEGO1/lego/legoomni/src/actors/act3ammo.cpp",
      "before": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad10.cpp",
-     "ordinal": 77,
+     "ordinal": 75,
      "after": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad11.cpp",
-     "ordinal": 107,
+     "ordinal": 105,
      "after": "LEGO1/lego/legoomni/src/actors/jetski.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad12.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad12.cpp",
-     "ordinal": 108,
+     "ordinal": 106,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad11.cpp",
      "before": "LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legorelocpad.cpp",
-     "ordinal": 115,
+     "ordinal": 113,
      "after": "LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp"
     }
    ],

@@ -8,6 +8,10 @@
 #include "mxutilities.h"
 #include "mxvariabletable.h"
 
+// Seats Tgl::Constant::Pi and rotateIndex[] at the front of this unit's .rdata
+// constant pool, as retail does; the meter's own three constants follow them.
+#include "roi/legoroi.h"
+
 #include <assert.h>
 
 DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94)
