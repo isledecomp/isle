@@ -35844,7 +35844,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/legoact2.cpp",
-   "source_sha256": "7a2917d8695366f0d4ae35a7547b0a20126196cb01ee5c09099526e1b3e9402b",
+   "source_sha256": "f46d409942d510f051de7e3800765981d46366094fc424e6d64d6b42172eb7a2",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -35868,24 +35868,6 @@
       "classes": 1,
       "functions": 1,
       "generated_header_sha256": "a9a90ebc7b083a7a2f186f0bbb62530f885755a70199720658d60b430833949a",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_ffbbb5a44884",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "prefix",
-      "prefix": "MxUnkRecVD",
-      "count": 1,
-      "width": 3,
-      "generated_header_sha256": "ffbbb5a4488431df322d3c325a870f214b5132da814588a3aaeeebebd5305fbb",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -36763,90 +36745,6 @@
       ],
       "authenticity_rationale": "Retail's body is ours with three sites recoloured and reordered. Each site loads a location vector through SET3 and writes it into local2world[3]; the allocator's colours differ site by site, and two exchanges of a pair of overlapping live ranges are expressed as sequential coalesces through a register the liveness proves dead across the exchange. The reorderings sink a `lea edx,[esp+0x14]; push edx` pair across an `[esp+0x18]` load, whose displacement moves by the push's own four-byte stack delta."
      }
-    },
-    {
-     "mangled": "?Tickle@LegoAct2@@UAEJXZ",
-     "donor": "d_ffbbb5a44884",
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_body_length": 824,
-     "expected_body_sha256": "b75e29d9b918c7abc8e40d7fa1f27fd512b6f4679fd7a4f25ba095b86df61deb",
-     "expected_changed_offsets": [
-      456,
-      458,
-      465,
-      467
-     ],
-     "expected_code_renames": [
-      [
-       45,
-       "L"
-      ],
-      [
-       459,
-       "T"
-      ],
-      [
-       468,
-       "T"
-      ],
-      [
-       476,
-       "T"
-      ],
-      [
-       772,
-       "L"
-      ],
-      [
-       776,
-       "L"
-      ],
-      [
-       780,
-       "L"
-      ],
-      [
-       784,
-       "L"
-      ],
-      [
-       788,
-       "L"
-      ],
-      [
-       792,
-       "L"
-      ],
-      [
-       796,
-       "L"
-      ],
-      [
-       800,
-       "L"
-      ],
-      [
-       804,
-       "L"
-      ],
-      [
-       808,
-       "L"
-      ],
-      [
-       812,
-       "L"
-      ],
-      [
-       816,
-       "L"
-      ],
-      [
-       820,
-       "L"
-      ]
-     ],
-     "expected_xdata_rename_offsets": []
     },
     {
      "mangled": "?HandlePathStruct@LegoAct2@@AAEJAAVLegoPathStructNotificationParam@@@Z",
@@ -64988,8 +64886,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/legoact2.cpp",
-    "clean": "1e86dc25ccfc4cb264074bf2fb1a592343da23f376b0289766bd0856d110005d",
-    "effective": "7a2917d8695366f0d4ae35a7547b0a20126196cb01ee5c09099526e1b3e9402b",
+    "clean": "c6f1a3b715a4eacf33a416559f609e1333cdaed41d0236e8cc7277742d1db67b",
+    "effective": "f46d409942d510f051de7e3800765981d46366094fc424e6d64d6b42172eb7a2",
     "size": 32300,
     "ops": [
      {

@@ -217,8 +217,8 @@ MxResult LegoAct2::Tickle()
 		m_timeSinceLastStage += 50;
 
 		if (m_timeSinceLastStage == 20000) {
-			const MxFloat* pepperPosition = FindROI("pepper")->GetWorldPosition();
 			MxFloat otherPoint[] = {-52.0f, 5.25f, -16.5f};
+			const MxFloat* pepperPosition = FindROI("pepper")->GetWorldPosition();
 
 			distance = DISTSQRD3(pepperPosition, otherPoint);
 
