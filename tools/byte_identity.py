@@ -8135,7 +8135,7 @@ def validate_source_overlay_generator(value: object, context: str) -> dict:
                 f"{param_context}.cyclic_successor_reference_count must be an object")
         exact_audit_keys(references, {"first_15", "remaining_9"},
                          param_context + ".cyclic_successor_reference_count")
-        require(references == {"first_15": 20, "remaining_9": 19},
+        require(references == {"first_15": 20, "remaining_9": 15},
                 f"{param_context}.cyclic_successor_reference_count differs")
         require(require_exact_int(
             params.get("function_count"), param_context + ".function_count",
