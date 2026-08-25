@@ -475,7 +475,7 @@ void LegoCarBuild::CalculateDragPositionOnGround(MxFloat p_coordinates[2], MxFlo
 // FUNCTION: BETA10 0x100701f0
 void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat p_param3, MxFloat p_param4[2])
 {
-	if (p_param1[1] == 0.0f) {
+	if (p_param1[1] == 0.0) {
 		return;
 	}
 	p_param4[0] = ((p_param3 - p_param2[1]) / p_param1[1]) * p_param1[0] + p_param2[0];
