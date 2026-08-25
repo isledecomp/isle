@@ -17,13 +17,13 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
 
         normalized = byte_identity.validate_source_overlay(overlay, source_root)
 
-        self.assertEqual(len(normalized["outputs"]), 170)
+        self.assertEqual(len(normalized["outputs"]), 169)
         self.assertEqual(
             sum(len(output["operations"]) for output in normalized["outputs"]),
-            425,
+            424,
         )
         self.assertEqual(
-            len(normalized["graph"]["generated_translation_units"]), 17
+            len(normalized["graph"]["generated_translation_units"]), 16
         )
         outputs_by_path = {
             output["logical_path"]: output for output in normalized["outputs"]
@@ -45,7 +45,7 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
         self.assertEqual(
             sum(output["clean"]["state"] == "absent"
                 for output in normalized["outputs"]),
-            23,
+            22,
         )
 
         for output in normalized["outputs"]:
@@ -110,8 +110,11 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
             b"// GLOBAL: LEGO1 0x100f435c",
             rendered["LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp"],
         )
+        # legordatapad13 was retired when mxcontrolpresenter.cpp gained the
+        # include that seats its own pool; legordatapad1 still exercises the
+        # pool-only pad renderer.
         self.assertEqual(
-            rendered["LEGO1/lego/legoomni/src/paths/legordatapad13.cpp"].split(b"\n")[0],
+            rendered["LEGO1/lego/legoomni/src/paths/legordatapad1.cpp"].split(b"\n")[0],
             b'#include "legopathboundary.h"',
         )
 

@@ -2,6 +2,10 @@
 
 #include "define.h"
 #include "legocontrolmanager.h"
+// Seats Tgl::Constant::Pi and rotateIndex[] in this unit's .rdata constant
+// pool, as retail does; the sibling control presenter next to it in link
+// order reaches them through the same header.
+#include "legoutils.h"
 #include "mxdsmultiaction.h"
 #include "mxmisc.h"
 #include "mxstillpresenter.h"

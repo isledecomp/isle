@@ -15376,62 +15376,6 @@
   },
   {
    "target": "lego1",
-   "source": "LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp",
-   "source_sha256": "fbf2779038e3c9f34f69cf250409657f6eab665cff63fbdb061f6dd7a122bf1c",
-   "mode": "compose_equal_body_comdat",
-   "command_policy": {
-    "required_flags": [
-     "/Zi",
-     "-c"
-    ],
-    "forbidden_prefixes": [
-     "/GL",
-     "-GL",
-     "/Z7",
-     "-Z7"
-    ]
-   },
-   "donors": [
-    {
-     "id": "d_fef890d26502",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 8,
-      "functions": 77,
-      "generated_header_sha256": "fef890d26502d9f94c647ab1ddb0ed35b2d882ed7cb5b554c6c38bdf2c2eab54",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    }
-   ],
-   "functions": [
-    {
-     "mangled": "?CheckButtonDown@MxControlPresenter@@QAEEHHPAVMxPresenter@@@Z",
-     "expected_body_length": 519,
-     "expected_body_sha256": "eeb4f54817f7d58b22c4f5dc48735113e8e4d3183e3700972f4985fdeddc6844",
-     "expected_changed_offsets": [
-      90,
-      91,
-      92,
-      93
-     ],
-     "splice_class": "equal_body_strict",
-     "donor": "d_fef890d26502"
-    }
-   ],
-   "completion": {
-    "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes 1 row(s) in LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp from generated carrier states over the rendered current source.",
-    "may_replace_compiler_output": true
-   }
-  },
-  {
-   "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/mxtransitionmanager.cpp",
    "source_sha256": "86c4bdd31cbdc2bae7db761a481f1230e5d8fe49d2061976ba322d6a3b789c41",
    "mode": "compose_equal_body_comdat",
@@ -48899,7 +48843,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT\u2019s own FPO record declares FRAME_FPO.",
+    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT’s own FPO record declares FRAME_FPO.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -56958,20 +56902,20 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp",
-    "clean": "dbc96ced606d72e6da6a87b6d5044debdc03275adb2e8098de216513e82b6d54",
-    "effective": "fbf2779038e3c9f34f69cf250409657f6eab665cff63fbdb061f6dd7a122bf1c",
-    "size": 9572,
+    "clean": "64fd4ad26a3b0757d2340b934951ec798fd59b8cbe5560a6c31559191d0df5cd",
+    "effective": "ce0e07d810a07d27c6fa78dbce8dd97fe7a16238c0f8b30b7ecf6014c464d729",
+    "size": 9697,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "d8c24d997fa480ccbaa81751347c0ecad789a0fce074d82a43e7b03a0d0d5d72",
+       "ctx": "44ed980ac77da6ec6b373fda5b48bbc3e1a62a4c614340762573cbd9921b76f8",
        "b": 0,
        "at": "start"
       },
       "gen": {
        "k": "seq",
-       "lines": 83,
+       "lines": 74,
        "items": [
         {
          "k": "lines",
@@ -56982,24 +56926,24 @@
          "k": "fwd_run",
          "stem": "MxUnkRecordCP",
          "first": 0,
-         "count": 71,
+         "count": 63,
          "line": 5,
          "width": 3
         },
         {
          "k": "lines",
          "n": 4,
-         "line": 77
+         "line": 68
         },
         {
          "k": "empty_class",
          "id": "MxUnkRecord000",
-         "line": 81
+         "line": 72
         },
         {
          "k": "fwd",
          "id": "MxUnkRecord001",
-         "line": 82
+         "line": 73
         }
        ]
       }
@@ -57007,12 +56951,12 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "9f48e634942aa1b090033edb7647fe4f26de6dc679a49f834eca674739df3174",
+       "ctx": "4f6bebef90583582ef48d1231b159b147ebd208fe50274dabc592a478bb83668",
        "at": "before_token"
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 8,
        "items": [
         {
          "k": "lines",
@@ -57023,7 +56967,7 @@
          "k": "fwd_run",
          "stem": "RkPF",
          "first": 0,
-         "count": 4,
+         "count": 5,
          "line": 3
         }
        ]
@@ -57038,7 +56982,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 9,
+       "lines": 14,
        "items": [
         {
          "k": "lines",
@@ -57069,6 +57013,26 @@
          "k": "fwd",
          "id": "MxUnkRecordOU",
          "line": 9
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFB",
+         "line": 10
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFC",
+         "line": 11
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFD",
+         "line": 12
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordFE",
+         "line": 13
         }
        ]
       }
@@ -61225,26 +61189,6 @@
        "k": "const_pool",
        "include_identity": "legopathboundary.h",
        "logical_path": "LEGO1/lego/legoomni/src/paths/legordatapad12.cpp",
-       "lines": 10,
-       "at": [
-        1
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "path": "LEGO1/lego/legoomni/src/paths/legordatapad13.cpp",
-    "effective": "9c0e16feac763c2d0e79e249ae58922735dd64213077f33360c5f4854ada5e02",
-    "size": 39,
-    "ops": [
-     {
-      "op": "append",
-      "id": "op_rpool_13_padding_tu",
-      "gen": {
-       "k": "const_pool",
-       "include_identity": "legopathboundary.h",
-       "logical_path": "LEGO1/lego/legoomni/src/paths/legordatapad13.cpp",
        "lines": 10,
        "at": [
         1
@@ -73642,80 +73586,74 @@
      "before": "LEGO1/lego/legoomni/src/control/legometerpresenter.cpp"
     },
     {
-     "path": "LEGO1/lego/legoomni/src/paths/legordatapad13.cpp",
-     "ordinal": 57,
-     "after": "LEGO1/lego/legoomni/src/common/legophoneme.cpp",
-     "before": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp"
-    },
-    {
      "path": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
-     "ordinal": 59,
+     "ordinal": 58,
      "after": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
-     "ordinal": 60,
+     "ordinal": 59,
      "after": "LEGO1/lego/legoomni/src/paths/legoboundaryedge.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
-     "ordinal": 61,
+     "ordinal": 60,
      "after": "LEGO1/lego/legoomni/src/paths/legopathedgecontainer.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legobewithmidpointcomparator.cpp",
-     "ordinal": 62,
+     "ordinal": 61,
      "after": "LEGO1/lego/legoomni/src/paths/legobewithmidpoint.cpp",
      "before": "LEGO1/lego/legoomni/src/audio/lego3dwavepresenter.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad6.cpp",
-     "ordinal": 68,
+     "ordinal": 67,
      "after": "LEGO1/lego/legoomni/src/entity/act2policestation.cpp",
      "before": "LEGO1/lego/legoomni/src/video/legophonemepresenter.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad7.cpp",
-     "ordinal": 72,
+     "ordinal": 71,
      "after": "LEGO1/lego/legoomni/src/worlds/legoact2.cpp",
      "before": "LEGO1/lego/legoomni/src/main/scripts.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad8.cpp",
-     "ordinal": 74,
+     "ordinal": 73,
      "after": "LEGO1/lego/legoomni/src/main/scripts.cpp",
      "before": "LEGO1/lego/legoomni/src/entity/legoentitypresenter.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad9.cpp",
-     "ordinal": 77,
+     "ordinal": 76,
      "after": "LEGO1/lego/legoomni/src/actors/act3ammo.cpp",
      "before": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad10.cpp",
-     "ordinal": 79,
+     "ordinal": 78,
      "after": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legopathboundary.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad11.cpp",
-     "ordinal": 109,
+     "ordinal": 108,
      "after": "LEGO1/lego/legoomni/src/actors/jetski.cpp",
      "before": "LEGO1/lego/legoomni/src/paths/legordatapad12.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legordatapad12.cpp",
-     "ordinal": 110,
+     "ordinal": 109,
      "after": "LEGO1/lego/legoomni/src/paths/legordatapad11.cpp",
      "before": "LEGO1/lego/legoomni/src/audio/mxbackgroundaudiomanager.cpp"
     },
     {
      "path": "LEGO1/lego/legoomni/src/paths/legorelocpad.cpp",
-     "ordinal": 117,
+     "ordinal": 116,
      "after": "LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp"
     }
    ],
