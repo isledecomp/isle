@@ -46977,7 +46977,7 @@
   {
    "target": "viewmanager",
    "source": "LEGO1/viewmanager/viewlodlist.cpp",
-   "source_sha256": "e46f94a9b4b997143d83f8a2046583cb6c229e0a803a7d4cdd3d665f03af44ff",
+   "source_sha256": "a3336ff2767b732f63986ddd25dd71b580a4fc77063f0e9d0d9d48f7c0da3143",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -48899,7 +48899,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT’s own FPO record declares FRAME_FPO.",
+    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT\u2019s own FPO record declares FRAME_FPO.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -73074,8 +73074,8 @@
    {
     "path": "LEGO1/viewmanager/viewlodlist.cpp",
     "clean": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
-    "effective": "e46f94a9b4b997143d83f8a2046583cb6c229e0a803a7d4cdd3d665f03af44ff",
-    "size": 4884,
+    "effective": "a3336ff2767b732f63986ddd25dd71b580a4fc77063f0e9d0d9d48f7c0da3143",
+    "size": 4912,
     "ops": [
      {
       "op": "insert",
@@ -73411,12 +73411,21 @@
        "at": "before_token"
       },
       "gen": {
-       "k": "include",
-       "header": "mxgeometry/mxmatrix.h",
-       "style": "quote",
-       "lines": 2,
-       "at": [
-        1
+       "k": "seq",
+       "lines": 4,
+       "items": [
+        {
+         "k": "include",
+         "header": "tgl/tglvector.h",
+         "style": "quote",
+         "line": 1
+        },
+        {
+         "k": "include",
+         "header": "mxgeometry/mxmatrix.h",
+         "style": "quote",
+         "line": 3
+        }
        ]
       }
      }
