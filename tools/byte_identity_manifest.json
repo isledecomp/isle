@@ -4565,14 +4565,14 @@
    },
    "donors": [
     {
-     "id": "d_8ac6b4ca0987",
+     "id": "d_6d3dd9e3e989",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
-      "classes": 2,
+      "classes": 1,
       "functions": 2,
-      "generated_header_sha256": "8ac6b4ca098707dc7bedc9b71b551721555a9190abf0b72a3c05f21b9418da2d",
+      "generated_header_sha256": "6d3dd9e3e989656da5af44acb35b5567f490c45f9e577d74f06ff9e7380f0437",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -4581,14 +4581,14 @@
      }
     },
     {
-     "id": "d_eec6c33322bc",
+     "id": "d_59c3eff44d09",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
       "classes": 2,
-      "functions": 4,
-      "generated_header_sha256": "eec6c33322bcb2cd4aacff89c604bd9a73df547bb00867341ba8a77c3aa43370",
+      "functions": 9,
+      "generated_header_sha256": "59c3eff44d090551933cdcee71e804b87ec803754c77cd44d7deb8f5680ba866",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -4597,19 +4597,37 @@
      }
     },
     {
-     "id": "d_8052ea35a19e",
+     "id": "d_9e816cbe1a74",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 2,
+      "classes": 22,
       "functions_per_class": 6,
-      "generated_header_sha256": "8052ea35a19e8111027b2047c064d035e8f360dc43418fa4d0a105e0495a8b12",
+      "generated_header_sha256": "9e816cbe1a744a9fe24597b0c380da745ad00eacedd563c1727cb590dcda4a4a",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_af922721e8ec",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 16,
+      "width": 3,
+      "generated_header_sha256": "af922721e8ec21d54bfb0b9e42cc7340b92c73f149ded0f5a82b2305ad6ee8e9",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
@@ -4627,11 +4645,11 @@
       139
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_eec6c33322bc"
+     "donor": "d_59c3eff44d09"
     },
     {
      "mangled": "?Notify@Ambulance@@UAEJAAVMxParam@@@Z",
-     "donor": "d_8ac6b4ca0987",
+     "donor": "d_6d3dd9e3e989",
      "expected_body_sha256": "25bf8e87e7b8fb8fd70017468259e716f311ce7c1bf76227fa29b17a7b512965",
      "expected_body_length": 164,
      "expected_changed_offsets": [
@@ -4691,7 +4709,7 @@
     },
     {
      "mangled": "?CreateState@Ambulance@@QAEXXZ",
-     "donor": "d_8052ea35a19e",
+     "donor": "d_9e816cbe1a74",
      "expected_body_sha256": "4619a6769d10e8670bd15cb9a95e3ea1993096986c030c891d6f4c4f310acc15",
      "expected_body_length": 48,
      "expected_changed_offsets": [
@@ -4706,6 +4724,15 @@
       45
      ],
      "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?HandlePathStruct@Ambulance@@UAEJAAVLegoPathStructNotificationParam@@@Z",
+     "donor": "d_af922721e8ec",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1160,
+     "expected_donor_length": 1148,
+     "expected_linked_span": 1152,
+     "expected_body_sha256": "f00f2f52f40d96b32d0dfbf3f4abf08e37bfd042d052b469f1e6eb5233e03740"
     }
    ],
    "completion": {
@@ -5553,128 +5580,38 @@
    },
    "donors": [
     {
-     "id": "d_01659b9c53a5",
+     "id": "d_9c7d8aa336eb",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
-      "kind": "forward_declaration_run",
-      "placement": "suffix",
-      "prefix": "MxUnkRecVC",
-      "count": 37,
+      "kind": "declaration_run_triple",
       "width": 3,
-      "generated_header_sha256": "01659b9c53a55f9df4b94a8109804977d1950af29649d5567cd9e4c3ef87b804",
+      "pre_prefix": "Qa",
+      "pre_count": 7,
+      "post_prefix": "Qb",
+      "post_count": 6,
+      "eof_prefix": "Qc",
+      "eof_count": 8,
+      "authenticity_rationale": "Framework-generated declarations are seated at file start, after the final include and at physical EOF; they emit no code, data, strings, vtables, linker payload, or retained object input.",
+      "generated_header_sha256": "9c7d8aa336ebce7697994214d71ca055d2112b8a05721b34ef505a7608e6766a",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
-     "id": "d_a3f8f8397223",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "pad_shape",
-      "classes": 6,
-      "functions_per_class": 2,
-      "generated_header_sha256": "a3f8f8397223ce8577a05b2aef175c3036ffdf0e89cdeaccbc3ae51f9eb5cd45",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+      "emission_policy": "non_emitting_declarations_only"
      }
     }
    ],
    "functions": [
     {
-     "mangled": "?HandlePathStruct@Pizza@@UAEJAAVLegoPathStructNotificationParam@@@Z",
-     "donor": "d_01659b9c53a5",
-     "expected_body_sha256": "b020c5b4b4fb3a88b2003337a216256075c6c264aa967caaf1276e7487a1b618",
-     "splice_class": "same_slot_resize",
-     "expected_seed_length": 933,
-     "expected_donor_length": 937,
-     "expected_linked_span": 944
-    },
-    {
      "mangled": "?HandleEndAction@Pizza@@UAEJAAVMxEndActionNotificationParam@@@Z",
-     "donor": "d_a3f8f8397223",
+     "donor": "d_9c7d8aa336eb",
+     "splice_class": "same_slot_resize",
      "expected_body_sha256": "827b04de993fb2db1c1e5f90c95d578df6fcdc0cda48cdb2f094239dbe88581c",
-     "expected_body_length": 1232,
-     "expected_changed_offsets": [
-      43,
-      46,
-      49,
-      79,
-      82,
-      102,
-      114,
-      189,
-      513,
-      924,
-      936,
-      1012,
-      1071,
-      1159
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       12,
-       "L"
-      ],
-      [
-       97,
-       "L"
-      ],
-      [
-       495,
-       "T"
-      ],
-      [
-       1196,
-       "L"
-      ],
-      [
-       1200,
-       "L"
-      ],
-      [
-       1204,
-       "L"
-      ],
-      [
-       1208,
-       "L"
-      ],
-      [
-       1212,
-       "L"
-      ],
-      [
-       1216,
-       "L"
-      ],
-      [
-       1220,
-       "L"
-      ],
-      [
-       1224,
-       "L"
-      ],
-      [
-       1228,
-       "L"
-      ]
-     ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36,
-      44,
-      52
-     ]
+     "expected_seed_length": 1252,
+     "expected_donor_length": 1232,
+     "expected_linked_span": 1232,
+     "expected_seed_line_count": 79,
+     "expected_donor_line_count": 80
     }
    ],
    "completion": {
@@ -18958,7 +18895,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/entity/legoworld.cpp",
-   "source_sha256": "31cba4785a3a9775cc169ad98cedd2b848065784de194da786518a359816d3f3",
+   "source_sha256": "f5ac6bc69cbf0f1bf218b031b3dbe73014a6cad0bcdd6f65cc82fc55226f6290",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -18973,24 +18910,6 @@
     ]
    },
    "donors": [
-    {
-     "id": "d_2aed5c6e0803",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVD",
-      "count": 29,
-      "width": 2,
-      "placement": "after_includes",
-      "generated_header_sha256": "2aed5c6e080341f478b074a2d2b079d7406556e0cae6991a2eea7ad4f2e923a9",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
     {
      "id": "d_ba68e8998543",
      "status": "compiler_generated_current_source",
@@ -19008,14 +18927,14 @@
      }
     },
     {
-     "id": "d_0003e04e9d35",
+     "id": "d_9971b269dd3c",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 9,
+      "classes": 22,
       "functions_per_class": 12,
-      "generated_header_sha256": "0003e04e9d35c2d984ba669b0f72092ba6fd6776e6453613db0e8c8e92013b01",
+      "generated_header_sha256": "9971b269dd3c62504fde0b6dc7763ae041801c0e9e07fb22399f71a883a1c00e",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -19024,16 +18943,16 @@
      }
     },
     {
-     "id": "d_014f091c7953",
+     "id": "d_2ceb1e35b71f",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "prefix": "MxUnkRecVB",
-      "count": 8,
+      "count": 5,
       "width": 2,
       "placement": "prefix",
-      "generated_header_sha256": "014f091c7953551c3b27e291e9d622a5146853897445c26e84b89c35de9fb641",
+      "generated_header_sha256": "2ceb1e35b71f70bca34676a20a5970db29d7a076093af3e9816b2f37d199a774",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -19042,14 +18961,14 @@
      }
     },
     {
-     "id": "d_2d1bfa3ba888",
+     "id": "d_3536e66620c1",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 10,
+      "classes": 34,
       "functions_per_class": 36,
-      "generated_header_sha256": "2d1bfa3ba88895f4383f8ad1531c5e58a8f737bf978f2bb02b1f999770eaa220",
+      "generated_header_sha256": "3536e66620c14cc4642927c854724fcef43bdafbfdca75706243d890e995dd60",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -19058,26 +18977,62 @@
      }
     },
     {
-     "id": "d_003ee8d380c0",
+     "id": "d_537fce2fd771",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
-      "classes": 2,
+      "classes": 4,
       "functions": 12,
-      "generated_header_sha256": "003ee8d380c0190e9b877b3027196c2a91c7327cbb0e48ab31d43acecd80ce06",
+      "generated_header_sha256": "537fce2fd771a7dbdef3ed6e8664cb2eb1c7830576a1dbefe49c2bce88a01455",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_ac02bac6036d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVD",
+      "count": 31,
+      "width": 2,
+      "placement": "after_includes",
+      "generated_header_sha256": "ac02bac6036d594393d61ef7d750864be51dee3d44df91213405233da26396c1",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_be786f55fc37",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVA",
+      "count": 4,
+      "width": 3,
+      "generated_header_sha256": "be786f55fc377f90d4fd634630d55ef148dcddd96c266bf6ba744b14fe16b50a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
    "functions": [
     {
      "mangled": "?erase@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_2aed5c6e0803",
+     "donor": "d_ac02bac6036d",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 305,
      "expected_section_count": 641,
@@ -19089,16 +19044,16 @@
      "expected_donor_line_count": 80,
      "expected_function_count": 195,
      "expected_comdat_count": 247,
-     "expected_seed_body_sha256": "fd3a34a44d1df49e282f93be531f08b64ef671df4aef4d549e7a0a9b2e01564b",
+     "expected_seed_body_sha256": "1094cb51248aece5455f57154eb54cd8d3b58b03f2a44a90d8c35897b6d7a7ce",
      "expected_donor_body_sha256": "0187b2df3410920983dcff72780bb3c455aeb70677673bd0ebdaf4fb103d15ac",
      "expected_body_sha256": "6b439654429deae7700f052d87dba696e1ab1bed77804c414ee26cc4efa8e341",
-     "expected_seed_metadata_sha256": "f03fdf019fab6abb18c64210d984fe6356ffd14d29dcf2b0849bdb47abf96fbc",
+     "expected_seed_metadata_sha256": "2ca06f49594be92a1077c28a7492118002f22bb90343bc808d889f7ff13b1a91",
      "expected_donor_metadata_sha256": "5513ec1dc8a304160bbf711b7b88a8f256e62bdb9ea9e9ad7b15d13e02a3112f",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
      ],
-     "expected_seed_length": 1112,
+     "expected_seed_length": 1106,
      "expected_donor_length": 1106,
      "expected_linked_span": 1120,
      "retail_oracle": {
@@ -19445,54 +19400,19 @@
     },
     {
      "mangled": "??1?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE@XZ",
-     "donor": "d_0003e04e9d35",
+     "donor": "d_9971b269dd3c",
      "expected_body_sha256": "9c345cdbf40d9328871a42c7375face5a8711a49c3819607d4e1c26b55a4e877",
      "expected_body_length": 196,
-     "expected_changed_offsets": [
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      24,
-      25,
-      26,
-      27,
-      28,
-      89,
-      91,
-      92,
-      93,
-      94,
-      96,
-      97,
-      98
-     ],
+     "expected_changed_offsets": [],
      "splice_class": "equal_body_strict"
     },
     {
      "mangled": "?Add@LegoWorld@@UAEXPAVMxCore@@@Z",
-     "donor": "d_014f091c7953",
+     "donor": "d_2ceb1e35b71f",
      "expected_body_sha256": "f7ce3c20c126ff9c74133cfb755360df2fd23690ec400395b21d593dd1b24cd1",
      "expected_body_length": 1330,
      "expected_changed_offsets": [
-      27,
-      28,
-      29,
-      30,
-      31,
-      32,
-      33,
-      34,
-      938
+      963
      ],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
@@ -19523,7 +19443,7 @@
     },
     {
      "mangled": "?find@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QBE?AVconst_iterator@1@ABQAVMxCore@@@Z",
-     "donor": "d_2d1bfa3ba888",
+     "donor": "d_3536e66620c1",
      "expected_body_sha256": "702b838de74d945887a5753fcafeb4032b5cc8cdb0f9de5c086cdaf583bf66fd",
      "expected_body_length": 92,
      "expected_changed_offsets": [
@@ -19536,6 +19456,7 @@
       9,
       10,
       11,
+      13,
       15,
       18,
       26,
@@ -19544,19 +19465,127 @@
       35,
       39,
       42,
-      54,
-      58
+      50,
+      58,
+      60,
+      73
      ],
      "splice_class": "equal_body_strict"
     },
     {
      "mangled": "?Enable@LegoWorld@@UAEXE@Z",
-     "donor": "d_003ee8d380c0",
+     "donor": "d_537fce2fd771",
      "expected_body_sha256": "dd31fecdb3189826c0e9d6ee08a533528594a3597b16243d8d09f6e5616bd29f",
      "splice_class": "same_slot_resize",
      "expected_seed_length": 1459,
      "expected_donor_length": 1462,
      "expected_linked_span": 1472
+    },
+    {
+     "mangled": "?PresentersPending@LegoWorld@@QAEEXZ",
+     "donor": "d_be786f55fc37",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 594,
+     "expected_body_sha256": "c0160a1b7554e946523b59ebe3c5224e5fdde3dc7b32ea97fb283b3207ac2c86",
+     "expected_changed_offsets": [
+      402
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       577,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76,
+      84,
+      92
+     ]
+    },
+    {
+     "mangled": "?insert@?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE?AViterator@1@V21@ABQAVROI@@@Z",
+     "donor": "d_ba68e8998543",
+     "splice_class": "retail_exact_register_bijection",
+     "expected_section_number": 605,
+     "expected_section_count": 641,
+     "expected_body_length": 78,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_relocation_count": 1,
+     "expected_seed_line_count": 6,
+     "expected_donor_line_count": 6,
+     "expected_function_count": 195,
+     "expected_comdat_count": 247,
+     "expected_body_sha256": "d1add492fe8363d7aeadec77fae719af960d07b409149e0881a3f04ca2632ee7",
+     "expected_changed_offsets": [
+      6,
+      12,
+      23,
+      27,
+      29,
+      42
+     ],
+     "expected_seed_body_sha256": "be36b0a1c3006e8f572c0eaab2bf0a7f4afc625543da359867feacf4e78323da",
+     "expected_donor_body_sha256": "be36b0a1c3006e8f572c0eaab2bf0a7f4afc625543da359867feacf4e78323da",
+     "expected_seed_metadata_sha256": "d6c9b9e6c440d950c204b6d9fcb881d0c8d0e5f95fcc6a29765199c76e1740a8",
+     "expected_donor_metadata_sha256": "873db0d605ca9c4d4bfb3003cc1024007603c85f90aecf3c00bb08a4bc535493",
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "expected_code_renames": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10022030",
+      "verdict": "MATCH",
+      "length": 78
+     },
+     "retail_relocations": [
+      {
+       "offset": 15,
+       "type": 20,
+       "addend": 0,
+       "target": "??2@YAPAXI@Z",
+       "target_section": 0,
+       "target_value": 0,
+       "target_type": 32,
+       "target_storage": 2,
+       "retail_target": "0x10086240"
+      }
+     ],
+     "register_bijection": {
+      "kind": "callee_saved_register_bijection_v1",
+      "mapping": {
+       "ebx": "edi",
+       "edi": "ebx"
+      },
+      "region_start": 3,
+      "region_end": 44,
+      "expected_rewritten_offsets": [
+       6,
+       12,
+       23,
+       27,
+       29,
+       42
+      ],
+      "expected_region_instruction_count": 15,
+      "expected_instruction_count": 33,
+      "debug_s_register_map": [],
+      "expected_seed_debug_s_sha256": "211657ee00952a586647156a496b3e4a665488d6f8f9a6bd34fa8ccbfd9ec691",
+      "expected_image_debug_s_sha256": "211657ee00952a586647156a496b3e4a665488d6f8f9a6bd34fa8ccbfd9ec691",
+      "authenticity_rationale": "A bijective renaming of general registers proved dead-on-entry and dead-on-exit for the region, applied to this donor compile of the same translation unit; the composition is refused unless the image equals the pinned retail oracle under the relocation mask."
+     }
     }
    ],
    "completion": {
@@ -19628,26 +19657,62 @@
    },
    "donors": [
     {
-     "id": "d_9954d4a6e17e",
+     "id": "d_af94bef4b4a1",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 5,
+      "classes": 25,
       "functions_per_class": 6,
-      "generated_header_sha256": "9954d4a6e17ea5ad88e68fc8631c32e16b51ce815d41ccdec1d13a5bdf88900d",
+      "generated_header_sha256": "af94bef4b4a140cebb40d1f274274deca105f6a7fe698a104e21e34e6c46908d",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_bf7dde82230e",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 4,
+      "width": 3,
+      "generated_header_sha256": "bf7dde82230eb5ca5f5f42a3a2882771a1a24ed3f32d099d2e4d1841d3007a2c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_ddd5e485c19a",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVD",
+      "count": 60,
+      "width": 3,
+      "generated_header_sha256": "ddd5e485c19aace5cfa34f3b19286ecaddda9624036f8c7b4ee87cdc3a87edfe",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered after the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
     {
      "mangled": "?LoadWorld@LegoWorldPresenter@@QAEJPADPAVLegoWorld@@@Z",
-     "donor": "d_9954d4a6e17e",
+     "donor": "d_af94bef4b4a1",
      "expected_body_sha256": "9c976fbe3d530075103493efe8c1289ad8c4740431ddabdbc4b37317bf34bd8d",
      "expected_body_length": 1972,
      "expected_changed_offsets": [
@@ -19657,7 +19722,18 @@
       485,
       487,
       493,
-      508
+      508,
+      1452,
+      1471,
+      1530,
+      1565,
+      1626,
+      1656,
+      1693,
+      1745,
+      1772,
+      1816,
+      1846
      ],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
@@ -19686,6 +19762,91 @@
       124,
       132,
       140
+     ]
+    },
+    {
+     "mangled": "?StartingTickle@LegoWorldPresenter@@UAEXXZ",
+     "donor": "d_bf7dde82230e",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 119,
+     "expected_body_sha256": "e6a606af2cb6104c69ffd71a63712e6a9d72506b058fc645340d98bac2bcd936",
+     "expected_changed_offsets": [
+      34
+     ]
+    },
+    {
+     "mangled": "?LoadWorldModel@LegoWorldPresenter@@AAEJAAUModelDbModel@@PAU_iobuf@@PAVLegoWorld@@@Z",
+     "donor": "d_ddd5e485c19a",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 1281,
+     "expected_body_sha256": "397ea5eaaf89b7274c653b38af4b487f9bd726f2c9ce42add37d803aab454fe7",
+     "expected_changed_offsets": [
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      850,
+      851,
+      852,
+      853,
+      854,
+      855,
+      856,
+      857,
+      858,
+      859,
+      860,
+      861,
+      862,
+      863,
+      864,
+      865,
+      866,
+      867,
+      868,
+      869,
+      870,
+      871,
+      872
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       1264,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44,
+      52,
+      60,
+      68,
+      76,
+      84,
+      92,
+      100,
+      108,
+      116,
+      124,
+      132
      ]
     }
    ]
@@ -19764,7 +19925,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/main/legomain.cpp",
-   "source_sha256": "b471e98b412d06d84178cf6446e4d398f360bbf990aaffb0586cf5b3bfb7d905",
+   "source_sha256": "fb2c53bf25bc1ee962a0632fd3d0bb1adaa36a8290428084ea94ae9913e6435c",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -25096,14 +25257,14 @@
      }
     },
     {
-     "id": "d_794eb4995377",
+     "id": "d_c9f525be0840",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 4,
+      "classes": 7,
       "functions_per_class": 2,
-      "generated_header_sha256": "794eb49953772981f931386d9c09faa4b1e954ba6ad0843fa865f8bbbbd83b5b",
+      "generated_header_sha256": "c9f525be0840b1f77f7adec23b6df9860f9ba14572ef9d159179567900f7f4d9",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -25118,15 +25279,7 @@
      "donor": "d_595e30e2615f",
      "expected_body_sha256": "fbb18840a47f4770d5437476af4946366bacb601d90e047c11b09a4248e45f30",
      "expected_body_length": 1391,
-     "expected_changed_offsets": [
-      521,
-      527,
-      533,
-      537,
-      593,
-      597,
-      669
-     ],
+     "expected_changed_offsets": [],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
       [
@@ -25150,14 +25303,17 @@
     },
     {
      "mangled": "?HandlePathStruct@JetskiRace@@UAEJAAVLegoPathStructNotificationParam@@@Z",
-     "donor": "d_794eb4995377",
+     "donor": "d_c9f525be0840",
      "expected_body_sha256": "a9c421e059b6af0ce01a94d06b3b690287a0359a0f2ee2191227450362745227",
      "expected_body_length": 645,
      "expected_changed_offsets": [
+      223,
       242,
       243,
       261,
-      262
+      262,
+      538,
+      609
      ],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
@@ -30599,24 +30755,6 @@
    },
    "donors": [
     {
-     "id": "d_1c695f105e92",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVC",
-      "count": 62,
-      "width": 3,
-      "placement": "after_includes",
-      "generated_header_sha256": "1c695f105e9291bee7c6244dc979a8ac97ee2b6789c04daa9824f217a2beac37",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
      "id": "d_8abcb274488f",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
@@ -30637,16 +30775,16 @@
      }
     },
     {
-     "id": "d_027f4e47143d",
+     "id": "d_c15e6e4702a9",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "prefix": "MxUnkRecVC",
-      "count": 116,
+      "count": 2,
       "width": 3,
       "placement": "after_includes",
-      "generated_header_sha256": "027f4e47143dde555c29093bb2fc7570140a5bd67545e9a13dc68096dd3cd5f6",
+      "generated_header_sha256": "c15e6e4702a930e5cbe3c3c4467268942873ee70bb9c2beffe9c3648347125b1",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -30655,14 +30793,86 @@
      }
     },
     {
-     "id": "d_8ac6b4ca0987",
+     "id": "d_6d3dd9e3e989",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
-      "classes": 2,
+      "classes": 1,
       "functions": 2,
-      "generated_header_sha256": "8ac6b4ca098707dc7bedc9b71b551721555a9190abf0b72a3c05f21b9418da2d",
+      "generated_header_sha256": "6d3dd9e3e989656da5af44acb35b5567f490c45f9e577d74f06ff9e7380f0437",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_5b6ad9111a14",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 2,
+      "width": 3,
+      "generated_header_sha256": "5b6ad9111a1425896e66fb875e700b2caed0566bd820b952b06bad7192bb84b5",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_37848ff209ab",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 14,
+      "width": 3,
+      "generated_header_sha256": "37848ff209abd7f6d5a981097808d8428546e374c796f7c39d977d5d66e0cea6",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_2349965b2ddc",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 13,
+      "width": 3,
+      "generated_header_sha256": "2349965b2ddc311f45dae506f984722c14eaf8d39df6206a55c746ff19a41ca3",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_8c414056741d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVC",
+      "count": 18,
+      "width": 3,
+      "placement": "after_includes",
+      "generated_header_sha256": "8c414056741d2175c76d7f00a35fc3a3a300dbade0912ab469a9914ca8f31e61",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -30674,7 +30884,7 @@
    "functions": [
     {
      "mangled": "?Enable@Act3@@UAEXE@Z",
-     "donor": "d_1c695f105e92",
+     "donor": "d_8c414056741d",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 306,
      "expected_section_count": 315,
@@ -30686,11 +30896,11 @@
      "expected_donor_line_count": 56,
      "expected_function_count": 96,
      "expected_comdat_count": 118,
-     "expected_seed_body_sha256": "c4227f82f4f881e9f6a5d178d821517650a6081c6ba6f99ca417f208525a6c62",
+     "expected_seed_body_sha256": "d93ed098d0592ca80bdcbbf5d0d54181804ed4dcaab8335a13e7157f27fc4735",
      "expected_donor_body_sha256": "a105c6f11822bcc2c6d3e3661a05397945bd2d93da1e6795fcbe10c3ceb7fb8e",
      "expected_body_sha256": "899f07f5ec4433c71c0fbe788c39a435c716e17d8a2189985b5e17622b5f57e7",
-     "expected_seed_metadata_sha256": "db4808ef6c2baa6857c66104226d9cd5d924a03d7cb42d7ee87b01e2fc449358",
-     "expected_donor_metadata_sha256": "cf497390b08412755e001fafe0bbe00c45e712f68c075da09b5f21c7a7c55fd8",
+     "expected_seed_metadata_sha256": "55892d4d5d51eec1da0374666289174002ee3040e62ad082377428c6a789d3fc",
+     "expected_donor_metadata_sha256": "85173490e15e868d887739d4d24751f28ac667e12d9f3b18cb3deae8186b5918",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -30819,7 +31029,7 @@
        "offset": 163,
        "type": 6,
        "addend": 0,
-       "target": "$T80547",
+       "target": "$T80519",
        "target_section": 3,
        "target_value": 320,
        "target_type": 0,
@@ -31058,8 +31268,8 @@
      "expected_relocation_divergences": [
       [
        10,
-       "$T80485",
-       "$T80547"
+       "$T80501",
+       "$T80519"
       ]
      ]
     },
@@ -31080,8 +31290,8 @@
      "expected_seed_body_sha256": "1e79a9f0f9883a7824c7d9723d187a0981607f50be1279edfb70285f82c9546a",
      "expected_donor_body_sha256": "1e79a9f0f9883a7824c7d9723d187a0981607f50be1279edfb70285f82c9546a",
      "expected_body_sha256": "38ab56dc64d102d51f823d4f05e8b1a5b23b24d3337af7269549a03e3f7b431c",
-     "expected_seed_metadata_sha256": "de146f37c3ea6d766a3466afe5ab4abbb5a2861ba2cf6cfc2d432811a5a1b7dd",
-     "expected_donor_metadata_sha256": "df438b0458a3a6de4c195a9ed9515b68fc3e5e836f567af3ca6dcad688709ebd",
+     "expected_seed_metadata_sha256": "e70196ae8033c476d695d4d527bc62fadbe64ecc82babebc7bba12bb48e5ab59",
+     "expected_donor_metadata_sha256": "7469c2df9d6f76653981d9283494a5b7df3bf8b46bca4bee796d3d9e6cbc3613",
      "expected_changed_offsets": [
       64,
       110,
@@ -31121,7 +31331,7 @@
        "offset": 25,
        "type": 6,
        "addend": 0,
-       "target": "$L80087",
+       "target": "$L80103",
        "target_section": 189,
        "target_value": 324,
        "target_type": 0,
@@ -31132,7 +31342,7 @@
        "offset": 66,
        "type": 6,
        "addend": 0,
-       "target": "_g_pizzaHitSounds$S72812",
+       "target": "_g_pizzaHitSounds$S72824",
        "target_section": 3,
        "target_value": 24,
        "target_type": 0,
@@ -31143,7 +31353,7 @@
        "offset": 112,
        "type": 6,
        "addend": 0,
-       "target": "_g_pizzaMissSounds$S72813",
+       "target": "_g_pizzaMissSounds$S72825",
        "target_section": 3,
        "target_value": 88,
        "target_type": 0,
@@ -31154,7 +31364,7 @@
        "offset": 155,
        "type": 6,
        "addend": 0,
-       "target": "_g_copDonutSounds$S72815",
+       "target": "_g_copDonutSounds$S72827",
        "target_section": 3,
        "target_value": 112,
        "target_type": 0,
@@ -31165,7 +31375,7 @@
        "offset": 198,
        "type": 6,
        "addend": 0,
-       "target": "_g_donutMissSounds$S72816",
+       "target": "_g_donutMissSounds$S72828",
        "target_section": 3,
        "target_value": 144,
        "target_type": 0,
@@ -31176,7 +31386,7 @@
        "offset": 241,
        "type": 6,
        "addend": 0,
-       "target": "_g_islanderSounds$S72817",
+       "target": "_g_islanderSounds$S72829",
        "target_section": 3,
        "target_value": 168,
        "target_type": 0,
@@ -31198,7 +31408,7 @@
        "offset": 303,
        "type": 6,
        "addend": 0,
-       "target": "_g_bricksterDonutSounds$S72818",
+       "target": "_g_bricksterDonutSounds$S72830",
        "target_section": 3,
        "target_value": 248,
        "target_type": 0,
@@ -31220,7 +31430,7 @@
        "offset": 324,
        "type": 6,
        "addend": 0,
-       "target": "$L72994",
+       "target": "$L73006",
        "target_section": 189,
        "target_value": 29,
        "target_type": 0,
@@ -31231,7 +31441,7 @@
        "offset": 328,
        "type": 6,
        "addend": 0,
-       "target": "$L72996",
+       "target": "$L73008",
        "target_section": 189,
        "target_value": 75,
        "target_type": 0,
@@ -31242,7 +31452,7 @@
        "offset": 332,
        "type": 6,
        "addend": 0,
-       "target": "$L72998",
+       "target": "$L73010",
        "target_section": 189,
        "target_value": 118,
        "target_type": 0,
@@ -31253,7 +31463,7 @@
        "offset": 336,
        "type": 6,
        "addend": 0,
-       "target": "$L73000",
+       "target": "$L73012",
        "target_section": 189,
        "target_value": 161,
        "target_type": 0,
@@ -31264,7 +31474,7 @@
        "offset": 340,
        "type": 6,
        "addend": 0,
-       "target": "$L73002",
+       "target": "$L73014",
        "target_section": 189,
        "target_value": 204,
        "target_type": 0,
@@ -31275,7 +31485,7 @@
        "offset": 344,
        "type": 6,
        "addend": 0,
-       "target": "$L73004",
+       "target": "$L73016",
        "target_section": 189,
        "target_value": 263,
        "target_type": 0,
@@ -31388,29 +31598,16 @@
     },
     {
      "mangled": "?RemoveByObjectIdOrFirst@Act3List@@QAEXI@Z",
-     "donor": "d_027f4e47143d",
+     "donor": "d_c15e6e4702a9",
+     "splice_class": "same_slot_resize",
      "expected_body_sha256": "56fa2fbd66146446400ae24ee27b173d4adbc9b8f16f01ead6301427c0e2d4d0",
-     "expected_body_length": 323,
-     "expected_changed_offsets": [
-      21,
-      32,
-      36,
-      40,
-      43,
-      47,
-      56,
-      63,
-      115,
-      121,
-      169,
-      188,
-      244
-     ],
-     "splice_class": "equal_body_strict"
+     "expected_seed_length": 328,
+     "expected_donor_length": 323,
+     "expected_linked_span": 336
     },
     {
      "mangled": "?ShootPizza@Act3@@QAEJPAVLegoPathController@@AAVVector3@@11@Z",
-     "donor": "d_8ac6b4ca0987",
+     "donor": "d_6d3dd9e3e989",
      "expected_body_sha256": "6351a71b513aeefb244d8502bb2bfe4f5494a1aba4d829277ffe6062bcab79eb",
      "expected_body_length": 416,
      "expected_changed_offsets": [
@@ -31438,6 +31635,172 @@
       400
      ],
      "splice_class": "equal_body_strict"
+    },
+    {
+     "mangled": "?Insert@Act3List@@QAEXHW4InsertMode@Act3ListElement@@@Z",
+     "donor": "d_5b6ad9111a14",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 458,
+     "expected_body_sha256": "2e66f03d9bbd091e7c2d83453c605f97a1283f17a5c9fd0a1272ae96d8cb2b30",
+     "expected_changed_offsets": [
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      97,
+      107,
+      117,
+      127,
+      279,
+      280,
+      281,
+      282,
+      283,
+      284,
+      285,
+      286,
+      287,
+      288,
+      289,
+      290,
+      291,
+      295,
+      298,
+      299,
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      346,
+      347,
+      348,
+      349,
+      350,
+      351,
+      352,
+      353,
+      354,
+      355,
+      356,
+      357,
+      358,
+      359,
+      360,
+      361,
+      362,
+      363,
+      364,
+      365,
+      366,
+      395,
+      396,
+      397,
+      398,
+      399,
+      400,
+      401,
+      402,
+      403,
+      404,
+      405,
+      409,
+      410,
+      411,
+      412,
+      413,
+      414,
+      415,
+      418,
+      419,
+      420,
+      421,
+      422,
+      423
+     ]
+    },
+    {
+     "mangled": "?ShootDonut@Act3@@QAEJPAVLegoPathController@@AAVVector3@@11@Z",
+     "donor": "d_37848ff209ab",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 332,
+     "expected_body_sha256": "8d986d64c7f99e7534d9ed1188d4b5d5333b3408cd917df5160e91230878e952",
+     "expected_changed_offsets": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      37,
+      66,
+      82,
+      84,
+      99,
+      109,
+      132,
+      154,
+      228,
+      239
+     ]
+    },
+    {
+     "mangled": "?insert@?$list@UAct3ListElement@@V?$allocator@UAct3ListElement@@@@@@QAE?AViterator@1@V21@ABUAct3ListElement@@@Z",
+     "donor": "d_37848ff209ab",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 90,
+     "expected_body_sha256": "e4f14699e047bf9df96fca9bfc62dccd2395e66fbecb756d9223dd313047a30d",
+     "expected_changed_offsets": [
+      6,
+      12,
+      23,
+      27,
+      29,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+     ]
+    },
+    {
+     "mangled": "??1?$list@UAct3ListElement@@V?$allocator@UAct3ListElement@@@@@@QAE@XZ",
+     "donor": "d_2349965b2ddc",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 100,
+     "expected_body_sha256": "dacb85a51576a1b77b1ae54358970d45277444820dafab63d2e39a56d75874a9",
+     "expected_changed_offsets": [
+      62
+     ]
     }
    ],
    "completion": {
@@ -31465,16 +31828,16 @@
    },
    "donors": [
     {
-     "id": "d_09a5798fc2fa",
+     "id": "d_cc0b05aac0bd",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "placement": "prefix",
       "prefix": "MxUnkRecVA",
-      "count": 63,
+      "count": 16,
       "width": 3,
-      "generated_header_sha256": "09a5798fc2fad747e92d4a405187d395ebb8e98a0c39683d6e110a5d6ec3c3e8",
+      "generated_header_sha256": "cc0b05aac0bd9593e54f6ddc9fe43c973770f77aebce9d4efe5d01a19e7de729",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -31483,21 +31846,39 @@
      }
     },
     {
-     "id": "d_74559908c735",
+     "id": "d_e8a9c2d14c76",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "placement": "prefix",
       "prefix": "MxUnkRecVA",
-      "count": 65,
+      "count": 21,
       "width": 3,
-      "generated_header_sha256": "74559908c73502b61621a4569be1d297759f06f878f09cba3ac6a82dc372f3c7",
+      "generated_header_sha256": "e8a9c2d14c7692b5b9509c4d0da4c7f34199f540f2bcfcd5fc154264e0e939a2",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_45cc8a855b72",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 7,
+      "width": 3,
+      "generated_header_sha256": "45cc8a855b720e7260b088f104e3b701c5bf245661c596ad24c9acf7ecaee107",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
     }
    ],
@@ -31506,21 +31887,18 @@
      "mangled": "?HandleEndAction@GasStation@@AAEJAAVMxEndActionNotificationParam@@@Z",
      "expected_body_sha256": "9d317cd830c6b510f7bd24f85bfdd47814e17220104cc5500cd32ac7f59c8e40",
      "splice_class": "same_slot_resize",
-     "expected_seed_length": 698,
+     "expected_seed_length": 702,
      "expected_donor_length": 699,
      "expected_linked_span": 704,
-     "donor": "d_09a5798fc2fa"
+     "donor": "d_cc0b05aac0bd"
     },
     {
      "mangled": "?StopAction@GasStationState@@QAEXW4Script@GarageScript@@@Z",
      "expected_body_length": 39,
      "expected_body_sha256": "0b33252253058760d3b652190cb8621fec232e9a4b71611377ba1389b610965b",
      "expected_changed_offsets": [
-      1,
       2,
-      3,
       4,
-      5,
       7,
       11,
       15,
@@ -31529,7 +31907,59 @@
       29
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_74559908c735"
+     "donor": "d_e8a9c2d14c76"
+    },
+    {
+     "mangled": "?Serialize@GasStationState@@UAEJPAVLegoStorage@@@Z",
+     "donor": "d_45cc8a855b72",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 290,
+     "expected_body_sha256": "f20775848012dfd9096b3601dd4d5656a12b59e7c5c25086857d7e2fe5f2ec56",
+     "expected_changed_offsets": [
+      33,
+      36,
+      38,
+      40,
+      83,
+      90,
+      92,
+      109,
+      111,
+      118,
+      130,
+      136,
+      152,
+      154,
+      170,
+      172,
+      208,
+      210,
+      217,
+      225,
+      228,
+      236,
+      238,
+      246,
+      248,
+      256,
+      261,
+      266,
+      268
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       198,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36
+     ]
     }
    ],
    "completion": {
@@ -31579,16 +32009,16 @@
    },
    "donors": [
     {
-     "id": "d_a852d1cda9eb",
+     "id": "d_b8d31cf68e6d",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "prefix": "MxUnkRecVC",
-      "count": 50,
+      "count": 17,
       "width": 3,
       "placement": "suffix",
-      "generated_header_sha256": "a852d1cda9eb3756dac5fb38eb17c9e371ddde0c0ec995d8ca2a93b890869a6c",
+      "generated_header_sha256": "b8d31cf68e6dabff9b1792a9ca34b9b12a1d0d777dc88e12366a1bfc3c9e20c0",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -31597,26 +32027,44 @@
      }
     },
     {
-     "id": "d_647de61ba54c",
+     "id": "d_947ff24aeb01",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "pad_shape",
-      "classes": 3,
+      "classes": 15,
       "functions_per_class": 8,
-      "generated_header_sha256": "647de61ba54c85b803ea48db11579a80b41be03baddb17058cbfa632259758d4",
+      "generated_header_sha256": "947ff24aeb01d8db8f5ea3e937d15fa4a54161da1a54f34581f0a3a238decdd6",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_bf7dde82230e",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 4,
+      "width": 3,
+      "generated_header_sha256": "bf7dde82230eb5ca5f5f42a3a2882771a1a24ed3f32d099d2e4d1841d3007a2c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
     {
      "mangled": "?ReadyWorld@Infocenter@@UAEXXZ",
-     "donor": "d_a852d1cda9eb",
+     "donor": "d_b8d31cf68e6d",
      "expected_body_sha256": "7628eab9dee44ba692e3bb51007adcb28e1c5f4634ee5dc08f2ebc814db5e2f1",
      "expected_body_length": 1205,
      "expected_changed_offsets": [
@@ -31640,7 +32088,7 @@
     },
     {
      "mangled": "?Escape@Infocenter@@UAEEXZ",
-     "donor": "d_647de61ba54c",
+     "donor": "d_947ff24aeb01",
      "expected_body_sha256": "fc690877e29041969c135187c765a8b81665b69f54eae0acc0e78a2822fb505c",
      "expected_body_length": 204,
      "expected_changed_offsets": [
@@ -31683,7 +32131,7 @@
     },
     {
      "mangled": "?PlayAction@Infocenter@@AAEXW4Script@InfomainScript@@@Z",
-     "donor": "d_647de61ba54c",
+     "donor": "d_947ff24aeb01",
      "expected_body_sha256": "3fb73cf13c934978b5ea9fec26200c8035e9bbd99a2c8266f338a36f04613957",
      "expected_body_length": 201,
      "expected_changed_offsets": [
@@ -31708,6 +32156,28 @@
       36,
       44
      ]
+    },
+    {
+     "mangled": "?UpdateEnabledGlowControl@Infocenter@@AAEXHH@Z",
+     "donor": "d_bf7dde82230e",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 164,
+     "expected_body_sha256": "84647bbc1d7c4738b8b39d0b635c0ef81597aec79cd8595b09011005d138e414",
+     "expected_changed_offsets": [
+      20,
+      22,
+      27,
+      41,
+      46,
+      53,
+      54,
+      56,
+      57,
+      60,
+      62,
+      63,
+      66
+     ]
     }
    ]
   },
@@ -31730,24 +32200,6 @@
    },
    "donors": [
     {
-     "id": "d_0c2d2d53d855",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "forward_declaration_run",
-      "prefix": "MxUnkRecVB",
-      "count": 100,
-      "width": 3,
-      "placement": "suffix",
-      "generated_header_sha256": "0c2d2d53d855f1711635aa5debd4478315e61c3a97fc8d7f2725da8ecc990146",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
      "id": "d_a9a90ebc7b08",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
@@ -31764,16 +32216,16 @@
      }
     },
     {
-     "id": "d_02355fcc53e1",
+     "id": "d_bd2d630eb6ca",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "forward_declaration_run",
       "prefix": "MxUnkRecVB",
-      "count": 87,
+      "count": 1,
       "width": 3,
       "placement": "prefix",
-      "generated_header_sha256": "02355fcc53e1d503b2945091fa439e6f2b03c4f810bc376cb4f428e8c1da2555",
+      "generated_header_sha256": "bd2d630eb6cabff2cc9be01e3ab640d0ccc34ab74a04b521a3f6d32f348d969f",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -31798,14 +32250,50 @@
      }
     },
     {
-     "id": "d_e4be0bb0a4aa",
+     "id": "d_a361d3d7e8ac",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
-      "classes": 2,
+      "classes": 5,
       "functions": 10,
-      "generated_header_sha256": "e4be0bb0a4aa26c221c29d7e14e6f3ae7d1034d1d3b891b26b26e1c8724933fd",
+      "generated_header_sha256": "a361d3d7e8ac82c6a32fc46c05fe3b96fa08a81e10272a2d0c5c3424b11bae6d",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_88ae85cbad06",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 9,
+      "width": 3,
+      "generated_header_sha256": "88ae85cbad0647e67f770f1ea28756ce4bea529ded321abaf90efdd44e10de62",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_cc4613e9eca7",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVB",
+      "count": 22,
+      "width": 3,
+      "placement": "prefix",
+      "generated_header_sha256": "cc4613e9eca7f585163c34274dae500d2891ca5aed968fc860f00d4b81cffcb5",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -31817,7 +32305,7 @@
    "functions": [
     {
      "mangled": "?Enable@Isle@@UAEXE@Z",
-     "donor": "d_0c2d2d53d855",
+     "donor": "d_cc4613e9eca7",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 95,
      "expected_section_count": 467,
@@ -31829,11 +32317,11 @@
      "expected_donor_line_count": 161,
      "expected_function_count": 131,
      "expected_comdat_count": 200,
-     "expected_seed_body_sha256": "e1e17ac06b95fd3c1f4e7f2687b8c2825f792b1676c8f9bd4ecc865dbba8e8b6",
+     "expected_seed_body_sha256": "b57e9a2f5d4e5d6d19c60209470358bd7e07f6491b3922e1d0eccc0d245c3261",
      "expected_donor_body_sha256": "19fd74e3e7e09eb52a2055987afcb2c2c3198fbae081eee373406afca453a265",
      "expected_body_sha256": "ce5b67d39c6a55c709d5fd8aa7bf3063eabd93de2e4cccdcccb1315773e67c3a",
-     "expected_seed_metadata_sha256": "5cba24e22364bb9e29624356aef579e62d1fbd857d0bf03277d21059c9ed24ae",
-     "expected_donor_metadata_sha256": "d66b9db99703d8704987085eef3a395e65c7d21567ac1476f5d0bb3098e0556a",
+     "expected_seed_metadata_sha256": "5cb89f7384e410865e25b96297f79f56a4850be9f884437cb035623533016820",
+     "expected_donor_metadata_sha256": "3af93f82b115e422bb012d102f8819d0e559c0e4f595651a3a721c6acccb2127",
      "expected_closure": [
       ".debug$S",
       ".xdata$x"
@@ -31863,7 +32351,7 @@
        "offset": 12,
        "type": 6,
        "addend": 0,
-       "target": "$L82870",
+       "target": "$L82808",
        "target_section": 95,
        "target_value": 3359,
        "target_type": 0,
@@ -32182,7 +32670,7 @@
        "offset": 516,
        "type": 6,
        "addend": 0,
-       "target": "$L83065",
+       "target": "$L83003",
        "target_section": 95,
        "target_value": 3480,
        "target_type": 0,
@@ -32193,7 +32681,7 @@
        "offset": 523,
        "type": 6,
        "addend": 0,
-       "target": "$L83066",
+       "target": "$L83004",
        "target_section": 95,
        "target_value": 3436,
        "target_type": 0,
@@ -32238,7 +32726,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32249,7 +32737,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32381,7 +32869,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32392,7 +32880,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32403,7 +32891,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32447,7 +32935,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32458,7 +32946,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32524,7 +33012,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32535,7 +33023,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32634,7 +33122,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32645,7 +33133,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32656,7 +33144,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32733,7 +33221,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32744,7 +33232,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32755,7 +33243,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32832,7 +33320,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32843,7 +33331,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32854,7 +33342,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32931,7 +33419,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32942,7 +33430,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32953,7 +33441,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33030,7 +33518,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33041,7 +33529,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33052,7 +33540,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33129,7 +33617,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 67,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33140,7 +33628,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 69,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33151,7 +33639,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33161,7 +33649,7 @@
        "offset": 2048,
        "type": 6,
        "addend": 0,
-       "target": "$L83067",
+       "target": "$L83005",
        "target_section": 95,
        "target_value": 3568,
        "target_type": 0,
@@ -33172,7 +33660,7 @@
        "offset": 2055,
        "type": 6,
        "addend": 0,
-       "target": "$L83068",
+       "target": "$L83006",
        "target_section": 95,
        "target_value": 3540,
        "target_type": 0,
@@ -33260,7 +33748,7 @@
        "offset": 2238,
        "type": 6,
        "addend": 0,
-       "target": "$T83072",
+       "target": "$T83010",
        "target_section": 4,
        "target_value": 32,
        "target_type": 0,
@@ -33315,7 +33803,7 @@
        "offset": 2343,
        "type": 6,
        "addend": 0,
-       "target": "$T83072",
+       "target": "$T83010",
        "target_section": 4,
        "target_value": 32,
        "target_type": 0,
@@ -34019,7 +34507,7 @@
        "offset": 3360,
        "type": 6,
        "addend": 0,
-       "target": "$T83064",
+       "target": "$T83002",
        "target_section": 96,
        "target_value": 0,
        "target_type": 0,
@@ -34107,7 +34595,7 @@
        "offset": 3436,
        "type": 6,
        "addend": 0,
-       "target": "$L76123",
+       "target": "$L76157",
        "target_section": 95,
        "target_value": 564,
        "target_type": 0,
@@ -34118,7 +34606,7 @@
        "offset": 3440,
        "type": 6,
        "addend": 0,
-       "target": "$L76125",
+       "target": "$L76159",
        "target_section": 95,
        "target_value": 683,
        "target_type": 0,
@@ -34129,7 +34617,7 @@
        "offset": 3444,
        "type": 6,
        "addend": 0,
-       "target": "$L76129",
+       "target": "$L76163",
        "target_section": 95,
        "target_value": 878,
        "target_type": 0,
@@ -34140,7 +34628,7 @@
        "offset": 3448,
        "type": 6,
        "addend": 0,
-       "target": "$L76131",
+       "target": "$L76165",
        "target_section": 95,
        "target_value": 997,
        "target_type": 0,
@@ -34151,7 +34639,7 @@
        "offset": 3452,
        "type": 6,
        "addend": 0,
-       "target": "$L76133",
+       "target": "$L76167",
        "target_section": 95,
        "target_value": 1116,
        "target_type": 0,
@@ -34162,7 +34650,7 @@
        "offset": 3456,
        "type": 6,
        "addend": 0,
-       "target": "$L76135",
+       "target": "$L76169",
        "target_section": 95,
        "target_value": 1269,
        "target_type": 0,
@@ -34173,7 +34661,7 @@
        "offset": 3460,
        "type": 6,
        "addend": 0,
-       "target": "$L76137",
+       "target": "$L76171",
        "target_section": 95,
        "target_value": 1425,
        "target_type": 0,
@@ -34184,7 +34672,7 @@
        "offset": 3464,
        "type": 6,
        "addend": 0,
-       "target": "$L76139",
+       "target": "$L76173",
        "target_section": 95,
        "target_value": 1581,
        "target_type": 0,
@@ -34195,7 +34683,7 @@
        "offset": 3468,
        "type": 6,
        "addend": 0,
-       "target": "$L76141",
+       "target": "$L76175",
        "target_section": 95,
        "target_value": 1737,
        "target_type": 0,
@@ -34206,7 +34694,7 @@
        "offset": 3472,
        "type": 6,
        "addend": 0,
-       "target": "$L76143",
+       "target": "$L76177",
        "target_section": 95,
        "target_value": 1893,
        "target_type": 0,
@@ -34217,7 +34705,7 @@
        "offset": 3476,
        "type": 6,
        "addend": 0,
-       "target": "$L76145",
+       "target": "$L76179",
        "target_section": 95,
        "target_value": 527,
        "target_type": 0,
@@ -34228,7 +34716,7 @@
        "offset": 3540,
        "type": 6,
        "addend": 0,
-       "target": "$L76150",
+       "target": "$L76184",
        "target_section": 95,
        "target_value": 2059,
        "target_type": 0,
@@ -34239,7 +34727,7 @@
        "offset": 3544,
        "type": 6,
        "addend": 0,
-       "target": "$L76160",
+       "target": "$L76194",
        "target_section": 95,
        "target_value": 2377,
        "target_type": 0,
@@ -34250,7 +34738,7 @@
        "offset": 3548,
        "type": 6,
        "addend": 0,
-       "target": "$L76174",
+       "target": "$L76208",
        "target_section": 95,
        "target_value": 2558,
        "target_type": 0,
@@ -34261,7 +34749,7 @@
        "offset": 3552,
        "type": 6,
        "addend": 0,
-       "target": "$L76188",
+       "target": "$L76222",
        "target_section": 95,
        "target_value": 2740,
        "target_type": 0,
@@ -34272,7 +34760,7 @@
        "offset": 3556,
        "type": 6,
        "addend": 0,
-       "target": "$L76191",
+       "target": "$L76225",
        "target_section": 95,
        "target_value": 2797,
        "target_type": 0,
@@ -34283,7 +34771,7 @@
        "offset": 3560,
        "type": 6,
        "addend": 0,
-       "target": "$L76194",
+       "target": "$L76228",
        "target_section": 95,
        "target_value": 2854,
        "target_type": 0,
@@ -34294,7 +34782,7 @@
        "offset": 3564,
        "type": 6,
        "addend": 0,
-       "target": "$L76147",
+       "target": "$L76181",
        "target_section": 95,
        "target_value": 2920,
        "target_type": 0,
@@ -34458,302 +34946,302 @@
       "expected_code_symbol_references": [
        [
         ".debug$S",
-        "$L82870",
+        "$L82808",
         3359
        ],
        [
         ".debug$S",
-        "$L82870",
+        "$L82808",
         3359
        ],
        [
         ".debug$S",
-        "$L82871",
+        "$L82809",
         675
        ],
        [
         ".debug$S",
-        "$L82871",
+        "$L82809",
         675
        ],
        [
         ".debug$S",
-        "$L82872",
+        "$L82810",
         870
        ],
        [
         ".debug$S",
-        "$L82872",
+        "$L82810",
         870
        ],
        [
         ".debug$S",
-        "$L82873",
+        "$L82811",
         989
        ],
        [
         ".debug$S",
-        "$L82873",
+        "$L82811",
         989
        ],
        [
         ".debug$S",
-        "$L82874",
+        "$L82812",
         1108
        ],
        [
         ".debug$S",
-        "$L82874",
+        "$L82812",
         1108
        ],
        [
         ".debug$S",
-        "$L82875",
+        "$L82813",
         1261
        ],
        [
         ".debug$S",
-        "$L82875",
+        "$L82813",
         1261
        ],
        [
         ".debug$S",
-        "$L82876",
+        "$L82814",
         1417
        ],
        [
         ".debug$S",
-        "$L82876",
+        "$L82814",
         1417
        ],
        [
         ".debug$S",
-        "$L82877",
+        "$L82815",
         1573
        ],
        [
         ".debug$S",
-        "$L82877",
+        "$L82815",
         1573
        ],
        [
         ".debug$S",
-        "$L82878",
+        "$L82816",
         1729
        ],
        [
         ".debug$S",
-        "$L82878",
+        "$L82816",
         1729
        ],
        [
         ".debug$S",
-        "$L82879",
+        "$L82817",
         1885
        ],
        [
         ".debug$S",
-        "$L82879",
+        "$L82817",
         1885
        ],
        [
         ".debug$S",
-        "$L82880",
+        "$L82818",
         3369
        ],
        [
         ".debug$S",
-        "$L82880",
+        "$L82818",
         3369
        ],
        [
         ".debug$S",
-        "$L82923",
+        "$L82861",
         667
        ],
        [
         ".debug$S",
-        "$L82923",
+        "$L82861",
         667
        ],
        [
         ".debug$S",
-        "$L82929",
+        "$L82867",
         981
        ],
        [
         ".debug$S",
-        "$L82929",
+        "$L82867",
         981
        ],
        [
         ".debug$S",
-        "$L82935",
+        "$L82873",
         1100
        ],
        [
         ".debug$S",
-        "$L82935",
+        "$L82873",
         1100
        ],
        [
         ".debug$S",
-        "$L82961",
+        "$L82899",
         862
        ],
        [
         ".debug$S",
-        "$L82961",
+        "$L82899",
         862
        ],
        [
         ".debug$S",
-        "$L82963",
+        "$L82901",
         854
        ],
        [
         ".debug$S",
-        "$L82963",
+        "$L82901",
         854
        ],
        [
         ".debug$S",
-        "$L82975",
+        "$L82913",
         1253
        ],
        [
         ".debug$S",
-        "$L82975",
+        "$L82913",
         1253
        ],
        [
         ".debug$S",
-        "$L82977",
+        "$L82915",
         1245
        ],
        [
         ".debug$S",
-        "$L82977",
+        "$L82915",
         1245
        ],
        [
         ".debug$S",
-        "$L82989",
+        "$L82927",
         1409
        ],
        [
         ".debug$S",
-        "$L82989",
+        "$L82927",
         1409
        ],
        [
         ".debug$S",
-        "$L82991",
+        "$L82929",
         1401
        ],
        [
         ".debug$S",
-        "$L82991",
+        "$L82929",
         1401
        ],
        [
         ".debug$S",
-        "$L83003",
+        "$L82941",
         1565
        ],
        [
         ".debug$S",
-        "$L83003",
+        "$L82941",
         1565
        ],
        [
         ".debug$S",
-        "$L83005",
+        "$L82943",
         1557
        ],
        [
         ".debug$S",
-        "$L83005",
+        "$L82943",
         1557
        ],
        [
         ".debug$S",
-        "$L83017",
+        "$L82955",
         1721
        ],
        [
         ".debug$S",
-        "$L83017",
+        "$L82955",
         1721
        ],
        [
         ".debug$S",
-        "$L83019",
+        "$L82957",
         1713
        ],
        [
         ".debug$S",
-        "$L83019",
+        "$L82957",
         1713
        ],
        [
         ".debug$S",
-        "$L83031",
+        "$L82969",
         1877
        ],
        [
         ".debug$S",
-        "$L83031",
+        "$L82969",
         1877
        ],
        [
         ".debug$S",
-        "$L83033",
+        "$L82971",
         1869
        ],
        [
         ".debug$S",
-        "$L83033",
+        "$L82971",
         1869
        ],
        [
         ".debug$S",
-        "$L83045",
+        "$L82983",
         3351
        ],
        [
         ".debug$S",
-        "$L83045",
+        "$L82983",
         3351
        ],
        [
         ".debug$S",
-        "$L83047",
+        "$L82985",
         3343
        ],
        [
         ".debug$S",
-        "$L83047",
+        "$L82985",
         3343
        ],
        [
         ".debug$S",
-        "$L83065",
+        "$L83003",
         3480
        ],
        [
         ".debug$S",
-        "$L83065",
+        "$L83003",
         3480
        ],
        [
         ".debug$S",
-        "$L83067",
+        "$L83005",
         3568
        ],
        [
         ".debug$S",
-        "$L83067",
+        "$L83005",
         3568
        ],
        [
@@ -34768,137 +35256,137 @@
        ],
        [
         ".xdata$x",
-        "$L82871",
+        "$L82809",
         675
        ],
        [
         ".xdata$x",
-        "$L82872",
+        "$L82810",
         870
        ],
        [
         ".xdata$x",
-        "$L82873",
+        "$L82811",
         989
        ],
        [
         ".xdata$x",
-        "$L82874",
+        "$L82812",
         1108
        ],
        [
         ".xdata$x",
-        "$L82875",
+        "$L82813",
         1261
        ],
        [
         ".xdata$x",
-        "$L82876",
+        "$L82814",
         1417
        ],
        [
         ".xdata$x",
-        "$L82877",
+        "$L82815",
         1573
        ],
        [
         ".xdata$x",
-        "$L82878",
+        "$L82816",
         1729
        ],
        [
         ".xdata$x",
-        "$L82879",
+        "$L82817",
         1885
        ],
        [
         ".xdata$x",
-        "$L82880",
+        "$L82818",
         3369
        ],
        [
         ".xdata$x",
-        "$L82923",
+        "$L82861",
         667
        ],
        [
         ".xdata$x",
-        "$L82929",
+        "$L82867",
         981
        ],
        [
         ".xdata$x",
-        "$L82935",
+        "$L82873",
         1100
        ],
        [
         ".xdata$x",
-        "$L82961",
+        "$L82899",
         862
        ],
        [
         ".xdata$x",
-        "$L82963",
+        "$L82901",
         854
        ],
        [
         ".xdata$x",
-        "$L82975",
+        "$L82913",
         1253
        ],
        [
         ".xdata$x",
-        "$L82977",
+        "$L82915",
         1245
        ],
        [
         ".xdata$x",
-        "$L82989",
+        "$L82927",
         1409
        ],
        [
         ".xdata$x",
-        "$L82991",
+        "$L82929",
         1401
        ],
        [
         ".xdata$x",
-        "$L83003",
+        "$L82941",
         1565
        ],
        [
         ".xdata$x",
-        "$L83005",
+        "$L82943",
         1557
        ],
        [
         ".xdata$x",
-        "$L83017",
+        "$L82955",
         1721
        ],
        [
         ".xdata$x",
-        "$L83019",
+        "$L82957",
         1713
        ],
        [
         ".xdata$x",
-        "$L83031",
+        "$L82969",
         1877
        ],
        [
         ".xdata$x",
-        "$L83033",
+        "$L82971",
         1869
        ],
        [
         ".xdata$x",
-        "$L83045",
+        "$L82983",
         3351
        ],
        [
         ".xdata$x",
-        "$L83047",
+        "$L82985",
         3343
        ]
       ],
@@ -34959,43 +35447,43 @@
      "expected_relocation_divergences": [
       [
        1,
-       "$L82770",
-       "$L82870"
+       "$L82786",
+       "$L82808"
       ],
       [
        30,
-       "$L82965",
-       "$L83065"
+       "$L82981",
+       "$L83003"
       ],
       [
        31,
-       "$L82966",
-       "$L83066"
+       "$L82982",
+       "$L83004"
       ],
       [
        119,
-       "$L82967",
-       "$L83067"
+       "$L82983",
+       "$L83005"
       ],
       [
        120,
-       "$L82968",
-       "$L83068"
+       "$L82984",
+       "$L83006"
       ],
       [
        128,
-       "$T82972",
-       "$T83072"
+       "$T82988",
+       "$T83010"
       ],
       [
        133,
-       "$T82972",
-       "$T83072"
+       "$T82988",
+       "$T83010"
       ],
       [
        197,
-       "$T82964",
-       "$T83064"
+       "$T82980",
+       "$T83002"
       ]
      ]
     },
@@ -35018,17 +35506,10 @@
     },
     {
      "mangled": "?Escape@Isle@@UAEEXZ",
-     "donor": "d_02355fcc53e1",
+     "donor": "d_bd2d630eb6ca",
      "expected_body_sha256": "7c1349dafe4c49c4ed53eb6475c1764ddb5d5e05c68847d51978637a9dad6147",
      "expected_body_length": 456,
-     "expected_changed_offsets": [
-      306,
-      308,
-      315,
-      317,
-      319,
-      322
-     ],
+     "expected_changed_offsets": [],
      "splice_class": "equal_body_strict"
     },
     {
@@ -35245,46 +35726,10 @@
     },
     {
      "mangled": "?HandleEndAction@Isle@@IAEJAAVMxEndActionNotificationParam@@@Z",
-     "donor": "d_e4be0bb0a4aa",
+     "donor": "d_a361d3d7e8ac",
      "expected_body_sha256": "3df8ab8fb6d8485eb55833d080f8569dd71bf55385036daac4964353565c7e75",
      "expected_body_length": 349,
-     "expected_changed_offsets": [
-      2,
-      3,
-      4,
-      5,
-      8,
-      10,
-      38,
-      54,
-      56,
-      101,
-      106,
-      117,
-      125,
-      165,
-      166,
-      168,
-      169,
-      170,
-      213,
-      221,
-      222,
-      233,
-      241,
-      257,
-      258,
-      259,
-      260,
-      267,
-      283,
-      284,
-      285,
-      286,
-      293,
-      309,
-      311
-     ],
+     "expected_changed_offsets": [],
      "splice_class": "equal_body_eh_structural_local",
      "expected_code_renames": [
       [
@@ -35317,6 +35762,21 @@
       ]
      ],
      "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?SwitchToInfocenter@Isle@@QAEXXZ",
+     "donor": "d_88ae85cbad06",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 341,
+     "expected_body_sha256": "b29b5cc10f54dcce7d212bedfdcbd967487112a73506c4c4fbc3ea37a314f98a",
+     "expected_changed_offsets": [
+      206,
+      208,
+      215,
+      217,
+      219,
+      222
+     ]
     }
    ],
    "completion": {
@@ -35358,6 +35818,60 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_ffbbb5a44884",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVD",
+      "count": 1,
+      "width": 3,
+      "generated_header_sha256": "ffbbb5a4488431df322d3c325a870f214b5132da814588a3aaeeebebd5305fbb",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_37848ff209ab",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "prefix",
+      "prefix": "MxUnkRecVD",
+      "count": 14,
+      "width": 3,
+      "generated_header_sha256": "37848ff209abd7f6d5a981097808d8428546e374c796f7c39d977d5d66e0cea6",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_5b6ad9111a14",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVD",
+      "count": 2,
+      "width": 3,
+      "generated_header_sha256": "5b6ad9111a1425896e66fb875e700b2caed0566bd820b952b06bad7192bb84b5",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered after the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -35378,8 +35892,8 @@
      "expected_seed_body_sha256": "bbf0c73d1ba5db5fb7fdd0fa315cb79815c407b2a666708b629e98a88aba66bb",
      "expected_donor_body_sha256": "bbf0c73d1ba5db5fb7fdd0fa315cb79815c407b2a666708b629e98a88aba66bb",
      "expected_body_sha256": "a55f1e9a23d6a914e674c41025cf91c808a696c81894cbc1035e217ec9382ed9",
-     "expected_seed_metadata_sha256": "51fea77ab0402ba87f56c2f7937defd6466e7d39d68ea36ffb254ce6d26050ad",
-     "expected_donor_metadata_sha256": "1d50414e8a6a3fb754b604aa9d96e9074d1525158c7c9924b05467f7b46b21c8",
+     "expected_seed_metadata_sha256": "c2dba0af0b54fbf999dc32f3bdaf82c5c135fd4a3ca3f91f0e0003dfecd7c08c",
+     "expected_donor_metadata_sha256": "4031f4ca299ea24cc57c6cce2abc443ef15c2297e5fe1662e4385a6389e752e7",
      "expected_changed_offsets": [
       440,
       444,
@@ -36193,6 +36707,188 @@
       ],
       "authenticity_rationale": "Retail's body is ours with three sites recoloured and reordered. Each site loads a location vector through SET3 and writes it into local2world[3]; the allocator's colours differ site by site, and two exchanges of a pair of overlapping live ranges are expressed as sequential coalesces through a register the liveness proves dead across the exchange. The reorderings sink a `lea edx,[esp+0x14]; push edx` pair across an `[esp+0x18]` load, whose displacement moves by the push's own four-byte stack delta."
      }
+    },
+    {
+     "mangled": "?Tickle@LegoAct2@@UAEJXZ",
+     "donor": "d_ffbbb5a44884",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 824,
+     "expected_body_sha256": "b75e29d9b918c7abc8e40d7fa1f27fd512b6f4679fd7a4f25ba095b86df61deb",
+     "expected_changed_offsets": [
+      456,
+      458,
+      465,
+      467
+     ],
+     "expected_code_renames": [
+      [
+       45,
+       "L"
+      ],
+      [
+       459,
+       "T"
+      ],
+      [
+       468,
+       "T"
+      ],
+      [
+       476,
+       "T"
+      ],
+      [
+       772,
+       "L"
+      ],
+      [
+       776,
+       "L"
+      ],
+      [
+       780,
+       "L"
+      ],
+      [
+       784,
+       "L"
+      ],
+      [
+       788,
+       "L"
+      ],
+      [
+       792,
+       "L"
+      ],
+      [
+       796,
+       "L"
+      ],
+      [
+       800,
+       "L"
+      ],
+      [
+       804,
+       "L"
+      ],
+      [
+       808,
+       "L"
+      ],
+      [
+       812,
+       "L"
+      ],
+      [
+       816,
+       "L"
+      ],
+      [
+       820,
+       "L"
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?HandlePathStruct@LegoAct2@@AAEJAAVLegoPathStructNotificationParam@@@Z",
+     "donor": "d_37848ff209ab",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 585,
+     "expected_body_sha256": "88ac468a0a95ecf5b20cce9a3a9fc276ee40814cf7822725f3cd4e8231596e19",
+     "expected_changed_offsets": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13,
+      14,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      31,
+      149,
+      155,
+      211,
+      220,
+      229,
+      239,
+      547,
+      561
+     ],
+     "expected_code_renames": [
+      [
+       473,
+       "T"
+      ],
+      [
+       505,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": []
+    },
+    {
+     "mangled": "?StartAction@LegoAct2@@QAEJW4Script@Act2mainScript@@EEPAVMx3DPointFloat@@11@Z",
+     "donor": "d_5b6ad9111a14",
+     "splice_class": "equal_body_eh_structural_local",
+     "expected_body_length": 666,
+     "expected_body_sha256": "c24893ab75c7928a05d1f5cf74d4b7ca550d8585ba9afda7e86dbacbeaa7a6ab",
+     "expected_changed_offsets": [
+      344,
+      345,
+      347,
+      348,
+      349,
+      350,
+      351,
+      352,
+      353,
+      354,
+      355,
+      356,
+      357,
+      358,
+      359,
+      360,
+      361,
+      362,
+      363
+     ],
+     "expected_code_renames": [
+      [
+       12,
+       "L"
+      ],
+      [
+       287,
+       "T"
+      ],
+      [
+       535,
+       "T"
+      ],
+      [
+       556,
+       "T"
+      ]
+     ],
+     "expected_xdata_rename_offsets": [
+      8,
+      36,
+      44
+     ]
     }
    ],
    "completion": {
@@ -36220,14 +36916,14 @@
    },
    "donors": [
     {
-     "id": "d_bd4f5c3defa3",
+     "id": "d_8ac6b4ca0987",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
       "classes": 2,
-      "functions": 6,
-      "generated_header_sha256": "bd4f5c3defa361043a8f0919dba6c3b514dc3db9aed412bb25a6936dc0926885",
+      "functions": 2,
+      "generated_header_sha256": "8ac6b4ca098707dc7bedc9b71b551721555a9190abf0b72a3c05f21b9418da2d",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -36242,15 +36938,47 @@
      "expected_body_length": 275,
      "expected_body_sha256": "2a46f734c2fdc3f8e96a2c6931921d679717e9653f3b5e738e952c7a95f51552",
      "expected_changed_offsets": [
-      184,
+      152,
+      168,
+      169,
+      180,
+      185,
+      193,
       199,
       223,
+      229,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      242,
+      243,
+      244,
+      245,
+      246,
+      247,
+      248,
       249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
       256,
+      257,
+      258,
+      259,
+      260,
+      261,
       262
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_bd4f5c3defa3"
+     "donor": "d_8ac6b4ca0987"
     }
    ],
    "completion": {
@@ -37332,7 +38060,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/main/mxmain.cpp",
-   "source_sha256": "8fcf4d5b307ef772bc6bb94bb5de9e85543cbaef00d694818fdd89e443f3abbd",
+   "source_sha256": "e1591ef87f1ec2b6de10acd3c3c8d0712875b6a3576655709b6c2be33472c5f0",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -37427,8 +38155,10 @@
      "?Clone@MxNotificationParam@@UBEPAV1@XZ",
      "??_GMxParam@@UAEPAXI@Z",
      "??1MxParam@@UAE@XZ",
+     "?Clone@MxStartActionNotificationParam@@UBEPAVMxNotificationParam@@XZ",
      "??_GMxStartActionNotificationParam@@UAEPAXI@Z",
      "??1MxStartActionNotificationParam@@UAE@XZ",
+     "?Clone@MxType4NotificationParam@@UBEPAVMxNotificationParam@@XZ",
      "??_GMxType4NotificationParam@@UAEPAXI@Z",
      "??1MxType4NotificationParam@@UAE@XZ",
      "?GetInstance@MxOmni@@SAPAV1@XZ",
@@ -37588,7 +38318,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp",
-   "source_sha256": "6218a76292933173916df79738adc9f6aa7284afde238e355310e5a7b23947ac",
+   "source_sha256": "95cbea9f42992abf5da347ada35056949424d782818d971efa08f6bc6126b52d",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -37623,17 +38353,55 @@
      }
     },
     {
-     "id": "d_d1709d4d9a4a",
+     "id": "d_81cb201bf081",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "extern_run_pair",
       "header_prefix": "g_h",
-      "header_count": 5,
+      "header_count": 39,
       "seat_prefix": "g_p",
-      "seat_count": 3,
+      "seat_count": 34,
       "width": 2,
-      "generated_header_sha256": "d1709d4d9a4a323ac0a5c9c491ad5f8305588a492e5870427e0168fc6cf7cdfe",
+      "generated_header_sha256": "81cb201bf0815e1bff3a11d70450b5cc14380d627eec901b7fcc3eeb29d8aee2",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_c552410f06d5",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 19,
+      "seat_prefix": "g_p",
+      "seat_count": 2,
+      "width": 2,
+      "generated_header_sha256": "c552410f06d5204ec0b2e5c6a300b1e7f59969eb6d9567074798a38980b5384a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_72f7173565eb",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "extern_run_pair",
+      "header_prefix": "g_h",
+      "header_count": 1,
+      "seat_prefix": "g_p",
+      "seat_count": 2,
+      "width": 2,
+      "generated_header_sha256": "72f7173565ebb33919e59f19360a462a6be46d307f5b2ca0269340eafefef5e0",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -37650,7 +38418,7 @@
      "expected_seed_length": 613,
      "expected_donor_length": 603,
      "expected_linked_span": 608,
-     "donor": "d_da1547df0cb0"
+     "donor": "d_c552410f06d5"
     },
     {
      "mangled": "?FUN_100c7db0@MxDiskStreamController@@AAEPAVMxDSStreamingAction@@XZ",
@@ -37703,7 +38471,7 @@
       8,
       36
      ],
-     "donor": "d_da1547df0cb0"
+     "donor": "d_72f7173565eb"
     },
     {
      "mangled": "?FUN_100c8540@MxDiskStreamController@@AAEXXZ",
@@ -37712,7 +38480,7 @@
      "expected_seed_length": 236,
      "expected_donor_length": 245,
      "expected_linked_span": 256,
-     "donor": "d_d1709d4d9a4a"
+     "donor": "d_81cb201bf081"
     }
    ],
    "completion": {
@@ -48018,7 +48786,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT’s own FPO record declares FRAME_FPO.",
+    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT\u2019s own FPO record declares FRAME_FPO.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -48550,6 +49318,111 @@
      "??_7MxMatrix@@6B@"
     ]
    ]
+  },
+  {
+   "target": "omni",
+   "source": "LEGO1/omni/src/common/mxmediapresenter.cpp",
+   "source_sha256": "bd291b10eea32c8f5a2c9dd40222c3bdd1f022aae3b9e68e6ae8fd13a583b05a",
+   "mode": "compose_equal_body_comdat",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "donors": [
+    {
+     "id": "d_4abd1fbb513d",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 20,
+      "width": 3,
+      "generated_header_sha256": "4abd1fbb513d79e6b226d2ed30e62836a31ecb0fa9b7e4a63e81bdd041ed94ab",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    },
+    {
+     "id": "d_37848ff209ab",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "placement": "after_includes",
+      "prefix": "MxUnkRecVD",
+      "count": 14,
+      "width": 3,
+      "generated_header_sha256": "37848ff209abd7f6d5a981097808d8428546e374c796f7c39d977d5d66e0cea6",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered inside the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
+    }
+   ],
+   "functions": [
+    {
+     "mangled": "?CurrentChunk@MxMediaPresenter@@QAEPAVMxStreamChunk@@XZ",
+     "donor": "d_4abd1fbb513d",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 81,
+     "expected_body_sha256": "989c3bd6f21474ab20116617b33bfe7d14fa50c0fda56852dcfc5420c56bcd69",
+     "expected_changed_offsets": [
+      3,
+      5,
+      7,
+      19,
+      21,
+      25,
+      31,
+      38,
+      45,
+      47,
+      50,
+      62,
+      67,
+      74,
+      77
+     ]
+    },
+    {
+     "mangled": "?RepeatingTickle@MxMediaPresenter@@UAEXXZ",
+     "donor": "d_4abd1fbb513d",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 214,
+     "expected_donor_length": 217,
+     "expected_linked_span": 224,
+     "expected_body_sha256": "bdcbd042f56c39743d3170ae1a44cd1b8e79a8d7eabe7bd9c069b670fa8dace8"
+    },
+    {
+     "mangled": "?StartAction@MxMediaPresenter@@UAEJPAVMxStreamController@@PAVMxDSAction@@@Z",
+     "donor": "d_37848ff209ab",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 525,
+     "expected_donor_length": 509,
+     "expected_linked_span": 512,
+     "expected_body_sha256": "293ca9f34e57b27035886d2608963b768687c13a1d1eb48a6f97defd843ba405"
+    }
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Restores the rows the in-class Clone definitions move: the two MxNotificationParam Clone bodies join their classes' flush group in mxmain.cpp.obj, and these bodies keep the schedule they had before the header change.",
+    "may_replace_compiler_output": true
+   }
   }
  ],
  "archives": [
@@ -51200,8 +52073,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/actors/radio.cpp",
     "clean": "8fd69414093398ece5a719d50f285ab3ab5bc4def106dd89637950702fdd12f4",
-    "effective": "39b292da4ba6fafa89632db41ec40542567e62dbd632432f9a93ec33ae223522",
-    "size": 6337,
+    "effective": "68aeca8e719f495b38d73c642c374346cb505fb66c30e8fbbb1264642e10744e",
+    "size": 6435,
     "ops": [
      {
       "op": "insert",
@@ -51280,7 +52153,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 14,
        "items": [
         {
          "k": "lines",
@@ -51291,14 +52164,21 @@
          "k": "class",
          "id": "RkRM0",
          "members": [
-          "m0"
+          "m0",
+          "m1",
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m6",
+          "m7"
          ],
          "line": 3
         },
         {
          "k": "fwd",
          "id": "RkRF0",
-         "line": 6
+         "line": 13
         }
        ]
       }
@@ -51308,8 +52188,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/actors/towtrack.cpp",
     "clean": "3d87bbd21de096f31b37fa7e825a76a496a9de302499224546cb80e3f7008e33",
-    "effective": "ccc224897a31a37262428692f2e81b591532685b1a831e67a663462239b4e00a",
-    "size": 18455,
+    "effective": "bfc902e237ae048c3b96a72da61925383544ef5efecc03eb7a5613bb1ac9ddc3",
+    "size": 18740,
     "ops": [
      {
       "op": "insert",
@@ -51320,7 +52200,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 8,
+       "lines": 14,
        "items": [
         {
          "k": "lines",
@@ -51333,11 +52213,41 @@
          "line": 5
         },
         {
+         "k": "empty_class",
+         "id": "MxUnkRecord001",
+         "line": 6
+        },
+        {
+         "k": "empty_class",
+         "id": "MxUnkRecord002",
+         "line": 7
+        },
+        {
+         "k": "empty_class",
+         "id": "MxUnkRecord003",
+         "line": 8
+        },
+        {
+         "k": "empty_class",
+         "id": "MxUnkRecord004",
+         "line": 9
+        },
+        {
+         "k": "empty_class",
+         "id": "MxUnkRecord005",
+         "line": 10
+        },
+        {
+         "k": "empty_class",
+         "id": "MxUnkRecord006",
+         "line": 11
+        },
+        {
          "k": "fwd_run",
          "stem": "MxUnkRecord",
-         "first": 1,
+         "first": 7,
          "count": 3,
-         "line": 6,
+         "line": 12,
          "width": 3
         }
        ]
@@ -51351,7 +52261,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 9,
+       "lines": 24,
        "items": [
         {
          "k": "lines",
@@ -51373,6 +52283,46 @@
           "c_rkTwE1"
          ],
          "line": 6
+        },
+        {
+         "k": "enum",
+         "id": "RkTwE2",
+         "members": [
+          "c_rkTwE2"
+         ],
+         "line": 9
+        },
+        {
+         "k": "enum",
+         "id": "RkTwE3",
+         "members": [
+          "c_rkTwE3"
+         ],
+         "line": 12
+        },
+        {
+         "k": "enum",
+         "id": "RkTwE4",
+         "members": [
+          "c_rkTwE4"
+         ],
+         "line": 15
+        },
+        {
+         "k": "enum",
+         "id": "RkTwE5",
+         "members": [
+          "c_rkTwE5"
+         ],
+         "line": 18
+        },
+        {
+         "k": "enum",
+         "id": "RkTwE6",
+         "members": [
+          "c_rkTwE6"
+         ],
+         "line": 21
         }
        ]
       }
@@ -51416,7 +52366,7 @@
         },
         {
          "k": "empty_class",
-         "id": "MxUnkRecord004",
+         "id": "MxUnkRecord010",
          "line": 11
         }
        ]
@@ -51655,58 +52605,6 @@
     ]
    },
    {
-    "path": "LEGO1/lego/legoomni/src/audio/legocachsound.cpp",
-    "clean": "1df932141e66f644e275a587cbb14beb34ec965798076d40dbb49e5cc8aff17e",
-    "effective": "9bd2d132ca77708d58f209e3379cfac2a41289d4e88ee9969754f0dfb21c9038",
-    "size": 8193,
-    "ops": [
-     {
-      "op": "insert",
-      "anchor": {
-       "ctx": "958481d7e32f3fc735c4ac28621da23d5cb5ebe3ee74a50c48836377d11d8f49",
-       "b": 9,
-       "at": "before_token"
-      },
-      "gen": {
-       "k": "include",
-       "header": "mxactionnotificationparam.h",
-       "style": "quote"
-      }
-     },
-     {
-      "op": "insert",
-      "anchor": {
-       "ctx": "662453c6cace80fd57751a43145a8afc8ba1487e713be19b106dfac68ad7af81",
-       "a": 0,
-       "at": "end"
-      },
-      "gen": {
-       "k": "seed_fn",
-       "calls": [
-        {
-         "qualified_member": [
-          "MxStartActionNotificationParam",
-          "Clone"
-         ],
-         "receiver": {
-          "kind": "null_cast"
-         },
-         "receiver_type": "MxStartActionNotificationParam"
-        }
-       ],
-       "function_identifier": "SeedActionNotification",
-       "lines": 5,
-       "at": [
-        2,
-        3,
-        4,
-        5
-       ]
-      }
-     }
-    ]
-   },
-   {
     "path": "LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp",
     "clean": "6c6839508dcdffb016e96b4156f1116b48c233627014987f0c421e32fb04f441",
     "effective": "8f7b7adf16c981403d21044d4dd707235808150aaaae4604374331698ddf12ec",
@@ -51930,8 +52828,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/build/legocarbuild.cpp",
     "clean": "8af28f4d0d823653f4764fa92ff4ab503aa21c61e5fb19bb228d49b8168bad98",
-    "effective": "a412119847997db95a0f83f47795c8c782896ed9347ccb4e38b4c2c1c7c4ce91",
-    "size": 54572,
+    "effective": "5c55359bf72e5253982431504013dd273f11448f4d447c2bed6a48468c82338e",
+    "size": 55425,
     "ops": [
      {
       "op": "insert",
@@ -51943,7 +52841,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 9,
+       "lines": 32,
        "items": [
         {
          "k": "lines",
@@ -51974,6 +52872,187 @@
          "k": "fwd",
          "id": "MxUnkRecordVJ",
          "line": 9
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordCY",
+         "line": 10
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDA",
+         "line": 11
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDB",
+         "line": 12
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDC",
+         "line": 13
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDD",
+         "line": 14
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDE",
+         "line": 15
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDF",
+         "line": 16
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDG",
+         "line": 17
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDH",
+         "line": 18
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDI",
+         "line": 19
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDL",
+         "line": 20
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDM",
+         "line": 21
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDN",
+         "line": 22
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDO",
+         "line": 23
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDS",
+         "line": 24
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDT",
+         "line": 25
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDU",
+         "line": 26
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDV",
+         "line": 27
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDW",
+         "line": 28
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDX",
+         "line": 29
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDY",
+         "line": 30
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordDZ",
+         "line": 31
+        }
+       ]
+      }
+     },
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "bc2f3e499b83b5072fbe301fe2ed287937e4fd14d51b63e7ff5ecdf88602cd2d",
+       "a": 0,
+       "at": "end"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 22,
+       "items": [
+        {
+         "k": "lines",
+         "n": 1,
+         "line": 1
+        },
+        {
+         "k": "class",
+         "id": "ZfCarb0",
+         "inline": true,
+         "members": [
+          {
+           "stem": "Record",
+           "first": 0,
+           "count": 3
+          }
+         ],
+         "line": 2
+        },
+        {
+         "k": "class",
+         "id": "ZfCarb1",
+         "inline": true,
+         "members": [
+          {
+           "stem": "Record",
+           "first": 0,
+           "count": 3
+          }
+         ],
+         "line": 7
+        },
+        {
+         "k": "class",
+         "id": "ZfCarb2",
+         "inline": true,
+         "members": [
+          {
+           "stem": "Record",
+           "first": 0,
+           "count": 3
+          }
+         ],
+         "line": 12
+        },
+        {
+         "k": "class",
+         "id": "ZfCarb3",
+         "inline": true,
+         "members": [
+          {
+           "stem": "Record",
+           "first": 0,
+           "count": 3
+          }
+         ],
+         "line": 17
         }
        ]
       }
@@ -56425,8 +57504,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/entity/legoworld.cpp",
     "clean": "a915648c94d189904a3d3d24fb7ce98fca76f339b4ee99f2d314f876375d270a",
-    "effective": "31cba4785a3a9775cc169ad98cedd2b848065784de194da786518a359816d3f3",
-    "size": 21910,
+    "effective": "f5ac6bc69cbf0f1bf218b031b3dbe73014a6cad0bcdd6f65cc82fc55226f6290",
+    "size": 21754,
     "ops": [
      {
       "op": "insert",
@@ -56546,7 +57625,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 26,
+       "lines": 20,
        "items": [
         {
          "k": "lines",
@@ -56561,7 +57640,7 @@
           {
            "stem": "Record",
            "first": 0,
-           "count": 9
+           "count": 3
           }
          ],
          "line": 4
@@ -56577,7 +57656,7 @@
            "count": 8
           }
          ],
-         "line": 16
+         "line": 10
         }
        ]
       }
@@ -56939,8 +58018,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/main/legomain.cpp",
     "clean": "7eef0d07b176b1eb3757800b01105e9b753185e06315a95626b6ce373c41ea59",
-    "effective": "b471e98b412d06d84178cf6446e4d398f360bbf990aaffb0586cf5b3bfb7d905",
-    "size": 19726,
+    "effective": "fb2c53bf25bc1ee962a0632fd3d0bb1adaa36a8290428084ea94ae9913e6435c",
+    "size": 19522,
     "ops": [
      {
       "op": "insert",
@@ -57025,7 +58104,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 38,
+       "lines": 34,
        "items": [
         {
          "k": "lines",
@@ -57115,7 +58194,7 @@
           {
            "stem": "Record",
            "first": 0,
-           "count": 8
+           "count": 4
           }
          ],
          "line": 28
@@ -57211,19 +58290,19 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 101,
+       "lines": 97,
        "items": [
         {
          "k": "lines",
          "n": 2,
-         "line": 2
+         "line": 1
         },
         {
          "k": "fwd_run",
          "stem": "MxUnkRecordSW",
          "first": 7000,
-         "count": 98,
-         "line": 4
+         "count": 94,
+         "line": 3
         }
        ]
       }
@@ -63342,8 +64421,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/worlds/hospital.cpp",
     "clean": "0cc136e6054f0d320396bcb8fc4af307b5e57cd6e63165aa306af4fb6b0b3abb",
-    "effective": "f9331d3c16a710d6bd44bc5755bb0d93f8956692a10ce86943a0a06094d98703",
-    "size": 20032,
+    "effective": "04aed3a93a98501646621af71fb795cc69bfb26da93c00e7d1f14ef02e6f4f09",
+    "size": 20089,
     "ops": [
      {
       "op": "insert",
@@ -63381,7 +64460,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 13,
+       "lines": 10,
        "items": [
         {
          "k": "lines",
@@ -63412,21 +64491,6 @@
          "k": "fwd",
          "id": "MxUnkRecordNP",
          "line": 9
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordNQ",
-         "line": 10
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordNR",
-         "line": 11
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordNS",
-         "line": 12
         }
        ]
       }
@@ -63440,7 +64504,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 13,
        "items": [
         {
          "k": "lines",
@@ -63456,6 +64520,36 @@
          "k": "fwd",
          "id": "MxUnkRecordNU",
          "line": 6
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordH",
+         "line": 7
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordI",
+         "line": 8
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordJ",
+         "line": 9
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordK",
+         "line": 10
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordL",
+         "line": 11
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordN",
+         "line": 12
         }
        ]
       }
@@ -63863,8 +64957,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/worlds/police.cpp",
     "clean": "6f1e9c52925b7b94da79de19e4d3d2591db79ecc59ed522bab360d12f467c06b",
-    "effective": "174947313a332781e657d1d8c984940b4af1d09247b9eec07fd0be354685065c",
-    "size": 6750,
+    "effective": "ca4471f9c9bf7426182be02505056411a156b67014a5bc8e067f777072ad51b9",
+    "size": 6825,
     "ops": [
      {
       "op": "insert",
@@ -63875,7 +64969,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 11,
+       "lines": 14,
        "items": [
         {
          "k": "lines",
@@ -63893,11 +64987,26 @@
          "line": 6
         },
         {
+         "k": "empty_class",
+         "id": "MxUnkRecord002",
+         "line": 7
+        },
+        {
+         "k": "empty_class",
+         "id": "MxUnkRecord003",
+         "line": 8
+        },
+        {
+         "k": "empty_class",
+         "id": "MxUnkRecord004",
+         "line": 9
+        },
+        {
          "k": "fwd_run",
          "stem": "MxUnkRecord",
-         "first": 2,
+         "first": 5,
          "count": 4,
-         "line": 7,
+         "line": 10,
          "width": 3
         }
        ]
@@ -63908,8 +65017,8 @@
    {
     "path": "LEGO1/lego/legoomni/src/worlds/registrationbook.cpp",
     "clean": "68c16048be734545892161faae48de178be77e3557f050e113520e5dee4524c1",
-    "effective": "640dd6d45b586ca49233523e9dca0452459a96ebe3fa58677552f2f353a7bf39",
-    "size": 17598,
+    "effective": "bdeb7bdf32dbbfe88c1de5073b450a59fefe1fe0a485316bf74e54d2c5394371",
+    "size": 17494,
     "ops": [
      {
       "op": "insert",
@@ -63948,7 +65057,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 26,
+       "lines": 22,
        "items": [
         {
          "k": "lines",
@@ -63961,8 +65070,7 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1",
-          "Record2"
+          "Record1"
          ],
          "line": 3
         },
@@ -63972,10 +65080,9 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1",
-          "Record2"
+          "Record1"
          ],
-         "line": 8
+         "line": 7
         },
         {
          "k": "class",
@@ -63983,10 +65090,9 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1",
-          "Record2"
+          "Record1"
          ],
-         "line": 13
+         "line": 11
         },
         {
          "k": "class",
@@ -63994,10 +65100,9 @@
          "inline": true,
          "members": [
           "Record0",
-          "Record1",
-          "Record2"
+          "Record1"
          ],
-         "line": 18
+         "line": 15
         },
         {
          "k": "enum",
@@ -64005,7 +65110,7 @@
          "members": [
           "c_rkRbE0"
          ],
-         "line": 23
+         "line": 19
         }
        ]
       }
@@ -67200,8 +68305,8 @@
    {
     "path": "LEGO1/omni/src/common/mxcompositepresenter.cpp",
     "clean": "bb977844039a8db57af9cdf1557f166308b31caa6419de3f0abf1a7529e4a609",
-    "effective": "8059e42efed3d67e47cb60dcb9631ff5538e1deeb085a203091b7f28c0c1669f",
-    "size": 6863,
+    "effective": "03e8b25e07f197b9a46f57f71c808b0bf97dc75b8c979e9d276375ae1129f9a6",
+    "size": 7029,
     "ops": [
      {
       "op": "insert",
@@ -67212,7 +68317,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 5,
+       "lines": 7,
        "items": [
         {
          "k": "lines",
@@ -67233,6 +68338,16 @@
          "k": "empty_class",
          "id": "RkC2",
          "line": 4
+        },
+        {
+         "k": "empty_class",
+         "id": "RkC3",
+         "line": 5
+        },
+        {
+         "k": "empty_class",
+         "id": "RkC4",
+         "line": 6
         }
        ]
       }
@@ -67278,7 +68393,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 15,
        "items": [
         {
          "k": "lines",
@@ -67294,6 +68409,30 @@
           },
           {
            "decl": "Record1"
+          },
+          {
+           "decl": "Record2"
+          },
+          {
+           "decl": "Record3"
+          },
+          {
+           "decl": "Record4"
+          },
+          {
+           "decl": "Record5"
+          },
+          {
+           "decl": "Record6"
+          },
+          {
+           "decl": "Record7"
+          },
+          {
+           "decl": "Record8"
+          },
+          {
+           "decl": "Record9"
           }
          ],
          "line": 3
@@ -67566,8 +68705,8 @@
    {
     "path": "LEGO1/omni/src/common/mxpresenter.cpp",
     "clean": "d205b1cee8c5aa4a970c2d203e80f2c4eb658a6a580c23123399d310b0a2d755",
-    "effective": "5607630cc7d71b1ee3026e377ef812d5a67aecf1d9164ac133cc27a03ed1dd3e",
-    "size": 6439,
+    "effective": "77056f0eda1b1b9dfb569ee1b2b978b7a5cedb9aee9b005718f0bc2bf0169a7b",
+    "size": 6407,
     "ops": [
      {
       "op": "insert",
@@ -67578,7 +68717,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 4,
        "items": [
         {
          "k": "lines",
@@ -67586,17 +68725,9 @@
          "line": 1
         },
         {
-         "k": "class",
-         "id": "RkRrM0",
-         "members": [
-          "m0"
-         ],
-         "line": 3
-        },
-        {
          "k": "empty_class",
          "id": "RkRrC0",
-         "line": 6
+         "line": 3
         }
        ]
       }
@@ -67803,8 +68934,8 @@
    {
     "path": "LEGO1/omni/src/main/mxmain.cpp",
     "clean": "3b372550751c8df49ded0c3d539517367912635c6c5b2c0be6d7c98853859d91",
-    "effective": "8fcf4d5b307ef772bc6bb94bb5de9e85543cbaef00d694818fdd89e443f3abbd",
-    "size": 11553,
+    "effective": "e1591ef87f1ec2b6de10acd3c3c8d0712875b6a3576655709b6c2be33472c5f0",
+    "size": 11357,
     "ops": [
      {
       "op": "insert",
@@ -67864,13 +68995,13 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 17,
+       "lines": 3,
        "items": [
         {
          "k": "fwd_run",
          "stem": "MmP",
          "first": 0,
-         "count": 17,
+         "count": 3,
          "line": 1,
          "width": 3
         }
@@ -67910,68 +69041,6 @@
           "Record"
          ],
          "line": 9
-        }
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "path": "LEGO1/omni/src/notify/mxactionnotificationparam.cpp",
-    "clean": "9e1ccdd3b8d6a5af7e5af25dc88a8ce92bdafdf6e57dbbe5713793bbfbeb404b",
-    "effective": "adef055f776e57b3376540e44d3e3c7fc55fc5be20bd0645a5022d28543fcb09",
-    "size": 731,
-    "ops": [
-     {
-      "op": "insert",
-      "anchor": {
-       "ctx": "69993b3c50057bf72431b3f48ad8e049a7efea4983906f3ee4a550d8795205df",
-       "b": 0,
-       "at": "start"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 18,
-       "items": [
-        {
-         "k": "lines",
-         "n": 2,
-         "line": 1
-        },
-        {
-         "k": "class",
-         "id": "RkRqM0",
-         "members": [
-          "m0"
-         ],
-         "line": 3
-        },
-        {
-         "k": "fwd_run",
-         "stem": "RkRqF",
-         "first": 0,
-         "count": 4,
-         "line": 6
-        },
-        {
-         "k": "lines",
-         "n": 4,
-         "line": 11
-        },
-        {
-         "k": "empty_class",
-         "id": "MxUnkRecordTM",
-         "line": 15
-        },
-        {
-         "k": "empty_class",
-         "id": "MxUnkRecordTN",
-         "line": 16
-        },
-        {
-         "k": "empty_class",
-         "id": "MxUnkRecordTO",
-         "line": 17
         }
        ]
       }
@@ -68164,8 +69233,8 @@
    {
     "path": "LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp",
     "clean": "29af93104cd3290dc754f11154f5bdf69b85c40b9b82f8ccd0e06a9eb4ba4feb",
-    "effective": "6218a76292933173916df79738adc9f6aa7284afde238e355310e5a7b23947ac",
-    "size": 11701,
+    "effective": "95cbea9f42992abf5da347ada35056949424d782818d971efa08f6bc6126b52d",
+    "size": 14232,
     "ops": [
      {
       "op": "insert",
@@ -68194,7 +69263,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 86,
+       "lines": 109,
        "items": [
         {
          "k": "lines",
@@ -68205,7 +69274,8 @@
          "k": "class",
          "id": "QqM0",
          "members": [
-          "qqm0"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68219,6 +69289,7 @@
          "k": "class",
          "id": "QqM1",
          "members": [
+          "qqm0",
           "qqm1"
          ],
          "access": [
@@ -68227,13 +69298,14 @@
            "before_member_index": 0
           }
          ],
-         "line": 6
+         "line": 7
         },
         {
          "k": "class",
          "id": "QqM2",
          "members": [
-          "qqm2"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68241,13 +69313,14 @@
            "before_member_index": 0
           }
          ],
-         "line": 10
+         "line": 12
         },
         {
          "k": "class",
          "id": "QqM3",
          "members": [
-          "qqm3"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68255,27 +69328,14 @@
            "before_member_index": 0
           }
          ],
-         "line": 14
+         "line": 17
         },
         {
          "k": "class",
          "id": "QqM4",
          "members": [
-          "qqm4"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 18
-        },
-        {
-         "k": "class",
-         "id": "QqM5",
-         "members": [
-          "qqm5"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68287,9 +69347,10 @@
         },
         {
          "k": "class",
-         "id": "QqM6",
+         "id": "QqM5",
          "members": [
-          "qqm6"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68297,13 +69358,29 @@
            "before_member_index": 0
           }
          ],
-         "line": 26
+         "line": 27
+        },
+        {
+         "k": "class",
+         "id": "QqM6",
+         "members": [
+          "qqm0",
+          "qqm1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 32
         },
         {
          "k": "class",
          "id": "QqM7",
          "members": [
-          "qqm7"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68311,41 +69388,14 @@
            "before_member_index": 0
           }
          ],
-         "line": 30
+         "line": 37
         },
         {
          "k": "class",
          "id": "QqM8",
          "members": [
-          "qqm8"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 34
-        },
-        {
-         "k": "class",
-         "id": "QqM9",
-         "members": [
-          "qqm9"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 38
-        },
-        {
-         "k": "class",
-         "id": "QqM10",
-         "members": [
-          "qqm10"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68357,9 +69407,10 @@
         },
         {
          "k": "class",
-         "id": "QqM11",
+         "id": "QqM9",
          "members": [
-          "qqm11"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68367,55 +69418,44 @@
            "before_member_index": 0
           }
          ],
-         "line": 46
+         "line": 47
+        },
+        {
+         "k": "class",
+         "id": "QqM10",
+         "members": [
+          "qqm0",
+          "qqm1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 52
+        },
+        {
+         "k": "class",
+         "id": "QqM11",
+         "members": [
+          "qqm0",
+          "qqm1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 57
         },
         {
          "k": "class",
          "id": "QqM12",
          "members": [
-          "qqm12"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 50
-        },
-        {
-         "k": "class",
-         "id": "QqM13",
-         "members": [
-          "qqm13"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 54
-        },
-        {
-         "k": "class",
-         "id": "QqM14",
-         "members": [
-          "qqm14"
-         ],
-         "access": [
-          {
-           "access": "public",
-           "before_member_index": 0
-          }
-         ],
-         "line": 58
-        },
-        {
-         "k": "class",
-         "id": "QqM15",
-         "members": [
-          "qqm15"
+          "qqm0",
+          "qqm1"
          ],
          "access": [
           {
@@ -68426,29 +69466,69 @@
          "line": 62
         },
         {
+         "k": "class",
+         "id": "QqM13",
+         "members": [
+          "qqm0",
+          "qqm1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 67
+        },
+        {
+         "k": "class",
+         "id": "QqM14",
+         "members": [
+          "qqm0",
+          "qqm1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 72
+        },
+        {
          "k": "lines",
          "n": 2,
-         "line": 67
+         "line": 77
         },
         {
          "k": "empty_class",
          "id": "ZzC0",
-         "line": 69
+         "line": 79
         },
         {
          "k": "empty_class",
          "id": "ZzC1",
-         "line": 70
+         "line": 80
         },
         {
          "k": "empty_class",
          "id": "ZzC2",
-         "line": 71
+         "line": 81
+        },
+        {
+         "k": "empty_class",
+         "id": "ZzC3",
+         "line": 82
+        },
+        {
+         "k": "empty_class",
+         "id": "ZzC4",
+         "line": 83
         },
         {
          "k": "lines",
          "n": 5,
-         "line": 73
+         "line": 84
         },
         {
          "k": "class",
@@ -68458,10 +69538,23 @@
           {
            "stem": "Record",
            "first": 0,
-           "count": 6
+           "count": 8
           }
          ],
-         "line": 78
+         "line": 89
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordFA",
+         "inline": true,
+         "members": [
+          {
+           "stem": "Record",
+           "first": 0,
+           "count": 8
+          }
+         ],
+         "line": 99
         }
        ]
       }
@@ -68475,7 +69568,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 14,
+       "lines": 91,
        "items": [
         {
          "k": "lines",
@@ -68486,7 +69579,10 @@
          "k": "class",
          "id": "MxUnkRecordUF",
          "members": [
-          "Record"
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
          ],
          "access": [
           {
@@ -68498,9 +69594,12 @@
         },
         {
          "k": "class",
-         "id": "MxUnkRecordUG",
+         "id": "MxUnkRecordES",
          "members": [
-          "Record"
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
          ],
          "access": [
           {
@@ -68508,7 +69607,199 @@
            "before_member_index": 0
           }
          ],
-         "line": 10
+         "line": 12
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordET",
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 19
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEU",
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 26
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEW",
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 33
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEX",
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 40
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEY",
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 47
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEZ",
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 54
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordUG",
+         "members": [
+          "Record0",
+          "Record1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 61
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEN",
+         "members": [
+          "Record0",
+          "Record1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 66
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEO",
+         "members": [
+          "Record0",
+          "Record1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 71
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEP",
+         "members": [
+          "Record0",
+          "Record1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 76
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEQ",
+         "members": [
+          "Record0",
+          "Record1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 81
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordER",
+         "members": [
+          "Record0",
+          "Record1"
+         ],
+         "access": [
+          {
+           "access": "public",
+           "before_member_index": 0
+          }
+         ],
+         "line": 86
         }
        ]
       }
@@ -68522,7 +69813,7 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 7,
+       "lines": 12,
        "items": [
         {
          "k": "lines",
@@ -68538,6 +69829,31 @@
          "k": "fwd",
          "id": "MxUnkRecordUI",
          "line": 6
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordEI",
+         "line": 7
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordEJ",
+         "line": 8
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordEK",
+         "line": 9
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordEL",
+         "line": 10
+        },
+        {
+         "k": "fwd",
+         "id": "MxUnkRecordEM",
+         "line": 11
         }
        ]
       }
@@ -68551,21 +69867,77 @@
       },
       "gen": {
        "k": "seq",
-       "lines": 5,
+       "lines": 37,
        "items": [
         {
          "k": "lines",
          "n": 1,
-         "line": 2
+         "line": 1
         },
         {
          "k": "class",
          "id": "MxUnkRecordAG",
          "inline": true,
          "members": [
-          "Record"
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3",
+          "Record4"
          ],
-         "line": 3
+         "line": 2
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEE",
+         "inline": true,
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3",
+          "Record4"
+         ],
+         "line": 9
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEF",
+         "inline": true,
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3",
+          "Record4"
+         ],
+         "line": 16
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEG",
+         "inline": true,
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3",
+          "Record4"
+         ],
+         "line": 23
+        },
+        {
+         "k": "class",
+         "id": "MxUnkRecordEH",
+         "inline": true,
+         "members": [
+          "Record0",
+          "Record1",
+          "Record2",
+          "Record3",
+          "Record4"
+         ],
+         "line": 30
         }
        ]
       }
