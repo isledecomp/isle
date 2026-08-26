@@ -103,6 +103,11 @@ void Matrix4::RotateY(const float& p_angle)
 	}
 }
 
+// Must be included here (not at the bottom of this header) for correct ordering in binary.
+// NormalizeQuaternion and LenSquared depend on Vector4.
+// There's a chance they included mxgeometry4d.h after including this somewhere.
+#include "realtime/vector3dtail.inl.h"
+
 // FUNCTION: LEGO1 0x100a0ff0
 // FUNCTION: BETA10 0x1001fe60
 void Matrix4::Scale(const float& p_x, const float& p_y, const float& p_z)
@@ -127,11 +132,6 @@ void Matrix4::RotateZ(const float& p_angle)
 		m_data[i][1] = matrix[i][1] * c + matrix[i][0] * s;
 	}
 }
-
-// Must be included here (not before MxMatrix) for correct ordering in binary.
-// FromQuaternion and ToQuaternion in Matrix4 depend on Vector4.
-// There's a chance they included mxgeometry4d.h after including this somewhere.
-#include "realtime/vector4d.inl.h"
 
 // FUNCTION: BETA10 0x1005a590
 int Matrix4::Invert(Matrix4& p_mat)

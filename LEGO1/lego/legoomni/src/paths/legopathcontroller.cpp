@@ -1,3 +1,5 @@
+#include "realtime/vector3dtail.inl.h"
+
 #include "legopathcontroller.h"
 
 #include "legopathedgecontainer.h"

@@ -288,3 +288,5 @@ LegoS32 LegoWEGEdge::ValidateFacePlanarity()
 
 	return 0;
 }
+
+#include "realtime/vector3dtail.inl.h"

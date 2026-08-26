@@ -7,6 +7,7 @@
 #include "decomp.h"
 #include "lodlist.h"
 #include "matrix.h"
+#include "realtime/vector3d.inl.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxstl/stlcompat.h"
 

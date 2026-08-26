@@ -25,6 +25,7 @@ struct PathWithTrigger {
 	float m_triggerLength;        // 0x08
 };
 
+#include "realtime/vector3d.inl.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxgeometry/mxgeometry4d.h"
 

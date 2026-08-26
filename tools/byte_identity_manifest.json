@@ -1004,7 +1004,7 @@
   {
    "target": "geom",
    "source": "LEGO1/lego/sources/geom/legowegedge.cpp",
-   "source_sha256": "9c083f7994466ddc9db88f62e4dae6ee5da39741fbc25603036c3427d7a1cf8b",
+   "source_sha256": "0cd1f63572764c562a2d81d4472d19e362774b195d3ef84bea3be8487165bc87",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1038,6 +1038,26 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: two unused forward declarations precede the current effective translation unit and a declaration shape is force-included; neither emits code, data, strings, vtables, nor linker directives."
      }
+    },
+    {
+     "id": "d_8ee5e31c467a",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_run_with_shape",
+      "placement": "suffix",
+      "prefix": "MxUnkRecVA",
+      "count": 4,
+      "width": 3,
+      "classes": 6,
+      "functions": 37,
+      "generated_header_sha256": "8ee5e31c467ab5d9226bbc15568da6abae3fc9d2e6a90e1c623df80a166e9d7a",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: four unused forward declarations follow the current effective translation unit and a declaration shape is force-included; neither emits code, data, strings, vtables, nor linker directives."
+     }
     }
    ],
    "functions": [
@@ -1045,50 +1065,126 @@
      "mangled": "?LinkEdgesAndFaces@LegoWEGEdge@@UAEJXZ",
      "donor": "d_b6db07485f83",
      "splice_class": "retail_exact_instruction_mosaic",
-     "expected_section_number": 207,
+     "expected_section_number": 201,
      "expected_section_count": 220,
      "expected_body_length": 1494,
      "expected_relocation_count": 32,
      "expected_line_count": 87,
-     "expected_seed_body_sha256": "5b9d3273253cf498ddc1f5b2e4f66b551210e6146836d064b95fa7b485144a95",
-     "expected_donor_body_sha256": "cc7c96a8432d2fb148851bf3cbee4cd078ca9d5616a90f811554e67337d68c42",
+     "expected_seed_body_sha256": "ea9246ef555708087c3e67d58ef6baf5e989854bc9841684068a695f1a0d09aa",
+     "expected_donor_body_sha256": "d54690c9cd8c4d1ea5ec2fbf37de144fe918f55853272782349ae5cf2c233f8a",
      "expected_body_sha256": "f682280da62601a19ed118acb354abfb3bfb15a99632a6be0e518a8a15371a2c",
      "instruction_ranges": [
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 300,
-       "end": 303,
+       "start": 237,
+       "end": 243,
+       "seed_bytes": "385e04895dec",
+       "seed_sha256": "bdbb44e96aac6aff4004291c754e3ddb11ce7f9ee39a72933a6c9ff2079c190a",
+       "donor_bytes": "895dec385e04",
+       "donor_sha256": "73a355aa6aaf0287f103397e9c5414d985e65a9285376bc9c9ae57cb3b32c746",
+       "donor": "d_8ee5e31c467a",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        3,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        3
+       ]
+      },
+      {
+       "start": 428,
+       "end": 434,
+       "seed_bytes": "ff45ec8a4604",
+       "seed_sha256": "13ceb75cc602433ae1412b0efde8d6df9fdaace5e7917b75d554c249067d93c4",
+       "donor_bytes": "8a4604ff45ec",
+       "donor_sha256": "8634bcc0fdf4e133e5a3647ab9b0e9aea6a196c3cde7f749df8d5a6d498bb649",
+       "donor": "d_8ee5e31c467a",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        3,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        3
+       ]
+      },
+      {
+       "start": 452,
+       "end": 462,
+       "seed_bytes": "d95e44c745ec00000000",
+       "seed_sha256": "af23c067fefc0c86e909bc2acf8d8322097dd8c845313fb4536d472aa7e9baa3",
+       "donor_bytes": "c745ec00000000d95e44",
+       "donor_sha256": "528f95c5b574d3705da6c687aaa21563dba0def7544f7b18da62da7ca40f809c",
+       "donor": "d_8ee5e31c467a",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        3,
+        7
+       ],
+       "donor_instruction_lengths": [
+        7,
+        3
+       ]
+      },
+      {
+       "start": 840,
+       "end": 850,
+       "seed_bytes": "8345e404ff45ec8a4604",
+       "seed_sha256": "ce5ddb77d61bc945fc386e163b9510f7c01f5db5e4ad5fa0357705b0275ac481",
+       "donor_bytes": "8a4604ff45ec8345e404",
+       "donor_sha256": "e5e827d024da08539632e50201cfecd3bee14ee5f53da1e900194996819fb39c",
+       "donor": "d_8ee5e31c467a",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        4,
+        3,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        3,
+        4
+       ]
+      },
+      {
+       "start": 955,
+       "end": 961,
+       "seed_bytes": "894e508b45ec",
+       "seed_sha256": "8677cf3b73e3614a7627211c1b444529b9dacd10e41edcc0506720b51ee76837",
+       "donor_bytes": "8b45ec894e50",
+       "donor_sha256": "d53e6c263fb122fbbad0bddfb2cd6496c860d27a97bcff329350024fe1b7cb0f",
+       "donor": "d_8ee5e31c467a",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        3,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        3
+       ]
+      },
+      {
+       "start": 1158,
+       "end": 1161,
        "seed_bytes": "83c104",
        "seed_sha256": "de40bc59184915c29d06f2d83944a51da12276621488d3ec285b94502f419126",
        "donor_bytes": "83c108",
-       "donor_sha256": "9289098f48f9c4b46306350001a7e6855ac49dacd2e27a1d6827e94affb96f12"
+       "donor_sha256": "9289098f48f9c4b46306350001a7e6855ac49dacd2e27a1d6827e94affb96f12",
+       "donor": "d_b6db07485f83",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 303,
-       "end": 306,
+       "start": 1161,
+       "end": 1164,
        "seed_bytes": "83c008",
        "seed_sha256": "6a4a22e2215f4d637a7de600d5327aa2ddb3d60a38c35e4ff29f44b3351d28ae",
        "donor_bytes": "83c004",
-       "donor_sha256": "b9d5c0a1789357775aa749a9e3e5f3b9f8f6aca27f919d3586b0625e63b42123"
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 379,
-       "end": 382,
-       "seed_bytes": "83c104",
-       "seed_sha256": "de40bc59184915c29d06f2d83944a51da12276621488d3ec285b94502f419126",
-       "donor_bytes": "83c108",
-       "donor_sha256": "9289098f48f9c4b46306350001a7e6855ac49dacd2e27a1d6827e94affb96f12"
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 382,
-       "end": 385,
-       "seed_bytes": "83c008",
-       "seed_sha256": "6a4a22e2215f4d637a7de600d5327aa2ddb3d60a38c35e4ff29f44b3351d28ae",
-       "donor_bytes": "83c004",
-       "donor_sha256": "b9d5c0a1789357775aa749a9e3e5f3b9f8f6aca27f919d3586b0625e63b42123"
+       "donor_sha256": "b9d5c0a1789357775aa749a9e3e5f3b9f8f6aca27f919d3586b0625e63b42123",
+       "donor": "d_b6db07485f83",
+       "kind": "same_offset_complete_x86_instruction_v1"
       }
      ],
      "retail_oracle": {
@@ -1113,8 +1209,8 @@
        "offset": 12,
        "type": 6,
        "addend": 0,
-       "target": "$L2591",
-       "target_section": 207,
+       "target": "$L2586",
+       "target_section": 201,
        "target_value": 1471,
        "target_type": 0,
        "target_storage": 6,
@@ -1147,7 +1243,7 @@
        "type": 20,
        "addend": 0,
        "target": "?ValidateFacePlanarity@LegoWEGEdge@@IAEJXZ",
-       "target_section": 217,
+       "target_section": 211,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -1169,7 +1265,7 @@
        "type": 20,
        "addend": 0,
        "target": "??0Mx4DPointFloat@@QAE@XZ",
-       "target_section": 211,
+       "target_section": 205,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -1224,7 +1320,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Vector3@@6B@",
-       "target_section": 209,
+       "target_section": 203,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -1366,9 +1462,9 @@
        "offset": 1317,
        "type": 6,
        "addend": 0,
-       "target": "$T2742",
+       "target": "$T2737",
        "target_section": 5,
-       "target_value": 16,
+       "target_value": 8,
        "target_type": 0,
        "target_storage": 3,
        "retail_target": "0x100db7d0"
@@ -1377,9 +1473,9 @@
        "offset": 1340,
        "type": 6,
        "addend": 0,
-       "target": "$T2743",
+       "target": "$T2738",
        "target_section": 5,
-       "target_value": 24,
+       "target_value": 16,
        "target_type": 0,
        "target_storage": 3,
        "retail_target": "0x100db7d8"
@@ -1388,9 +1484,9 @@
        "offset": 1359,
        "type": 6,
        "addend": 0,
-       "target": "$T2743",
+       "target": "$T2738",
        "target_section": 5,
-       "target_value": 24,
+       "target_value": 16,
        "target_type": 0,
        "target_storage": 3,
        "retail_target": "0x100db7d8"
@@ -1421,8 +1517,8 @@
        "offset": 1472,
        "type": 6,
        "addend": 0,
-       "target": "$T2740",
-       "target_section": 208,
+       "target": "$T2735",
+       "target_section": 202,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 3,
@@ -1449,6 +1545,20 @@
        "target_type": 32,
        "target_storage": 2,
        "retail_target": "0x10086260"
+      }
+     ],
+     "expected_seed_metadata_sha256": "82222cabde902a2803957917082b05e0539df2496f83a6f1c9d99aaf8fc396af",
+     "expected_donor_metadata_sha256": "e1d865ba647422938a233960da38dfa6733809a9a8687804cae99eea11e99409",
+     "expected_mosaic_donor_body_sha256": "5b9d3273253cf498ddc1f5b2e4f66b551210e6146836d064b95fa7b485144a95",
+     "expected_donor_body_length": 1494,
+     "expected_donor_line_count": 87,
+     "donor_variants": [
+      {
+       "donor": "d_8ee5e31c467a",
+       "expected_body_length": 1494,
+       "expected_line_count": 87,
+       "expected_body_sha256": "026275a1955a8c5ca1b3c63531345a54119b7383411f170a159bab61d058abaf",
+       "expected_metadata_sha256": "bc4041732301ad62f907889ddb53f55a55c45f7b57346decf260abb03cd8076e"
       }
      ]
     }
@@ -4931,6 +5041,37 @@
    },
    "group_order": [
     [
+     "?SetWorldSpeed@LegoEntity@@UAEXM@Z",
+     "?NormalizeQuaternion@Vector4@@UAEHXZ",
+     "?EqualsHamiltonProduct@Vector4@@UAEHABV1@0@Z",
+     "?GetSoundFrequencyFactor@LegoActor@@UAEMXZ",
+     "?SetSoundFrequencyFactor@LegoActor@@UAEXM@Z",
+     "?SetLastPathStruct@LegoActor@@UAEXM@Z",
+     "?GetLastPathStruct@LegoActor@@UAEMXZ",
+     "?GetActorId@LegoActor@@UAEEXZ",
+     "?SetActorId@LegoActor@@UAEXE@Z",
+     "?SetUserNavFlag@LegoPathActor@@UAEXE@Z",
+     "?GetUserNavFlag@LegoPathActor@@UAEEXZ",
+     "?StepState@LegoPathActor@@UAEIMAAVMatrix4@@@Z",
+     "?HitActor@LegoPathActor@@UAEJPAV1@E@Z",
+     "?NextTargetLocation@LegoPathActor@@UAEHXZ",
+     "?SetMaxLinearVel@LegoPathActor@@UAEXM@Z",
+     "?GetMaxLinearVel@LegoPathActor@@UAEMXZ",
+     "?GetWallHitDirectionFactor@LegoPathActor@@UAEMXZ",
+     "?GetWallHitDampening@LegoPathActor@@UAEMXZ",
+     "?SetWallHitDirectionFactor@LegoPathActor@@UAEXM@Z",
+     "?SetWallHitDampening@LegoPathActor@@UAEXM@Z",
+     "?VTable0xc4@LegoPathActor@@UAEXXZ",
+     "?SetCanRotate@LegoPathActor@@UAEXE@Z",
+     "?HandleNotification0@IslePathActor@@UAEJXZ",
+     "?HandlePathStruct@IslePathActor@@UAEJAAVLegoPathStructNotificationParam@@@Z",
+     "??1IslePathActor@@UAE@XZ",
+     "?HandleClick@IslePathActor@@UAEJXZ",
+     "?HandleControl@IslePathActor@@UAEJAAVLegoControlManagerNotificationParam@@@Z",
+     "?HandleEndAnim@IslePathActor@@UAEJAAVLegoEndAnimNotificationParam@@@Z",
+     "?ClassName@IslePathActor@@UBEPBDXZ",
+     "?IsA@IslePathActor@@UBEEPBD@Z",
+     "??_GIslePathActor@@UAEPAXI@Z",
      "?ClassName@Helicopter@@UBEPBDXZ",
      "?IsA@Helicopter@@UBEEPBD@Z",
      "??4Mx4DPointFloat@@UAEXABVVector4@@@Z",
@@ -5606,6 +5747,337 @@
        "retail_target": "0x10003a03"
       }
      ]
+    },
+    {
+     "mangled": "?DotImpl@Vector3@@MBEMPBM0@Z",
+     "donor": "d_d1bb8d20cb73",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 369,
+     "expected_donor_section_number": 369,
+     "expected_section_count": 419,
+     "expected_donor_section_count": 419,
+     "expected_body_length": 31,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_relocation_count": 0,
+     "expected_seed_line_count": 2,
+     "expected_donor_line_count": 2,
+     "expected_function_count": 132,
+     "expected_comdat_count": 151,
+     "expected_seed_body_sha256": "885b5f0ea287a7adc25ad73048f9c1ad1b7b9e73608becde44dc6a0f8a0afcb5",
+     "expected_donor_body_sha256": "885b5f0ea287a7adc25ad73048f9c1ad1b7b9e73608becde44dc6a0f8a0afcb5",
+     "expected_body_sha256": "edab2fe370ddaa75af4ca0b31c4a365320a8a8df07921fec47ec806c73f95283",
+     "expected_seed_metadata_sha256": "232d65962a23b663efeb54c15e55b86465b7770654016ed4a9bab98880bb0974",
+     "expected_donor_metadata_sha256": "4a764192f6352dedf7e185b8a622a05a475760bd5a5efc1c7d2f992299870683",
+     "expected_changed_offsets": [
+      23,
+      25
+     ],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10003b80",
+      "verdict": "MATCH",
+      "length": 31
+     },
+     "retail_relocations": [],
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "commutative_operand_forms": [
+       {
+        "pair_offset": 22,
+        "operation": "fmul",
+        "expected_rewritten_offsets": [
+         23,
+         25
+        ]
+       }
+      ],
+      "expected_instruction_count": 11,
+      "expected_changed_offsets": [
+       23,
+       25
+      ],
+      "expected_procedure_range": [
+       31,
+       0,
+       28
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?DotImpl@Vector3@@MBEMPBM0@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?DotImpl@Vector3@@MBEMPBM0@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?DotImpl@Vector3@@MBEMPBM0@Z",
+        0
+       ]
+      ],
+      "expected_external_entries": [],
+      "expected_seed_debug_s_sha256": "e38cb4e604e7f87864692d23cce94cf50b7506b24bbdbe415c458e49a55a88d7",
+      "expected_image_debug_s_sha256": "e38cb4e604e7f87864692d23cce94cf50b7506b24bbdbe415c458e49a55a88d7",
+      "authenticity_rationale": "MSVC 4.2 canonicalises which operand of a commutative x87 product is loaded first as a function of the translation unit's parse state; the v3/V4X include relocation flips the pair while the computed value is one rounding of the same two exact factors (K1-K10)."
+     }
+    },
+    {
+     "mangled": "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
+     "donor": "d_d1bb8d20cb73",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 102,
+     "expected_donor_section_number": 102,
+     "expected_section_count": 419,
+     "expected_donor_section_count": 419,
+     "expected_body_length": 68,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_relocation_count": 0,
+     "expected_seed_line_count": 5,
+     "expected_donor_line_count": 5,
+     "expected_function_count": 132,
+     "expected_comdat_count": 151,
+     "expected_seed_body_sha256": "4f191c6ad3387cc1009c5e770f591b1c02f1d74fcae232581a71a3c5941dcd21",
+     "expected_donor_body_sha256": "4f191c6ad3387cc1009c5e770f591b1c02f1d74fcae232581a71a3c5941dcd21",
+     "expected_body_sha256": "7121365111fbc014d5c76419df8b1007aadda7e6a43616f1bb594f2c202bee78",
+     "expected_seed_metadata_sha256": "d01f14ee188bcd021f2d8499602369f9fa2384cda9c7475bc09b982ca1df108c",
+     "expected_donor_metadata_sha256": "5b60c07e29948e4adf8865162c4ae0b8528b43b84f5620592548e927b1a42ef9",
+     "expected_changed_offsets": [
+      19,
+      20,
+      22,
+      23
+     ],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10002270",
+      "verdict": "MATCH",
+      "length": 68
+     },
+     "retail_relocations": [],
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "commutative_operand_forms": [
+       {
+        "pair_offset": 18,
+        "operation": "fmul",
+        "expected_rewritten_offsets": [
+         19,
+         20,
+         22,
+         23
+        ]
+       }
+      ],
+      "expected_instruction_count": 26,
+      "expected_changed_offsets": [
+       19,
+       20,
+       22,
+       23
+      ],
+      "expected_procedure_range": [
+       68,
+       5,
+       65
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?EqualsCrossImpl@Vector3@@MAEXPBM0@Z",
+        0
+       ]
+      ],
+      "expected_external_entries": [],
+      "expected_seed_debug_s_sha256": "d9216f5892cddc9eb1a0f2ff319d0a227c57511a1e04b65c8dea74e4bd8c524e",
+      "expected_image_debug_s_sha256": "d9216f5892cddc9eb1a0f2ff319d0a227c57511a1e04b65c8dea74e4bd8c524e",
+      "authenticity_rationale": "MSVC 4.2 canonicalises which operand of a commutative x87 product is loaded first as a function of the translation unit's parse state; the v3/V4X include relocation flips the pair while the computed value is one rounding of the same two exact factors (K1-K10)."
+     }
+    },
+    {
+     "mangled": "?SetMatrixProduct@Vector4@@UAEXPBM0@Z",
+     "donor": "d_d1bb8d20cb73",
+     "splice_class": "retail_exact_composed_rewriting",
+     "expected_section_number": 201,
+     "expected_donor_section_number": 201,
+     "expected_section_count": 419,
+     "expected_donor_section_count": 419,
+     "expected_body_length": 151,
+     "expected_characteristics": 1615859744,
+     "expected_selection": 2,
+     "expected_relocation_count": 0,
+     "expected_seed_line_count": 6,
+     "expected_donor_line_count": 6,
+     "expected_function_count": 132,
+     "expected_comdat_count": 151,
+     "expected_seed_body_sha256": "1d1308faa9422827dbc712156c5fecbe6d0733cc0960a2d1e9c5a003d1f2e41e",
+     "expected_donor_body_sha256": "1d1308faa9422827dbc712156c5fecbe6d0733cc0960a2d1e9c5a003d1f2e41e",
+     "expected_body_sha256": "faeb460d0bb09749be126540c3b7113ef753db3affa4897b1e501cf53002576f",
+     "expected_seed_metadata_sha256": "85334c16305b094ad4423a2fbb5b391f1b7b36798ba1517f8df5b96bcaaa8346",
+     "expected_donor_metadata_sha256": "02d7c415a0d2e10bd86e3302252dc89b907c33a3465842b2691fe2d38a9b3136",
+     "expected_changed_offsets": [
+      35,
+      37,
+      79,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      103,
+      106
+     ],
+     "expected_closure": [
+      ".debug$F",
+      ".debug$S"
+     ],
+     "expected_code_renames": [],
+     "expected_xdata_rename_offsets": [],
+     "retail_oracle": {
+      "image": "LEGO1.DLL",
+      "address": "0x10002a40",
+      "verdict": "MATCH",
+      "length": 151
+     },
+     "retail_relocations": [],
+     "composed_rewriting": {
+      "kind": "schedule_bijection_relational_v1",
+      "commutative_operand_forms": [
+       {
+        "pair_offset": 34,
+        "operation": "fmul",
+        "expected_rewritten_offsets": [
+         35,
+         37
+        ]
+       }
+      ],
+      "expected_instruction_count": 57,
+      "expected_changed_offsets": [
+       35,
+       37,
+       79,
+       81,
+       82,
+       83,
+       84,
+       85,
+       86,
+       87,
+       88,
+       89,
+       90,
+       91,
+       92,
+       93,
+       94,
+       95,
+       103,
+       106
+      ],
+      "expected_procedure_range": [
+       151,
+       5,
+       148
+      ],
+      "expected_code_symbol_references": [
+       [
+        ".debug$F",
+        "?SetMatrixProduct@Vector4@@UAEXPBM0@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?SetMatrixProduct@Vector4@@UAEXPBM0@Z",
+        0
+       ],
+       [
+        ".debug$S",
+        "?SetMatrixProduct@Vector4@@UAEXPBM0@Z",
+        0
+       ]
+      ],
+      "expected_external_entries": [],
+      "expected_seed_debug_s_sha256": "203c56b38442d4b5df9b1c4bd423711cb592ca87b7566bb9d21c5f3814bd765c",
+      "expected_image_debug_s_sha256": "203c56b38442d4b5df9b1c4bd423711cb592ca87b7566bb9d21c5f3814bd765c",
+      "authenticity_rationale": "MSVC 4.2 canonicalises which operand of a commutative x87 product is loaded first as a function of the translation unit's parse state; the v3/V4X include relocation flips the pair while the computed value is one rounding of the same two exact factors (K1-K10). The second site is one simulated region rewrite over the seed's own faddp summation chain: the same four products join one commutative sum in a different association order, proved by symbolic execution with the sum compared as an unordered multiset.",
+      "simulated_region_rewrites": [
+       {
+        "region_start": 77,
+        "region_end": 109,
+        "target_order": [
+         9,
+         10,
+         5,
+         6,
+         4,
+         0,
+         1,
+         7,
+         8,
+         2,
+         3,
+         11
+        ],
+        "expected_rewritten_offsets": [
+         79,
+         81,
+         82,
+         83,
+         84,
+         85,
+         86,
+         87,
+         88,
+         89,
+         90,
+         91,
+         92,
+         93,
+         94,
+         95,
+         103,
+         106
+        ]
+       }
+      ]
+     }
     }
    ]
   },
@@ -5868,7 +6340,7 @@
      "expected_donor_body_sha256": "12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6",
      "expected_body_sha256": "12d517ae112fa47477a5f6e35e0361641ad502c057ef64df08aeef8160da48d6",
      "expected_seed_metadata_sha256": "7664092f6cb27da38534686314ac797423059af58c51567c1b95d923a76a080b",
-     "expected_donor_metadata_sha256": "d138fddad34f73b0f2063ff588019735a0fa967c07b84a8446c41f58a8e24ba4",
+     "expected_donor_metadata_sha256": "e0ca1a76b4e44fafd0c32c5fc9b8fe2e66737437cb2e6cc70ada44862f4ab736",
      "expected_changed_offsets": [
       186,
       187,
@@ -6195,10 +6667,6 @@
      "-Z7"
     ]
    },
-   "group_order": [
-    "??_7MxNotificationParam@@6B@",
-    "??_7MxParam@@6B@"
-   ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
     "reason": "Restores the retail-anchored .rdata COMDAT group order and splices the register-colour donor body for SkateBoard::HandleClick.",
@@ -8390,8 +8858,8 @@
      "expected_seed_body_sha256": "bc16039218bb4eba6452b493299f024e39f1a0b52bad4bcbd9d2ea6cb901fde2",
      "expected_donor_body_sha256": "bc16039218bb4eba6452b493299f024e39f1a0b52bad4bcbd9d2ea6cb901fde2",
      "expected_body_sha256": "4b420eab338a597b23266e67a75383fe678c6a93afad979ec1536d95d1fd76c5",
-     "expected_seed_metadata_sha256": "e503715caab215750249cd473cffcd5d716a224a7b2cfd89f227bf9d4679991b",
-     "expected_donor_metadata_sha256": "799dfc29343cc739c955a44409c08b4092af9d59edc3a4fa3d89c45ddd93230f",
+     "expected_seed_metadata_sha256": "594135928ac9cebf752ad48c971ac033b282b53df71c981f8ac494edb249f751",
+     "expected_donor_metadata_sha256": "c36764d195833ca5e3b8a238b8f26a16124e7cdbcedd4f3e262d4c8ba0bc5e01",
      "expected_changed_offsets": [
       34,
       46,
@@ -8489,7 +8957,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7?$MxListCursor@PAULegoTranInfo@@@@6B@",
-       "target_section": 533,
+       "target_section": 531,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -8500,7 +8968,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7?$MxPtrListCursor@ULegoTranInfo@@@@6B@",
-       "target_section": 531,
+       "target_section": 532,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -8511,7 +8979,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoTranInfoListCursor@@6B@",
-       "target_section": 532,
+       "target_section": 533,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -8610,7 +9078,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7?$MxListCursor@PAULegoTranInfo@@@@6B@",
-       "target_section": 533,
+       "target_section": 531,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -8621,7 +9089,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7?$MxPtrListCursor@ULegoTranInfo@@@@6B@",
-       "target_section": 531,
+       "target_section": 532,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -8632,7 +9100,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoTranInfoListCursor@@6B@",
-       "target_section": 532,
+       "target_section": 533,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -9259,8 +9727,8 @@
      "expected_comdat_count": 407,
      "expected_seed_body_sha256": "898dae6d8c839afe3958e0599616372a6144fca60b0be6036ad8bfdb02002599",
      "expected_donor_body_sha256": "57f41fee973de995146aebaf85b7f6aa0fc74b310b4033ec9d4b2a1d17879919",
-     "expected_seed_metadata_sha256": "8a29a519c1fcd39ea629b342a48c36dacdf4f769de3636e0ff1160d8fddcbb56",
-     "expected_donor_metadata_sha256": "7f8ad413bd35c9872303dd324bc3c7ca3b781429c41a2ae0509e9648616b997e",
+     "expected_seed_metadata_sha256": "5f2cf38ac3d72f90147eb92bd1c7e1f7dab3cdb9f5a3327ffa919d71bc644729",
+     "expected_donor_metadata_sha256": "b58f84460ff04a774d97c17087ac032057ea33a86e116ea91c827a0c50fa0b68",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -9879,8 +10347,8 @@
      "expected_seed_body_sha256": "245e2e2e95a4bd0967b7669934f326bb7595e2acfd16465e355c206dfa11f807",
      "expected_donor_body_sha256": "025aba94d40e72be8b861cf1a42f56f048a22a11b2e59b1340b44077d709d963",
      "expected_body_sha256": "e8b2ece54eb7a9658d3f345b68b19fc5fe3b4095dbd1f9786c2c0406c94a27e6",
-     "expected_seed_metadata_sha256": "75177b0c2d7213e0f22749e64eb176ba4c2aead438defcb90d68211696376549",
-     "expected_donor_metadata_sha256": "0a8c02774d2e35db0f8bdf9475641e0c25cb4c56d868f5780c83206a1c757e8e",
+     "expected_seed_metadata_sha256": "b935e33ee5424d62fe4f524f2216e6cc7e77230fa1e8e7451ce683beb75083a5",
+     "expected_donor_metadata_sha256": "cbdd84eb43da27635f8e9c30bc2ec033c59655b9e62101364f58d37aa0e54914",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -10161,7 +10629,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxMatrix@@6B@",
-       "target_section": 163,
+       "target_section": 159,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -10172,7 +10640,7 @@
        "type": 6,
        "addend": 40,
        "target": "??_7MxMatrix@@6B@",
-       "target_section": 163,
+       "target_section": 159,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -10464,8 +10932,8 @@
      "expected_seed_body_sha256": "8817b0d0fe1346e2fb3237867fd669ef8f41aebd8eb62d2fd3cbdb551c73a52d",
      "expected_donor_body_sha256": "1bb50abe6bc190dfd8823b28de671638055d1b5c842d477d159dead2564ba359",
      "expected_body_sha256": "fb066b9e47dcce9adb706e837279e086d5ddf4a30a7f2980ba2bbe6502bd6972",
-     "expected_seed_metadata_sha256": "da61e21b4921c959ca3bafc6a53cd2f5d55fea209c7325a13bddbf0b859fb38d",
-     "expected_donor_metadata_sha256": "1167de1f5f971efe868fe1d88322c3533c42a6d7f5eb2f74ec7a3e632d289fd2",
+     "expected_seed_metadata_sha256": "99e1d9238b77685b027a88a1c8bb0684b7eb4df9510b4479a60ce5f7952b9807",
+     "expected_donor_metadata_sha256": "55879e2ac081340c60581c9d5ab111a31db2435fa5e83ed868fb290c90cf200b",
      "expected_closure": [
       ".debug$S",
       ".xdata$x"
@@ -10548,7 +11016,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Matrix4@@6B@",
-       "target_section": 160,
+       "target_section": 161,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -10559,7 +11027,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxMatrix@@6B@",
-       "target_section": 163,
+       "target_section": 159,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -10581,7 +11049,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Matrix4@@6B@",
-       "target_section": 160,
+       "target_section": 161,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -10592,7 +11060,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxMatrix@@6B@",
-       "target_section": 163,
+       "target_section": 159,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -11031,8 +11499,8 @@
      "expected_seed_body_sha256": "2fdb110f538d84a19821f9f7a431bc52c3d73c708409ec217cc2e9e2ff7cc654",
      "expected_donor_body_sha256": "2fdb110f538d84a19821f9f7a431bc52c3d73c708409ec217cc2e9e2ff7cc654",
      "expected_body_sha256": "64645c14c141578ec59eac0a5c523d8d34080a856261aa85d2258d6b8322fed2",
-     "expected_seed_metadata_sha256": "7d157a9ffc1bb55da9d24e069857b25ea0857488a742954501ec06c5aa5387ee",
-     "expected_donor_metadata_sha256": "20a50b6a6394b6c13a37a1a39a1d3eee393f2ecd08a1238a51c6ea82fdd6c7c5",
+     "expected_seed_metadata_sha256": "facaf293c74296a1c5d8bda3fc6600da53fbaa6d4f4888b4f205d64de1caa84b",
+     "expected_donor_metadata_sha256": "b8edec228d198a6232d76a2111813c2b5193bf48fd659f4edf02d32f10a6ba09",
      "expected_changed_offsets": [
       3,
       11,
@@ -11128,8 +11596,8 @@
      "expected_seed_body_sha256": "d67ac225978542948fa2488bd675a6562bed978855ffc8dcddbad16b140ffdcb",
      "expected_donor_body_sha256": "d67ac225978542948fa2488bd675a6562bed978855ffc8dcddbad16b140ffdcb",
      "expected_body_sha256": "98d4478db59e6702b4d625a4341d69b248bedd5b11d5ee41d3c9dbcca8645d4c",
-     "expected_seed_metadata_sha256": "62c30368e5e17e4f21cd2080e404645d3a07621ec710696b85e1c9ff02b0efd4",
-     "expected_donor_metadata_sha256": "bfcdfc1828c1ffda2f1c4516652cfb2fcf7d9694b2fc50985d3c8c7e402c1a90",
+     "expected_seed_metadata_sha256": "81347a88b88c168c9b178dbdb933a456892d5de89829bad210db958a45bf4ed9",
+     "expected_donor_metadata_sha256": "04eb0cdd1c9a9662716d32ca7da459b21a9c02404d85d00c71ea95e8c05d55f2",
      "expected_changed_offsets": [
       213,
       219,
@@ -11443,8 +11911,8 @@
      "expected_seed_body_sha256": "07b81c17430aa94b65d7929bad8f1d21602c5b68ffdb59c3c858abe9674c5ea6",
      "expected_donor_body_sha256": "07b81c17430aa94b65d7929bad8f1d21602c5b68ffdb59c3c858abe9674c5ea6",
      "expected_body_sha256": "8fa98f56b4ef68300c38c1dd8b83b00270623cd34a39520352bbdc88b312194a",
-     "expected_seed_metadata_sha256": "107d488a559e1dfede0de6234c8e8b1b7b015096b8d868c6c15b12406b776793",
-     "expected_donor_metadata_sha256": "5d5598519fc90fdfb256ef93a556a5b9967cd88c0b0129e69277560f49b8a509",
+     "expected_seed_metadata_sha256": "3b0ae0bf74aa489f468e89da6d1e0476615df412752df846e8316d6b56476015",
+     "expected_donor_metadata_sha256": "14016822a922a2bf658e875f10e21d9f3ae5427f7d564fea6c7cf346bf7a3881",
      "expected_changed_offsets": [
       224,
       225,
@@ -11621,8 +12089,8 @@
      "expected_seed_body_sha256": "a53d539c0846ad5328ec3b3a0ffa52cd9abaeed83da0f3f3c34e0d9f29721a8d",
      "expected_donor_body_sha256": "a53d539c0846ad5328ec3b3a0ffa52cd9abaeed83da0f3f3c34e0d9f29721a8d",
      "expected_body_sha256": "fc329d6aa96c6bf57348113a0b10e8950e05443be7e26cc056a8bc325a492781",
-     "expected_seed_metadata_sha256": "1f7f817e7027677b864980c0506c8c24d4a0ea0e9c6d3ca42ff1dfa10d0b9c21",
-     "expected_donor_metadata_sha256": "59f405a033e147a41f0bee4f99194f01ff12bb03873bed0a1f1590e12281c80a",
+     "expected_seed_metadata_sha256": "01e2f8b2f5000654972683b1fcb84b741bedad2339158063f982190aaff7e146",
+     "expected_donor_metadata_sha256": "b3d7c7358c8f86ad2273777f8f0d5a2333ad952a5896b064aaeecfb1cb6c2435",
      "expected_changed_offsets": [
       40,
       41,
@@ -11747,7 +12215,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Mx4DPointFloat@@6B@",
-       "target_section": 160,
+       "target_section": 161,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -11769,7 +12237,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Mx4DPointFloat@@6B@",
-       "target_section": 160,
+       "target_section": 161,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -11946,8 +12414,8 @@
      "expected_seed_body_sha256": "6e332f588844147d4d31d41dce6acc71c9a8db70355f1186da93232a3134f75c",
      "expected_donor_body_sha256": "6e332f588844147d4d31d41dce6acc71c9a8db70355f1186da93232a3134f75c",
      "expected_body_sha256": "9bf2e6dc58dffa609a1dd15bf2f3bcb3cc6763210cc5f7b6fbbdcb9fe67cf462",
-     "expected_seed_metadata_sha256": "1697f72ddd3faf1572a28457945e5e612cac16cc234482b8044eeb14ca1ceda3",
-     "expected_donor_metadata_sha256": "77b07eddf4072fc4ddf932dda40d22b5da0d6160b19c85a3983e0d9787d43f4f",
+     "expected_seed_metadata_sha256": "f6d43859bacd3be027af592469c3d95abe5b211fe6b9b664e2e2c73ced2cf276",
+     "expected_donor_metadata_sha256": "074a6095b4e7be645106116ccb8c7c6445abb10e0f96d803adb7d56fdd27e5ad",
      "expected_changed_offsets": [
       12,
       19,
@@ -12020,37 +12488,36 @@
     "may_replace_compiler_output": true
    },
    "group_order": [
-    [
-     "??_7Mx4DPointFloat@@6B@",
-     "??_7Matrix4@@6B@",
-     "??_7LegoAnimationManager@@6B@",
-     "??_7Vector2@@6B@",
-     "??_7MxMatrix@@6B@",
-     "??_7?$MxCollection@PAVLegoROI@@@@6B@",
-     "??_7?$MxList@PAVLegoROI@@@@6B@",
-     "??_7?$MxPtrList@VLegoROI@@@@6B@",
-     "??_7LegoROIList@@6B@",
-     "??_7LegoTranInfoList@@6B@",
-     "??_7?$MxCollection@PAULegoTranInfo@@@@6B@",
-     "??_7?$MxList@PAULegoTranInfo@@@@6B@",
-     "??_7?$MxPtrList@ULegoTranInfo@@@@6B@",
-     "??_7?$MxListCursor@PAULegoTranInfo@@@@6B@",
-     "??_7Vector3@@6B@",
-     "??_7LegoEntityListCursor@@6B@",
-     "??_7?$MxPtrListCursor@VLegoEntity@@@@6B@",
-     "??_7?$MxListCursor@PAVLegoEntity@@@@6B@",
-     "??_7Mx3DPointFloat@@6B@",
-     "??_7MxNotificationParam@@6B@",
-     "??_7LegoEndAnimNotificationParam@@6B@",
-     "??_7MxParam@@6B@",
-     "??_7?$MxPtrListCursor@ULegoTranInfo@@@@6B@",
-     "??_7LegoTranInfoListCursor@@6B@",
-     "??_7?$MxPtrListCursor@VLegoROI@@@@6B@",
-     "??_7LegoROIListCursor@@6B@",
-     "??_7?$MxListCursor@PAVLegoROI@@@@6B@",
-     "??_7LegoState@@6B@",
-     "??_7Vector4@@6B@"
-    ]
+    "??_7Mx4DPointFloat@@6B@",
+    "??_7Matrix4@@6B@",
+    "??_7LegoAnimationManager@@6B@",
+    "??_7Vector2@@6B@",
+    "??_7MxMatrix@@6B@",
+    "??_7?$MxCollection@PAVLegoROI@@@@6B@",
+    "??_7?$MxList@PAVLegoROI@@@@6B@",
+    "??_7?$MxPtrList@VLegoROI@@@@6B@",
+    "??_7LegoROIList@@6B@",
+    "??_7LegoTranInfoList@@6B@",
+    "??_7?$MxCollection@PAULegoTranInfo@@@@6B@",
+    "??_7?$MxList@PAULegoTranInfo@@@@6B@",
+    "??_7?$MxPtrList@ULegoTranInfo@@@@6B@",
+    "??_7?$MxListCursor@PAULegoTranInfo@@@@6B@",
+    "??_7Vector3@@6B@",
+    "??_7LegoEntityListCursor@@6B@",
+    "??_7?$MxPtrListCursor@VLegoEntity@@@@6B@",
+    "??_7?$MxListCursor@PAVLegoEntity@@@@6B@",
+    "??_7Mx3DPointFloat@@6B@",
+    "??_7MxNotificationParam@@6B@",
+    "??_7LegoEndAnimNotificationParam@@6B@",
+    "??_7MxParam@@6B@",
+    "??_7?$MxPtrListCursor@ULegoTranInfo@@@@6B@",
+    "??_7LegoTranInfoListCursor@@6B@",
+    "??_7?$MxPtrListCursor@VLegoROI@@@@6B@",
+    "??_7LegoROIListCursor@@6B@",
+    "??_7?$MxListCursor@PAVLegoROI@@@@6B@",
+    "??_7LegoState@@6B@",
+    "??_7Vector4@@6B@",
+    "??_7AnimState@@6B@"
    ]
   },
   {
@@ -15920,6 +16387,24 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_bf47df9b8588",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "forward_declaration_run",
+      "prefix": "MxUnkRecVB",
+      "count": 19,
+      "width": 3,
+      "placement": "after_includes",
+      "generated_header_sha256": "bf47df9b8588fe69fb437c2b62aea6b9753152a55a236a3e10966f920cc69bc8",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered with the translation unit; it contributes no code, data, strings, vtables, or linker directives."
+     }
     }
    ],
    "functions": [
@@ -15932,135 +16417,184 @@
      "expected_body_length": 4112,
      "expected_relocation_count": 261,
      "expected_line_count": 231,
-     "expected_seed_body_sha256": "7f6d5b0c7b36d7798499e3c212130df8cbac48fc5acddffb1a809592a48aba03",
-     "expected_donor_body_sha256": "9a4d86b33f91243deef027ea0787aa9d7100c99010591ea9e39377d5db1ed2d4",
+     "expected_seed_body_sha256": "00cb5c96217ecf7b5e19f08065882e171d3e8cd329e2a04ea588cfb22a104bca",
+     "expected_donor_body_sha256": "161b2b665dc1170be76b82fa7fb2210d452e5702cb08c356216fb615493946c8",
      "expected_body_sha256": "9013a8f10a7c663316d097102d86e33750c77d10127acdc60de34e4bec48f3ac",
      "instruction_ranges": [
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
        "start": 1625,
        "end": 1632,
        "seed_bytes": "8d843528ffffff",
        "seed_sha256": "d4dcb25d381ae565478f6a1d1676bf3d3607da28a9a1b83579a8d4e63541439a",
        "donor_bytes": "8d8c3528ffffff",
-       "donor_sha256": "370c8d4b2f2cdc507aee39c4b8ee8fbf3d715d159d9f92286a42dad287f6eac0"
+       "donor_sha256": "370c8d4b2f2cdc507aee39c4b8ee8fbf3d715d159d9f92286a42dad287f6eac0",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
        "start": 1632,
        "end": 1639,
        "seed_bytes": "8d8c352cffffff",
        "seed_sha256": "2b609da2dd3da407a87037562115328f82fef439599956a36460fe3790794657",
        "donor_bytes": "8d84352cffffff",
-       "donor_sha256": "2cd26d4b4e99683bf36c2dac5aa1e4165fb559bb4abcab098d89aeea4b958ede"
+       "donor_sha256": "2cd26d4b4e99683bf36c2dac5aa1e4165fb559bb4abcab098d89aeea4b958ede",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
        "start": 1645,
        "end": 1647,
        "seed_bytes": "d900",
        "seed_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c",
        "donor_bytes": "d901",
-       "donor_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755"
+       "donor_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
        "start": 1653,
        "end": 1655,
        "seed_bytes": "d901",
        "seed_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755",
        "donor_bytes": "d900",
-       "donor_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c"
+       "donor_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
        "start": 1667,
        "end": 1669,
        "seed_bytes": "d901",
        "seed_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755",
        "donor_bytes": "d900",
-       "donor_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c"
+       "donor_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
        "start": 1675,
        "end": 1677,
        "seed_bytes": "d900",
        "seed_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c",
        "donor_bytes": "d901",
-       "donor_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755"
+       "donor_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3141,
-       "end": 3147,
-       "seed_bytes": "8b8554ffffff",
-       "seed_sha256": "f78830c01e92de4cd7248dfa4296d26de3a657d8783c381c8d575866ce3cffd0",
-       "donor_bytes": "8b8d54ffffff",
-       "donor_sha256": "5ac58a3e3e7bd9d8a93433b1d2d4f41c5d2d60b5b8f71f4e92379d184d9d2654"
+       "start": 1784,
+       "end": 1801,
+       "seed_bytes": "d95da8dd0500000000d9ffd99d18ffffff",
+       "seed_sha256": "2bbe13ea71490b24aaf496feeb9039b5d9edde46b33f623f7d3e520743553e78",
+       "donor_bytes": "d99d18ffffffdd0500000000d9ffd95da8",
+       "donor_sha256": "f3d787b63c5d1ed5777650003cb8a635a02ec099ffd89864f0dbb40351d65902",
+       "donor": "d_bf47df9b8588",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        3,
+        6,
+        2,
+        6
+       ],
+       "donor_instruction_lengths": [
+        6,
+        6,
+        2,
+        3
+       ],
+       "relocation_reseat": true,
+       "seed_relocation_offsets": [
+        1789
+       ],
+       "donor_relocation_offsets": [
+        1792
+       ]
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3147,
-       "end": 3153,
-       "seed_bytes": "8b8d54ffffff",
-       "seed_sha256": "5ac58a3e3e7bd9d8a93433b1d2d4f41c5d2d60b5b8f71f4e92379d184d9d2654",
-       "donor_bytes": "8b8554ffffff",
-       "donor_sha256": "f78830c01e92de4cd7248dfa4296d26de3a657d8783c381c8d575866ce3cffd0"
+       "start": 1836,
+       "end": 1847,
+       "seed_bytes": "d88d18ffffffd901d84da8",
+       "seed_sha256": "8b6242984d87cb8ec05b6768594d76eb119e11dd5a57b8d74ec55a2edc5b2f54",
+       "donor_bytes": "d84da8d901d88d18ffffff",
+       "donor_sha256": "9f5594ada84cb121429fcd5673b08c815ad5e8c6e99931f6df934527650dab32",
+       "donor": "d_bf47df9b8588",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        6,
+        2,
+        3
+       ],
+       "donor_instruction_lengths": [
+        3,
+        2,
+        6
+       ]
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3153,
-       "end": 3156,
-       "seed_bytes": "83c008",
-       "seed_sha256": "6a4a22e2215f4d637a7de600d5327aa2ddb3d60a38c35e4ff29f44b3351d28ae",
-       "donor_bytes": "83c104",
-       "donor_sha256": "de40bc59184915c29d06f2d83944a51da12276621488d3ec285b94502f419126"
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3156,
-       "end": 3159,
-       "seed_bytes": "83c104",
-       "seed_sha256": "de40bc59184915c29d06f2d83944a51da12276621488d3ec285b94502f419126",
-       "donor_bytes": "83c008",
-       "donor_sha256": "6a4a22e2215f4d637a7de600d5327aa2ddb3d60a38c35e4ff29f44b3351d28ae"
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3169,
-       "end": 3171,
-       "seed_bytes": "d900",
-       "seed_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c",
-       "donor_bytes": "d901",
-       "donor_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755"
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3171,
-       "end": 3173,
-       "seed_bytes": "d808",
-       "seed_sha256": "d2e10a596e50a6d1d62df6473e17c1ca3337573659c941fdbef4684827751a39",
-       "donor_bytes": "d809",
-       "donor_sha256": "392e3c99e7f4c4c235defe5946cf24417d8e9aefede07672c349aff240f465b1"
-      },
-      {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3175,
-       "end": 3177,
+       "start": 1856,
+       "end": 1858,
        "seed_bytes": "d901",
        "seed_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755",
        "donor_bytes": "d900",
-       "donor_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c"
+       "donor_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
       },
       {
-       "kind": "same_offset_complete_x86_instruction_v1",
-       "start": 3177,
+       "start": 1864,
+       "end": 1866,
+       "seed_bytes": "d900",
+       "seed_sha256": "28426ff241652c8c0e9f9f2e7606e1b99c5714c87d6fdc0138412137e2f1be8c",
+       "donor_bytes": "d901",
+       "donor_sha256": "2bba1b052c922d602556dafd9daf61b8de4ac97f591b7dfcec293095157a3755",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_v1"
+      },
+      {
+       "start": 3141,
+       "end": 3159,
+       "seed_bytes": "8b8554ffffff8b8d54ffffff83c00883c104",
+       "seed_sha256": "1987cc740ee2f6d6271fe47b528e2cae5a34f7e7a67f9bf9843a3aef5a76dacb",
+       "donor_bytes": "8b8d54ffffff8b8554ffffff83c10483c008",
+       "donor_sha256": "d5640d1a908946fe583669e171c8a9389308ab1abfe8ab4e8f753afce0805548",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        6,
+        6,
+        3,
+        3
+       ],
+       "donor_instruction_lengths": [
+        6,
+        6,
+        3,
+        3
+       ]
+      },
+      {
+       "start": 3169,
        "end": 3179,
-       "seed_bytes": "d809",
-       "seed_sha256": "392e3c99e7f4c4c235defe5946cf24417d8e9aefede07672c349aff240f465b1",
-       "donor_bytes": "d808",
-       "donor_sha256": "d2e10a596e50a6d1d62df6473e17c1ca3337573659c941fdbef4684827751a39"
+       "seed_bytes": "d900d808dec1d901d809",
+       "seed_sha256": "3579fa3a1af7beeec0ae5d3a1ad76272c011fe375aa8c68b7dcf7a7848a5d3f5",
+       "donor_bytes": "d901d809dec1d900d808",
+       "donor_sha256": "51cf5f31a951f2a32af7d8e6e6045091c8e69608a4cc9647446aa40dd125e2c3",
+       "donor": "d_220110f729c6",
+       "kind": "same_offset_complete_x86_instruction_sequence_v1",
+       "seed_instruction_lengths": [
+        2,
+        2,
+        2,
+        2,
+        2
+       ],
+       "donor_instruction_lengths": [
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
       }
      ],
      "retail_oracle": {
@@ -18941,7 +19475,22 @@
        "target_storage": 6,
        "retail_target": "0x10055dd4"
       }
-     ]
+     ],
+     "expected_seed_metadata_sha256": "b53548bca03751f01d83117a60e830d81384170c71eb0d860943a246b2615f5a",
+     "expected_donor_metadata_sha256": "3ba0cc722418e2a8a290649a7c6bfbf18c652ec946810b64381da0002a674bd8",
+     "expected_donor_body_length": 4112,
+     "expected_donor_line_count": 231,
+     "donor_variants": [
+      {
+       "donor": "d_bf47df9b8588",
+       "expected_body_length": 4112,
+       "expected_line_count": 231,
+       "expected_body_sha256": "defb01523471b288a1da568ae50debb98a5b12da621be5a1d26d8bff57887e12",
+       "expected_metadata_sha256": "14b63c561cc60590bb96d30a90466136a23f1c47d2e8714dac801b3da537e052"
+      }
+     ],
+     "expected_mosaic_donor_body_sha256": "9c715040fe86a80a8ec950a781907428405956e3e054c24fe017d22887f76f64",
+     "expected_output_relocation_sha256": "5c00fe499e28f4ae1f2b5a3bdccc87bdfcf35f78aaa1830260ab1b762056182f"
     }
    ],
    "completion": {
@@ -20833,14 +21382,14 @@
    },
    "donors": [
     {
-     "id": "d_945e33b4ee80",
+     "id": "d_90c1df3a1305",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
       "kind": "declaration_shape",
-      "classes": 5,
+      "classes": 4,
       "functions": 21,
-      "generated_header_sha256": "945e33b4ee8049975a3fd22c4e2756839bd333baa2117e70dc088bb983645a2c",
+      "generated_header_sha256": "90c1df3a1305992f045dc0b1baafa3d89809563931310a49c174d4a4bf182f29",
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -20894,22 +21443,6 @@
      }
     },
     {
-     "id": "d_91cb3e339eea",
-     "status": "compiler_generated_current_source",
-     "authenticity": "synthetic_baseline_only",
-     "recipe": {
-      "kind": "declaration_shape",
-      "classes": 10,
-      "functions": 48,
-      "generated_header_sha256": "91cb3e339eea53da78540d65b3fbae5a2dc9b773215896cf6b036a73e1a95b38",
-      "compile_lane": {
-       "required_define": "DIRECTX5_SDK"
-      },
-      "emission_policy": "non_emitting_declarations_only",
-      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier rendered ahead of the translation unit; it contributes no code, data, strings, vtables, or linker directives."
-     }
-    },
-    {
      "id": "d_e277a8695ed2",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
@@ -20927,33 +21460,65 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_945e33b4ee80",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 5,
+      "functions": 21,
+      "generated_header_sha256": "945e33b4ee8049975a3fd22c4e2756839bd333baa2117e70dc088bb983645a2c",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a declaration shape is force-included ahead of the current effective translation unit; it emits no code, data, strings, vtables, nor linker directives."
+     }
+    },
+    {
+     "id": "d_2d8bfe201e7b",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 7,
+      "functions": 55,
+      "generated_header_sha256": "2d8bfe201e7b561e49bc49a812d6cd534731338ed229072303ea050239d52e0e",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a declaration shape is force-included ahead of the current effective translation unit; it emits no code, data, strings, vtables, nor linker directives."
+     }
     }
    ],
    "functions": [
     {
      "mangled": "?erase@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_945e33b4ee80",
+     "donor": "d_90c1df3a1305",
      "complete_donor": "d_5931aaed5bad",
      "splice_class": "retail_exact_cross_tu_complete_target_resize",
-     "expected_seed_length": 1104,
+     "expected_seed_length": 1097,
      "expected_donor_length": 1096,
      "expected_linked_span": 1104,
      "expected_characteristics": 1615859744,
      "expected_selection": 2,
-     "expected_seed_section_number": 434,
+     "expected_seed_section_number": 404,
      "expected_seed_section_count": 479,
      "expected_seed_relocation_count": 16,
      "expected_seed_line_count": 80,
-     "expected_seed_body_sha256": "d8791ec5c16d4c8a73e30549c7e6132dd73e48a16d564b160c04e0dc277e169b",
-     "expected_seed_metadata_sha256": "aa4b8afba76c4b47ac0cb5a23deb047a63c8eccf595a169838f3fed49b499421",
+     "expected_seed_body_sha256": "44c332d26fcdcccb524c65574878703703079d8306722abc90572cc55e95a091",
+     "expected_seed_metadata_sha256": "0d0e118dea718d9a08226816e57c22fe32d7aa07af99cfb1a3af44a3e6d888ea",
      "expected_seed_function_count": 149,
      "expected_seed_comdat_count": 174,
-     "expected_target_donor_section_number": 434,
+     "expected_target_donor_section_number": 404,
      "expected_target_donor_section_count": 479,
      "expected_target_donor_relocation_count": 16,
      "expected_target_donor_line_count": 80,
-     "expected_target_donor_body_sha256": "e9df0512ad5b38096092f6f9f6f05ad43efdde8706fd3b0dca3e7a8f4c585c47",
-     "expected_target_donor_metadata_sha256": "2fd282792027291b924fc6f1cf9b222106ecacdd300205becc2459d82fb07653",
+     "expected_target_donor_body_sha256": "702d5ec0e0bbbc725159ffb9385e1ee681141df43b08623cb2c175c52a0939ac",
+     "expected_target_donor_metadata_sha256": "4e97be57da506e4da0e7e758ae1e06c4072905baa3820cd281b7c5082d6dacfe",
      "expected_target_donor_function_count": 149,
      "expected_target_donor_comdat_count": 174,
      "expected_complete_donor_length": 1096,
@@ -20997,10 +21562,10 @@
       298
      ],
      "expected_normalized_body_sha256": "89ac1595e9a3ac4c0e1bbb9c9a076857a77f6bf1c090e63e2b9a1ae6c3363dfd",
-     "expected_normalized_line_sha256": "17a410b0889623bf57a36d89c69c4431dbbc19e8e63bc3313d8cd40b0c992cc0",
+     "expected_normalized_line_sha256": "87cca234cbc5a72c67d20750548063cbadecf9e960f42a8a117568051341e9bd",
      "expected_normalized_fpo_sha256": "0c2808ae9846569081d09c6698d9de6a05e4b4e55ef1f9792580cf56c51a9df7",
-     "expected_normalized_debug_s_sha256": "e422af9ec5ae8944829577f8529ba27e542a8dcc4cc0c2c765bef69186369f3a",
-     "expected_normalized_metadata_sha256": "fb5d31f7eb2722856fecfc4f589b66eeccf40ec4c04a939d15afaec88f3a109f",
+     "expected_normalized_debug_s_sha256": "67f6f6be0f48a9c62dae1b09777c7de45158917e17607e89c575550cf56dc391",
+     "expected_normalized_metadata_sha256": "e4d824cc0c280b4fd53fed2ae8052423348ada648f28c6981b12a814be05fab9",
      "retail_oracle": {
       "image": "LEGO1.DLL",
       "address": "0x1002bff0",
@@ -21013,7 +21578,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21024,7 +21589,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21035,7 +21600,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21046,7 +21611,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21057,7 +21622,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21068,7 +21633,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21079,7 +21644,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21090,7 +21655,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21101,7 +21666,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21112,7 +21677,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21123,7 +21688,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21134,7 +21699,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21145,7 +21710,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21156,7 +21721,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21167,7 +21732,7 @@
        "type": 6,
        "addend": 0,
        "target": "?_Nil@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@1PAU_Node@1@A",
-       "target_section": 423,
+       "target_section": 393,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -21191,6 +21756,8 @@
      "expected_body_length": 92,
      "expected_body_sha256": "8e107d4a821eb26c06e8e59fd63ec9ce5f411b66403e1c25124e71d8596d0050",
      "expected_changed_offsets": [
+      10,
+      13,
       15,
       17,
       18,
@@ -21200,7 +21767,10 @@
       35,
       39,
       41,
-      42
+      42,
+      50,
+      60,
+      73
      ],
      "splice_class": "equal_body_strict",
      "donor": "d_945e33b4ee80"
@@ -21219,72 +21789,13 @@
     },
     {
      "mangled": "?CheckPresenterAndActorIntersections@LegoExtraActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
-     "expected_body_length": 1375,
      "expected_body_sha256": "90f510f99952233ae82b36e8c0af354c5ccd5f9a0391e4365cf65e8eaab16341",
-     "expected_changed_offsets": [
-      321,
-      324,
-      330,
-      332,
-      343,
-      356,
-      401
-     ],
-     "splice_class": "equal_body_eh_structural_local",
-     "expected_code_renames": [
-      [
-       12,
-       "L"
-      ],
-      [
-       710,
-       "T"
-      ],
-      [
-       761,
-       "T"
-      ],
-      [
-       773,
-       "T"
-      ],
-      [
-       792,
-       "T"
-      ],
-      [
-       815,
-       "T"
-      ],
-      [
-       829,
-       "T"
-      ],
-      [
-       852,
-       "T"
-      ],
-      [
-       990,
-       "T"
-      ],
-      [
-       1006,
-       "T"
-      ],
-      [
-       1358,
-       "T"
-      ]
-     ],
-     "expected_xdata_rename_offsets": [
-      8,
-      36,
-      44,
-      52,
-      60
-     ],
-     "donor": "d_91cb3e339eea"
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1370,
+     "expected_donor_length": 1375,
+     "expected_linked_span": 1376,
+     "donor": "d_2d8bfe201e7b",
+     "expected_donor_section_number": 421
     },
     {
      "mangled": "?HitActor@LegoExtraActor@@UAEJPAVLegoPathActor@@E@Z",
@@ -21462,6 +21973,22 @@
      ],
      "expected_xdata_rename_offsets": [],
      "donor": "d_5c8f94e9502d"
+    },
+    {
+     "mangled": "?_Copy@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@IAEXABV1@@Z",
+     "donor": "d_945e33b4ee80",
+     "splice_class": "equal_body_strict",
+     "expected_body_length": 230,
+     "expected_body_sha256": "0242193983ff9d0041c4222ad443c362a263276e50c80067768dde05fcbc7daa",
+     "expected_changed_offsets": [
+      64,
+      201,
+      204,
+      207,
+      215,
+      220
+     ],
+     "expected_donor_section_number": 443
     }
    ],
    "completion": {
@@ -22796,7 +23323,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-   "source_sha256": "794a53f01780ba64ba634ee6a172fcd63fe03ca32ea8c733dc9edebb6a7bda08",
+   "source_sha256": "1b14f3554ae7e8af05ba5dc3710ec479757bfb3bf5a7cf2b75f0132e4a3f08be",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -24123,8 +24650,8 @@
      "expected_seed_body_sha256": "fbf5fc785b6d23cef164eff564e3233ea498d44ffd216dc62a38666851b27b60",
      "expected_donor_body_sha256": "518c3d4768bcde12d9b39ab6af93c2e329fb1939ce0d96457c5f68a86b5522a2",
      "expected_body_sha256": "3fcccc69abdf18643ec5dcbd8e8014188c163d783ae758873e596b7474176599",
-     "expected_seed_metadata_sha256": "a11a9f1a80b3094a9b10ca170dfd2dbc214a6750060a6b5bca507ee2029132de",
-     "expected_donor_metadata_sha256": "e7b03660d8180e0197888f1d8a508d43635b51014f96a4a5bf0940bfd215e475",
+     "expected_seed_metadata_sha256": "923d86cca2f32879461939bc9f893c6e06c2c4eca7fed4db906805260ab86f5a",
+     "expected_donor_metadata_sha256": "1f57d53f94df49e8624bced8f2770acea7f1c01fc1c3359f401038515b7eb6df",
      "expected_closure": [
       ".debug$S",
       ".xdata$x"
@@ -24228,7 +24755,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Mx3DPointFloat@@6B@",
-       "target_section": 116,
+       "target_section": 117,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -24250,7 +24777,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Mx3DPointFloat@@6B@",
-       "target_section": 116,
+       "target_section": 117,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -24261,7 +24788,7 @@
        "type": 20,
        "addend": 0,
        "target": "?LenSquared@Vector3@@UBEMXZ",
-       "target_section": 264,
+       "target_section": 165,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -24272,7 +24799,7 @@
        "type": 20,
        "addend": 0,
        "target": "?LenSquared@Vector3@@UBEMXZ",
-       "target_section": 264,
+       "target_section": 165,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -24316,7 +24843,7 @@
        "type": 20,
        "addend": 0,
        "target": "?LenSquared@Vector3@@UBEMXZ",
-       "target_section": 264,
+       "target_section": 165,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -24382,7 +24909,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Mx3DPointFloat@@6B@",
-       "target_section": 116,
+       "target_section": 117,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -24393,7 +24920,7 @@
        "type": 20,
        "addend": 0,
        "target": "?LenSquared@Vector3@@UBEMXZ",
-       "target_section": 264,
+       "target_section": 165,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -24459,7 +24986,7 @@
        "type": 20,
        "addend": 0,
        "target": "?LenSquared@Vector3@@UBEMXZ",
-       "target_section": 264,
+       "target_section": 165,
        "target_value": 0,
        "target_type": 32,
        "target_storage": 2,
@@ -25455,6 +25982,22 @@
       "emission_policy": "non_emitting_declarations_only",
       "authenticity_rationale": "Framework-generated extern-declaration compiler-state carrier seated after the include block and at end of file; it contributes no code, data, strings, vtables, or linker directives."
      }
+    },
+    {
+     "id": "d_33a3188514ec",
+     "status": "compiler_generated_current_source",
+     "authenticity": "synthetic_baseline_only",
+     "recipe": {
+      "kind": "declaration_shape",
+      "classes": 4,
+      "functions": 19,
+      "generated_header_sha256": "33a3188514ec4e333c44bd840c56b9682839c34d580b7793291838996c8cdf33",
+      "compile_lane": {
+       "required_define": "DIRECTX5_SDK"
+      },
+      "emission_policy": "non_emitting_declarations_only",
+      "authenticity_rationale": "Framework-generated declaration-only compiler-state carrier: a declaration shape is force-included ahead of the current effective translation unit; it emits no code, data, strings, vtables, nor linker directives."
+     }
     }
    ],
    "functions": [
@@ -25509,7 +26052,7 @@
       390
      ],
      "splice_class": "equal_body_eh_structural_local",
-     "expected_donor_section_number": 404,
+     "expected_donor_section_number": 296,
      "expected_xdata_rename_offsets": [
       8,
       36,
@@ -25528,6 +26071,16 @@
       ]
      ],
      "donor": "d_05cd9c5c4213"
+    },
+    {
+     "mangled": "?CheckPresenterAndActorIntersections@LegoCarRaceActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
+     "expected_body_sha256": "f8807eae26e83bcac73faf75b3f42001ae923e4a39bd0f70eec6df2ced0f424e",
+     "splice_class": "same_slot_resize",
+     "expected_seed_length": 1173,
+     "expected_donor_length": 1168,
+     "expected_linked_span": 1168,
+     "expected_donor_section_number": 412,
+     "donor": "d_33a3188514ec"
     }
    ],
    "completion": {
@@ -30143,7 +30696,14 @@
      "??_7?$MxCollection@PAVLegoLOD@@@@6B@",
      "??_7?$MxList@PAVLegoLOD@@@@6B@",
      "??_7?$MxPtrList@VLegoLOD@@@@6B@",
-     "??_7LegoLODList@@6B@"
+     "??_7LegoLODList@@6B@",
+     "??_7?$MxCollection@PAVLegoNamedPart@@@@6B@",
+     "??_7?$MxList@PAVLegoNamedPart@@@@6B@",
+     "??_7?$MxPtrList@VLegoNamedPart@@@@6B@",
+     "??_7LegoNamedPartList@@6B@",
+     "??_7?$MxListCursor@PAVLegoLOD@@@@6B@",
+     "??_7?$MxPtrListCursor@VLegoLOD@@@@6B@",
+     "??_7LegoLODListCursor@@6B@"
     ]
    ]
   },
@@ -30955,8 +31515,8 @@
      "expected_seed_body_sha256": "d93ed098d0592ca80bdcbbf5d0d54181804ed4dcaab8335a13e7157f27fc4735",
      "expected_donor_body_sha256": "a105c6f11822bcc2c6d3e3661a05397945bd2d93da1e6795fcbe10c3ceb7fb8e",
      "expected_body_sha256": "899f07f5ec4433c71c0fbe788c39a435c716e17d8a2189985b5e17622b5f57e7",
-     "expected_seed_metadata_sha256": "55892d4d5d51eec1da0374666289174002ee3040e62ad082377428c6a789d3fc",
-     "expected_donor_metadata_sha256": "85173490e15e868d887739d4d24751f28ac667e12d9f3b18cb3deae8186b5918",
+     "expected_seed_metadata_sha256": "2faf210c434e07405770e3ff790ac26d08740461878c875ab793b035f42ddfbc",
+     "expected_donor_metadata_sha256": "373b986a9ec6c5dbe82cc2b32254b66ceb8dac5731864e714f3f502ac4d216cc",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -32376,8 +32936,8 @@
      "expected_seed_body_sha256": "b57e9a2f5d4e5d6d19c60209470358bd7e07f6491b3922e1d0eccc0d245c3261",
      "expected_donor_body_sha256": "19fd74e3e7e09eb52a2055987afcb2c2c3198fbae081eee373406afca453a265",
      "expected_body_sha256": "ce5b67d39c6a55c709d5fd8aa7bf3063eabd93de2e4cccdcccb1315773e67c3a",
-     "expected_seed_metadata_sha256": "5cb89f7384e410865e25b96297f79f56a4850be9f884437cb035623533016820",
-     "expected_donor_metadata_sha256": "3af93f82b115e422bb012d102f8819d0e559c0e4f595651a3a721c6acccb2127",
+     "expected_seed_metadata_sha256": "882c35f77ac9d186dc8f045bdd274bc4b0d9b8636d73cb52d433012b96b80828",
+     "expected_donor_metadata_sha256": "088b20d15feceaff869957fcafb5c09a4fcdd44e5675d0a08db9d2c97c8b1adc",
      "expected_closure": [
       ".debug$S",
       ".xdata$x"
@@ -32782,7 +33342,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32793,7 +33353,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32925,7 +33485,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32936,7 +33496,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32947,7 +33507,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 67,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -32991,7 +33551,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33002,7 +33562,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33068,7 +33628,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33079,7 +33639,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33178,7 +33738,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33189,7 +33749,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33200,7 +33760,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 67,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33277,7 +33837,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33288,7 +33848,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33299,7 +33859,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 67,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33376,7 +33936,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33387,7 +33947,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33398,7 +33958,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 67,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33475,7 +34035,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33486,7 +34046,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33497,7 +34057,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 67,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33574,7 +34134,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33585,7 +34145,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33596,7 +34156,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 67,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33673,7 +34233,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxParam@@6B@",
-       "target_section": 69,
+       "target_section": 67,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33684,7 +34244,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxNotificationParam@@6B@",
-       "target_section": 68,
+       "target_section": 69,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -33695,7 +34255,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7LegoEventNotificationParam@@6B@",
-       "target_section": 67,
+       "target_section": 68,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -35931,7 +36491,7 @@
      "expected_donor_body_sha256": "bbf0c73d1ba5db5fb7fdd0fa315cb79815c407b2a666708b629e98a88aba66bb",
      "expected_body_sha256": "a55f1e9a23d6a914e674c41025cf91c808a696c81894cbc1035e217ec9382ed9",
      "expected_seed_metadata_sha256": "c2dba0af0b54fbf999dc32f3bdaf82c5c135fd4a3ca3f91f0e0003dfecd7c08c",
-     "expected_donor_metadata_sha256": "4031f4ca299ea24cc57c6cce2abc443ef15c2297e5fe1662e4385a6389e752e7",
+     "expected_donor_metadata_sha256": "84c43436758f7a570580d7688b6a399326dbcb5ba2e159d724db100166abf72f",
      "expected_changed_offsets": [
       440,
       444,
@@ -36849,7 +37409,11 @@
     "state": "object_composition_enabled_final_gates_incomplete",
     "reason": "Closes 1 row in LEGO1/lego/legoomni/src/worlds/legoact2.cpp: a web-recolour certificate over a generated declaration-only carrier state of the rendered current source.",
     "may_replace_compiler_output": true
-   }
+   },
+   "group_order": [
+    "??_7MxActionNotificationParam@@6B@",
+    "??_7MxEndActionNotificationParam@@6B@"
+   ]
   },
   {
    "target": "lego1",
@@ -37653,35 +38217,45 @@
     "may_replace_compiler_output": true
    },
    "group_order": [
-    "?SetDuration@MxDSParallelAction@@UAEXJ@Z",
-    "?IsA@MxCore@@UBEEPBD@Z",
-    "?ClassName@MxCore@@UBEPBDXZ",
-    "?Tickle@MxCore@@UAEJXZ",
-    "?Compare@?$MxCollection@VMxString@@@@UAECVMxString@@0@Z",
-    "??1?$MxCollection@VMxString@@@@UAE@XZ",
-    "?Destroy@?$MxCollection@VMxString@@@@SAXVMxString@@@Z",
-    "??1?$MxList@VMxString@@@@UAE@XZ",
-    "??_G?$MxCollection@VMxString@@@@UAEPAXI@Z",
-    "??_G?$MxList@VMxString@@@@UAEPAXI@Z",
-    "?ClassName@MxDSSelectAction@@UBEPBDXZ",
-    "?IsA@MxDSSelectAction@@UBEEPBD@Z",
-    "??_GMxDSSelectAction@@UAEPAXI@Z",
-    "??_GMxStringList@@UAEPAXI@Z",
-    "??1MxDSSelectAction@@UAE@XZ",
-    "?CopyFrom@MxDSSelectAction@@QAEXAAV1@@Z",
-    "?Append@?$MxList@VMxString@@@@QAEXVMxString@@@Z",
-    "??_GMxStringListCursor@@UAEPAXI@Z",
-    "??1?$MxListCursor@VMxString@@@@UAE@XZ",
-    "??_G?$MxListCursor@VMxString@@@@UAEPAXI@Z",
-    "??1MxStringListCursor@@UAE@XZ",
-    "??0MxDSSelectAction@@QAE@AAV0@@Z",
-    "??4MxDSSelectAction@@QAEAAV0@AAV0@@Z",
-    "?Clone@MxDSSelectAction@@UAEPAVMxDSAction@@XZ",
-    "?GetSizeOnDisk@MxDSSelectAction@@UAEIXZ",
-    "?Deserialize@MxDSSelectAction@@UAEXAAPAEF@Z",
-    "?InsertEntry@?$MxList@VMxString@@@@IAEPAV?$MxListEntry@VMxString@@@@VMxString@@PAV2@1@Z",
-    "??0?$MxListEntry@VMxString@@@@QAE@VMxString@@PAV0@1@Z",
-    "?GetValue@?$MxListEntry@VMxString@@@@QAE?AVMxString@@XZ"
+    [
+     "?SetDuration@MxDSParallelAction@@UAEXJ@Z",
+     "?IsA@MxCore@@UBEEPBD@Z",
+     "?ClassName@MxCore@@UBEPBDXZ",
+     "?Tickle@MxCore@@UAEJXZ",
+     "?Compare@?$MxCollection@VMxString@@@@UAECVMxString@@0@Z",
+     "??1?$MxCollection@VMxString@@@@UAE@XZ",
+     "?Destroy@?$MxCollection@VMxString@@@@SAXVMxString@@@Z",
+     "??1?$MxList@VMxString@@@@UAE@XZ",
+     "??_G?$MxCollection@VMxString@@@@UAEPAXI@Z",
+     "??_G?$MxList@VMxString@@@@UAEPAXI@Z",
+     "?ClassName@MxDSSelectAction@@UBEPBDXZ",
+     "?IsA@MxDSSelectAction@@UBEEPBD@Z",
+     "??_GMxDSSelectAction@@UAEPAXI@Z",
+     "??_GMxStringList@@UAEPAXI@Z",
+     "??1MxDSSelectAction@@UAE@XZ",
+     "?CopyFrom@MxDSSelectAction@@QAEXAAV1@@Z",
+     "?Append@?$MxList@VMxString@@@@QAEXVMxString@@@Z",
+     "??_GMxStringListCursor@@UAEPAXI@Z",
+     "??1?$MxListCursor@VMxString@@@@UAE@XZ",
+     "??_G?$MxListCursor@VMxString@@@@UAEPAXI@Z",
+     "??1MxStringListCursor@@UAE@XZ",
+     "??0MxDSSelectAction@@QAE@AAV0@@Z",
+     "??4MxDSSelectAction@@QAEAAV0@AAV0@@Z",
+     "?Clone@MxDSSelectAction@@UAEPAVMxDSAction@@XZ",
+     "?GetSizeOnDisk@MxDSSelectAction@@UAEIXZ",
+     "?Deserialize@MxDSSelectAction@@UAEXAAPAEF@Z",
+     "?InsertEntry@?$MxList@VMxString@@@@IAEPAV?$MxListEntry@VMxString@@@@VMxString@@PAV2@1@Z",
+     "??0?$MxListEntry@VMxString@@@@QAE@VMxString@@PAV0@1@Z",
+     "?GetValue@?$MxListEntry@VMxString@@@@QAE?AVMxString@@XZ"
+    ],
+    [
+     "??_7MxDSSelectAction@@6B@",
+     "??_7?$MxCollection@VMxString@@@@6B@",
+     "??_7?$MxList@VMxString@@@@6B@",
+     "??_7MxStringList@@6B@",
+     "??_7MxStringListCursor@@6B@",
+     "??_7?$MxListCursor@VMxString@@@@6B@"
+    ]
    ]
   },
   {
@@ -38140,16 +38714,17 @@
      "??_G?$MxHashTable@PAVMxVariable@@@@UAEPAXI@Z"
     ],
     [
-     "??_7MxVariableTable@@6B@",
      "??_7MxNotificationParam@@6B@",
-     "??_7MxTickleManager@@6B@",
-     "??_7?$MxHashTable@PAVMxVariable@@@@6B@",
-     "??_7MxType4NotificationParam@@6B@",
-     "??_7MxStartActionNotificationParam@@6B@",
+     "??_7MxParam@@6B@",
      "??_7MxDSActionListCursor@@6B@",
      "??_7?$MxListCursor@PAVMxDSAction@@@@6B@",
-     "??_7MxParam@@6B@",
-     "??_7MxActionNotificationParam@@6B@"
+     "??_7MxActionNotificationParam@@6B@",
+     "??_7MxTickleManager@@6B@",
+     "??_7?$MxCollection@PAVMxVariable@@@@6B@",
+     "??_7MxVariableTable@@6B@",
+     "??_7?$MxHashTable@PAVMxVariable@@@@6B@",
+     "??_7MxType4NotificationParam@@6B@",
+     "??_7MxStartActionNotificationParam@@6B@"
     ]
    ]
   },
@@ -41620,7 +42195,7 @@
    },
    "donors": [
     {
-     "id": "d_4c77c6181155",
+     "id": "d_d5241275c1d8",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -41669,8 +42244,8 @@
        },
        {
         "path": "LEGO1/realtime/realtime.h",
-        "clean_sha256": "32e1c4664cae19ea81a62d38178e888fdc48460bfe171cd7768b2dd9d924844c",
-        "rendered_sha256": "d63ddbdaac651991a5fa313390ee932ab3e2e5fa62942fd3593e2fdaeaa603c4",
+        "clean_sha256": "0f4e4bb24bbb99f2141da045707947f18979229262e24a27505842b940e76b6b",
+        "rendered_sha256": "609d734ec7ba0de76fd62c28d6fbf996fd2d7819d7caafe9998ae1a9a57665e3",
         "operations": [
          {
           "op": "insert",
@@ -41692,7 +42267,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "4c77c6181155c917f47b0e760dcd22dfdc2226e861a87762841303a7bc7d06da",
+      "rendering_identity_sha256": "d5241275c1d800787b63c89112ebb137481c81549fabc840181803e6b9450fcb",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering leaves the target translation unit unchanged and applies two bounded, typed compiler-state source permutations in checked-in headers. The explicit default-constructor form is treated as an authenticated donor-only permutation, not a generally logic-neutral shipped-source change. Target-only extraction retains the seed object shell and admits only the retail-exact same-name target closure."
      }
@@ -41750,8 +42325,8 @@
      "expected_seed_body_sha256": "cf0dbe538e73593fe5e31ffcdcc9e5610f8da4730a127e1488a502a5f70ee884",
      "expected_donor_body_sha256": "bb72cdd5c7052c3e8362dbc9021986445217478a5a00073be9a3f38a71276b29",
      "expected_body_sha256": "447b52a765e9f0ab7677f35787764298daebcf4abdaf8eaa217190a39b924927",
-     "expected_seed_metadata_sha256": "79c479f59fade11132283c3ce14233d0a156339b8b77247ea1089a56436591db",
-     "expected_donor_metadata_sha256": "54c28516c7d6b76913ac096120374e2ebc2795cd30d50d03d837de9dd71b704b",
+     "expected_seed_metadata_sha256": "1bf561ac6e4ab7232dffb06c35c5913f9c2de1d04e5698fb4afe34f53a1e0b58",
+     "expected_donor_metadata_sha256": "436ddd42dc0bea3acf308b946fbb036cd533c68f2fe1e2d08efd978427d3e7bd",
      "expected_closure": [
       ".debug$F",
       ".debug$S"
@@ -41768,7 +42343,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxMatrix@@6B@",
-       "target_section": 8,
+       "target_section": 7,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -42212,7 +42787,7 @@
     },
     {
      "mangled": "??0OrientableROI@@QAE@XZ",
-     "donor": "d_4c77c6181155",
+     "donor": "d_d5241275c1d8",
      "splice_class": "retail_exact_source_target_closure",
      "expected_seed_length": 520,
      "expected_donor_length": 514,
@@ -42288,7 +42863,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7ROI@@6B@",
-       "target_section": 11,
+       "target_section": 9,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -42299,7 +42874,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Matrix4@@6B@",
-       "target_section": 9,
+       "target_section": 11,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -42310,7 +42885,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7MxMatrix@@6B@",
-       "target_section": 7,
+       "target_section": 8,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -42431,7 +43006,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7OrientableROI@@6B@",
-       "target_section": 10,
+       "target_section": 7,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -42442,7 +43017,7 @@
        "type": 6,
        "addend": 0,
        "target": "??_7Vector2@@6B@",
-       "target_section": 8,
+       "target_section": 10,
        "target_value": 0,
        "target_type": 0,
        "target_storage": 2,
@@ -42521,26 +43096,32 @@
     "may_replace_compiler_output": true
    },
    "group_order": [
-    "??_GOrientableROI@@UAEPAXI@Z",
-    "?WrappedSetLocal2WorldWithWorldDataUpdate@OrientableROI@@QAEXABVMatrix4@@@Z",
-    "?UpdateTransformationRelativeToParent@OrientableROI@@QAEXABVMatrix4@@@Z",
-    "?WrappedUpdateWorldDataWithTransform@OrientableROI@@QAEXABVMatrix4@@@Z",
-    "?GetLocalTransform@OrientableROI@@QAEXAAVMatrix4@@@Z",
-    "?SetLocal2World@OrientableROI@@QAEXABVMatrix4@@@Z",
-    "?UpdateWorldData@OrientableROI@@UAEXXZ",
-    "?SetLocal2WorldWithWorldDataUpdate@OrientableROI@@UAEXABVMatrix4@@@Z",
-    "?UpdateWorldDataWithTransform@OrientableROI@@UAEXABVMatrix4@@@Z",
-    "?UpdateWorldDataWithTransformAndChildren@OrientableROI@@UAEXABVMatrix4@@@Z",
-    "?SetWorldVelocity@OrientableROI@@QAEXABVVector3@@@Z",
-    "?UpdateWorldVelocity@OrientableROI@@UAEXXZ",
-    "?CalcWorldBoundingVolumes@@YAXABVBoundingSphere@@ABVMatrix4@@AAVBoundingBox@@AAV1@@Z",
-    "?CalcLocalTransform@@YAXABVVector3@@00AAVMatrix4@@@Z",
-    "??1ROI@@UAE@XZ",
-    "??_GROI@@UAEPAXI@Z",
-    "?GetWorldVelocity@OrientableROI@@UBEPBMXZ",
-    "?GetWorldBoundingBox@OrientableROI@@UBEABVBoundingBox@@XZ",
-    "?GetWorldBoundingSphere@OrientableROI@@UBEABVBoundingSphere@@XZ",
-    "?WrappedUpdateWorldData@OrientableROI@@UAEXXZ"
+    [
+     "??_GOrientableROI@@UAEPAXI@Z",
+     "?WrappedSetLocal2WorldWithWorldDataUpdate@OrientableROI@@QAEXABVMatrix4@@@Z",
+     "?UpdateTransformationRelativeToParent@OrientableROI@@QAEXABVMatrix4@@@Z",
+     "?WrappedUpdateWorldDataWithTransform@OrientableROI@@QAEXABVMatrix4@@@Z",
+     "?GetLocalTransform@OrientableROI@@QAEXAAVMatrix4@@@Z",
+     "?SetLocal2World@OrientableROI@@QAEXABVMatrix4@@@Z",
+     "?UpdateWorldData@OrientableROI@@UAEXXZ",
+     "?SetLocal2WorldWithWorldDataUpdate@OrientableROI@@UAEXABVMatrix4@@@Z",
+     "?UpdateWorldDataWithTransform@OrientableROI@@UAEXABVMatrix4@@@Z",
+     "?UpdateWorldDataWithTransformAndChildren@OrientableROI@@UAEXABVMatrix4@@@Z",
+     "?SetWorldVelocity@OrientableROI@@QAEXABVVector3@@@Z",
+     "?UpdateWorldVelocity@OrientableROI@@UAEXXZ",
+     "?CalcWorldBoundingVolumes@@YAXABVBoundingSphere@@ABVMatrix4@@AAVBoundingBox@@AAV1@@Z",
+     "?CalcLocalTransform@@YAXABVVector3@@00AAVMatrix4@@@Z",
+     "??1ROI@@UAE@XZ",
+     "??_GROI@@UAEPAXI@Z",
+     "?GetWorldVelocity@OrientableROI@@UBEPBMXZ",
+     "?GetWorldBoundingBox@OrientableROI@@UBEABVBoundingBox@@XZ",
+     "?GetWorldBoundingSphere@OrientableROI@@UBEABVBoundingSphere@@XZ",
+     "?WrappedUpdateWorldData@OrientableROI@@UAEXXZ"
+    ],
+    [
+     "??_7OrientableROI@@6B@",
+     "??_7ROI@@6B@"
+    ]
    ]
   },
   {
@@ -43521,8 +44102,8 @@
      "expected_seed_body_sha256": "6682a3cdf61830c60ed1d1628a01d9cd63555d4a15649aba2669442151c22ec7",
      "expected_donor_body_sha256": "6682a3cdf61830c60ed1d1628a01d9cd63555d4a15649aba2669442151c22ec7",
      "expected_body_sha256": "62b0169fecc2e748902f02e480fd02d9aa2b1c9ed9efab11f9845b7ce11ca704",
-     "expected_seed_metadata_sha256": "c518caee1673a66fb7b6afa9098b9ea36374aeb498d18c547ac17f4cbb94b68d",
-     "expected_donor_metadata_sha256": "b5e1eb7ee40a86942f90a65444718b8e8894c4f8ae5bd641dbe3539e6e9f493c",
+     "expected_seed_metadata_sha256": "9c49deb5395e3f9d938a9cbbba61b5810a62d7e610bd12edd28995ae9dd011f3",
+     "expected_donor_metadata_sha256": "f9ba8cb34904c2db60ee7ea2196edbd9c2c9fd868990426ce4129e3743b9cf3e",
      "expected_changed_offsets": [
       688,
       691,
@@ -48740,7 +49321,7 @@
    ],
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
-    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT’s own FPO record declares FRAME_FPO.",
+    "reason": "Closes the ViewLODList map _Erase 0x100a7db0 and iterator _Dec 0x100a7800 rows from one generated forward-run carrier state, and the _Tree::erase row 0x100a7960 from a second: at that carrier the body differs from retail by two register bijections, one of which names EBP -- an ordinary callee-saved register here, because this COMDAT\u2019s own FPO record declares FRAME_FPO.",
     "may_replace_compiler_output": true
    },
    "group_order": [
@@ -49375,6 +49956,71 @@
    "completion": {
     "state": "object_composition_enabled_final_gates_incomplete",
     "reason": "Restores the rows the in-class Clone definitions move: the two MxNotificationParam Clone bodies join their classes' flush group in mxmain.cpp.obj, and these bodies keep the schedule they had before the header change.",
+    "may_replace_compiler_output": true
+   }
+  },
+  {
+   "target": "lego1",
+   "source": "LEGO1/lego/legoomni/src/race/legoracers.cpp",
+   "source_sha256": "790380db7ce4d1feb173aa177c40724f2cbe2be82cb6bddc7e87bc3a8cce3375",
+   "mode": "restore_comdat_group_order",
+   "command_policy": {
+    "required_flags": [
+     "/Zi",
+     "-c"
+    ],
+    "forbidden_prefixes": [
+     "/GL",
+     "-GL",
+     "/Z7",
+     "-Z7"
+    ]
+   },
+   "group_order": [
+    "?ClassName@MxEntity@@UBEPBDXZ",
+    "??_ELegoJetski@@$4PPPPPPPM@A@AEPAXI@Z",
+    "??_GLegoJetski@@UAEPAXI@Z",
+    "?Notify@LegoJetski@@$4PPPPPPPM@A@AEJAAVMxParam@@@Z",
+    "?ClassName@LegoJetski@@$4PPPPPPPM@A@BEPBDXZ",
+    "?ClassName@LegoJetski@@UBEPBDXZ",
+    "?IsA@LegoJetski@@$4PPPPPPPM@A@BEEPBD@Z",
+    "?IsA@LegoJetski@@UBEEPBD@Z",
+    "?IsA@MxCore@@UBEEPBD@Z",
+    "?ParseAction@LegoJetski@@$4PPPPPPPM@A@AEXPAD@Z",
+    "?SetWorldSpeed@LegoJetski@@$4PPPPPPPM@A@AEXM@Z",
+    "?CheckIntersections@LegoRaceActor@@$4PPPPPPPM@PPPPPOIA@AEHAAVVector3@@00@Z",
+    "?CheckPresenterAndActorIntersections@LegoJetski@@$4PPPPPPPM@A@AEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
+    "?CheckPresenterAndActorIntersections@LegoJetski@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
+    "?Animate@LegoJetski@@$4PPPPPPPM@A@AEXM@Z",
+    "?ApplyTransform@LegoAnimActor@@$4PPPPPPPM@PPPPPOIM@AEXAAVMatrix4@@@Z",
+    "?StepState@LegoRaceActor@@$4PPPPPPPM@PPPPPOIA@AEIMAAVMatrix4@@@Z",
+    "?HitActor@LegoJetski@@$4PPPPPPPM@A@AEJPAVLegoPathActor@@E@Z",
+    "?SwitchBoundary@LegoJetski@@$4PPPPPPPM@A@AEXAAPAVLegoPathBoundary@@AAPAULegoOrientedEdge@@AAM@Z",
+    "?SwitchBoundary@LegoJetski@@UAEXAAPAVLegoPathBoundary@@AAPAULegoOrientedEdge@@AAM@Z",
+    "?CalculateSpline@LegoJetski@@$4PPPPPPPM@A@AEJXZ",
+    "?CalculateSpline@LegoJetski@@UAEJXZ",
+    "?HandleJump@LegoJetskiRaceActor@@$4PPPPPPPM@A@AEHPAVLegoPathBoundary@@PAULegoEdge@@@Z",
+    "??_ELegoRaceCar@@$4PPPPPPPM@A@AEPAXI@Z",
+    "??_GLegoRaceCar@@UAEPAXI@Z",
+    "?Notify@LegoRaceCar@@$4PPPPPPPM@A@AEJAAVMxParam@@@Z",
+    "?ClassName@LegoRaceCar@@$4PPPPPPPM@A@BEPBDXZ",
+    "?ClassName@LegoRaceCar@@UBEPBDXZ",
+    "?IsA@LegoRaceCar@@$4PPPPPPPM@A@BEEPBD@Z",
+    "?IsA@LegoRaceCar@@UBEEPBD@Z",
+    "?ClassName@MxCore@@UBEPBDXZ",
+    "?ParseAction@LegoRaceCar@@$4PPPPPPPM@A@AEXPAD@Z",
+    "?SetWorldSpeed@LegoRaceCar@@$4PPPPPPPM@A@AEXM@Z",
+    "?CheckPresenterAndActorIntersections@LegoRaceCar@@$4PPPPPPPM@A@AEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
+    "?CheckPresenterAndActorIntersections@LegoRaceCar@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
+    "?Animate@LegoRaceCar@@$4PPPPPPPM@A@AEXM@Z",
+    "?HitActor@LegoRaceCar@@$4PPPPPPPM@A@AEJPAVLegoPathActor@@E@Z",
+    "?SwitchBoundary@LegoRaceCar@@$4PPPPPPPM@A@AEXAAPAVLegoPathBoundary@@AAPAULegoOrientedEdge@@AAM@Z",
+    "?SwitchBoundary@LegoRaceCar@@UAEXAAPAVLegoPathBoundary@@AAPAULegoOrientedEdge@@AAM@Z",
+    "?CalculateSpline@LegoRaceCar@@$4PPPPPPPM@A@AEJXZ"
+   ],
+   "completion": {
+    "state": "object_composition_enabled_final_gates_incomplete",
+    "reason": "Restores the retail-anchored COMDAT group order of LEGO1/lego/legoomni/src/race/legoracers.cpp (whole-group permutation, body-inert).",
     "may_replace_compiler_output": true
    }
   }
@@ -59286,14 +59932,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-    "clean": "c4fad741be389fea78a7f6a0b4bef93f66156295ac5fe56a67bc3a7165ba6a75",
-    "effective": "794a53f01780ba64ba634ee6a172fcd63fe03ca32ea8c733dc9edebb6a7bda08",
-    "size": 28518,
+    "clean": "bd57189c551368a9d60da0c3ca071c77e09a829b3073ed8217389503c13769a0",
+    "effective": "1b14f3554ae7e8af05ba5dc3710ec479757bfb3bf5a7cf2b75f0132e4a3f08be",
+    "size": 28558,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "786f48d9ba03b6a4b6238db5ad7ad7e7c95f8d165f10b591d09ad22d161f0503",
+       "ctx": "77d85c31a3d8fae1c6654bf18aba0e31301e2d439cd86f5cb4169270acc616d3",
        "b": 0,
        "a": 16,
        "at": "start"
@@ -65347,9 +65993,9 @@
    },
    {
     "path": "LEGO1/lego/sources/geom/legowegedge.cpp",
-    "clean": "e577e0e98581a62aac62c4ce3e2a03c070f62f824f3da9ee48f20b8d4cfea3cd",
-    "effective": "9c083f7994466ddc9db88f62e4dae6ee5da39741fbc25603036c3427d7a1cf8b",
-    "size": 6665,
+    "clean": "d7689ef88a0ee4b671194760e239d8e5ce8926b84c70e861105ecb136c567162",
+    "effective": "0cd1f63572764c562a2d81d4472d19e362774b195d3ef84bea3be8487165bc87",
+    "size": 6705,
     "ops": [
      {
       "op": "insert",
@@ -65515,9 +66161,9 @@
    },
    {
     "path": "LEGO1/lego/sources/misc/legospline.cpp",
-    "clean": "75b127151593f7c6f925f8d0fcb551c49597610e95cdbb7fbc48f960361a77ef",
-    "effective": "3fd3d23b3f5ee075e190178b0376be49e5fb03f7ec1d07123dcc5969e5207115",
-    "size": 2747,
+    "clean": "c4fcc996997f3e4dac0d84c7a5b12dc1fe18d230e5062c3be2fae53dbf6792eb",
+    "effective": "dfa615ef4aced2b6e3afde83b4ad58aa6b7c4fc0d36fde4d9cd5310a25cddb01",
+    "size": 2787,
     "ops": [
      {
       "op": "insert",
@@ -67198,9 +67844,9 @@
    },
    {
     "path": "LEGO1/mxgeometry/mxmatrix.h",
-    "clean": "51be9f4437298715fdeb7310f5546502cdcdab196510204a919ea16a9a3c7764",
-    "effective": "4a303c5364b68d26162091df448727d4dbdf5ffe47eba74be4caf1888ba9950d",
-    "size": 4826,
+    "clean": "0128a558d02aebb74ea58b567d94954164cbac2c2b5edae7e2ca3dd7e2f38c6b",
+    "effective": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+    "size": 4835,
     "ops": [
      {
       "op": "insert",
@@ -72322,9 +72968,9 @@
    },
    {
     "path": "LEGO1/realtime/vector3d.inl.h",
-    "clean": "877e4ec982924372d949e505de6fb22741c9ccc3cc5a2331535f4e931f25fdaa",
-    "effective": "59acb0da540ba1fd9bc5471b90f8cbe76fa33e6471d6193b1e289463e5cd7995",
-    "size": 2684,
+    "clean": "1416d1a2add6bfe588db280ec6303af773d2b16f714711ac7e736b6206bf7a0f",
+    "effective": "c9a075bb65e2065094662248752f805283e84c5f5ea70c04c6cd86c27f3de629",
+    "size": 2685,
     "ops": [
      {
       "op": "insert",
@@ -72393,112 +73039,45 @@
         }
        ]
       }
-     },
-     {
-      "op": "delete",
-      "from": {
-       "ctx": "bbba32c3454b93f8baba06bdaaa10890776ceff42aafea4f1c17595f940114bd",
-       "line_before": "d10b36aa74a59bcf4a88185837f658afaf3646eff2bb16c3928d0e9335e945d2",
-       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-      },
-      "to": {
-       "ctx": "f7963e498c0ff74828903c2ec43d8c9239f44647b6d95bdfe932ccd494d618f4",
-       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-       "line_after": "a49c41d056555cc78c7f573905f04b09fa219d188b755717c66e9e4ddc89af8d"
-      },
-      "removed": {
-       "sha256": "22e5d8539794d789f0a869c1b7ecfdaa40d11641d950a7344b820c9701499e7f",
-       "size": 180
-      },
-      "id": "op_3613_vector3_len_restore",
-      "gen": {
-       "k": "reloc",
-       "range_identity": "Vector3::LenSquared() const",
-       "ordinary_owner": "LEGO1/realtime/vector3d.inl.h",
-       "byte_destination": "LEGO1/realtime/vector3dtail.inl.h",
-       "source_range_token_pin": {
-        "baseline_sha256": "22e5d8539794d789f0a869c1b7ecfdaa40d11641d950a7344b820c9701499e7f",
-        "baseline_size": 180,
-        "baseline_line_count": 8,
-        "baseline_significant_token_sha256": "096c510574f2a15f6718d7eaa822eb2afbb3d08ad12c17b4e54bc190ebf7a258"
-       },
-       "source_operation_id": "op_3613_vector3_len_restore",
-       "range_dependency_id": "vector3_len_squared_owner_transfer_v1",
-       "range_render_policy": "strip_prose_preserve_physical_lines_v1",
-       "transfer": "copy_authenticated_clean_source_range"
-      }
      }
     ]
    },
    {
     "path": "LEGO1/realtime/vector3dtail.inl.h",
-    "effective": "8635b3159a11ee93a2304d7b0e91230f8aa68981750df2335857ca4e30df8597",
-    "size": 303,
+    "effective": "742aab103fbce88e367a01920a286b46a21f5693c9ddf6a15b6d7f23dbf9e673",
+    "size": 805,
     "ops": [
      {
-      "op": "append",
+      "op": "insert",
+      "anchor": {
+       "ctx": "eec248d09557cf8495aceb038e8b0dd81f7119f34ea02811364af2c4acec03be",
+       "b": 9,
+       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+       "line_after": "72f296b9daecc26bb595b21097dfc0354b359c9d81cf677c54ae2b0749c05266"
+      },
       "gen": {
        "k": "seq",
-       "lines": 16,
+       "lines": 3,
        "items": [
         {
-         "k": "reloc",
-         "range_identity": "Vector3::LenSquared() const",
-         "source_logical_path": "LEGO1/realtime/vector3d.inl.h",
-         "destination_logical_path": "LEGO1/realtime/vector3dtail.inl.h",
-         "ordinary_owner": "LEGO1/realtime/vector3d.inl.h",
-         "byte_owner": "LEGO1/realtime/vector3dtail.inl.h",
-         "destination_guard": "VECTOR3DTAIL_H",
-         "destination_include_identity": "vector.h",
-         "destination_include_seat": {
-          "before_function": "Vector4::EqualsHamiltonProduct",
-          "owner": "LEGO1/realtime/vector4d.inl.h"
-         },
-         "source_operation_id": "op_3613_vector3_len_restore",
-         "range_dependency_id": "vector3_len_squared_owner_transfer_v1",
-         "range_render_policy": "strip_prose_preserve_physical_lines_v1",
-         "source_range_token_pin": {
-          "baseline_sha256": "22e5d8539794d789f0a869c1b7ecfdaa40d11641d950a7344b820c9701499e7f",
-          "baseline_size": 180,
-          "baseline_line_count": 8,
-          "baseline_significant_token_sha256": "096c510574f2a15f6718d7eaa822eb2afbb3d08ad12c17b4e54bc190ebf7a258"
-         },
-         "transfer": "copy_authenticated_clean_source_range",
-         "lines": 16,
-         "at": [
-          1,
-          2,
-          4,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          16
-         ],
+         "k": "fwd_run",
+         "stem": "MxUnkRecordZ",
+         "first": 400,
+         "count": 2,
+         "width": 4,
          "line": 1
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordZ0400",
-         "line": 6
-        },
-        {
-         "k": "fwd",
-         "id": "MxUnkRecordZ0401",
-         "line": 7
         }
        ]
       }
      }
-    ]
+    ],
+    "clean": "58e8db1f9e2041db67a8418bcae81e0552b75c6e8c9e5365940039625228ea6d"
    },
    {
     "path": "LEGO1/realtime/vector4d.inl.h",
-    "clean": "61eb833bc007afa30b680730cf05fae999bc3505b4fc775d53b95f8366efd5b0",
-    "effective": "64ae89a39b21ae65a40e27a9858650b5777b413a59a26c8eb54e847d9aa2ebfb",
-    "size": 4600,
+    "clean": "8cf7ed928280f44be01febece73189a2ff7f3a74b284ad087b5845b296779c07",
+    "effective": "ea87dfc9f483556caffc4930f761f907ab0e408ef3fdc0d65863781072f2ddde",
+    "size": 4094,
     "ops": [
      {
       "op": "insert",
@@ -72525,31 +73104,20 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "bbffa3f41726f84a76127acb6a439be3be9da6779a48627db74c5edc95ab277c",
+       "ctx": "db620be6536472b4cbd7435a07144d0a0d572343f6143bc6f7039227a4d4a2f3",
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "3d5ad667e52956ca3b6836c58401c91d862617309c5ae87129bff0290477f149"
       },
       "gen": {
        "k": "seq",
-       "lines": 20,
+       "lines": 18,
        "items": [
-        {
-         "k": "reloc",
-         "logical_header": "LEGO1/realtime/vector3dtail.inl.h",
-         "role": "destination_include_seat",
-         "style": "quote",
-         "lines": 2,
-         "at": [
-          1
-         ],
-         "line": 1
-        },
         {
          "k": "fwd_run",
          "stem": "MxUnkRecordZ",
          "first": 300,
          "count": 17,
-         "line": 3,
+         "line": 1,
          "width": 4
         }
        ]

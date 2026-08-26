@@ -4,6 +4,7 @@
 #include "legoview1.h"
 
 #include "decomp.h"
+#include "realtime/vector3d.inl.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxgeometry/mxmatrix.h"
 #include "realtime/realtime.h"

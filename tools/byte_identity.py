@@ -17501,6 +17501,17 @@ def validate_manifest(
                         "expected_seed_length", "expected_donor_length",
                         "expected_linked_span", "expected_body_sha256",
                     }
+                    if "expected_donor_section_number" in function:
+                        # Declared cross-lane donor: the donor's COMDAT seat
+                        # is pinned explicitly instead of matching the
+                        # seed's -- the same declared-seat rule the
+                        # equal-body and register-bijection classes carry.
+                        resize_keys |= {"expected_donor_section_number"}
+                        seat = function.get("expected_donor_section_number")
+                        require(isinstance(seat, int)
+                                and not isinstance(seat, bool) and seat > 0,
+                                f"{function_context}"
+                                ".expected_donor_section_number is invalid")
                     split_lines = ("expected_seed_line_count" in function
                                    or "expected_donor_line_count" in function)
                     if split_lines:
@@ -24450,8 +24461,17 @@ def compose_same_slot_resize(
         == function["expected_linked_span"],
         "donor 16-byte linked contribution span changed",
     )
-    require(sp["number"] == dp["number"],
-            "target section seat changed")
+    declared_donor_seat = function.get("expected_donor_section_number")
+    if declared_donor_seat is None:
+        require(sp["number"] == dp["number"],
+                "target section seat changed")
+    else:
+        # Declared cross-lane donor: another real compile lane of the same
+        # TU text whose emission order differs, so its seat is pinned
+        # explicitly instead of matching the seed's -- the same declared-seat
+        # rule the equal-body and register-bijection classes carry.
+        require(dp["number"] == declared_donor_seat,
+                "declared cross-lane donor seat changed")
     # Ordinary carrier donors must be whole-object-equivalent.  A target-only
     # donor may omit a pinned strict subset because the composed output keeps
     # every original seed definition and copies only this target closure.
@@ -24523,8 +24543,14 @@ def compose_same_slot_resize(
         dx = _comdat_child(donor, dp, ".xdata$x")
     sd = _comdat_child(seed, sp, ".debug$S")
     dd = _comdat_child(donor, dp, ".debug$S")
-    require(sx["number"] == dx["number"] and sd["number"] == dd["number"],
-            "closure section seats changed")
+    if declared_donor_seat is None:
+        require(sx["number"] == dx["number"]
+                and sd["number"] == dd["number"],
+                "closure section seats changed")
+    # A declared cross-lane donor's closure children were already located BY
+    # NAME through the COMDAT association above; their absolute seats ride
+    # the donor's own emission order and are not load-bearing -- every byte
+    # the install copies is taken through those named children.
     # D1.  `raw_size` equality on the `.debug$S` closure child is a
     # same-function sanity proxy: no donor `.debug$S` byte ever reaches the
     # output.  A source refactor that removes a caller local legitimately
@@ -24656,11 +24682,22 @@ def compose_same_slot_resize(
     for seed_index, donor_index in mapping.items():
         left = seed.symbols[seed_index]
         right = donor.symbols[donor_index]
-        require(
-            (left["section"], left["type"], left["storage"])
-            == (right["section"], right["type"], right["storage"]),
-            "mapped local symbol class changed",
-        )
+        if declared_donor_seat is None:
+            require(
+                (left["section"], left["type"], left["storage"])
+                == (right["section"], right["type"], right["storage"]),
+                "mapped local symbol class changed",
+            )
+        else:
+            # A declared cross-lane donor's locals ride its own seats; the
+            # class comparison is seat-relative.
+            require(
+                (left["section"] - sp["number"], left["type"],
+                 left["storage"])
+                == (right["section"] - dp["number"], right["type"],
+                    right["storage"]),
+                "mapped local symbol class changed",
+            )
 
     seed_function_index, seed_function = function_symbol(
         seed, mangled, sp["number"])
@@ -26251,6 +26288,13 @@ def compose_retail_exact_cross_tu_complete_target_resize(
         "retail_oracle": function["retail_oracle"],
         "retail_relocations": function["retail_relocations"],
     }
+    if (function["expected_target_donor_section_number"]
+            != function["expected_seed_section_number"]):
+        # The target donor is a declared cross-lane state whose emission
+        # order differs; its seat is already pinned at the topology layer,
+        # so pass the same declared pin to the installer's seat check.
+        effective["expected_donor_section_number"] = function[
+            "expected_target_donor_section_number"]
     composed, detail = compose_same_slot_resize(
         seed_bytes, normalized, effective, retail_body=bytes(retail_body))
     return composed, {
@@ -26778,6 +26822,21 @@ def _compose_retail_exact_instruction_mosaic_core(
                 # the record itself is identical; only its operand seat
                 # inside this range follows the donor's instruction order
                 strict_fields = strict_fields[1:]
+                # A compiler-numbered local ($T constant, $L label) is its
+                # LOCATION, not its serial: the donor's extra declarations
+                # shift the compiler's symbol counter while the seat and
+                # content do not -- the same identity rule the
+                # donor-rewriting seam's `_relocation_identity` already
+                # carries.  Every other field (type, addend, width, section,
+                # value, storage) stays strict.
+                if (left["target_storage"] in (3, 6)
+                        and right["target_storage"] in (3, 6)
+                        and left["target"].startswith("$")
+                        and right["target"].startswith("$")
+                        and left["target"].rstrip("0123456789")
+                        == right["target"].rstrip("0123456789")):
+                    strict_fields = tuple(field for field in strict_fields
+                                          if field != "target")
             require(all(left[field] == right[field]
                         for field in strict_fields),
                     f"instruction-mosaic range {index} contains a changed "

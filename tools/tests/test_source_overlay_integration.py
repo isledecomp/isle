@@ -20,7 +20,7 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
         self.assertEqual(len(normalized["outputs"]), 165)
         self.assertEqual(
             sum(len(output["operations"]) for output in normalized["outputs"]),
-            420,
+            419,
         )
         self.assertEqual(
             len(normalized["graph"]["generated_translation_units"]), 12
@@ -40,12 +40,12 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
         self.assertEqual(
             sum(output["clean"]["state"] == "present"
                 for output in normalized["outputs"]),
-            147,
+            148,
         )
         self.assertEqual(
             sum(output["clean"]["state"] == "absent"
                 for output in normalized["outputs"]),
-            18,
+            17,
         )
 
         for output in normalized["outputs"]:
