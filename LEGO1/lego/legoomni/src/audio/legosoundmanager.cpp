@@ -1,4 +1,6 @@
 #include "legosoundmanager.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 
 #include "legocachesoundmanager.h"
 #include "mxautolock.h"

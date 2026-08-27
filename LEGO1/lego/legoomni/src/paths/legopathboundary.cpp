@@ -384,3 +384,16 @@ MxU32 LegoPathBoundary::RemovePresenter(LegoAnimPresenter* p_presenter)
 
 	return 0;
 }
+
+// FUNCTION: BETA10 0x100b23bb
+MxU32 LegoPathBoundary::BETA_100b23bb(const Vector3& p_position, LegoOrientedEdge*& p_edge)
+{
+	for (MxS32 i = 0; i < m_numEdges; i++) {
+		LegoOrientedEdge* edge = (LegoOrientedEdge*) m_edges[i];
+		if (edge->FUN_10048c40(p_position)) {
+			p_edge = edge;
+			return TRUE;
+		}
+	}
+	return FALSE;
+}

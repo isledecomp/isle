@@ -1,6 +1,7 @@
 #include "legophonemepresenter.h"
 
 #include "legocharactermanager.h"
+#include "realtime/matrix4d.inl.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "misc/legocontainer.h"

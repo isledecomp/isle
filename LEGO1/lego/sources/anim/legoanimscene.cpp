@@ -23,6 +23,8 @@ inline double UnkGet0x100db830()
 
 // clang-format off
 #include "tgl/tglvector.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxgeometry/mxquaternion.h"
 

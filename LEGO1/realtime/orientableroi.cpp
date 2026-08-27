@@ -1,3 +1,5 @@
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "orientableroi.h"
 
 #include "decomp.h"

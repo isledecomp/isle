@@ -1,6 +1,7 @@
 #include "misc.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "realtime/matrix4d.inl.h"
 #include "legoinputmanager.h"
 #include "legomain.h"
 #include "legovideomanager.h"

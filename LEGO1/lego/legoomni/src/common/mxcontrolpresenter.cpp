@@ -6,6 +6,7 @@
 // pool, as retail does; the sibling control presenter next to it in link
 // order reaches them through the same header.
 #include "legoutils.h"
+#include "realtime/matrix4d.inl.h"
 #include "mxdsmultiaction.h"
 #include "mxmisc.h"
 #include "mxstillpresenter.h"

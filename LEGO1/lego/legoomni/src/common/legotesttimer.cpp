@@ -2,6 +2,7 @@
 
 #include "legoeventnotificationparam.h"
 #include "legoinputmanager.h"
+#include "realtime/matrix4d.inl.h"
 #include "misc.h"
 #include "mxnotificationparam.h"
 

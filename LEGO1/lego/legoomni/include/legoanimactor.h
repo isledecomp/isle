@@ -11,7 +11,9 @@ struct LegoAnimActorStruct {
 	LegoAnimActorStruct(float p_worldSpeed, LegoAnim* p_AnimTreePtr, LegoROI** p_roiMap, MxU32 p_numROIs);
 	~LegoAnimActorStruct();
 
+	float GetDistance(float p_time);
 	float GetDuration();
+	float GetTotalDistance();
 
 	// FUNCTION: BETA10 0x1000fb10
 	float GetWorldSpeed() { return m_worldSpeed; }

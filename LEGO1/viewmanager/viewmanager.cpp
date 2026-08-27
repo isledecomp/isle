@@ -1,8 +1,12 @@
 #include "viewmanager.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
+
 #include "mxdirectx/mxstopwatch.h"
 #include "tgl/d3drm/tglimpl.h"
 #include "viewlod.h"
+#include "viewlod.inl.h"
 
 #include <vec.h>
 

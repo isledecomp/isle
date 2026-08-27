@@ -1,3 +1,4 @@
+#include "realtime/vector3dtail.inl.h"
 #include "legoroi.h"
 
 #include "anim/legoanim.h"
@@ -969,3 +970,5 @@ void LegoROI::UpdateWorldBoundingVolumes()
 {
 	CalcWorldBoundingVolumes(m_sphere, m_local2world, m_world_bounding_box, m_world_bounding_sphere);
 }
+
+#include "realtime/matrix4d.inl.h"

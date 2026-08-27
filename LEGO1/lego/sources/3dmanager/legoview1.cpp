@@ -6,6 +6,8 @@
 #include "decomp.h"
 #include "realtime/vector3d.inl.h"
 #include "mxgeometry/mxgeometry3d.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "mxgeometry/mxmatrix.h"
 #include "realtime/realtime.h"
 

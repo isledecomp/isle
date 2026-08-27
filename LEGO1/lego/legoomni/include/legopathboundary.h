@@ -56,6 +56,7 @@ public:
 	);
 	MxU32 AddPresenterIfInRange(LegoAnimPresenter* p_presenter);
 	MxU32 RemovePresenter(LegoAnimPresenter* p_presenter);
+	MxU32 BETA_100b23bb(const Vector3& p_position, LegoOrientedEdge*& p_edge);
 
 	// FUNCTION: BETA10 0x1001ffb0
 	LegoPathActorSet& GetActors() { return m_actors; }

@@ -3,6 +3,8 @@
 #include "3dmanager/lego3dmanager.h"
 #include "decomp.h"
 #include "define.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"

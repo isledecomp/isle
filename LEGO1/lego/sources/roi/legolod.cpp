@@ -1,5 +1,7 @@
 #include "legolod.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "legoroi.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
@@ -582,3 +584,7 @@ inline IDirect3DRM2* GetD3DRM_legolod(Tgl::Renderer* pRenderer)
 	return ((TglImpl::RendererImpl*) pRenderer)->ImplementationData();
 }
 #endif
+
+#include "viewmanager/viewlod.inl.h"
+
+#include "legolod.inl.h"

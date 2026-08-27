@@ -1,4 +1,5 @@
 #include "legotextureinfo.h"
+#include "realtime/matrix4d.inl.h"
 
 #include "legovideomanager.h"
 #include "misc.h"

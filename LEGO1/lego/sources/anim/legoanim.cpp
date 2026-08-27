@@ -969,3 +969,7 @@ LegoResult LegoMorphKey::Write(LegoStorage* p_storage)
 
 	return SUCCESS;
 }
+
+#include "realtime/matrix4d.inl.h"
+
+#include "realtime/vector3dtail.inl.h"

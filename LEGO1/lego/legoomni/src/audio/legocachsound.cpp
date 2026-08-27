@@ -1,6 +1,7 @@
 #include "legocachsound.h"
 
 #include "legosoundmanager.h"
+#include "realtime/matrix4d.inl.h"
 #include "misc.h"
 #include "mxmain.h"
 

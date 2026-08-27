@@ -4740,9 +4740,34 @@ def require_target_source_refactor_recipe_policy(
                 "exactly one bound operation")
         header_clean = (Path(root) / header_rendering["path"]).read_bytes()
     else:
-        require(len(validated["renderings"]) == 1
-                and validated["renderings"][0]["path"] == unit_source,
-                f"{context}: refactor donor may render only its own TU")
+        tu_renderings = [r for r in validated["renderings"]
+                         if r["path"] == unit_source]
+        require(len(tu_renderings) == 1,
+                f"{context}: refactor donor must render its own TU "
+                "exactly once")
+        # Additional renderings may only restore a header's immediately
+        # preceding include/declaration state: every operation must use
+        # exclusively non-emitting generators (an include directive or a
+        # physical line reservation), so nothing the policy exists to bar
+        # -- probes, suppliers, archive pulls, constants, live body
+        # statements -- can ride them.
+        for extra in validated["renderings"]:
+            if extra["path"] == unit_source:
+                continue
+            require(extra["path"].endswith(".h"),
+                    f"{context}: refactor donor extra rendering is not a "
+                    "header")
+            for operation in extra["operations"]:
+                generators = list(iter_source_overlay_leaf_generators(
+                    operation["generator"]))
+                require(generators and all(
+                    (SOURCE_OVERLAY_KIND_POLICIES.get(generator["kind"])
+                     or ("",))[0] in ("include_dependency",
+                                      "non_emitting_declaration",
+                                      "source_layout_only")
+                    for generator in generators),
+                    f"{context}: refactor donor header rendering uses an "
+                    "emitting generator")
     source = Path(root) / unit_source
     clean = source.read_bytes()
     start_marker = proof["start_marker"].encode("ascii")
@@ -5339,13 +5364,44 @@ def require_source_target_closure_recipe_policy(
     sequence cannot smuggle an emitting item inside itself.
     """
     validated = validate_donor_source_overlay_recipe(recipe, root)
+    # Both mirror projections stage the donor's private copy of the rendered
+    # source ROOT, so nested quoted includes resolve against the overridden
+    # headers.  `source_root_mirror_only_v1` is the stricter of the two --
+    # it stages nothing else -- so it satisfies the same requirement.
     require(
         validated["compile_lane"].get("include_projection")
-        == "source_root_mirror_v1",
+        in ("source_root_mirror_v1", "source_root_mirror_only_v1"),
         f"{context}: header source permutations require the private "
         "source-root projection",
     )
     renderings = validated["renderings"]
+    # A rendering whose every operation uses exclusively non-emitting
+    # generators (an include directive or a physical line reservation) is a
+    # header-state REVERSAL, not a source permutation: it restores a
+    # header's immediately preceding include/declaration state and can
+    # carry none of what this policy exists to bar.  Reversals ride
+    # alongside the permutation headers without counting against them.
+    def _is_reversal(item):
+        if item["path"] == unit_source:
+            return False
+        if not item["path"].endswith((".h", ".hpp")):
+            return False
+        generators = [g for operation in item["operations"]
+                      for g in iter_source_overlay_leaf_generators(
+                          operation["generator"])]
+        if not generators:
+            return False
+        for g in generators:
+            policy = SOURCE_OVERLAY_KIND_POLICIES.get(g["kind"])
+            if policy is None or policy[0] not in (
+                    "include_dependency", "non_emitting_declaration",
+                    "source_layout_only"):
+                return False
+        return True
+
+    reversal_renderings = [item for item in renderings if _is_reversal(item)]
+    renderings = [item for item in renderings
+                  if not _is_reversal(item)]
     require(2 <= len(renderings) <= 3
             and sum(item["path"] == unit_source for item in renderings) == 1,
             f"{context}: donor must render its TU and one or two headers")
@@ -13896,7 +13952,8 @@ def validate_manifest(
                     and (
                         "include_projection" not in lane
                         or lane["include_projection"]
-                        == "source_root_mirror_v1"
+                        in ("source_root_mirror_v1",
+                            "source_root_mirror_only_v1")
                     ),
                     f"{donor_context}.compile_lane must select by a define "
                     "and an optional closed include projection",
@@ -15816,7 +15873,13 @@ def validate_manifest(
                         "expected_donor_section_count",
                         "expected_donor_extra_functions",
                         "expected_relocation_divergences",
+                        "expected_donor_section_number",
+                        "debug_representation_delta",
                     }
+                    donor_rewriting_keys.add(
+                        "expected_donor_section_number")
+                    donor_rewriting_keys.add(
+                        "debug_representation_delta")
                     exact_keys(function,
                                donor_rewriting_keys
                                - (optional_rewriting_keys
@@ -15915,9 +15978,24 @@ def validate_manifest(
                         f"{function_context}.donor_rewriting",
                         function["expected_donor_length"],
                     )
-                    normalized_functions.append({
+                    normalized_rewriting_function = {
                         **function, "donor_rewriting": rewriting_spec,
-                    })
+                    }
+                    if "debug_representation_delta" in function:
+                        require(
+                            "expected_donor_section_number" in function,
+                            f"{function_context}: a debug representation "
+                            "delta requires a declared donor seat",
+                        )
+                        normalized_rewriting_function[
+                            "debug_representation_delta"] = (
+                            validate_debug_representation_delta(
+                                function["debug_representation_delta"],
+                                f"{function_context}"
+                                ".debug_representation_delta",
+                            )
+                        )
+                    normalized_functions.append(normalized_rewriting_function)
                     continue
                 if splice_class == REGISTER_BIJECTION_CLASS:
                     bijection_keys = {
@@ -17279,6 +17357,44 @@ def validate_manifest(
                         "expected_linked_span", "expected_body_sha256",
                         "retail_oracle", "retail_relocations",
                     }
+                    if "expected_donor_section_number" in function:
+                        # Declared cross-lane donor: the donor's COMDAT seat
+                        # is pinned explicitly instead of matching the
+                        # seed's -- the same declared-seat rule the
+                        # equal-body and resize classes carry.
+                        divergent_keys |= {"expected_donor_section_number"}
+                        seat = function.get("expected_donor_section_number")
+                        require(isinstance(seat, int)
+                                and not isinstance(seat, bool) and seat > 0,
+                                f"{function_context}"
+                                ".expected_donor_section_number is invalid")
+                        if "debug_representation_delta" in function:
+                            # The record-by-record same-function proof that
+                            # replaces D1's raw-size proxy, exactly as the
+                            # donor-rewriting class declares it.
+                            divergent_keys.add("debug_representation_delta")
+                            function["debug_representation_delta"] = (
+                                validate_debug_representation_delta(
+                                    function["debug_representation_delta"],
+                                    f"{function_context}"
+                                    ".debug_representation_delta",
+                                )
+                            )
+                        for optional_census in (
+                                "expected_donor_extra_functions",
+                                "expected_seed_only_functions"):
+                            if optional_census not in function:
+                                continue
+                            divergent_keys.add(optional_census)
+                            names = function[optional_census]
+                            require(isinstance(names, list) and names
+                                    and names == sorted(set(names))
+                                    and all(isinstance(item, str)
+                                            and item.startswith("?")
+                                            and len(item) >= 8
+                                            for item in names),
+                                    f"{function_context}.{optional_census} "
+                                    "is invalid")
                     if splice_class == "retail_exact_target_closure":
                         divergent_keys |= {
                             "expected_seed_section_count",
@@ -17380,6 +17496,7 @@ def validate_manifest(
                         function.get("retail_relocations"),
                         f"{function_context}.retail_relocations",
                         function["expected_donor_length"],
+                        allow_empty=True,
                     )
                     normalized_function = dict(function)
                     if "target_source_refactor" in function:
@@ -22523,6 +22640,298 @@ def codeview_symbol_identity(record: dict) -> tuple[int, str]:
                             else record["name"])
 
 
+DEBUG_REPRESENTATION_DELTA_KINDS = frozenset({
+    "procedure_extent", "compiler_label_number", "local_location",
+    "inserted_donor_local"})
+
+
+# S_REGISTER payload: typind u16, reg u16; S_BPREL32 payload: off i32,
+# typind u16.  These are the only location encodings a register-allocation
+# difference between two compiles of one function moves a named local
+# between, so they are the closed set `local_location` admits.
+CODEVIEW_LOCAL_LOCATION_RECORD_TYPES = frozenset({0x0002, 0x0200})
+
+
+def _codeview_local_location(
+    record_type: int, payload: bytes, context: str,
+) -> tuple[int, dict]:
+    """One admitted local record's (type index, location encoding)."""
+    if record_type == 0x0002:
+        return (int.from_bytes(payload[0:2], "little"),
+                {"register": int.from_bytes(payload[2:4], "little")})
+    require(record_type == 0x0200,
+            f"{context}: record is not a local-location record")
+    return (int.from_bytes(payload[4:6], "little"),
+            {"bp_offset": int.from_bytes(payload[0:4], "little",
+                                         signed=True)})
+
+
+def validate_debug_representation_delta(
+    value: object, context: str,
+) -> list[dict]:
+    """Validate one pinned seed<->donor `.debug$S` representation delta."""
+    require(isinstance(value, list) and 1 <= len(value) <= 32,
+            f"{context} must name one to thirty-two records")
+    normalized = []
+    previous = -1
+    for index, item in enumerate(value):
+        item_context = f"{context}[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        kind = item.get("kind")
+        require(kind in DEBUG_REPRESENTATION_DELTA_KINDS,
+                f"{item_context}.kind is outside the closed delta kinds")
+        keys = {"kind", "record_index"}
+        if kind == "local_location":
+            keys |= {"name", "seed_location", "donor_location"}
+            # One shared `type` pins an identical type index; the split
+            # pair pins each compile's own per-compile type ordinal.
+            if "seed_type" in item or "donor_type" in item:
+                keys |= {"seed_type", "donor_type"}
+            else:
+                keys |= {"type"}
+        elif kind == "inserted_donor_local":
+            keys |= {"name", "type", "location"}
+        exact_audit_keys(item, keys, item_context)
+        record_index = require_exact_int(
+            item.get("record_index"), item_context + ".record_index",
+            minimum=0, maximum=1 << 12)
+        require(record_index > previous,
+                f"{item_context}.record_index is unsorted or repeated")
+        previous = record_index
+        normalized_item = {"kind": kind, "record_index": record_index}
+        if kind == "local_location":
+            name = item.get("name")
+            require(isinstance(name, str) and name
+                    and local_symbol_kind(name) is None,
+                    f"{item_context}.name is not a source-named local")
+            normalized_item["name"] = name
+            if "seed_type" in item or "donor_type" in item:
+                for type_key in ("seed_type", "donor_type"):
+                    normalized_item[type_key] = require_exact_int(
+                        item.get(type_key), item_context + "." + type_key,
+                        minimum=0, maximum=0xffff)
+            else:
+                normalized_item["type"] = require_exact_int(
+                    item.get("type"), item_context + ".type",
+                    minimum=0, maximum=0xffff)
+            for side in ("seed_location", "donor_location"):
+                location = item.get(side)
+                require(isinstance(location, dict) and len(location) == 1
+                        and next(iter(location))
+                        in ("register", "bp_offset"),
+                        f"{item_context}.{side} is invalid")
+                key = next(iter(location))
+                if key == "register":
+                    bound = require_exact_int(
+                        location[key], f"{item_context}.{side}.register",
+                        minimum=1, maximum=0xffff)
+                else:
+                    bound = location[key]
+                    require(type(bound) is int and bound != 0
+                            and -(1 << 31) <= bound < (1 << 31),
+                            f"{item_context}.{side}.bp_offset is invalid")
+                normalized_item[side] = {key: bound}
+            # A row must declare an actual move: either the location
+            # changes, or the split-type form records a per-compile TYPE
+            # ordinal move at the same seat.  A row that moves neither is
+            # a no-op and stays refused.
+            moves_type = (
+                "seed_type" in normalized_item
+                and normalized_item["seed_type"]
+                != normalized_item["donor_type"]
+            )
+            require(normalized_item["seed_location"]
+                    != normalized_item["donor_location"] or moves_type,
+                    f"{item_context} does not move the local's location")
+        elif kind == "inserted_donor_local":
+            name = item.get("name")
+            require(isinstance(name, str) and name
+                    and local_symbol_kind(name) is None,
+                    f"{item_context}.name is not a source-named local")
+            normalized_item["name"] = name
+            normalized_item["type"] = require_exact_int(
+                item.get("type"), item_context + ".type",
+                minimum=0, maximum=0xffff)
+            location = item.get("location")
+            require(isinstance(location, dict) and len(location) == 1
+                    and next(iter(location)) in ("register", "bp_offset"),
+                    f"{item_context}.location is invalid")
+            key = next(iter(location))
+            if key == "register":
+                bound = require_exact_int(
+                    location[key], f"{item_context}.location.register",
+                    minimum=1, maximum=0xffff)
+            else:
+                bound = location[key]
+                require(type(bound) is int and bound != 0
+                        and -(1 << 31) <= bound < (1 << 31),
+                        f"{item_context}.location.bp_offset is invalid")
+            normalized_item["location"] = {key: bound}
+        normalized.append(normalized_item)
+    return normalized
+
+
+def require_debug_symbol_representation_delta(
+    seed_stream: bytes, donor_stream: bytes, declared: list[dict],
+    expected_seed_length: int, expected_donor_length: int, context: str,
+) -> list[dict]:
+    """Prove the seed and donor `.debug$S` streams describe the SAME function.
+
+    This replaces the raw-size equality proxy of D1 with something strictly
+    stronger: both streams must parse to exhaustion within the closed record
+    table, hold the same record sequence, and differ ONLY at the declared
+    indices, each inside its closed kind:
+
+      * `procedure_extent` -- the S_*PROC32 record's len/DbgEnd fields carry
+        the two bodies' own lengths, pinned to the row's length pins and
+        moving in lockstep; every other payload byte is equal.
+      * `compiler_label_number` -- an S_LABEL32 record differs only in its
+        `$L<serial>` per-compile serial, exactly the collapse the divergent
+        relocation identity already performs for these names.
+      * `local_location` -- one named local's location moved between the
+        closed S_REGISTER/S_BPREL32 encodings (or recolored within
+        S_REGISTER); its name and type index are pinned and must hold on
+        BOTH sides, and both measured locations must equal the declaration.
+
+    No donor `.debug$S` byte ever reaches the composed output (the install
+    keeps the seed's stream); this proof exists purely so the same-function
+    identity guarantee the raw-size proxy carried is preserved -- record by
+    record, which the proxy never was.
+    """
+    seed_records = parse_codeview_symbol_stream(
+        seed_stream, f"{context} (seed)")
+    donor_records = parse_codeview_symbol_stream(
+        donor_stream, f"{context} (donor)")
+    declared_by_index = {item["record_index"]: item for item in declared}
+    require(max(declared_by_index, default=-1) < len(donor_records),
+            f"{context}: a declared record index is out of range")
+    inserted = sum(1 for item in declared
+                   if item["kind"] == "inserted_donor_local")
+    require(len(donor_records) == len(seed_records) + inserted,
+            f"{context}: record counts differ from the declared "
+            "insertions")
+    detail = []
+    seed_cursor = 0
+    for index, donor_record in enumerate(donor_records):
+        item = declared_by_index.get(index)
+        if item is not None and item["kind"] == "inserted_donor_local":
+            # The donor gained a record the seed never had; the install
+            # keeps the seed's stream, so the record must merely be a
+            # fully pinned named local -- nothing of it reaches the output.
+            donor_payload = donor_stream[
+                donor_record["offset"] + 4:
+                donor_record["offset"] + donor_record["size"]]
+            require(donor_record["type"]
+                    in CODEVIEW_LOCAL_LOCATION_RECORD_TYPES,
+                    f"{context}: inserted record {index} is outside the "
+                    "closed local-location forms")
+            require(donor_record["name"] == item["name"],
+                    f"{context}: inserted record {index} name differs "
+                    "from its pin")
+            donor_type, donor_location = _codeview_local_location(
+                donor_record["type"], donor_payload, f"{context} (donor)")
+            require(donor_type == item["type"]
+                    and donor_location == item["location"],
+                    f"{context}: inserted record {index} differs from "
+                    "its declaration")
+            detail.append({"record_index": index,
+                           "kind": "inserted_donor_local",
+                           "name": donor_record["name"]})
+            continue
+        require(seed_cursor < len(seed_records),
+                f"{context}: the seed stream ran out of records")
+        seed_record = seed_records[seed_cursor]
+        seed_cursor += 1
+        seed_payload = seed_stream[
+            seed_record["offset"] + 4:
+            seed_record["offset"] + seed_record["size"]]
+        donor_payload = donor_stream[
+            donor_record["offset"] + 4:
+            donor_record["offset"] + donor_record["size"]]
+        differs = (seed_record["type"] != donor_record["type"]
+                   or seed_payload != donor_payload)
+        item = declared_by_index.get(index)
+        if item is None:
+            require(not differs,
+                    f"{context}: record {index} differs without a "
+                    "declaration")
+            continue
+        require(differs,
+                f"{context}: declared record {index} does not differ")
+        kind = item["kind"]
+        if kind == "procedure_extent":
+            require(seed_record["type"] == donor_record["type"]
+                    and seed_record["type"]
+                    in CODEVIEW_PROCEDURE_RECORD_TYPES
+                    and len(seed_payload) == len(donor_payload)
+                    and len(seed_payload) >= 24,
+                    f"{context}: record {index} is not a procedure pair")
+            # The procedure TYPE INDEX (payload[30:32]) is a per-compile
+            # type-table ordinal, exactly as `$L`/`$T` serials are
+            # per-compile counters; everything else outside the extent
+            # fields must hold byte for byte.
+            require(seed_payload[:12] == donor_payload[:12]
+                    and seed_payload[24:30] == donor_payload[24:30]
+                    and seed_payload[32:] == donor_payload[32:],
+                    f"{context}: record {index} moves more than the "
+                    "procedure extent")
+            seed_length = int.from_bytes(seed_payload[12:16], "little")
+            donor_length = int.from_bytes(donor_payload[12:16], "little")
+            seed_start = int.from_bytes(seed_payload[16:20], "little")
+            donor_start = int.from_bytes(donor_payload[16:20], "little")
+            seed_end = int.from_bytes(seed_payload[20:24], "little")
+            donor_end = int.from_bytes(donor_payload[20:24], "little")
+            require(seed_length == expected_seed_length
+                    and donor_length == expected_donor_length,
+                    f"{context}: record {index} extent differs from the "
+                    "row's length pins")
+            require(seed_start <= seed_end <= seed_length
+                    and donor_start <= donor_end <= donor_length,
+                    f"{context}: record {index} debug range does not sit "
+                    "inside its own extent")
+        elif kind == "compiler_label_number":
+            require(seed_record["type"] == donor_record["type"] == 0x0209
+                    and seed_payload[:7] == donor_payload[:7],
+                    f"{context}: record {index} is not a label pair")
+            require(local_symbol_kind(seed_record["name"]) == "L"
+                    and local_symbol_kind(donor_record["name"]) == "L",
+                    f"{context}: record {index} is not a compiler-numbered "
+                    "label")
+        else:
+            require(seed_record["type"]
+                    in CODEVIEW_LOCAL_LOCATION_RECORD_TYPES
+                    and donor_record["type"]
+                    in CODEVIEW_LOCAL_LOCATION_RECORD_TYPES,
+                    f"{context}: record {index} is outside the closed "
+                    "local-location forms")
+            require(seed_record["name"] == donor_record["name"]
+                    == item["name"],
+                    f"{context}: record {index} name differs from its pin")
+            seed_type, seed_location = _codeview_local_location(
+                seed_record["type"], seed_payload, f"{context} (seed)")
+            donor_type, donor_location = _codeview_local_location(
+                donor_record["type"], donor_payload, f"{context} (donor)")
+            if "type" in item:
+                require(seed_type == donor_type == item["type"],
+                        f"{context}: record {index} type index differs "
+                        "from its pin")
+            else:
+                require(seed_type == item["seed_type"]
+                        and donor_type == item["donor_type"],
+                        f"{context}: record {index} type index differs "
+                        "from its pin")
+            require(seed_location == item["seed_location"]
+                    and donor_location == item["donor_location"],
+                    f"{context}: record {index} location differs from its "
+                    "declaration")
+        detail.append({"record_index": index, "kind": kind,
+                       "name": seed_record["name"]})
+    require(seed_cursor == len(seed_records),
+            f"{context}: the seed stream has records the walk never "
+            "paired")
+    return detail
+
+
 def require_removed_caller_locals_delta(
     seed_stream: bytes, donor_stream: bytes, relocation_offsets: list[int],
     delta: dict, context: str,
@@ -24415,6 +24824,7 @@ def compose_same_slot_resize(
     target_closure_extract: bool = False,
     source_target_extract: bool = False,
     declared_donor_extras: list | None = None,
+    declared_seed_only: list | None = None,
 ) -> tuple[bytes, dict]:
     """Install a donor code body of a different size that occupies the same
     16-byte linked contribution slot, repairing every dependent COFF record.
@@ -24484,22 +24894,37 @@ def compose_same_slot_resize(
         topology_detail = require_target_closure_extraction_topology(
             seed, donor, function, "target-closure extraction"
         )
-    elif declared_donor_extras:
-        # The caller (retail_exact_donor_rewriting) has already proved the
-        # donor's emission delta is exactly this closed name list; the same
-        # statement is re-measured here rather than trusted.
+    elif declared_donor_extras or declared_seed_only:
+        # The caller has already proved the donor's emission delta is
+        # exactly these closed name lists; the same statement is re-measured
+        # here rather than trusted.  A seed-only name is sound for the same
+        # reason the target-closure class states: the composed output keeps
+        # every original seed definition and copies only this target
+        # closure, so a definition the donor's private rendering omits
+        # never had, and never needed, donor bytes.
         seed_fns = function_multiset(seed)
         donor_fns = function_multiset(donor)
-        measured = []
+        measured_extra = []
+        measured_only = []
         for name in set(seed_fns) | set(donor_fns):
             left, right = seed_fns.get(name, 0), donor_fns.get(name, 0)
             if right == left:
                 continue
-            require(right == left + 1,
+            if right == left + 1:
+                measured_extra.append(name)
+                continue
+            require(left == right + 1,
                     f"donor function census diverges at {name}")
-            measured.append(name)
-        require(sorted(measured) == sorted(declared_donor_extras),
+            measured_only.append(name)
+        require(sorted(measured_extra)
+                == sorted(declared_donor_extras or []),
                 "donor function set differs from its declared extras")
+        require(sorted(measured_only)
+                == sorted(declared_seed_only or []),
+                "donor function set differs from its declared seed-only "
+                "names")
+        require(mangled not in (declared_seed_only or []),
+                "the target itself cannot be a seed-only name")
     else:
         require(len(seed.sections) == len(donor.sections),
                 "global section count differs")
@@ -24561,6 +24986,7 @@ def compose_same_slot_resize(
     # composed output drop the stale records.  Every other field of the tuple,
     # and the whole tuple for the sibling child, is unchanged.
     local_set_delta = function.get("local_set_delta")
+    representation_delta = function.get("debug_representation_delta")
     local_set_detail = {}
     reduced_debug_raw = None
     debug_shape_keys = ("name", "raw_size", "relocation_count", "line_count",
@@ -24570,6 +24996,14 @@ def compose_same_slot_resize(
                 and function["target_source_refactor"]["kind"]
                 in LOCAL_SET_DELTA_REFACTOR_KINDS,
                 "local-set delta is outside its closed source-refactor kinds")
+        debug_shape_keys = ("name", "relocation_count", "line_count",
+                            "characteristics")
+    if representation_delta is not None:
+        # D1's raw-size proxy is replaced -- never merely dropped -- by the
+        # record-by-record same-function proof below.
+        require(local_set_delta is None,
+                "debug representation delta cannot combine with a "
+                "local-set delta")
         debug_shape_keys = ("name", "relocation_count", "line_count",
                             "characteristics")
     for left, right, name, keys in (
@@ -24589,6 +25023,14 @@ def compose_same_slot_resize(
                 [item["offset"] for item in detailed_relocations(seed, sd)],
                 local_set_delta, "debug$S local-set delta",
             )
+        )
+    representation_detail = []
+    if representation_delta is not None:
+        representation_detail = require_debug_symbol_representation_delta(
+            bytes(coff_body(seed, sd)), bytes(coff_body(donor, dd)),
+            representation_delta, function["expected_seed_length"],
+            function["expected_donor_length"],
+            "debug$S representation delta",
         )
     if fpo_closure:
         # The donor's FPO record describes the donor body; adopt it whole
@@ -25023,6 +25465,8 @@ def compose_same_slot_resize(
         "substituted_relocations": len(substitutions),
         "imported_undefined_symbols": [item[0] for item in imported_symbols],
         "retail_exact": bool(divergent),
+        **({"debug_representation_delta": representation_detail}
+           if representation_detail else {}),
         **local_set_detail,
         **topology_detail,
         **semantic_detail,
@@ -25379,7 +25823,8 @@ def validate_donor_source_overlay_recipe(
             and lane["required_define"]
             and (
                 "include_projection" not in lane
-                or lane["include_projection"] == "source_root_mirror_v1"
+                or lane["include_projection"] in (
+                    "source_root_mirror_v1", "source_root_mirror_only_v1")
             ),
             "donor source overlay compile lane differs")
     renderings = recipe.get("renderings")
@@ -27592,8 +28037,13 @@ def compose_retail_exact_reloc_divergent(
             "source-refactor function requires its source-proof composer")
     require(isinstance(retail_body, (bytes, bytearray)) and retail_body,
             "retail oracle body is missing")
-    return compose_same_slot_resize(seed_bytes, donor_bytes, function,
-                                    retail_body=bytes(retail_body))
+    return compose_same_slot_resize(
+        seed_bytes, donor_bytes, function,
+        retail_body=bytes(retail_body),
+        declared_donor_extras=(
+            function.get("expected_donor_extra_functions") or None),
+        declared_seed_only=(
+            function.get("expected_seed_only_functions") or None))
 
 
 def compose_retail_exact_source_refactor(
@@ -28451,7 +28901,7 @@ def compose_equal_body_comdat(
                 "declared cross-lane donor seat changed",
             )
             seat_map = {donor_primary["number"]: seed_primary["number"]}
-            for child_name in (".debug$S", ".xdata$x"):
+            for child_name in closure[1]:
                 seat_map[
                     _comdat_child(donor, donor_primary, child_name)["number"]
                 ] = _comdat_child(seed, seed_primary, child_name)["number"]
@@ -33044,6 +33494,10 @@ INSTRUCTION_SCHEDULE_IMAGE_TARGETS = frozenset({
     ("roi", "lego1"),
     ("realtime", "lego1"),
     ("omni", "lego1"),
+    # `viewmanager` is listed once, in the LEGO1 DLL's own
+    # `target_link_libraries` -- the same link-graph fact the
+    # register-bijection-reencoding class already pins for its own rows.
+    ("viewmanager", "lego1"),
 })
 
 
@@ -36882,6 +37336,51 @@ def _validate_commutative_operand_forms(
     return normalized_forms, form_bytes
 
 
+def _validate_esp_argument_exchanges(
+    value: object, context: str, body_length: int,
+) -> tuple[list, list]:
+    """Validate the `esp_argument_exchanges` list of a seam declaration.
+
+    Shape only -- E1..E8 are discharged by `apply_esp_argument_exchange`
+    on the measured body, and E8's pairing with a declared register
+    bijection is checked where the seam applies the certificates.
+    Returns (normalized_items, rewritten_bytes)."""
+    normalized_items = []
+    exchange_bytes = []
+    previous_offset = -1
+    for index, item in enumerate(
+            value.get("esp_argument_exchanges") or []):
+        item_context = f"{context}.esp_argument_exchanges[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "first_offset", "second_offset", "expected_rewritten_offsets",
+        }, item_context)
+        first = require_exact_int(item.get("first_offset"),
+                                  f"{item_context}.first_offset",
+                                  minimum=0, maximum=body_length - 4)
+        second = require_exact_int(item.get("second_offset"),
+                                   f"{item_context}.second_offset",
+                                   minimum=0, maximum=body_length - 4)
+        require(first > previous_offset and first < second,
+                f"{item_context}: sites are unsorted")
+        previous_offset = second
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and len(offsets) >= 2
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and 0 <= offset < body_length
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        exchange_bytes.extend(offsets)
+        normalized_items.append({
+            "first_offset": first,
+            "second_offset": second,
+            "expected_rewritten_offsets": list(offsets),
+        })
+    require(len(set(exchange_bytes)) == len(exchange_bytes),
+            f"{context}: two argument exchanges rewrite the same byte")
+    return normalized_items, exchange_bytes
+
+
 def validate_composed_rewriting(
     value: object, context: str, body_length: int,
     lone_statement_ok: bool = False,
@@ -36891,7 +37390,7 @@ def validate_composed_rewriting(
     exact_audit_keys(value, {
         "kind", "windows", "register_bijections", "relational_sites",
         "fp_sum_rotations", "simulated_region_rewrites", "slot_bijections",
-        "commutative_operand_forms",
+        "commutative_operand_forms", "esp_argument_exchanges",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_seed_debug_s_sha256",
@@ -36901,6 +37400,7 @@ def validate_composed_rewriting(
                           "relational_sites", "fp_sum_rotations",
                           "simulated_region_rewrites", "slot_bijections",
                           "commutative_operand_forms",
+                          "esp_argument_exchanges",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == COMPOSED_REWRITING_KIND,
@@ -37214,6 +37714,8 @@ def validate_composed_rewriting(
         normalized_sites.append(normalized_site)
     normalized_forms, form_bytes = _validate_commutative_operand_forms(
         value, context, body_length)
+    normalized_exchange_items, exchange_bytes = (
+        _validate_esp_argument_exchanges(value, context, body_length))
     declared_slots = value.get("slot_bijections") or []
     require(normalized_windows or normalized_bijections or normalized_sites
             or normalized_rotations or normalized_region_rewrites
@@ -37277,15 +37779,20 @@ def validate_composed_rewriting(
         for item in declared_slots if isinstance(item, dict)
         for offset in (item.get("expected_rewritten_offsets") or [])
         if type(offset) is int}
-    require(set(bijection_bytes) | set(relational_bytes)
-            | set(rotation_bytes) | set(region_rewrite_bytes) | slot_bytes
-            | set(form_bytes)
-            <= set(changed),
+    strict_union = (set(bijection_bytes) | set(relational_bytes)
+                    | set(rotation_bytes) | set(region_rewrite_bytes)
+                    | slot_bytes)
+    if not normalized_exchange_items:
+        # Without an argument exchange every primitive's bytes must survive
+        # to the final image; a later exchange may legitimately flip a
+        # commuted pair's register fields back onto the seed's values.
+        strict_union |= set(form_bytes)
+    require(strict_union <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in window_bytes or offset in rotation_regions
                 or offset in region_rewrite_regions or offset in slot_bytes
                 or offset in set(bijection_bytes) | set(relational_bytes)
-                | set(form_bytes)
+                | set(form_bytes) | set(exchange_bytes)
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
             "certificate can move")
@@ -37376,6 +37883,7 @@ def validate_composed_rewriting(
     normalized["simulated_region_rewrites"] = normalized_region_rewrites
     normalized["slot_bijections"] = normalized_slots
     normalized["commutative_operand_forms"] = normalized_forms
+    normalized["esp_argument_exchanges"] = normalized_exchange_items
     if code_length is not None:
         normalized["expected_code_length"] = code_length
     if targets is not None:
@@ -37570,6 +38078,20 @@ def compose_retail_exact_composed_rewriting(
                     f"composed-rewriting commutative form {index} rewrote a "
                     "different site from its declaration")
         form_detail = form_proof["sites"]
+    exchange_site_detail = []
+    if spec.get("esp_argument_exchanges"):
+        image, exchange_site_proof = apply_esp_argument_exchange(
+            image, spec["esp_argument_exchanges"], relocation_offsets,
+            "composed-rewriting argument exchange", relocation_symbols,
+            code_length)
+        for index, (item, site) in enumerate(
+                zip(spec["esp_argument_exchanges"],
+                    exchange_site_proof["sites"])):
+            require(site["rewritten_offsets"]
+                    == item["expected_rewritten_offsets"],
+                    f"composed-rewriting argument exchange {index} rewrote "
+                    "a different byte set from its declaration")
+        exchange_site_detail = exchange_site_proof["sites"]
     # C1, second half: the byte-local certificates, measured on the image the
     # reordering produced.
     bijection_detail = []
@@ -37852,6 +38374,7 @@ def compose_retail_exact_composed_rewriting(
         "instruction_schedule": schedule_detail,
         "fp_sum_reassociation": fp_detail,
         "commutative_operand_forms": form_detail,
+        "esp_argument_exchanges": exchange_site_detail,
         "simulated_region_rewrites": region_rewrite_detail,
         "register_bijections": bijection_detail,
         "slot_bijections": slot_detail,
@@ -37917,6 +38440,7 @@ def validate_donor_rewriting(
         "kind", "windows", "fp_sum_rotations", "register_bijections",
         "fp_pointer_exchanges", "simulated_region_rewrites",
         "relational_sites", "commutative_operand_forms",
+        "slot_bijections",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_code_length",
@@ -37924,7 +38448,7 @@ def validate_donor_rewriting(
     }, context, optional={"windows", "fp_sum_rotations",
                           "register_bijections", "fp_pointer_exchanges",
                           "simulated_region_rewrites", "relational_sites",
-                          "commutative_operand_forms",
+                          "commutative_operand_forms", "slot_bijections",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == DONOR_REWRITING_KIND,
@@ -38204,11 +38728,52 @@ def validate_donor_rewriting(
                     f"{site_context}.reencode must be true when present")
             normalized_site["reencode"] = True
         normalized_sites.append(normalized_site)
+    normalized_slots = []
+    for index, item in enumerate(value.get("slot_bijections") or []):
+        item_context = f"{context}.slot_bijections[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "mapping", "expected_rewritten_offsets",
+            "debug_s_bprel_offsets",
+        }, item_context)
+        slot_mapping = item.get("mapping")
+        require(isinstance(slot_mapping, dict)
+                and 2 <= len(slot_mapping) <= 8
+                and all(isinstance(key, str)
+                        and type(slot_value) is int and slot_value < 0
+                        and int(key) < 0
+                        for key, slot_value in slot_mapping.items()),
+                f"{item_context}.mapping is invalid")
+        slot_keys = {int(key) for key in slot_mapping}
+        require(slot_keys == set(slot_mapping.values())
+                and len(set(slot_mapping.values())) == len(slot_mapping)
+                and all(int(key) != slot_value
+                        for key, slot_value in slot_mapping.items()),
+                f"{item_context}.mapping is not a fixed-point-free "
+                "bijection")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and 0 <= offset < body_length
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        records = item.get("debug_s_bprel_offsets")
+        require(isinstance(records, list)
+                and records == sorted(set(records))
+                and all(type(offset) is int and offset >= 0
+                        for offset in records),
+                f"{item_context}.debug_s_bprel_offsets is invalid")
+        normalized_slots.append({
+            "mapping": dict(sorted(slot_mapping.items())),
+            "expected_rewritten_offsets": list(offsets),
+            "debug_s_bprel_offsets": list(records),
+        })
     normalized_forms, form_bytes = _validate_commutative_operand_forms(
         value, context, body_length)
     require(normalized_windows or normalized_rotations
             or normalized_bijections or normalized_exchanges
-            or normalized_rewrites or normalized_sites or normalized_forms,
+            or normalized_rewrites or normalized_sites or normalized_forms
+            or normalized_slots,
             f"{context} declares no certificate")
     window_bytes = {offset for window in normalized_windows
                     for offset in range(window["start"], window["end"])}
@@ -38255,15 +38820,18 @@ def validate_donor_rewriting(
                            if site["seed_condition"]
                            == site["image_condition"]
                            for offset in site["expected_rewritten_offsets"]}
+    slot_bytes = {offset for item in normalized_slots
+                  for offset in item["expected_rewritten_offsets"]}
     require(set(rotation_bytes) | set(bijection_bytes)
             | set(exchange_bytes) | set(rewrite_bytes) | set(form_bytes)
+            | slot_bytes
             | (set(relational_bytes) - identity_relational)
             <= set(changed),
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in rotation_regions or offset in window_bytes
                 or offset in rewrite_regions
                 or offset in set(bijection_bytes) | set(exchange_bytes)
-                | set(relational_bytes) | set(form_bytes)
+                | set(relational_bytes) | set(form_bytes) | slot_bytes
                 for offset in changed),
             f"{context}.expected_changed_offsets names a byte no declared "
             "certificate can move")
@@ -38307,6 +38875,7 @@ def validate_donor_rewriting(
         "simulated_region_rewrites": normalized_rewrites,
         "relational_sites": normalized_sites,
         "commutative_operand_forms": normalized_forms,
+        "slot_bijections": normalized_slots,
     }
     if code_length is not None:
         normalized["expected_code_length"] = code_length
@@ -38353,9 +38922,18 @@ def compose_retail_exact_donor_rewriting(
     dp = donor.function_section(mangled)
 
     # --- D1: provenance ---------------------------------------------------
-    require(sp["number"] == dp["number"]
-            == function["expected_section_number"],
-            "donor-rewriting target section seat changed")
+    declared_donor_seat = function.get("expected_donor_section_number")
+    if declared_donor_seat is None:
+        require(sp["number"] == dp["number"]
+                == function["expected_section_number"],
+                "donor-rewriting target section seat changed")
+    else:
+        # Declared cross-lane donor: the donor's COMDAT seat is pinned
+        # explicitly instead of matching the seed's -- the same
+        # declared-seat rule the equal-body and resize classes carry.
+        require(sp["number"] == function["expected_section_number"]
+                and dp["number"] == declared_donor_seat,
+                "donor-rewriting declared donor seat changed")
     require(len(seed.sections) == function["expected_section_count"]
             and len(donor.sections)
             == function.get("expected_donor_section_count",
@@ -38522,6 +39100,20 @@ def compose_retail_exact_donor_rewriting(
             "region": [item["region_start"], item["region_end"]],
             "rewritten_offsets": proof["rewritten_offsets"],
             "region_instruction_count": proof["region_instruction_count"],
+        })
+    slot_detail = []
+    for index, item in enumerate(spec.get("slot_bijections") or []):
+        image, proof = apply_slot_bijection(
+            image, item["mapping"], relocation_offsets,
+            f"donor-rewriting slot bijection {index}",
+            relocation_symbols, code_length)
+        require(proof["rewritten_offsets"]
+                == item["expected_rewritten_offsets"],
+                f"donor-rewriting slot bijection {index} rewrote a "
+                "different byte set from its declaration")
+        slot_detail.append({
+            "mapping": dict(sorted(item["mapping"].items())),
+            "rewritten_offsets": proof["rewritten_offsets"],
         })
     fp_detail = []
     if spec.get("fp_sum_rotations"):
@@ -38750,6 +39342,19 @@ def compose_retail_exact_donor_rewriting(
         "retail_oracle": function["retail_oracle"],
         "retail_relocations": function["retail_relocations"],
     }
+    if "debug_representation_delta" in function:
+        # The declared record-level delta rides to the installing composer,
+        # where it replaces D1's raw-size proxy with the record-by-record
+        # same-function proof.
+        effective["debug_representation_delta"] = (
+            function["debug_representation_delta"])
+    if "expected_donor_section_number" in function:
+        # The declared cross-lane seat rides to the installing composer,
+        # exactly as the cross-TU complete-target class forwards it: D1
+        # already proved the donor sits at the declared seat, and the
+        # installer's own seat check must read the same declaration.
+        effective["expected_donor_section_number"] = (
+            function["expected_donor_section_number"])
     composed, detail = compose_same_slot_resize(
         seed_bytes, bytes(derived), effective,
         retail_body=bytes(retail_body),
@@ -38773,6 +39378,7 @@ def compose_retail_exact_donor_rewriting(
         "commutative_operand_forms": form_detail,
         "simulated_region_rewrites": rewrite_detail,
         "register_bijections": bijection_detail,
+        "slot_bijections": slot_detail,
         "relational_form": relational_detail,
         "instruction_count": len(image_instructions),
         "changed_offsets": changed,
@@ -38883,6 +39489,207 @@ def _commutative_memory_operand(body, item, context):
     modrm_at = encoding["modrm_at"]
     end = item["offset"] + item["length"]
     return modrm_at, end, bytes(body[modrm_at:end])
+
+
+def apply_esp_argument_exchange(
+    body: bytes, exchanges: list, relocation_offsets: frozenset,
+    context: str, relocations: dict | None = None,
+    code_length: int | None = None,
+) -> tuple[bytes, dict]:
+    """Exchange two incoming pointer arguments' roles, or refuse.
+
+    The certificate: two `mov r32, [esp+disp8]` argument loads in the
+    function's linear prologue prefix take each other's incoming argument
+    slot, and every later use of either destination register is renamed
+    under the corresponding two-register bijection.  The pair composes to
+    an isomorphism of the machine function: the same two argument values
+    flow through exchanged register names.
+
+    Obligations, all discharged here on the measured body:
+      E1  both offsets decode as `8B /r` with mod=01, rm=100, SIB=24 --
+          `mov r32, [esp+disp8]` -- inside a totally decoded prefix;
+      E2  the destinations are distinct and neither is ESP or EBP;
+      E3  the prefix from entry through the second load consists ONLY of
+          `push r32`, `sub esp, imm8`, and `mov r32, [esp+disp8]`
+          instructions, so the ESP depth at each site is exact and no
+          instruction can have consumed either destination register;
+      E4  no relocation byte lies inside either instruction;
+      E5  the two loads address DIFFERENT incoming argument slots (the
+          slot is disp MINUS the tracked ESP depth, entry-relative), both
+          above the return address;
+      E6  the exchanged displacements still encode as disp8;
+      E7  no other prologue load addresses either exchanged slot, and no
+          instruction after the prologue prefix has an ESP-based memory
+          operand at all (so nothing else can alias an argument slot);
+      E8  after the prefix, neither destination register is WRITTEN again
+          (a `pop r32` restoring a prologue `push r32` is the structural
+          exception and is left unrenamed), every register field naming
+          either destination is flipped to the other, instruction
+          boundaries survive re-decoding, and each rewritten
+          instruction's read/write sets are exactly the originals with
+          the two registers exchanged.
+    """
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(exchanges, list) and len(exchanges) == 1,
+            f"{context}: exactly one exchange must be declared")
+    item = exchanges[0]
+    item_context = f"{context} exchange 0"
+    first, second = item["first_offset"], item["second_offset"]
+    require(type(first) is int and type(second) is int
+            and 0 <= first < second < len(body),
+            f"{item_context}: offsets are out of range")
+    # E3: walk the linear prefix from entry.
+    depth = 0
+    at = 0
+    depths = {}
+    loads = {}
+    pushed = []
+    while at < len(body):
+        opcode = body[at]
+        if 0x50 <= opcode <= 0x57:              # push r32
+            depth += 4
+            pushed.append(opcode - 0x50)
+            at += 1
+            continue
+        if (opcode == 0x83 and at + 3 <= len(body)
+                and body[at + 1] == 0xEC):      # sub esp, imm8
+            depth += body[at + 2]
+            at += 3
+            continue
+        if (opcode == 0x8B and at + 4 <= len(body)
+                and (body[at + 1] >> 6) == 1
+                and (body[at + 1] & 7) == 4
+                and body[at + 2] == 0x24):      # mov r32, [esp+disp8]
+            register = (body[at + 1] >> 3) & 7
+            displacement = body[at + 3]
+            loads[at] = (register, displacement)
+            depths[at] = depth
+            at += 4
+            continue
+        require(at > second,
+                f"{item_context}: the prologue prefix holds an "
+                f"instruction outside the closed form at {at}")
+        break
+    prefix_end = at
+    require(first in loads and second in loads,
+            f"{item_context}: a declared offset is not an argument load")
+    first_register, first_disp = loads[first]
+    second_register, second_disp = loads[second]
+    require(first_register != second_register
+            and first_register not in (4, 5)
+            and second_register not in (4, 5),
+            f"{item_context}: destination registers are not two distinct "
+            "general registers")
+    for offset in (first + 3, second + 3):
+        require(offset not in relocation_offsets,
+                f"{item_context}: a relocation lies under the displacement")
+    first_slot = first_disp - depths[first]
+    second_slot = second_disp - depths[second]
+    require(first_slot != second_slot and first_slot >= 4
+            and second_slot >= 4,
+            f"{item_context}: the loads do not take two distinct incoming "
+            "argument slots")
+    for load_at, (_, load_disp) in loads.items():
+        if load_at in (first, second):
+            continue
+        require(load_disp - depths[load_at]
+                not in (first_slot, second_slot),
+                f"{item_context}: another prefix load addresses an "
+                "exchanged slot")
+    new_first = second_slot + depths[first]
+    new_second = first_slot + depths[second]
+    require(0 <= new_first <= 0x7F and 0 <= new_second <= 0x7F,
+            f"{item_context}: an exchanged displacement does not encode "
+            "as disp8")
+    decoded = decode_ia32_bijection_body(
+        body, f"{context} body", relocations, code_length)
+    numbers = {first_register: second_register,
+               second_register: first_register}
+    names = {IA32_GENERAL_REGISTER_NAMES[first_register]:
+             IA32_GENERAL_REGISTER_NAMES[second_register],
+             IA32_GENERAL_REGISTER_NAMES[second_register]:
+             IA32_GENERAL_REGISTER_NAMES[first_register]}
+    exchanged_names = frozenset(names)
+    remaining_pops = list(pushed)
+    structural_pops = set()
+    image = bytearray(body)
+    image[first + 3] = new_first
+    image[second + 3] = new_second
+    rewritten = [first + 3, second + 3]
+    for instruction in decoded:
+        offset = instruction["offset"]
+        if offset < prefix_end:
+            continue
+        memory = instruction.get("memory")
+        require(memory is None or memory.get("base") != "esp",
+                f"{item_context}: an ESP-based memory operand after the "
+                f"prologue prefix could alias an argument slot "
+                f"(at {offset})")
+        opcode = instruction["opcode"]
+        if (instruction["length"] == 1 and 0x58 <= body[offset] <= 0x5F
+                and (body[offset] - 0x58) in remaining_pops):
+            remaining_pops.remove(body[offset] - 0x58)
+            structural_pops.add(offset)
+            continue
+        require(not (instruction["writes"] & exchanged_names)
+                or instruction["flow"] in ("ret", "exit"),
+                f"{item_context}: an instruction at {offset} writes an "
+                "exchanged register after the prologue prefix")
+        for byte_index, shift in instruction["fields"]:
+            value = (image[byte_index] >> shift) & 7
+            if value not in numbers:
+                continue
+            require(byte_index not in relocation_offsets,
+                    f"{item_context}: a rewritten register field overlaps "
+                    "a relocation")
+            image[byte_index] = (
+                (image[byte_index] & ~(7 << shift))
+                | (numbers[value] << shift)) & 0xFF
+            rewritten.append(byte_index)
+    image = bytes(image)
+    image_instructions = decode_ia32_bijection_body(
+        image, f"{context} image", relocations, code_length)
+    require([(entry["offset"], entry["length"])
+             for entry in image_instructions]
+            == [(entry["offset"], entry["length"]) for entry in decoded],
+            f"{item_context}: the exchange changed an instruction boundary")
+    for left, right in zip(image_instructions, decoded):
+        if (right["offset"] < prefix_end
+                or right["offset"] in structural_pops
+                or right["offset"] in (first, second)):
+            continue
+        if right["flow"] in ("ret", "exit"):
+            # A return's read set is a calling-convention artifact with no
+            # register fields; nothing is renamed and nothing leaks.
+            continue
+        if not right["fields"]:
+            # No encodable register fields: an implicit use of an
+            # exchanged register (a string op's esi/edi, for example)
+            # cannot be renamed, so it must not exist.
+            require(not ((right["reads"] | right["writes"])
+                         & exchanged_names),
+                    f"{item_context}: an implicit use of an exchanged "
+                    f"register at {right['offset']} cannot be renamed")
+            continue
+        expected_reads = frozenset(names.get(name, name)
+                                   for name in right["reads"])
+        expected_writes = frozenset(names.get(name, name)
+                                    for name in right["writes"])
+        require(left["reads"] == expected_reads
+                and left["writes"] == expected_writes,
+                f"{item_context}: the rewrite at {right['offset']} is not "
+                "the declared two-register exchange")
+    rewritten = sorted(set(
+        offset for offset in rewritten if image[offset] != body[offset]))
+    sites = [{
+        "first_offset": first, "second_offset": second,
+        "registers": [IA32_GENERAL_REGISTER_NAMES[first_register],
+                      IA32_GENERAL_REGISTER_NAMES[second_register]],
+        "rewritten_offsets": rewritten,
+    }]
+    return image, {"sites": sites}
 
 
 def apply_commutative_operand_form(
@@ -39078,6 +39885,228 @@ def apply_commutative_operand_form(
 
 
 FP_POINTER_EXCHANGE_KIND = "fp_pointer_addend_exchange_v1"
+
+
+# ---------------------------------------------------------------------------
+# Commutative integer-multiply load form: `mov rT, rS ; imul rT, [esp+d8]`
+# <-> `mov rT, [esp+d8] ; imul rT, rS` -- one product, two roundings-free
+# integer forms whose only difference is which factor rides the load.  MSVC
+# 4.2 selects the form from whole-TU parse state exactly as it does for the
+# x87 pair (measured on DissolveTransition: the pre-landing carrier state
+# renders one form, the current state the other, over identical source).
+#
+# WHAT IT PROVES, per declared site (I1..I8, declaration-scoped):
+#  I1  FORM.  At `mov_offset` the closed decoder sees `mov rT, rS`
+#      (8B /r, mod==3) with rT and rS distinct general registers, rT and rS
+#      not ESP; at `imul_offset` it sees `imul rT, [esp+disp8]`
+#      (0F AF /r, mod==1, rm==100, SIB==0x24) naming the SAME rT.
+#  I2  INTERVENING.  Between the pair lie at most two whole instructions,
+#      each of which does not read or write rT, does not write rS, does not
+#      write memory, does not touch ESP, and neither reads nor writes
+#      arithmetic flags -- so both orders read the same slot value and rS,
+#      and no observer sees rT's intermediate value.
+#  I3  REWRITE.  The exchange re-encodes the pair as
+#      `mov rT, [esp+disp8]` (8B /r mod==1 rm==100 SIB 24 disp8) and
+#      `imul rT, rS` (0F AF /r mod==3); the intervening instructions'
+#      bytes are carried verbatim (shifted by the mov's growth); the site's
+#      total length is unchanged and the instruction count is unchanged.
+#  I4  RELOCATIONS.  No byte of the site is a relocation operand.
+#  I5  FLAGS.  Both forms define EFLAGS by the same IMUL of the same two
+#      values; MOV writes no flags; I2 already bars flag observers inside.
+#  I6  BOUNDARIES.  No branch target, entry point, or internal relocation
+#      target lies strictly inside the site.
+#  I7  The rewritten byte set equals the declaration's.
+#  I8  The whole-body instruction grid outside the site is unchanged.
+# ---------------------------------------------------------------------------
+
+IMUL_OPERAND_EXCHANGE_KIND = "imul_operand_exchange_v1"
+
+
+def apply_imul_operand_exchange(
+    body: bytes, sites: list, relocation_offsets: frozenset, context: str,
+    relocations: dict | None = None, code_length: int | None = None,
+    external_entries: frozenset | None = None,
+    internal_targets: frozenset | None = None,
+) -> tuple[bytes, dict]:
+    """Exchange each declared integer-multiply load form, or refuse."""
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(sites, list) and sites,
+            f"{context}: no site is declared")
+    items, successors, entries = ia32_relational_flow_walk(
+        body, relocations, context, code_length, external_entries)
+    branch_targets = {item["target"] for item in items
+                     if item.get("target") is not None}
+    entry_offsets = {items[entry]["offset"] for entry in entries[1:]}
+    decoded = decode_ia32_bijection_body(
+        body, f"{context} decode", relocations, code_length)
+    index_of = {item["offset"]: index for index, item in enumerate(decoded)}
+    number_of = {name: number for name, number
+                 in _IA32_REGISTER_NUMBERS.items()}
+    name_of = {number: name for name, number in number_of.items()}
+    image = bytearray(body)
+    proved = []
+    previous_end = 0
+    for ordinal, site in enumerate(sites):
+        site_context = f"{context} site {ordinal}"
+        mov_at = site["mov_offset"]
+        imul_at = site["imul_offset"]
+        require(type(mov_at) is int and type(imul_at) is int
+                and mov_at in index_of and imul_at in index_of
+                and mov_at < imul_at,
+                f"{site_context}: offsets are not ordered instruction "
+                "boundaries")
+        require(previous_end <= mov_at,
+                f"{site_context}: sites are unsorted or overlapping")
+        mov = decoded[index_of[mov_at]]
+        imul = decoded[index_of[imul_at]]
+        # I1: the closed pair form.
+        require(mov["length"] == 2 and body[mov_at] == 0x8B
+                and (body[mov_at + 1] >> 6) == 3,
+                f"{site_context}: the load is not `mov r32, r32`")
+        rt = (body[mov_at + 1] >> 3) & 7
+        rs = body[mov_at + 1] & 7
+        require(rt != rs, f"{site_context}: the pair names one register")
+        require(name_of[rt] != "esp" and name_of[rs] != "esp",
+                f"{site_context}: the pair touches ESP")
+        require(imul["length"] == 5
+                and body[imul_at] == 0x0F and body[imul_at + 1] == 0xAF
+                and (body[imul_at + 2] >> 6) == 1
+                and (body[imul_at + 2] & 7) == 4
+                and body[imul_at + 3] == 0x24,
+                f"{site_context}: the operator is not "
+                "`imul r32, [esp+disp8]`")
+        require(((body[imul_at + 2] >> 3) & 7) == rt,
+                f"{site_context}: the operator does not name the load's "
+                "target")
+        disp8 = body[imul_at + 4]
+        end = imul_at + 5
+        previous_end = end
+        # I2: the intervening instructions.
+        between = [decoded[i] for i in range(index_of[mov_at] + 1,
+                                             index_of[imul_at])]
+        require(len(between) <= 2,
+                f"{site_context}: more than two instructions lie between "
+                "the pair")
+        rt_atoms = _IA32_ATOMS_OF[name_of[rt]]
+        rs_atoms = _IA32_ATOMS_OF[name_of[rs]]
+        esp_atoms = _IA32_ATOMS_OF["esp"]
+        for inner in between:
+            require(inner["flow"] == "straight",
+                    f"{site_context}: an intervening instruction branches")
+            reads = frozenset(inner["read_atoms"])
+            writes = frozenset(inner["write_atoms"])
+            require(not (reads & rt_atoms) and not (writes & rt_atoms),
+                    f"{site_context}: an intervening instruction touches "
+                    "the load target")
+            require(not (writes & rs_atoms),
+                    f"{site_context}: an intervening instruction writes "
+                    "the exchanged register")
+            require(not (reads & esp_atoms) or not inner["memory_write"],
+                    f"{site_context}: an intervening instruction writes "
+                    "through ESP")
+            require(not inner["memory_write"],
+                    f"{site_context}: an intervening instruction writes "
+                    "memory")
+            require(not (writes & esp_atoms),
+                    f"{site_context}: an intervening instruction moves ESP")
+            require("flags" not in inner["read_atoms"]
+                    and not (reads & frozenset({"eflags"}))
+                    and not inner.get("reads_flags"),
+                    f"{site_context}: an intervening instruction reads "
+                    "flags")
+        # I4/I6: relocations and boundaries.
+        require(all(offset not in relocation_offsets
+                    for offset in range(mov_at, end)),
+                f"{site_context}: the site overlaps a relocation")
+        require(not any(mov_at < target < end
+                        for target in branch_targets),
+                f"{site_context}: a branch target lies inside the site")
+        require(not any(mov_at < offset < end
+                        for offset in entry_offsets),
+                f"{site_context}: an entry point lies inside the site")
+        require(not any(mov_at < target < end
+                        for target in (internal_targets or frozenset())),
+                f"{site_context}: an internal relocation target lies "
+                "inside the site")
+        # I3: the rewrite.
+        carried = b"".join(body[inner["offset"]:
+                                inner["offset"] + inner["length"]]
+                           for inner in between)
+        new_site = (bytes([0x8B, 0x40 | (rt << 3) | 4, 0x24, disp8])
+                    + carried
+                    + bytes([0x0F, 0xAF, 0xC0 | (rt << 3) | rs]))
+        require(len(new_site) == end - mov_at,
+                f"{site_context}: the exchange changed the site length")
+        image[mov_at:end] = new_site
+        rewritten = [offset for offset in range(mov_at, end)
+                     if image[offset] != body[offset]]
+        require(rewritten == site["expected_rewritten_offsets"],
+                f"{site_context}: the exchange rewrote a different byte "
+                "set from its declaration")
+        proved.append({
+            "mov_offset": mov_at, "imul_offset": imul_at,
+            "target": name_of[rt], "exchanged": name_of[rs],
+            "slot_displacement": disp8,
+            "rewritten_offsets": rewritten,
+        })
+    # I8: the grid outside the sites is unchanged.
+    reencoded = decode_ia32_bijection_body(
+        bytes(image), f"{context} image", relocations, code_length)
+    require(len(reencoded) == len(decoded),
+            f"{context}: the exchange changed the instruction count")
+    site_spans = [(site["mov_offset"], site["imul_offset"] + 5)
+                  for site in sites]
+    for left, right in zip(decoded, reencoded):
+        inside = any(start <= left["offset"] < stop
+                     for start, stop in site_spans)
+        if not inside:
+            require(left["offset"] == right["offset"]
+                    and left["length"] == right["length"],
+                    f"{context}: the exchange moved an instruction "
+                    "outside its sites")
+    return bytes(image), {"sites": proved}
+
+
+def _validate_imul_operand_exchanges(
+    value: dict, context: str, body_length: int,
+) -> tuple[list, list]:
+    """Validate the declaration shape; the applier discharges I1..I8."""
+    raw = value.get("imul_operand_exchanges") or []
+    require(isinstance(raw, list) and len(raw) <= 16,
+            f"{context}.imul_operand_exchanges is invalid")
+    normalized = []
+    rewritten = []
+    previous = -1
+    for index, item in enumerate(raw):
+        item_context = f"{context}.imul_operand_exchanges[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "mov_offset", "imul_offset", "expected_rewritten_offsets",
+        }, item_context)
+        mov_at = require_exact_int(
+            item.get("mov_offset"), item_context + ".mov_offset",
+            minimum=0, maximum=body_length - 7)
+        imul_at = require_exact_int(
+            item.get("imul_offset"), item_context + ".imul_offset",
+            minimum=2, maximum=body_length - 5)
+        require(mov_at > previous and mov_at + 2 <= imul_at,
+                f"{item_context} is unsorted or malformed")
+        previous = imul_at + 5 - 1
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int
+                        and mov_at <= offset < imul_at + 5
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        normalized.append({
+            "mov_offset": mov_at, "imul_offset": imul_at,
+            "expected_rewritten_offsets": list(offsets),
+        })
+        rewritten.extend(offsets)
+    return normalized, rewritten
 
 
 _SIMULATOR_REGS = ("eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi")
@@ -40696,6 +41725,13 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
                           regs[_SIMULATOR_REGS[reg_field]])
         elif op == 0x80 and mod != 3 and reg_field == 7:   # cmp r/m8, imm8
             last_flags = ("cmp8", mem_operand(2), encoded[length - 1])
+        elif op == 0x83 and mod != 3 and reg_field == 7:   # cmp m32, imm8
+            addr = mem_operand(2)
+            left = read_slot(addr)
+            last_flags = ("cmp",
+                          left if left is not None else ("load", addr),
+                          ("imm", int.from_bytes(encoded[length - 1:length],
+                                                 "little", signed=True)))
         elif op == 0x39 and mod == 3:          # cmp r/m32, r32 (reg form)
             last_flags = ("cmp", regs[_SIMULATOR_REGS[rm]],
                           regs[_SIMULATOR_REGS[reg_field]])
@@ -40741,6 +41777,18 @@ def _srr_simulate(body: bytes, start: int, end: int, context: str,
             name = _SIMULATOR_REGS[reg_field]
             regs[name] = ("imm", 0)
             last_flags = ("zeroflags",)
+        elif op == 0xC1 and mod == 3 and reg_field == 4:   # shl r32, imm8
+            name = _SIMULATOR_REGS[rm]
+            regs[name] = ("shl", regs[name], encoded[length - 1])
+            last_flags = ("shlflags", regs[name])
+        elif op == 0xC1 and mod == 3 and reg_field == 5:   # shr r32, imm8
+            name = _SIMULATOR_REGS[rm]
+            regs[name] = ("shr", regs[name], encoded[length - 1])
+            last_flags = ("shrflags", regs[name])
+        elif op == 0xC1 and mod == 3 and reg_field == 7:   # sar r32, imm8
+            name = _SIMULATOR_REGS[rm]
+            regs[name] = ("sar", regs[name], encoded[length - 1])
+            last_flags = ("sarflags", regs[name])
         elif 0x50 <= op <= 0x57:               # push r32
             do_push(regs[_SIMULATOR_REGS[op - 0x50]])
         elif op == 0x6A:                       # push imm8

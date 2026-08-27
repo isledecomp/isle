@@ -1,7 +1,7 @@
 #ifndef MXMATRIX_H
 #define MXMATRIX_H
 
-#include "realtime/matrix4d.inl.h"
+#include "realtime/matrix.h"
 
 // VTABLE: LEGO1 0x100d4300
 // VTABLE: BETA10 0x101b82e0
@@ -106,7 +106,7 @@ void Matrix4::RotateY(const float& p_angle)
 // Must be included here (not at the bottom of this header) for correct ordering in binary.
 // NormalizeQuaternion and LenSquared depend on Vector4.
 // There's a chance they included mxgeometry4d.h after including this somewhere.
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vector.h"
 
 // FUNCTION: LEGO1 0x100a0ff0
 // FUNCTION: BETA10 0x1001fe60

@@ -1,6 +1,7 @@
 #include "mxcompositemediapresenter.h"
 
 #include "legosoundmanager.h"
+#include "realtime/matrix4d.inl.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "mxautolock.h"

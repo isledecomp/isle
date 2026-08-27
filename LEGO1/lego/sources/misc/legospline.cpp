@@ -1,5 +1,7 @@
 #include "legospline.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "mxgeometry/mxmatrix.h"
 
 DECOMP_SIZE_ASSERT(LegoSpline, 0x50)

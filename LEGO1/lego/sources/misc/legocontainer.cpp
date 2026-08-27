@@ -1,4 +1,5 @@
 #include "legocontainer.h"
+#include "realtime/matrix4d.inl.h"
 
 #include "lego/legoomni/include/legovideomanager.h"
 #include "lego/legoomni/include/misc.h"

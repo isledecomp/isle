@@ -4,6 +4,8 @@
 #include "legopointofviewcontroller.h"
 #include "mxgeometry.h"
 #include "mxgeometry/mxgeometry3d.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "mxgeometry/mxmatrix.h"
 
 // VTABLE: LEGO1 0x100d57b0

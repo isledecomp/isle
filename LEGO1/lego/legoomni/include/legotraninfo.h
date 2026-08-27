@@ -7,6 +7,8 @@
 
 #include "decomp.h"
 // clang-format on
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vector3dtail.inl.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxtypes.h"
 

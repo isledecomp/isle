@@ -13,6 +13,15 @@
 DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
 DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)
 
+// SIZE 0x0c
+class LegoDistanceKey : public LegoAnimKey {
+public:
+	float GetDistance() { return m_distance; }
+
+protected:
+	float m_distance; // 0x08
+};
+
 // FUNCTION: LEGO1 0x1001bf80
 // FUNCTION: BETA10 0x1003dc10
 LegoAnimActorStruct::LegoAnimActorStruct(
@@ -37,12 +46,56 @@ LegoAnimActorStruct::~LegoAnimActorStruct()
 	}
 }
 
+// FUNCTION: BETA10 0x1003dd5e
+float LegoAnimActorStruct::GetDistance(float p_time)
+{
+	unsigned int i;
+	float f;
+
+	if (m_unk0x10.size() == 0) {
+		return 0.0f;
+	}
+
+	if (((LegoDistanceKey*) m_unk0x10.back())->GetTime() <= p_time) {
+		return ((LegoDistanceKey*) m_unk0x10.back())->GetDistance();
+	}
+
+	if (((LegoDistanceKey*) m_unk0x10.front())->GetTime() >= p_time) {
+		return 0.0f;
+	}
+
+	for (i = 1; i < m_unk0x10.size(); i++) {
+		if (((LegoDistanceKey*) m_unk0x10[i])->GetTime() >= p_time) {
+			f = (p_time - ((LegoDistanceKey*) m_unk0x10[i - 1])->GetTime()) /
+				(((LegoDistanceKey*) m_unk0x10[i])->GetTime() -
+				 ((LegoDistanceKey*) m_unk0x10[i - 1])->GetTime());
+			return ((LegoDistanceKey*) m_unk0x10[i - 1])->GetDistance() +
+				   (((LegoDistanceKey*) m_unk0x10[i])->GetDistance() -
+					((LegoDistanceKey*) m_unk0x10[i - 1])->GetDistance()) *
+					   f;
+		}
+	}
+
+	assert(0);
+	return -1.0f;
+}
+
 // FUNCTION: LEGO1 0x1001c130
 // FUNCTION: BETA10 0x1003df3a
 float LegoAnimActorStruct::GetDuration()
 {
 	assert(m_AnimTreePtr);
 	return m_AnimTreePtr->GetDuration();
+}
+
+// FUNCTION: BETA10 0x1003df8c
+float LegoAnimActorStruct::GetTotalDistance()
+{
+	if (m_unk0x10.size() == 0) {
+		return 0.0f;
+	}
+
+	return ((LegoDistanceKey*) m_unk0x10.back())->GetDistance();
 }
 
 // FUNCTION: LEGO1 0x1001c140

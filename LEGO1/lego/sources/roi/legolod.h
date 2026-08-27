@@ -24,11 +24,11 @@ public:
 
 	// FUNCTION: LEGO1 0x100aae70
 	// FUNCTION: BETA10 0x1018e650
-	int NumPolys() const override { return m_numPolys; } // vtable+0x0c
+	int NumPolys() const override; // vtable+0x0c
 
 	// FUNCTION: LEGO1 0x100aae80
 	// FUNCTION: BETA10 0x1018e670
-	float VTable0x10() override { return 0.0; } // vtable+0x10
+	float VTable0x10() override; // vtable+0x10
 
 	LegoResult Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage);
 	LegoLOD* Clone(Tgl::Renderer* p_renderer);
