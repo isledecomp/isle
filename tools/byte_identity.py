@@ -14670,8 +14670,14 @@ def validate_manifest(
             require(isinstance(function, dict), f"{function_context} must be an object")
             if mode == "compose_equal_body_comdat":
                 mangled = function.get("mangled")
-                require(isinstance(mangled, str) and mangled.startswith("?")
-                        and len(mangled) >= 8,
+                # C++ decorated names start with '?'; the only other MSVC
+                # first-party form a row may name is a __stdcall C export
+                # (`_Name@N`, e.g. `_WinMain@16`) -- a closed allowance; the
+                # composers verify the named body against retail regardless.
+                require(isinstance(mangled, str)
+                        and ((mangled.startswith("?") and len(mangled) >= 8)
+                             or re.fullmatch(r"_[A-Za-z]\w*@\d+", mangled)
+                             is not None),
                         f"{function_context}.mangled is invalid")
                 require(mangled not in seen_functions,
                         f"{function_context}.mangled is duplicated")
@@ -17476,7 +17482,13 @@ def validate_manifest(
                     exact_keys(retail, {"image", "address", "verdict",
                                         "length"},
                                f"{function_context}.retail_oracle")
-                    require(retail.get("image") == "LEGO1.DLL",
+                    # The oracle image is bound to the TU's own image
+                    # target: the ISLE executable for `isle` rows, the DLL
+                    # for everything else -- the same closed binding the
+                    # equal-body oracle path derives from the image table.
+                    _expected_oracle_image = (
+                        "ISLE.EXE" if target == "isle" else "LEGO1.DLL")
+                    require(retail.get("image") == _expected_oracle_image,
                             f"{function_context}.retail_oracle.image is "
                             f"invalid")
                     require(isinstance(retail.get("address"), str)
@@ -33498,6 +33510,11 @@ INSTRUCTION_SCHEDULE_IMAGE_TARGETS = frozenset({
     # `target_link_libraries` -- the same link-graph fact the
     # register-bijection-reencoding class already pins for its own rows.
     ("viewmanager", "lego1"),
+    # `misc` and `anim` are likewise LEGO1 link inputs (misc.lib, anim.lib
+    # on the DLL's own link line); the same closed link-graph fact admits
+    # their donor-rewriting rows to bind the LEGO1 image oracle.
+    ("misc", "lego1"),
+    ("anim", "lego1"),
 })
 
 

@@ -359,10 +359,49 @@ def finish_owned(process: subprocess.Popen, command: list[str], *,
 def run(command: list[str], *, timeout_seconds: float,
         cwd: Path | None = None, env: dict | None = None,
         log: Path | None = None) -> None:
+    # A negative returncode is a SIGNAL, not a compiler verdict: the host
+    # occasionally tears down a short-lived wine child (observed as -15 at
+    # sub-second elapsed times), which is an environment fault, never a
+    # property of the pinned inputs.  One deterministic retry re-runs the
+    # identical command; a genuine compiler failure still fails both times.
     process = start_owned(command, cwd=cwd, env=env)
-    finish_owned(
-        process, command, timeout_seconds=timeout_seconds, log=log,
-    )
+    started = time.monotonic()
+    try:
+        output = process.communicate(timeout=max(0.001, timeout_seconds))[0]
+        with _ACTIVE_CHILDREN_LOCK:
+            _ACTIVE_CHILDREN.discard(process)
+    except subprocess.TimeoutExpired:
+        output = _terminate_process_tree(process)
+        if log is not None:
+            log.parent.mkdir(parents=True, exist_ok=True)
+            log.write_bytes(output)
+        tail = output[-4000:].decode("utf-8", "replace")
+        fail(
+            f"command timed out after {timeout_seconds:g}s: "
+            f"{' '.join(command)}\n{tail}"
+        )
+    except BaseException:
+        _terminate_process_tree(process)
+        raise
+    if process.returncode is not None and process.returncode < 0:
+        remaining = timeout_seconds - (time.monotonic() - started)
+        print(f"[isle_build] retrying signal-killed child "
+              f"({process.returncode}): {command[0]}", flush=True)
+        process = start_owned(command, cwd=cwd, env=env)
+        finish_owned(
+            process, command, timeout_seconds=max(1.0, remaining), log=log,
+            timeout_label=timeout_seconds,
+        )
+        return
+    if log is not None:
+        log.parent.mkdir(parents=True, exist_ok=True)
+        log.write_bytes(output)
+    if process.returncode != 0:
+        tail = output[-4000:].decode("utf-8", "replace")
+        fail(
+            f"command failed ({process.returncode}, "
+            f"{time.monotonic() - started:.1f}s): {' '.join(command)}\n{tail}"
+        )
 
 
 def run_rdata_pool_repack(obj: Path, declaration: dict, build: Path) -> str:
@@ -466,6 +505,65 @@ def stamp_link_time(data: bytes, link_time: int,
     return bytes(stamped)
 
 
+def verify_lane_coherence(build_root: Path) -> None:
+    """Refuse when the diagnostic (build/) and terminal lanes disagree on any
+    linked object's non-debug section content.
+
+    The two lanes compile the same shadow sources and receive the same
+    compositions, so every non-debug section byte must be identical (the only
+    sanctioned divergence is debug-record metadata, which embeds the lane
+    cwd).  A mismatch means one lane holds a stale or divergent object and
+    every downstream measurement (reccmp report, MD5 distance) would silently
+    disagree between lanes — the exact failure that once hid a +32-byte
+    image defect behind a 1.0-scoring report.  Object lists come from the
+    lanes' objects1.rsp link inputs, never from a directory glob.
+    """
+    import struct as _struct
+
+    def rsp_objects(lane: Path) -> dict:
+        # rsp tokens are lane-relative (they already carry CMakeFiles/...).
+        entries = {}
+        for rsp in sorted((lane / "CMakeFiles").glob("*.dir/objects1.rsp")):
+            for token in rsp.read_text().split():
+                token = token.strip('"')
+                if token.endswith(".obj"):
+                    entries[token] = lane / token
+        return entries
+
+    def nondebug_sections(path: Path):
+        data = path.read_bytes()
+        count = _struct.unpack_from("<H", data, 2)[0]
+        out = []
+        for index in range(count):
+            base = 20 + index * 40
+            name = data[base:base + 8].rstrip(b"\0")
+            size, pointer = _struct.unpack_from("<II", data, base + 16)
+            if name.startswith(b".debug"):
+                continue
+            out.append((name, size,
+                        hashlib.sha256(data[pointer:pointer + size]).hexdigest()))
+        return out
+
+    diagnostic = rsp_objects(build_root / "build")
+    terminal = rsp_objects(build_root / "terminal")
+    divergent = []
+    for key in sorted(set(diagnostic) & set(terminal)):
+        left, right = diagnostic[key], terminal[key]
+        if not (left.is_file() and right.is_file()):
+            divergent.append(f"{key} (missing object)")
+            continue
+        if nondebug_sections(left) != nondebug_sections(right):
+            divergent.append(key)
+    if divergent:
+        listing = "\n  ".join(divergent[:20])
+        fail("lane coherence violation - diagnostic and terminal lanes "
+             f"disagree on {len(divergent)} object(s); every measurement is "
+             "untrustworthy until the divergent objects are rebuilt:\n  "
+             + listing)
+    print(f"[isle_build] lane coherence verified over "
+          f"{len(set(diagnostic) & set(terminal))} shared objects", flush=True)
+
+
 def terminal_lane(manifest: dict, source_overlay: dict, gates: dict,
                   build_root: Path,
                   shadow: Path, plan: Path, compiler: Path, jobs: int,
@@ -489,6 +587,7 @@ def terminal_lane(manifest: dict, source_overlay: dict, gates: dict,
     compose_translation_units(
         manifest, source_overlay, terminal_build, shadow, compiler,
         jobs, compile_timeout, link_timeout)
+    verify_lane_coherence(build_root)
     results = {}
     states = []
     for identity, gate in gates.items():
@@ -1184,7 +1283,8 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         "include_projection"
                     )
                     private_shadow = None
-                    if projection == "source_root_mirror_v1":
+                    if projection in ("source_root_mirror_v1",
+                                      "source_root_mirror_only_v1"):
                         # A flat -I override cannot shadow nested quoted
                         # includes: once a clean parent header is opened,
                         # its siblings win before -I is searched.  Mirror the
@@ -1208,8 +1308,9 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
                         if path == unit["source"]:
                             (probe / "s.cpp").write_bytes(payload)
                         else:
-                            (probe / "inc" / Path(path).name).write_bytes(
-                                payload)
+                            if projection != "source_root_mirror_only_v1":
+                                (probe / "inc" / Path(path).name).write_bytes(
+                                    payload)
                             if private_shadow is not None:
                                 projected = private_shadow / path
                                 projected.parent.mkdir(
