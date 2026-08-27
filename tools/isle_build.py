@@ -540,6 +540,13 @@ def verify_lane_coherence(build_root: Path) -> None:
             size, pointer = _struct.unpack_from("<II", data, base + 16)
             if name.startswith(b".debug"):
                 continue
+            if pointer == 0:
+                # Uninitialized data (.bss): no raw bytes exist.  Hashing
+                # data[0:size] would hash the FILE HEADER, whose offsets
+                # legitimately shift with lane-specific debug sizes -- the
+                # phantom "flap" that condemned every .bss-carrying object.
+                out.append((name, size, "uninitialized"))
+                continue
             out.append((name, size,
                         hashlib.sha256(data[pointer:pointer + size]).hexdigest()))
         return out

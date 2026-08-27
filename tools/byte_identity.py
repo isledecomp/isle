@@ -37106,6 +37106,259 @@ def _fp_sum_parse_chain(
     return slots
 
 
+def apply_x87_squared_addend_exchange(
+    body: bytes, chains: list, relocation_offsets: frozenset, context: str,
+    relocations: dict | None = None, code_length: int | None = None,
+    external_entries: frozenset | None = None,
+    internal_targets: frozenset | None = None,
+) -> tuple[bytes, dict]:
+    """Permute `fld m32 / fsub m32` addend units whose values provably enter
+    the result only as SQUARES inside one commutative x87 sum, or refuse.
+
+    x87_squared_addend_exchange_v1 obligations, all discharged here:
+      X1  the window parses as N >= 2 contiguous units, each EXACTLY
+          `fld m32` (D9 /0) then `fsub m32` (D8 /4), no relocation byte
+          anywhere inside the window;
+      X2  no branch target, external entry or relocated target lies inside
+          the window (same flow walk the fp-sum primitive performs);
+      X3  from the window end, the consumption region consists ONLY of
+          `fxch st(k)`, `fmul st(0), st(0)` and `faddp st(1)` instructions,
+          each pushed unit value is multiplied by itself exactly once
+          before any faddp consumes it, and the region ends with all N unit
+          values folded into a single stack slot: every unit therefore
+          contributes only its square to one commutative, associative sum,
+          so any unit permutation preserves the computed value exactly;
+      X4  the declared order is a true permutation, only whole units move,
+          the length is unchanged, and the rewritten byte set equals the
+          declared `expected_rewritten_offsets`.
+    """
+    require(isinstance(body, (bytes, bytearray)) and body,
+            f"{context}: body is empty")
+    body = bytes(body)
+    require(isinstance(chains, list) and chains,
+            f"{context}: no chain is declared")
+    items, successors, entries = ia32_relational_flow_walk(
+        body, relocations, context, code_length, external_entries)
+    branch_targets = {item["target"] for item in items
+                     if item.get("target") is not None}
+    image = bytearray(body)
+    proved = []
+    previous_end = 0
+    for ordinal, chain in enumerate(chains):
+        chain_context = f"{context} x87 chain {ordinal}"
+        start = chain["chain_start"]
+        end = chain["chain_end"]
+        require(type(start) is int and type(end) is int
+                and 0 < start < end <= len(body),
+                f"{chain_context}: bounds are out of range")
+        require(previous_end <= start,
+                f"{chain_context}: chains are unsorted or overlapping")
+        previous_end = end
+        inside = lambda target: start < target < end
+        require(not any(inside(target) for target in branch_targets),
+                f"{chain_context}: a branch targets the chain interior")
+        require(not any(inside(items[entry]["offset"])
+                        for entry in entries[1:]),
+                f"{chain_context}: an external entry lies inside the chain")
+        require(not any(inside(target)
+                        for target in (internal_targets or frozenset())),
+                f"{chain_context}: a relocated target lies inside the chain")
+        # A relocation record may ride inside a unit (an absolute m32
+        # constant operand); it moves WITH its unit and by nothing else.
+        # Records are recovered as maximal contiguous relocated-byte runs;
+        # a run must be a single whole record (at most 4 bytes) and must
+        # not touch the window's edges from outside.
+        require(not (start - 1 in relocation_offsets
+                     and start in relocation_offsets)
+                and not (end - 1 in relocation_offsets
+                         and end in relocation_offsets),
+                f"{chain_context}: a relocated record crosses the chain "
+                f"edge")
+        carried_runs = []
+        run_start = None
+        for offset in range(start, end + 1):
+            if offset < end and offset in relocation_offsets:
+                if run_start is None:
+                    run_start = offset
+            elif run_start is not None:
+                carried_runs.append((run_start, offset))
+                run_start = None
+        for run_lo, run_hi in carried_runs:
+            require(run_hi - run_lo <= 4
+                    and run_lo - 1 not in relocation_offsets
+                    and run_hi not in relocation_offsets,
+                    f"{chain_context}: a relocated run inside the chain is "
+                    f"not one whole record")
+        # X1: parse the units.  The second instruction of a unit is
+        # fsub m32 (D8 /4) or fadd m32 (D8 /0); the operation travels with
+        # its unit, so the unit's VALUE is independent of its position.
+        units = []
+        cursor = start
+        while cursor < end:
+            require(cursor + 2 <= end and body[cursor] == 0xD9
+                    and (body[cursor + 1] >> 3) & 7 == 0
+                    and (body[cursor + 1] >> 6) != 3,
+                    f"{chain_context}: the instruction at {cursor} is not "
+                    f"an fld m32")
+            fld_len = _x87_m32_length(body, cursor, chain_context)
+            sub_at = cursor + fld_len
+            require(sub_at + 2 <= end and body[sub_at] == 0xD8
+                    and (body[sub_at + 1] >> 3) & 7 in (0, 4)
+                    and (body[sub_at + 1] >> 6) != 3,
+                    f"{chain_context}: the instruction at {sub_at} is not "
+                    f"an fsub/fadd m32")
+            sub_len = _x87_m32_length(body, sub_at, chain_context)
+            units.append((cursor, fld_len + sub_len, fld_len))
+            cursor = sub_at + sub_len
+        require(cursor == end and len(units) >= 2,
+                f"{chain_context}: the window is not a whole number of "
+                f"fld/fsub units")
+        require(all(any(offset <= run_lo and run_hi <= offset + length
+                        for offset, length, _ in units)
+                    for run_lo, run_hi in carried_runs),
+                f"{chain_context}: a relocated record straddles a unit "
+                f"boundary")
+        # X3: the consumption region -- simulate the closed alphabet and
+        # build the faddp fold tree over stack POSITIONS (position p = the
+        # p-th unit pushed inside the window).  Leaves are position ids;
+        # each faddp makes one binary node.
+        squared = [False] * len(units)
+        stack = list(range(len(units) - 1, -1, -1))
+        scan = end
+        walk_at = {item["offset"]: item for item in items}
+        while True:
+            require(scan + 2 <= len(body),
+                    f"{chain_context}: the consumption region runs off the "
+                    f"body")
+            op, modrm = body[scan], body[scan + 1]
+            if not (0xD8 <= op <= 0xDF) and op != 0x9B:
+                # A scheduler-interleaved integer instruction: transparent
+                # to x87 dataflow when it is straight-line (fall flow) and
+                # not an x87 escape.  Its bytes never move, its flag and
+                # memory effects cannot depend on the unit order (the units
+                # only LOAD memory), so it is skipped, not interpreted.
+                item = walk_at.get(scan)
+                require(item is not None and item["flow"] == "fall",
+                        f"{chain_context}: a non-x87 instruction at {scan} "
+                        f"in the consumption region is not straight-line")
+                scan += item["length"]
+                continue
+            if op == 0xD9 and 0xC8 <= modrm <= 0xCF:
+                k = modrm - 0xC8
+                require(k < len(stack),
+                        f"{chain_context}: fxch exchanges below the unit "
+                        f"stack")
+                stack[0], stack[k] = stack[k], stack[0]
+                scan += 2
+            elif op in (0xD8, 0xDC) and modrm == 0xC8:
+                # fmul st(0), st(0): the top value becomes its square.
+                unit = stack[0]
+                require(isinstance(unit, int) and not squared[unit],
+                        f"{chain_context}: a unit is multiplied twice or a "
+                        f"folded slot is squared")
+                squared[unit] = True
+                scan += 2
+            elif op == 0xDE and modrm == 0xC1:
+                require(len(stack) >= 2,
+                        f"{chain_context}: faddp folds below the unit stack")
+                top, nxt = stack[0], stack[1]
+                for slot in (top, nxt):
+                    if isinstance(slot, int):
+                        require(squared[slot],
+                                f"{chain_context}: a unit is summed before "
+                                f"it is squared")
+                stack = [(nxt, top)] + stack[2:]
+                scan += 2
+            else:
+                break
+            if len(stack) == 1 and not isinstance(stack[0], int):
+                break
+        require(len(stack) == 1 and not isinstance(stack[0], int)
+                and all(squared),
+                f"{chain_context}: the consumption region does not fold "
+                f"every squared unit into one commutative sum")
+        fold_tree = stack[0]
+        # X4: permute whole units -- but ONLY a permutation that is exact
+        # under IEEE commutativity: relabelling the fold tree's leaves by
+        # the order must give a tree equal to the original up to per-node
+        # child swaps (canonical forms match).  Associativity is never
+        # assumed.
+        order = chain["order"]
+        require(isinstance(order, list)
+                and sorted(order) == list(range(len(units))),
+                f"{chain_context}: the order is not a permutation of the "
+                f"{len(units)} units")
+        require(order != list(range(len(units))),
+                f"{chain_context}: the order is the identity")
+
+        def canonical(node, labels):
+            if isinstance(node, int):
+                return ("L", labels[node])
+            left = canonical(node[0], labels)
+            right = canonical(node[1], labels)
+            return ("N",) + (left + right if left <= right
+                             else right + left)
+
+        identity = list(range(len(units)))
+        require(canonical(fold_tree, order)
+                == canonical(fold_tree, identity),
+                f"{chain_context}: the order is not commutativity-exact "
+                f"for the fold tree")
+        blocks = [body[offset:offset + length]
+                  for offset, length, _ in units]
+        rebuilt = b"".join(blocks[index] for index in order)
+        require(len(rebuilt) == end - start,
+                f"{chain_context}: the permutation changed the length")
+        image[start:end] = rebuilt
+        chain_reseat = []
+        instruction_moves = []
+        cursor = start
+        for source_index in order:
+            source_offset, length, fld_len = units[source_index]
+            if cursor != source_offset:
+                instruction_moves.append([source_offset, cursor])
+                instruction_moves.append([source_offset + fld_len,
+                                          cursor + fld_len])
+                for run_lo, run_hi in carried_runs:
+                    if source_offset <= run_lo \
+                            and run_hi <= source_offset + length:
+                        chain_reseat.append(
+                            [run_lo, cursor + (run_lo - source_offset)])
+            cursor += length
+        rewritten = [index for index in range(start, end)
+                     if image[index] != body[index]]
+        require(rewritten == chain["expected_rewritten_offsets"],
+                f"{chain_context}: rewrote a different byte set from its "
+                f"declaration")
+        require(sorted(map(list, chain_reseat))
+                == sorted(map(list, chain.get("relocation_reseat") or [])),
+                f"{chain_context}: reseated a different relocation set "
+                f"from its declaration")
+        proved.append({"chain_start": start, "chain_end": end,
+                       "order": list(order),
+                       "unit_count": len(units),
+                       "relocation_reseat": sorted(chain_reseat),
+                       "instruction_moves": sorted(instruction_moves),
+                       "rewritten_offsets": rewritten})
+    return bytes(image), {"chains": proved}
+
+
+def _x87_m32_length(body: bytes, offset: int, context: str) -> int:
+    """Length of a D9/D8 m32 instruction (mod!=3), refusing exotic forms."""
+    modrm = body[offset + 1]
+    mod, rm = modrm >> 6, modrm & 7
+    require(mod != 3, f"{context}: not a memory operand at {offset}")
+    length = 2
+    if rm == 4:
+        length += 1  # SIB
+        rm = body[offset + 2] & 7
+    if mod == 1:
+        length += 1
+    elif mod == 2 or (mod == 0 and rm == 5):
+        length += 4
+    return length
+
+
 def apply_fp_sum_reassociation(
     body: bytes, chains: list, relocation_offsets: frozenset, context: str,
     relocations: dict | None = None, code_length: int | None = None,
@@ -37408,6 +37661,7 @@ def validate_composed_rewriting(
         "kind", "windows", "register_bijections", "relational_sites",
         "fp_sum_rotations", "simulated_region_rewrites", "slot_bijections",
         "commutative_operand_forms", "esp_argument_exchanges",
+        "x87_squared_addend_exchanges",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_seed_debug_s_sha256",
@@ -37418,6 +37672,7 @@ def validate_composed_rewriting(
                           "simulated_region_rewrites", "slot_bijections",
                           "commutative_operand_forms",
                           "esp_argument_exchanges",
+                          "x87_squared_addend_exchanges",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == COMPOSED_REWRITING_KIND,
@@ -37485,6 +37740,59 @@ def validate_composed_rewriting(
             "order": list(order),
             "expected_rewritten_offsets": list(offsets),
         })
+    normalized_x87 = []
+    x87_bytes = []
+    x87_regions = set()
+    previous_x87_end = 0
+    for index, item in enumerate(
+            value.get("x87_squared_addend_exchanges") or []):
+        item_context = f"{context}.x87_squared_addend_exchanges[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "chain_start", "chain_end", "order",
+            "expected_rewritten_offsets", "relocation_reseat",
+        }, item_context, optional={"relocation_reseat"})
+        start = require_exact_int(item.get("chain_start"),
+                                  f"{item_context}.chain_start",
+                                  minimum=1, maximum=body_length - 1)
+        end = require_exact_int(item.get("chain_end"),
+                                f"{item_context}.chain_end",
+                                minimum=2, maximum=body_length)
+        require(previous_x87_end <= start < end,
+                f"{item_context}: chains are unsorted or overlapping")
+        previous_x87_end = end
+        order = item.get("order")
+        require(isinstance(order, list) and len(order) >= 2
+                and sorted(order) == list(range(len(order)))
+                and order != list(range(len(order))),
+                f"{item_context}.order is not a non-identity permutation")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and start <= offset < end
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        normalized_item = {
+            "chain_start": start, "chain_end": end,
+            "order": list(order),
+            "expected_rewritten_offsets": list(offsets),
+        }
+        reseat = item.get("relocation_reseat")
+        if reseat is not None:
+            require(isinstance(reseat, list) and reseat
+                    and all(isinstance(pair, list) and len(pair) == 2
+                            and all(type(offset) is int
+                                    and start <= offset < end
+                                    for offset in pair)
+                            for pair in reseat)
+                    and len({pair[0] for pair in reseat}) == len(reseat)
+                    and len({pair[1] for pair in reseat}) == len(reseat),
+                    f"{item_context}.relocation_reseat is invalid")
+            normalized_item["relocation_reseat"] = [list(pair)
+                                                   for pair in reseat]
+        x87_bytes.extend(offsets)
+        x87_regions.update(range(start, end))
+        normalized_x87.append(normalized_item)
     normalized_region_rewrites = []
     region_rewrite_bytes = []
     region_rewrite_regions = set()
@@ -37736,7 +38044,7 @@ def validate_composed_rewriting(
     declared_slots = value.get("slot_bijections") or []
     require(normalized_windows or normalized_bijections or normalized_sites
             or normalized_rotations or normalized_region_rewrites
-            or normalized_forms or declared_slots,
+            or normalized_forms or declared_slots or normalized_x87,
             f"{context} declares no certificate")
     # A lone window, bijection, mirror or rotation belongs to its own
     # class; the simulated region rewrite and the commutative operand form
@@ -37749,7 +38057,7 @@ def validate_composed_rewriting(
     # witness to reproduce the seed's section structure, which such a
     # witness cannot, so the composition context is the only sound home.
     require(normalized_region_rewrites or normalized_forms
-            or lone_statement_ok
+            or normalized_x87 or lone_statement_ok
             or len(normalized_windows) + len(normalized_bijections)
             + len(normalized_sites) + len(normalized_rotations)
             + len(declared_slots) >= 2,
@@ -37781,6 +38089,12 @@ def validate_composed_rewriting(
                                            | set(relational_bytes))),
             f"{context}: a simulated region rewrite overlaps another "
             "certificate's bytes")
+    require(not (x87_regions & (window_bytes | set(bijection_bytes)
+                                | set(relational_bytes) | set(form_bytes)
+                                | rotation_regions
+                                | region_rewrite_regions)),
+            f"{context}: an x87 exchange chain overlaps another "
+            "certificate's bytes")
     require(not (set(form_bytes) & (window_bytes | set(bijection_bytes)
                                     | set(relational_bytes))),
             f"{context}: a commutative operand form overlaps another "
@@ -37798,7 +38112,7 @@ def validate_composed_rewriting(
         if type(offset) is int}
     strict_union = (set(bijection_bytes) | set(relational_bytes)
                     | set(rotation_bytes) | set(region_rewrite_bytes)
-                    | slot_bytes)
+                    | set(x87_bytes) | slot_bytes)
     if not normalized_exchange_items:
         # Without an argument exchange every primitive's bytes must survive
         # to the final image; a later exchange may legitimately flip a
@@ -37808,6 +38122,7 @@ def validate_composed_rewriting(
             f"{context}.expected_changed_offsets omits a rewritten byte")
     require(all(offset in window_bytes or offset in rotation_regions
                 or offset in region_rewrite_regions or offset in slot_bytes
+                or offset in x87_regions
                 or offset in set(bijection_bytes) | set(relational_bytes)
                 | set(form_bytes) | set(exchange_bytes)
                 for offset in changed),
@@ -37901,6 +38216,7 @@ def validate_composed_rewriting(
     normalized["slot_bijections"] = normalized_slots
     normalized["commutative_operand_forms"] = normalized_forms
     normalized["esp_argument_exchanges"] = normalized_exchange_items
+    normalized["x87_squared_addend_exchanges"] = normalized_x87
     if code_length is not None:
         normalized["expected_code_length"] = code_length
     if targets is not None:
@@ -38060,6 +38376,30 @@ def compose_retail_exact_composed_rewriting(
                     f"composed-rewriting fp-sum chain {index} rewrote a "
                     "different byte set from its declaration")
         fp_detail = fp_proof["chains"]
+    x87_detail = []
+    x87_relocation_moves = {}
+    if spec.get("x87_squared_addend_exchanges"):
+        image, x87_proof = apply_x87_squared_addend_exchange(
+            image, spec["x87_squared_addend_exchanges"], relocation_offsets,
+            "composed-rewriting x87 exchange", relocation_symbols,
+            code_length, frozenset(external_entries), internal_targets)
+        seed_row_offsets = {row["offset"] for row in seed_rows}
+        for index, (item, chain) in enumerate(
+                zip(spec["x87_squared_addend_exchanges"],
+                    x87_proof["chains"])):
+            require(chain["rewritten_offsets"]
+                    == item["expected_rewritten_offsets"],
+                    f"composed-rewriting x87 exchange {index} rewrote a "
+                    "different byte set from its declaration")
+            for old_at, new_at in chain["relocation_reseat"]:
+                require(old_at in seed_row_offsets,
+                        f"composed-rewriting x87 exchange {index} reseats "
+                        "an offset that heads no seed relocation record")
+                require(old_at not in x87_relocation_moves,
+                        f"composed-rewriting x87 exchange {index} reseats "
+                        "a relocation twice")
+                x87_relocation_moves[old_at] = new_at
+        x87_detail = x87_proof["chains"]
     region_rewrite_detail = []
     if spec.get("simulated_region_rewrites"):
         image, region_proof = apply_simulated_region_rewrite(
@@ -38194,6 +38534,9 @@ def compose_retail_exact_composed_rewriting(
     for region in region_rewrite_detail:
         for old_at, new_at in region["instruction_moves"]:
             line_moves[old_at] = new_at
+    for chain in x87_detail:
+        for old_at, new_at in chain["instruction_moves"]:
+            line_moves[old_at] = new_at
     lined_seed_bytes = bytearray(seed_bytes)
     if line_moves:
         table_at = sp["line_offset"]
@@ -38212,9 +38555,37 @@ def compose_retail_exact_composed_rewriting(
                 offset.to_bytes(4, "little")
             lined_seed_bytes[entry_at + 4:entry_at + 6] = \
                 line_no.to_bytes(2, "little")
-    lined_seed = CoffObject(bytes(lined_seed_bytes)) if line_moves else seed
+    installed_rows = seed_rows
+    if x87_relocation_moves:
+        # The record moves WITH its own instruction; the rewritten table is
+        # then re-sorted by operand offset, the order this toolchain emits.
+        table_at = sp["relocation_offset"]
+        records = []
+        for position in range(sp["relocation_count"]):
+            entry_at = table_at + position * 10
+            record = bytearray(
+                lined_seed_bytes[entry_at:entry_at + 10])
+            old_at = int.from_bytes(record[0:4], "little")
+            if old_at in x87_relocation_moves:
+                record[0:4] = \
+                    x87_relocation_moves[old_at].to_bytes(4, "little")
+            records.append(bytes(record))
+        records.sort(key=lambda record: int.from_bytes(record[0:4],
+                                                       "little"))
+        lined_seed_bytes[table_at:table_at
+                         + sp["relocation_count"] * 10] = b"".join(records)
+        installed_rows = sorted(
+            [{**row, "offset": x87_relocation_moves.get(row["offset"],
+                                                        row["offset"])}
+             for row in seed_rows],
+            key=lambda row: row["offset"])
+        installed_rows = [{**row, "ordinal": position}
+                          for position, row in enumerate(installed_rows)]
+    moved_tables = bool(line_moves) or bool(x87_relocation_moves)
+    lined_seed = (CoffObject(bytes(lined_seed_bytes))
+                  if moved_tables else seed)
     lined_sp = (lined_seed.function_section(mangled)
-                if line_moves else sp)
+                if moved_tables else sp)
 
     # Obligation 7 of the schedule class, measured on the IMAGE with the
     # SEED's own tables (rows moved with their instructions) -- which are
@@ -38229,14 +38600,14 @@ def compose_retail_exact_composed_rewriting(
     require(len(retail_body) == pinned_length == len(image),
             "composed-rewriting retail length changed")
     semantic_detail = require_retail_relocation_oracle(
-        seed_rows, bytes(retail_body),
+        installed_rows, bytes(retail_body),
         int(function["retail_oracle"]["address"], 16),
         function["retail_relocations"],
         "composed-rewriting retail relocation oracle",
     )
     masked_image = bytearray(image)
     masked_retail = bytearray(retail_body)
-    for row in seed_rows:
+    for row in installed_rows:
         start, width = row["offset"], row["width"]
         masked_image[start:start + width] = b"\0" * width
         masked_retail[start:start + width] = b"\0" * width
@@ -38272,9 +38643,9 @@ def compose_retail_exact_composed_rewriting(
     cp = checked.function_section(mangled)
     require(coff_body(checked, cp) == image,
             "composed-rewriting composed body differs from the image")
-    require(detailed_relocations(checked, cp) == seed_rows
+    require(detailed_relocations(checked, cp) == installed_rows
             and _coff_table_bytes(checked, cp, "relocations")
-            == _coff_table_bytes(seed, sp, "relocations")
+            == _coff_table_bytes(lined_seed, lined_sp, "relocations")
             and _coff_table_bytes(checked, cp, "lines")
             == _coff_table_bytes(lined_seed, lined_sp, "lines"),
             "composed-rewriting output changed seed relocation/line bytes")
@@ -38382,6 +38753,21 @@ def compose_retail_exact_composed_rewriting(
                                       mangled), "lines")
                 == _coff_table_bytes(lined_seed, lined_sp, "lines"),
                 "composed-rewriting line rows differ from the proved moves")
+    if x87_relocation_moves:
+        # The reseated records live in the target's own COFF relocation
+        # table; only the 4-byte VirtualAddress field of a moved record may
+        # change, and the rewrite is re-derived here rather than trusted:
+        # the installed table was already required to parse as exactly
+        # `installed_rows` above.
+        allowed |= set(range(sp["relocation_offset"],
+                             sp["relocation_offset"]
+                             + sp["relocation_count"] * 10))
+        require(_coff_table_bytes(CoffObject(composed),
+                                  CoffObject(composed).function_section(
+                                      mangled), "relocations")
+                == _coff_table_bytes(lined_seed, lined_sp, "relocations"),
+                "composed-rewriting relocation records differ from the "
+                "proved reseat")
     require({index for index in range(len(seed_bytes))
              if seed_bytes[index] != composed[index]} <= allowed,
             "composed-rewriting changed bytes outside its own COMDAT")
@@ -38392,6 +38778,7 @@ def compose_retail_exact_composed_rewriting(
         "fp_sum_reassociation": fp_detail,
         "commutative_operand_forms": form_detail,
         "esp_argument_exchanges": exchange_site_detail,
+        "x87_squared_addend_exchanges": x87_detail,
         "simulated_region_rewrites": region_rewrite_detail,
         "register_bijections": bijection_detail,
         "slot_bijections": slot_detail,
@@ -38457,7 +38844,7 @@ def validate_donor_rewriting(
         "kind", "windows", "fp_sum_rotations", "register_bijections",
         "fp_pointer_exchanges", "simulated_region_rewrites",
         "relational_sites", "commutative_operand_forms",
-        "slot_bijections",
+        "slot_bijections", "x87_squared_addend_exchanges",
         "expected_instruction_count", "expected_changed_offsets",
         "expected_procedure_range", "expected_code_symbol_references",
         "expected_external_entries", "expected_code_length",
@@ -38466,6 +38853,7 @@ def validate_donor_rewriting(
                           "register_bijections", "fp_pointer_exchanges",
                           "simulated_region_rewrites", "relational_sites",
                           "commutative_operand_forms", "slot_bijections",
+                          "x87_squared_addend_exchanges",
                           "expected_code_length",
                           "expected_internal_relocation_targets"})
     require(value.get("kind") == DONOR_REWRITING_KIND,
@@ -38530,6 +38918,61 @@ def validate_donor_rewriting(
             "order": list(order),
             "expected_rewritten_offsets": list(offsets),
         })
+    normalized_x87 = []
+    x87_regions = set()
+    previous_x87_end = 0
+    for index, item in enumerate(
+            value.get("x87_squared_addend_exchanges") or []):
+        item_context = f"{context}.x87_squared_addend_exchanges[{index}]"
+        require(isinstance(item, dict), f"{item_context} must be an object")
+        exact_audit_keys(item, {
+            "chain_start", "chain_end", "order",
+            "expected_rewritten_offsets", "relocation_reseat",
+        }, item_context, optional={"relocation_reseat"})
+        start = require_exact_int(item.get("chain_start"),
+                                  f"{item_context}.chain_start",
+                                  minimum=1, maximum=body_length - 1)
+        end = require_exact_int(item.get("chain_end"),
+                                f"{item_context}.chain_end",
+                                minimum=2, maximum=body_length)
+        require(previous_x87_end <= start < end,
+                f"{item_context}: chains are unsorted or overlapping")
+        previous_x87_end = end
+        order = item.get("order")
+        require(isinstance(order, list) and len(order) >= 2
+                and sorted(order) == list(range(len(order)))
+                and order != list(range(len(order))),
+                f"{item_context}.order is not a non-identity permutation")
+        offsets = item.get("expected_rewritten_offsets")
+        require(isinstance(offsets, list) and offsets
+                and offsets == sorted(set(offsets))
+                and all(type(offset) is int and start <= offset < end
+                        for offset in offsets),
+                f"{item_context}.expected_rewritten_offsets is invalid")
+        normalized_item = {
+            "chain_start": start, "chain_end": end,
+            "order": list(order),
+            "expected_rewritten_offsets": list(offsets),
+        }
+        reseat = item.get("relocation_reseat")
+        if reseat is not None:
+            require(isinstance(reseat, list) and reseat
+                    and all(isinstance(pair, list) and len(pair) == 2
+                            and all(type(offset) is int
+                                    and start <= offset < end
+                                    for offset in pair)
+                            for pair in reseat)
+                    and len({pair[0] for pair in reseat}) == len(reseat)
+                    and len({pair[1] for pair in reseat}) == len(reseat),
+                    f"{item_context}.relocation_reseat is invalid")
+            normalized_item["relocation_reseat"] = [list(pair)
+                                                   for pair in reseat]
+        rotation_bytes.extend(offsets)
+        x87_regions.update(range(start, end))
+        normalized_x87.append(normalized_item)
+    require(not (x87_regions & rotation_regions),
+            f"{context}: an x87 exchange chain overlaps an fp-sum chain")
+    rotation_regions |= x87_regions
     normalized_bijections = []
     bijection_bytes = []
     previous_end = 0
@@ -38790,7 +39233,7 @@ def validate_donor_rewriting(
     require(normalized_windows or normalized_rotations
             or normalized_bijections or normalized_exchanges
             or normalized_rewrites or normalized_sites or normalized_forms
-            or normalized_slots,
+            or normalized_slots or normalized_x87,
             f"{context} declares no certificate")
     window_bytes = {offset for window in normalized_windows
                     for offset in range(window["start"], window["end"])}
@@ -38893,6 +39336,7 @@ def validate_donor_rewriting(
         "relational_sites": normalized_sites,
         "commutative_operand_forms": normalized_forms,
         "slot_bijections": normalized_slots,
+        "x87_squared_addend_exchanges": normalized_x87,
     }
     if code_length is not None:
         normalized["expected_code_length"] = code_length
@@ -39197,6 +39641,25 @@ def compose_retail_exact_donor_rewriting(
         rewrite_detail = rewrite_proof["regions"]
         relocation_moves = dict(
             (old, new) for old, new in rewrite_proof["relocation_reseat"])
+    x87_detail = []
+    if spec.get("x87_squared_addend_exchanges"):
+        image, x87_proof = apply_x87_squared_addend_exchange(
+            image, spec["x87_squared_addend_exchanges"], relocation_offsets,
+            "donor-rewriting x87 exchange", relocation_symbols, code_length,
+            frozenset(external_entries), internal_targets)
+        for index, (item, chain) in enumerate(
+                zip(spec["x87_squared_addend_exchanges"],
+                    x87_proof["chains"])):
+            require(chain["rewritten_offsets"]
+                    == item["expected_rewritten_offsets"],
+                    f"donor-rewriting x87 exchange {index} rewrote a "
+                    "different byte set from its declaration")
+            for old, new in chain["relocation_reseat"]:
+                require(old not in relocation_moves,
+                        f"donor-rewriting x87 exchange {index} reseats a "
+                        "relocation another certificate already moved")
+                relocation_moves[old] = new
+        x87_detail = x87_proof["chains"]
     schedule_detail = []
     windows = spec.get("windows") or []
     if windows:
@@ -39244,6 +39707,8 @@ def compose_retail_exact_donor_rewriting(
     for item in spec.get("simulated_region_rewrites") or []:
         window_bytes |= set(range(item["region_start"],
                                   item["region_end"]))
+    for item in spec.get("x87_squared_addend_exchanges") or []:
+        window_bytes |= set(range(item["chain_start"], item["chain_end"]))
     require(all(left["offset"] == right["offset"]
                 and left["length"] == right["length"]
                 for left, right in zip(donor_instructions,
@@ -39270,6 +39735,9 @@ def compose_retail_exact_donor_rewriting(
             cursor += window["source_instruction_lengths"][source_index]
     for region in rewrite_detail:
         for old, new in region["instruction_moves"]:
+            line_moves[old] = new
+    for chain in x87_detail:
+        for old, new in chain["instruction_moves"]:
             line_moves[old] = new
     lined_donor = bytearray(donor_bytes)
     if line_moves:
@@ -39394,6 +39862,7 @@ def compose_retail_exact_donor_rewriting(
         "fp_pointer_exchanges": exchange_detail,
         "commutative_operand_forms": form_detail,
         "simulated_region_rewrites": rewrite_detail,
+        "x87_squared_addend_exchanges": x87_detail,
         "register_bijections": bijection_detail,
         "slot_bijections": slot_detail,
         "relational_form": relational_detail,
