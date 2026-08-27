@@ -220,7 +220,9 @@ MxResult LegoAct2::Tickle()
 			MxFloat otherPoint[] = {-52.0f, 5.25f, -16.5f};
 			const MxFloat* pepperPosition = FindROI("pepper")->GetWorldPosition();
 
-			distance = DISTSQRD3(pepperPosition, otherPoint);
+			distance = (pepperPosition[2] - otherPoint[2]) * (pepperPosition[2] - otherPoint[2]);
+			distance += (pepperPosition[1] - otherPoint[1]) * (pepperPosition[1] - otherPoint[1]);
+			distance += (pepperPosition[0] - otherPoint[0]) * (pepperPosition[0] - otherPoint[0]);
 
 			if (m_infomanDirecting == (Act2mainScript::Script) 0 && distance > 50.0f && pepperPosition[0] > -57.0f) {
 				StartAction(Act2mainScript::c_Avo906In_PlayWav, FALSE, FALSE, NULL, NULL, NULL);

@@ -17,13 +17,13 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
 
         normalized = byte_identity.validate_source_overlay(overlay, source_root)
 
-        self.assertEqual(len(normalized["outputs"]), 165)
+        self.assertEqual(len(normalized["outputs"]), 164)
         self.assertEqual(
             sum(len(output["operations"]) for output in normalized["outputs"]),
-            419,
+            418,
         )
         self.assertEqual(
-            len(normalized["graph"]["generated_translation_units"]), 12
+            len(normalized["graph"]["generated_translation_units"]), 11
         )
         outputs_by_path = {
             output["logical_path"]: output for output in normalized["outputs"]
@@ -45,7 +45,7 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
         self.assertEqual(
             sum(output["clean"]["state"] == "absent"
                 for output in normalized["outputs"]),
-            17,
+            16,
         )
 
         for output in normalized["outputs"]:

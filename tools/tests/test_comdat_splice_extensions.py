@@ -2446,7 +2446,7 @@ class SameTuInstructionHybridResizeTests(unittest.TestCase):
                     donor["recipe"], source, "fixture")
             )
         self.assertEqual(set(generated), {
-            "d_02c3090ca79b", "d_282491eaa62c"})
+            "d_7a0499c7aeb6", "d_834480df190e"})
         function = next(
             item for item in unit["functions"]
             if item.get("splice_class")
@@ -4218,17 +4218,27 @@ class SourcePermutationTests(unittest.TestCase):
 
     def test_live_for_initializer_recipe_is_confined_to_its_owner(self):
         source, recipe, function = self._live_for_initializer_case()
+        manifest = json.loads(
+            (TOOLS / "byte_identity_manifest.json").read_text())
+        overlay = byte_identity.validate_source_overlay(
+            manifest["source_overlay"], ROOT)
+        canonical = next(
+            (item["operations"] for item in overlay["outputs"]
+             if item["logical_path"] == source), [])
         detail = byte_identity.require_target_source_refactor_recipe_policy(
-            recipe, function, ROOT, source, "fixture"
+            recipe, function, ROOT, source, "fixture",
+            canonical_operations=canonical
         )
         self.assertEqual(
             detail["refactor_operation_ids"],
             ["op_remove_for_init_declaration"],
         )
-        rendered = byte_identity.render_donor_source_overlay(recipe, ROOT)[
-            source]
+        rendered = byte_identity.render_donor_source_overlay(
+            recipe, ROOT, canonical_operations=canonical)[source]
+        clean = overlay["rendered_by_path"].get(
+            source, (ROOT / source).read_bytes())
         proof_detail = byte_identity.require_target_source_refactor_identity(
-            (ROOT / source).read_bytes(), rendered,
+            clean, rendered,
             function["target_source_refactor"], "fixture",
         )
         self.assertEqual(proof_detail["seed_target_source_size"], 769)
@@ -6325,7 +6335,7 @@ class OrdinaryFpoSelfPermutationTests(unittest.TestCase):
 class SourceFpoInstructionMosaicTests(unittest.TestCase):
     """A typed source refactor may feed only its isolated FPO composer."""
 
-    DONOR_ID = "d_e0364d1e12cf"
+    DONOR_ID = "d_3862f6494ffc"
 
     def live_records(self):
         manifest = json.loads(
@@ -7005,13 +7015,15 @@ class SourceFpoInstructionMosaicTests(unittest.TestCase):
         _, _, donor, function = self.live_records()
         self.assertEqual(
             donor["recipe"]["rendering_identity_sha256"],
-            "e0364d1e12cf7f5eaa0750215fd9885501f5b093b5d2f7cd9af22a2edb822578")
+            "3862f6494ffc50dc99a4b7df1b82d7baad485e9ae43b12b29dd06599e7c39667")
         self.assertEqual(
             function["splice_class"],
             byte_identity.RETAIL_EXACT_SOURCE_EQUAL_BODY_CLASS)
         self.assertNotIn("instruction_ranges", function)
         self.assertEqual(function["expected_changed_offsets"],
-                         [61, 63, 69, 79, 88, 98])
+                         [61, 63, 69, 79, 88, 98, 299, 300, 301, 302, 303,
+                          304, 316, 317, 318, 319, 320, 321, 322, 323, 324,
+                          325])
         self.assertEqual(function["expected_closure"],
                          [".debug$F", ".debug$S"])
         self.assertEqual(function["expected_seed_line_count"], 42)
