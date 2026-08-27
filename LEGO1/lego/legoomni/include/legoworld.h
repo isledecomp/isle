@@ -1,11 +1,9 @@
 #ifndef LEGOWORLD_H
 #define LEGOWORLD_H
 
-// clang-format off
 #include "mxpresenterlist.h"
 #include "legoentitylist.h"
 #include "legocachesoundlist.h"
-// clang-format on
 
 #include "legoentity.h"
 #include "legomain.h"

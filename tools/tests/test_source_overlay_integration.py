@@ -100,7 +100,7 @@ class SourceOverlayIntegrationTests(unittest.TestCase):
         )
         self.assertIn(
             b"// FUNCTION: LEGO1 0x10003bd0",
-            rendered["LEGO1/realtime/vector3dtail.inl.h"],
+            rendered["LEGO1/realtime/vectorlength.inl.h"],
         )
         # g_ctrlEdgesB is defined by its ordinary owner: retail emits it inside
         # legopathcontroller.cpp.obj's own .data blob at 0x100f435c.  The

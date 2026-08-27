@@ -5,7 +5,6 @@
 // but were included from one of the higher level classes. We should attempt
 // to reverse engineer the inclusion "graph" at some point. Until then, to maintain
 // correct order in the binary, we include them in the order we want here.
-// clang-format off
 #include "mxpresenter.h"
 #include "legoentity.h"
 #include "legopathactor.h"
@@ -29,7 +28,6 @@
 #include "pizzeria.h"
 #include "buildings.h"
 #include "jukebox.h"
-// clang-format on
 
 #include "act2actor.h"
 #include "act2brick.h"

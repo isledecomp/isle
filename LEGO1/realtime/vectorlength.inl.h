@@ -1,5 +1,5 @@
-#ifndef VECTOR3DTAIL_H
-#define VECTOR3DTAIL_H
+#ifndef VECTORLENGTH_H
+#define VECTORLENGTH_H
 
 #include "vector4d.inl.h"
 

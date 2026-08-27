@@ -1,7 +1,7 @@
 #include "legospline.h"
 
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "mxgeometry/mxmatrix.h"
 
 DECOMP_SIZE_ASSERT(LegoSpline, 0x50)
@@ -67,8 +67,8 @@ LegoResult LegoSpline::Evaluate(float p_alpha, Matrix4& p_mat, Vector3& p_up, Le
 		for (LegoS32 i = 0; i < 3; i++) {
 			position[i] = m_coefficents[0][i] + (m_coefficents[1][i] * p_alpha) + m_coefficents[2][i] * alpha_squared +
 						  m_coefficents[3][i] * alpha_cubed;
-			dir[i] =
-				m_coefficents[1][i] + 2.0f * (m_coefficents[2][i] * p_alpha) + m_coefficents[3][i] * alpha_squared * 3.0f;
+			dir[i] = m_coefficents[1][i] + 2.0f * (m_coefficents[2][i] * p_alpha) +
+					 m_coefficents[3][i] * alpha_squared * 3.0f;
 		}
 	}
 

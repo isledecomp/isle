@@ -437,17 +437,6 @@ void MxOmni::Resume()
 	}
 }
 
-// Retail places these two constructors immediately after MxOmni::Resume --
-// 0x100b0a00 -> 0x100b0a30 -> 0x100b0b00, contiguous and in this order, inside
-// the span mxmain.cpp.obj occupies -- so they are the tail of THIS translation
-// unit rather than TUs of their own. BETA10 corroborates from the other side:
-// MxOmniCreateFlags::MxOmniCreateFlags sits at 0x10130a1c and
-// MxOmniCreateParam::MxOmniCreateParam at 0x10130b6b, neither 16-aligned, and a
-// separately-placed COMDAT would be. Keeping them as their own .cpp files left
-// them with no first-level referrer, so LINK could only satisfy the .def
-// exports for them in a trailing pass and both landed at the very end of the
-// image instead of here.
-
 DECOMP_SIZE_ASSERT(MxOmniCreateFlags, 0x02)
 
 // FUNCTION: LEGO1 0x100b0a30

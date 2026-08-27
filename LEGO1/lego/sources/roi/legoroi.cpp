@@ -1,4 +1,4 @@
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "legoroi.h"
 
 #include "anim/legoanim.h"

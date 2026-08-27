@@ -4,6 +4,7 @@
 #include "viewlod.h"
 
 #include <stdio.h>
+
 DECOMP_SIZE_ASSERT(ViewLODListManager, 0x14)
 DECOMP_SIZE_ASSERT(LODListBase, 0x10)
 DECOMP_SIZE_ASSERT(LODList<ViewLOD>, 0x10)

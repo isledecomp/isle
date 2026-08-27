@@ -23,13 +23,8 @@ public:
 
 	~ViewLOD() override;
 
-	// FUNCTION: LEGO1 0x100a6f30
-	// FUNCTION: BETA10 0x10174db0
 	inline double AveragePolyArea() const override; // vtable+0x04
-
-	// FUNCTION: LEGO1 0x100a6f50
-	// FUNCTION: BETA10 0x10174de0
-	inline int NVerts() const override; // vtable+0x08
+	inline int NVerts() const override;             // vtable+0x08
 
 	Tgl::MeshBuilder* GetMeshBuilder() { return m_meshBuilder; }
 	const Tgl::MeshBuilder* GetMeshBuilder() const { return m_meshBuilder; }

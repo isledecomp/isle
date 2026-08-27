@@ -1,6 +1,7 @@
 #include "legowegedge.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoOrientedEdge, 0x40)
 DECOMP_SIZE_ASSERT(LegoWEGEdge, 0x54)
 DECOMP_SIZE_ASSERT(PathWithTrigger, 0x0c)
@@ -289,4 +290,4 @@ LegoS32 LegoWEGEdge::ValidateFacePlanarity()
 	return 0;
 }
 
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"

@@ -1,4 +1,4 @@
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 
 #include "legopathcontroller.h"
 
@@ -7,6 +7,7 @@
 #include "mxmisc.h"
 #include "mxticklemanager.h"
 #include "mxtimer.h"
+
 DECOMP_SIZE_ASSERT(LegoPathController, 0x40)
 DECOMP_SIZE_ASSERT(LegoPathCtrlEdge, 0x40)
 DECOMP_SIZE_ASSERT(LegoPathController::CtrlBoundary, 0x08)
@@ -968,6 +969,7 @@ MxResult LegoPathController::FindPath(
 
 	return FAILURE;
 }
+
 // FUNCTION: LEGO1 0x1004a240
 // FUNCTION: BETA10 0x100b9160
 MxS32 LegoPathController::GetNextPathEdge(

@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdio.h> // for vsprintf
+
 // File name validated by BETA10 0x1011cba3; directory unknown
 
 // FUNCTION: CONFIG 0x00402560
@@ -52,9 +53,6 @@ int LegoDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 	static_assert(sizeof(GUID4) == sizeof(GUID), "Equal size");
 
 #ifdef MXDIRECTX_FOR_CONFIG
-	// CONFIG.EXE and LEGO1.DLL compile this TU in different contexts, and 1997's
-	// two builds disagree on this frame layout -- retail CONFIG orders these
-	// locals the other way round. (mxdirectx was a standalone project in 1997.)
 	GUID4 deviceGuid;
 	GUID4 compareGuid;
 #else

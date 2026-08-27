@@ -22,7 +22,6 @@ public:
 	ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const OrientableROI* point_of_view);
 	virtual ~ViewManager();
 
-	// FUNCTION: LEGO1 0x100a6200
 	virtual int FlushBuffers(); // vtable+0x04
 
 	void Remove(ViewROI* p_roi);

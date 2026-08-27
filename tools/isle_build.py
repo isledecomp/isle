@@ -571,6 +571,110 @@ def verify_lane_coherence(build_root: Path) -> None:
           f"{len(set(diagnostic) & set(terminal))} shared objects", flush=True)
 
 
+COLD_ARTIFACT_PATTERNS = (
+    "*.obj", "*.pdb", "*.dll", "*.DLL", "*.exe", "*.EXE",
+    "*.ilk", "*.lib", "*.exp",
+)
+
+DEPEND_CLOSURES: dict | None = None
+DEPEND_LOCK = threading.Lock()
+DEPEND_FILE_SHA: dict = {}
+
+
+def _parse_depend_closures(build: Path) -> dict:
+    """Read CMake's own scanned header dependencies, per object."""
+    closures: dict = {}
+    for depend in sorted(build.glob("CMakeFiles/*.dir/depend.make")):
+        target = None
+        for raw in depend.read_text().splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            continued = line.endswith("\\")
+            if continued:
+                line = line[:-1].strip()
+            if target is None:
+                name, separator, remainder = line.partition(":")
+                if not separator:
+                    continue
+                target = name.strip()
+                remainder = remainder.strip()
+                if remainder:
+                    closures.setdefault(target, set()).add(remainder)
+            elif line:
+                closures.setdefault(target, set()).add(line)
+            if not continued:
+                target = None
+    return {name: tuple(sorted(paths)) for name, paths in closures.items()}
+
+
+def include_closure_sha256(build: Path, seed_object: Path) -> str | None:
+    """Digest every file the compiler read for this object.
+
+    A composition marker keyed only on the object's own bytes cannot tell a
+    freshly compiled seed from one whose include closure changed underneath
+    it while the object itself stayed put.  Binding the marker to this digest
+    closes that: any edit to any header in the closure invalidates the marker
+    and the seed is recompiled.  Returns None when CMake has no scan for the
+    object, which the caller must treat as "not attested" -- fail closed."""
+    global DEPEND_CLOSURES
+    with DEPEND_LOCK:
+        if DEPEND_CLOSURES is None:
+            DEPEND_CLOSURES = _parse_depend_closures(build)
+        closures = DEPEND_CLOSURES
+    try:
+        key = str(seed_object.relative_to(build))
+    except ValueError:
+        return None
+    dependencies = closures.get(key)
+    if not dependencies:
+        return None
+    digest = hashlib.sha256()
+    for dependency in dependencies:
+        path = (build / dependency).resolve()
+        with DEPEND_LOCK:
+            recorded = DEPEND_FILE_SHA.get(path)
+        if recorded is None:
+            recorded = (hashlib.sha256(path.read_bytes()).hexdigest()
+                        if path.is_file() else "absent")
+            with DEPEND_LOCK:
+                DEPEND_FILE_SHA[path] = recorded
+        digest.update(dependency.encode())
+        digest.update(b"\0")
+        digest.update(recorded.encode())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def enforce_cold_lane(build_root: Path) -> None:
+    """A terminal verdict must never ride a warm artifact.
+
+    Delete every compiled object, PDB, linked image, composition marker and
+    donor arena in the lane before building, so the entire proof chain -- seed
+    compiles, donor arenas, compositions, links -- is re-derived from the
+    tree within this run.  Composition markers matter as much as objects: a
+    marker whose ``composed_sha`` matches the on-disk object short-circuits
+    the seed recompile, so a stale-but-marker-attested composition could
+    otherwise survive indefinitely."""
+    removed = 0
+    for lane in (build_root / "build", build_root / "terminal"):
+        if not lane.is_dir():
+            continue
+        for pattern in COLD_ARTIFACT_PATTERNS + ("composed-*.json",):
+            for path in lane.rglob(pattern):
+                path.unlink()
+                removed += 1
+    donors = build_root / "donors"
+    arenas = 0
+    if donors.is_dir():
+        arenas = sum(1 for _ in donors.iterdir())
+        shutil.rmtree(donors)
+    donors.mkdir(parents=True, exist_ok=True)
+    print(f"[isle_build] COLD terminal lane enforced: removed {removed} "
+          f"compiled artifact(s) and {arenas} donor arena(s); every object "
+          "in this verdict is compiled fresh in this run", flush=True)
+
+
 def terminal_lane(manifest: dict, source_overlay: dict, gates: dict,
                   build_root: Path,
                   shadow: Path, plan: Path, compiler: Path, jobs: int,
@@ -768,7 +872,10 @@ def main() -> int:
     parser.add_argument("--jobs", type=int,
                         default=min(4, os.cpu_count() or 4))
     parser.add_argument("--terminal", action="store_true",
-                        help="require complete rows and literal retail bytes")
+                        help="require complete rows and literal retail bytes; "
+                             "the lane is wiped cold first (objects, donor "
+                             "arenas, composition markers) so the verdict "
+                             "can never ride a stale artifact")
     parser.add_argument(
         "--repin-compositions", action="store_true",
         help="refresh every composition entry's MEASURED pins against the "
@@ -789,6 +896,8 @@ def main() -> int:
     compiler = arguments.compiler.resolve()
     build_root = arguments.build_dir.resolve()
     build_root.mkdir(parents=True, exist_ok=True)
+    if arguments.terminal:
+        enforce_cold_lane(build_root)
     try:
         validated = byte_identity.validate_manifest(
             arguments.manifest, ROOT, build_root,
@@ -867,6 +976,7 @@ def main() -> int:
     verdict = {
         "status": ("BYTE_IDENTITY_COMPLETE" if arguments.terminal
                    else "ITERATION_GATES_PASSED_FINAL_GATES_INCOMPLETE"),
+        "cold_lane": arguments.terminal,
         "images": {},
         "manifest_sha256": sha256_file(arguments.manifest),
         "compiler_sha256": sha256_file(compiler),
@@ -1051,10 +1161,17 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
         seed_sha = hashlib.sha256(seed_bytes).hexdigest()
         unit_sha = hashlib.sha256(
             json.dumps(unit, sort_keys=True).encode()).hexdigest()
+        closure_sha = include_closure_sha256(build, seed_object)
         if marker.exists() and REPIN_COMPOSITIONS is None:
             state = json.loads(marker.read_text())
             if (state.get("composed_sha") == seed_sha
-                    and state.get("unit_sha") == unit_sha):
+                    and state.get("unit_sha") == unit_sha
+                    # A composed object survives a header edit untouched (its
+                    # own bytes still match the marker), so without the
+                    # closure digest a stale composition rides every later
+                    # gate.  No digest means no attestation: recompile.
+                    and closure_sha is not None
+                    and state.get("include_closure_sha") == closure_sha):
                 return None, None
         # The object on disk is not attested as this unit's fresh seed (it
         # may hold a previous composition), so recompile it in place first.
@@ -1111,7 +1228,8 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
             marker.write_text(json.dumps({
                 "seed_sha": seed_sha,
                 "composed_sha": hashlib.sha256(composed).hexdigest(),
-            "unit_sha": unit_sha,
+                "unit_sha": unit_sha,
+                "include_closure_sha": closure_sha,
             }, indent=1) + "\n")
             return unit["target"], (
                 f"[isle_build] {verb} COMDAT group order in "
@@ -2196,6 +2314,7 @@ def compose_translation_units(manifest: dict, source_overlay: dict,
             "seed_sha": seed_sha,
             "composed_sha": hashlib.sha256(composed).hexdigest(),
             "unit_sha": unit_sha,
+            "include_closure_sha": closure_sha,
         }, indent=1) + "\n")
         return unit["target"], (
             f"[isle_build] composed {len(unit['functions'])} function(s) "

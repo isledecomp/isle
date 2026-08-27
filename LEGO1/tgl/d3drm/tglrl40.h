@@ -5,13 +5,8 @@
 
 #include <d3drmwin.h>
 
-// The D3D Retained Mode 4.0 implementation layer. BETA10 stores every assert
-// of these helpers with the file name tglRL40.h and a line number; the bodies
-// below follow that line order. The companion translation unit is tglrl40.cpp.
+// The D3D Retained Mode 4.0 implementation layer.
 
-// Global scope: legovideomanager.h forward-declares ViewportAppData and
-// legovideomanager.cpp links against ::ViewportDestroyCallback, matching the
-// unqualified 1997 manglings.
 struct ViewportAppData {
 	ViewportAppData(IDirect3DRM2* pRenderer);
 	~ViewportAppData();
@@ -27,7 +22,7 @@ struct ViewportAppData {
 	// ViewportAppData::`scalar deleting destructor'
 };
 
-// Forward declare to satisfy order check
+// Forward declarations
 void ViewportDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 void TextureDestroyCallback(IDirect3DRMObject* pObject, void* pArg);
 
@@ -173,7 +168,7 @@ inline Result MeshSetTextureMappingMode(MeshImpl::MeshData* pMesh, TextureMappin
 	}
 }
 
-// Forward declare to satisfy order check
+// Forward declarations
 inline IDirect3DRMFrame* ViewportGetLightFrame(IDirect3DRMViewport* pViewport);
 inline Result ViewPrepareFrameForRender(
 	IDirect3DRMFrame* pFrame,
@@ -189,11 +184,6 @@ inline Result ViewRestoreFrameAfterRender(
 	IDirect3DRMFrame* pLightFrame
 );
 
-// BETA10 asserts place this member at tglRL40.h L312-L313, including the
-// original name of the renderer singleton: assert((g_pTheRenderer->AddRef(),
-// g_pTheRenderer->Release()) == 1). The Succeeded(result) capture that feeds
-// the L312 assert does not survive NDEBUG cleanly, so the asserts are not
-// restored here yet.
 inline Result RendererImpl::Create()
 {
 	if (g_pTheRenderer) {
@@ -489,9 +479,6 @@ inline Result DeviceUpdate(IDirect3DRMDevice2* pDevice)
 }
 
 // FUNCTION: BETA10 0x1016e4f0
-// BETA10 places this at tglRL40.h L688-L697. The two asserts it records at
-// L692 and L697 are both assert(Succeeded(result)): one status check after
-// fetching the Direct3D device and one after reading the stats.
 inline unsigned long DeviceGetTrianglesDrawn(IDirect3DRMDevice2* pDevice)
 {
 	IDirect3DDevice2* pD3DDevice;

@@ -10,6 +10,7 @@
 #include "mxtypes.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxNotification, 0x08);
 DECOMP_SIZE_ASSERT(MxNotificationManager, 0x40);
 

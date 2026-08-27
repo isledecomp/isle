@@ -9,7 +9,7 @@
 #include "mxdirectx/mxstopwatch.h"
 #include "mxdisplaysurface.h"
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxmisc.h"
 #include "mxpalette.h"

@@ -15,10 +15,6 @@ DECOMP_SIZE_ASSERT(LegoRaceActor, 0x180)
 // STRING: LEGO1 0x100f0c04
 const char* g_strHIT_ACTOR_SOUND = "HIT_ACTOR_SOUND";
 
-// The timeout retail applies after a hit.  It has to be a named file-scope
-// constant: MSVC 4.2 numbers those at parse time, ahead of every function-body
-// literal, and that is the only way it can sit at the front of this unit's
-// .rdata pool where retail keeps it.  The name follows the use.
 // GLOBAL: LEGO1 0x100d5b2c
 const float g_hitAnimationTimeout = 2000.0f;
 

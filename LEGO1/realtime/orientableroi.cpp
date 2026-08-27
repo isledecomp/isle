@@ -1,11 +1,12 @@
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "orientableroi.h"
 
 #include "decomp.h"
 #include "realtime.h"
 
 #include <vec.h>
+
 DECOMP_SIZE_ASSERT(OrientableROI, 0xdc)
 
 // FUNCTION: LEGO1 0x100a4420

@@ -1,17 +1,12 @@
 // TglSurface.cpp : implementation file
 
-// The order of these includes is byte-identity significant: it decides which
-// of Tgl::Constant::Pi and rotateIndex[] this unit seats first in its .rdata
-// constant pool, and clang-format would sort them back.
-// clang-format off
 #include "tglsurface.h"
 
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "mxgeometry/mxmatrix.h"
 
 #include "decomp.h"
-// clang-format on
 
 DECOMP_SIZE_ASSERT(TglSurface, 0x70);
 

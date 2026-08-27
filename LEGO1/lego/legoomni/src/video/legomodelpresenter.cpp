@@ -20,6 +20,7 @@
 #include "roi/legoroi.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoModelPresenter, 0x6c)
 
 // GLOBAL: LEGO1 0x100f7ae0

@@ -205,8 +205,22 @@ def main() -> int:
                 if anchor["boundary"] == "after_newline":
                     offset = bi.resolve_source_overlay_anchor(
                         previous, anchor, f"{context}.{key} pre-edit")
+                    try:
+                        seat_offset = carry_byte(offset)
+                    except bi.ByteIdentityError:
+                        # The pre-edit seat byte abuts the edit itself (e.g.
+                        # a deleted comment block ended at the seat).  The
+                        # token context has already been carried and proved
+                        # unique above; resolving the carried anchor on the
+                        # post-edit text is the same seat, found the
+                        # fail-closed way.
+                        seat_offset = bi.resolve_source_overlay_anchor(
+                            current,
+                            bi.validate_source_overlay_anchor(
+                                raw, f"{context}.{key} carried"),
+                            f"{context}.{key} post-edit")
                     line_before, line_after = bi.source_overlay_seat_lines(
-                        current, carry_byte(offset))
+                        current, seat_offset)
                     raw["line_before"] = bi.sha256_bytes(line_before)
                     raw["line_after"] = bi.sha256_bytes(line_after)
         by_path[path]["clean"] = hashlib.sha256(current).hexdigest()
@@ -228,12 +242,28 @@ def main() -> int:
     for path in args.paths:
         previous = previous_bytes[path]
         current = (ROOT / path).read_bytes()
-        expected = _replay(rendered_before[path], previous, current)
-        bi.require(
-            rendered_after[path] == expected,
-            f"{path}: the re-rendered overlay is not the old rendering with "
-            "the clean-source edit replayed -- an operation payload or seat "
-            "moved")
+        try:
+            expected = _replay(rendered_before[path], previous, current)
+            bi.require(
+                rendered_after[path] == expected,
+                f"{path}: the re-rendered overlay is not the old rendering "
+                "with the clean-source edit replayed -- an operation payload "
+                "or seat moved")
+        except bi.ByteIdentityError as error:
+            if ("touches an overlay seat" not in str(error)
+                    and "not the old rendering" not in str(error)):
+                raise
+            # The edit abuts an operation seat, so the byte-level replay is
+            # ambiguous.  A comment/blank-only edit cannot move a single
+            # significant token, so require exact significant-token equality
+            # between the old and new renderings instead -- the
+            # compiler-visible text is then proven unchanged.
+            bi.require(
+                bi.source_overlay_significant_sha256(rendered_after[path])
+                == bi.source_overlay_significant_sha256(
+                    rendered_before[path]),
+                f"{path}: the edit abuts an operation seat AND changes "
+                "significant tokens -- re-derive this output by hand")
         by_path[path]["effective"] = hashlib.sha256(
             rendered_after[path]).hexdigest()
         by_path[path]["size"] = len(rendered_after[path])

@@ -4,7 +4,7 @@
 #include "decomp.h"
 #include "define.h"
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "islepathactor.h"
 #include "legoanimationmanager.h"
 #include "legoanimpresenter.h"
@@ -499,6 +499,7 @@ MxBool LegoAnimMMPresenter::FUN_1004b830()
 {
 	return m_unk0x58 >= e_unk6;
 }
+
 // FUNCTION: LEGO1 0x1004b840
 // FUNCTION: BETA10 0x1004d033
 void LegoAnimMMPresenter::FUN_1004b840()

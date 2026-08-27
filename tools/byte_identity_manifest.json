@@ -567,7 +567,7 @@
   {
    "target": "anim",
    "source": "LEGO1/lego/sources/anim/legoanim.cpp",
-   "source_sha256": "ecdddb24f0e95cc2eb066db77f73a8b484de265977d8c0288fccac2f98be7b53",
+   "source_sha256": "90a4872fefb99697439cb0cc7985bccf50143bfb14beb36504789bf4fe54d5f6",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -583,7 +583,7 @@
    },
    "donors": [
     {
-     "id": "d_599068252bc3",
+     "id": "d_23eca8d4089a",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -594,8 +594,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/sources/anim/legoanim.cpp",
-        "clean_sha256": "24616fd74906b47c75e0111d589f45b6f4edc0a0b5ce42367ff6584481993dc1",
-        "rendered_sha256": "8ecae052449d915e3e88a2d70a417470c152e737316ca42fdc301387556fa177",
+        "clean_sha256": "872fe92f64421eda32ee041bd4ade4f9033bd8ff6b4838d5b1d81f626c5e8ff1",
+        "rendered_sha256": "b9530f7c2fe1f2d6fe9c299e382ba22596ad69b9fd3998bd58b319b98d8a729c",
         "operations": [
          {
           "op": "insert",
@@ -618,7 +618,7 @@
             },
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 2
             }
@@ -628,7 +628,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "599068252bc380093379633aafe3864c1c0b4b15c166c0edef77f6f74eb81381",
+      "rendering_identity_sha256": "23eca8d4089adbcfb88a4845efb255cb07c5a7dfdbd10e2b0c76f81e656127cd",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering is this translation unit with no compiler-state carrier at all: the shipped declaration runs that seat the unit are simply absent, so the donor compiles the bare unit and these three bodies keep the schedule they have without the carrier.  Bare forward declarations emit no code, data, strings, vtables or linker directives, and their absence emits nothing either."
      }
@@ -685,7 +685,7 @@
    "functions": [
     {
      "mangled": "?Write@LegoScaleKey@@QAEJPAVLegoStorage@@@Z",
-     "donor": "d_599068252bc3",
+     "donor": "d_23eca8d4089a",
      "splice_class": "equal_body_strict",
      "expected_body_length": 83,
      "expected_body_sha256": "c5e07c0f1fdbd804c657f5137ed532ffe11d3bb73e406bb77db105926a5661cd",
@@ -710,7 +710,7 @@
     },
     {
      "mangled": "?Read@LegoAnim@@UAEJPAVLegoStorage@@J@Z",
-     "donor": "d_599068252bc3",
+     "donor": "d_23eca8d4089a",
      "splice_class": "equal_body_eh_structural_local",
      "expected_body_length": 445,
      "expected_body_sha256": "8fe1c5357cee7dc408d19059c11c907e2770fb6072f96af4dac1f38721e6ef8a",
@@ -744,7 +744,7 @@
     },
     {
      "mangled": "?Write@LegoAnim@@UAEJPAVLegoStorage@@@Z",
-     "donor": "d_599068252bc3",
+     "donor": "d_23eca8d4089a",
      "splice_class": "equal_body_strict",
      "expected_body_length": 234,
      "expected_body_sha256": "68068d24883929ce0267786634c15253d1df3feef58c17899f7429a1441341a7",
@@ -1333,7 +1333,7 @@
   {
    "target": "config",
    "source": "CONFIG/config.cpp",
-   "source_sha256": "afb09566f3dcb0f1d98223b3ae70d90d6abc60f4e235bddbfef13c27151f7453",
+   "source_sha256": "837d1e59eb4d8f764b8d3b8c5ba88626739bcd2a75366705644a4c753f0e8cfc",
    "mode": "restore_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -1360,7 +1360,7 @@
   {
    "target": "config",
    "source": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-   "source_sha256": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
+   "source_sha256": "615baddc38e58c71d7e0d317201592ed881f4947101471acde6b82287f6a9f4f",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -1533,7 +1533,7 @@
   {
    "target": "geom",
    "source": "LEGO1/lego/sources/geom/legowegedge.cpp",
-   "source_sha256": "0cd1f63572764c562a2d81d4472d19e362774b195d3ef84bea3be8487165bc87",
+   "source_sha256": "4e71766ce99ca4b124d7b11e7ac146c4d8b181d3a78cad5f4ab1890258d71af1",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -2101,7 +2101,7 @@
   {
    "target": "isle",
    "source": "ISLE/isleapp.cpp",
-   "source_sha256": "e0acd77c800944fc1c847163196db00c46ba3b6e5f49c898cef78c5e641c1049",
+   "source_sha256": "a090a29277ba8e500dc3671dd2abe22b8a2c225aca9b7b97ba53764e19e74747",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -4051,7 +4051,7 @@
    },
    "donors": [
     {
-     "id": "d_651575324178",
+     "id": "d_57131e45dc34",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -4127,8 +4127,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -4185,7 +4185,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -4317,7 +4317,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "651575324178b0790364bedf506d13c44389a1742c84fc858971b0968383a7ac"
+      "rendering_identity_sha256": "57131e45dc34a8078bfba4d8feaeb773d0394326fc453de1e5efb7dd33e44b6d"
      }
     },
     {
@@ -4369,7 +4369,7 @@
      }
     },
     {
-     "id": "d_39a51374f1f9",
+     "id": "d_3205589760e0",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -4436,8 +4436,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -4494,7 +4494,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -4608,11 +4608,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "39a51374f1f963630b9a381f50805efae4bc6e126f8b1b280bd2dee8ec31013d"
+      "rendering_identity_sha256": "3205589760e0defc61d9c5eb6fe5e8b6f238646d0ebcea41437fc3c70ed0a0f2"
      }
     },
     {
-     "id": "d_65ff1499c2b9",
+     "id": "d_60e8618242a8",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -4658,8 +4658,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -4716,7 +4716,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -4830,7 +4830,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "65ff1499c2b9c2a9ccfa18c3f2446215589d82fcd3736c43d55b1e1de1460dee"
+      "rendering_identity_sha256": "60e8618242a86002325d24023c19f4b9b464a02146e97d75e54725766738d700"
      }
     },
     {
@@ -4885,7 +4885,7 @@
    "functions": [
     {
      "mangled": "?FUN_100417c0@Act3Brickster@@QAEJXZ",
-     "donor": "d_651575324178",
+     "donor": "d_57131e45dc34",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 371,
      "expected_section_count": 584,
@@ -6467,7 +6467,7 @@
      "expected_seed_length": 1628,
      "expected_donor_length": 1632,
      "expected_linked_span": 1632,
-     "donor": "d_39a51374f1f9"
+     "donor": "d_3205589760e0"
     },
     {
      "mangled": "?FUN_10040360@Act3Cop@@QAEJXZ",
@@ -6634,7 +6634,7 @@
       132,
       140
      ],
-     "donor": "d_65ff1499c2b9"
+     "donor": "d_60e8618242a8"
     },
     {
      "mangled": "?ParseAction@Act3Brickster@@UAEXPAD@Z",
@@ -7606,7 +7606,7 @@
    },
    "donors": [
     {
-     "id": "d_e55bb39a509f",
+     "id": "d_8efe6b1b7beb",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -7624,8 +7624,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -7682,7 +7682,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -7798,7 +7798,7 @@
       ],
       "canonical_overlay_replay": "owning_translation_unit_v1",
       "emission_policy": "donor_private_rendering_only",
-      "rendering_identity_sha256": "e55bb39a509f696cc7a5d163487242efefe4307a8beefe8bda2ac9d2e00c7827",
+      "rendering_identity_sha256": "8efe6b1b7beb7ceaa393068476cef995ab271e0190001fd739a577cd578c6476",
       "authenticity_rationale": "The donor-private rendering replays the shipped overlay for this translation unit and adds no operation of its own, so the donor is the compiler's ordinary output for the effective checked-in source with no carrier state at all; it is the certificate's pre-image and nothing else."
      }
     },
@@ -7822,7 +7822,7 @@
    "functions": [
     {
      "mangled": "?Animate@Act3Ammo@@UAEXM@Z",
-     "donor": "d_e55bb39a509f",
+     "donor": "d_8efe6b1b7beb",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_seed_length": 2666,
      "expected_donor_length": 2666,
@@ -10111,7 +10111,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/actors/dunebuggy.cpp",
-   "source_sha256": "385285c2d531c0e55b91de2fe20217111555a9d77a738582e9cc13a62aace8bb",
+   "source_sha256": "008b3a06c17e4d3d4a2de67d35f84196f3cb05fbb7787282dfd49ef75963ae79",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -10551,7 +10551,7 @@
    },
    "donors": [
     {
-     "id": "d_d75ead1abe05",
+     "id": "d_3251f33d41b9",
      "recipe": {
       "kind": "donor_source_overlay",
       "compile_lane": {
@@ -10570,8 +10570,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -10628,7 +10628,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -10742,7 +10742,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "d75ead1abe05f92136e3c71128486d9c8dde9e3f296b47c4239fd568514d3632"
+      "rendering_identity_sha256": "3251f33d41b918ecf35c69f80242ed1788591a5bf4fe90c9692d137f156f7be0"
      },
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only"
@@ -10817,7 +10817,7 @@
    "functions": [
     {
      "mangled": "?FromQuaternion@Matrix4@@UAEHABVVector4@@@Z",
-     "donor": "d_d75ead1abe05",
+     "donor": "d_3251f33d41b9",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 308,
      "expected_donor_length": 308,
@@ -10890,7 +10890,7 @@
     },
     {
      "mangled": "?EqualsHamiltonProduct@Vector4@@UAEHABV1@0@Z",
-     "donor": "d_d75ead1abe05",
+     "donor": "d_3251f33d41b9",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 205,
      "expected_donor_length": 205,
@@ -14033,7 +14033,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-   "source_sha256": "28d0a0987183d1a6f15e89693819e2bb168a0b7bf54e6072c9b3065abf93a040",
+   "source_sha256": "56c93bb959659ae73b818e77a761a7727d36d52444d0e663d83a34a12d406474",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -14049,7 +14049,7 @@
    },
    "donors": [
     {
-     "id": "d_dd9698d615dc",
+     "id": "d_e1e0341d2c71",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -14100,8 +14100,8 @@
        },
        {
         "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-        "clean_sha256": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
-        "rendered_sha256": "017471f3f370044daaf1897301611ad977a237ae310fc11bb8ec733a4e956b88",
+        "clean_sha256": "2ad21bc777f258fff72b4bcac7c27cc4891159cc1064ba6f722089839011e27b",
+        "rendered_sha256": "7b9584ca80d142df5912d79a3b06381596aa867c1ee8b0ffa69851385e8b1c5a",
         "operations": [
          {
           "op": "insert",
@@ -14378,7 +14378,7 @@
        }
       ],
       "emission_policy": "donor_private_rendering_only",
-      "rendering_identity_sha256": "dd9698d615dc4a7de97a87dd1d54ee6b487c6c32f2aeb1d282e6b9b5c840e47e",
+      "rendering_identity_sha256": "e1e0341d2c71a29e01a8fa00e30b86ed9ae871266ddee4dcd79b07eb411a1a60",
       "authenticity_rationale": "Donor-private rendering of the checked-in header and translation unit by typed operations only: the member signature generator emits one fresh constructor declaration and its qualified inline definition header from a closed typed parameter list, and the constructor body plus its one call site are two renderings of a single closed parameter set whose inverse reconstructs the checked-in statements byte for byte. The donor object is a byte source only and never enters the link; the shipped tree keeps the caller's allocation untouched, which is why no includer is perturbed."
      }
     },
@@ -14399,7 +14399,7 @@
      }
     },
     {
-     "id": "d_f25718287df2",
+     "id": "d_8dbf98cc2d79",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -14470,8 +14470,8 @@
        },
        {
         "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-        "clean_sha256": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
-        "rendered_sha256": "334b3fcc05e7ccda61cc801776e2dbf655bab8aac217c700c767a2e16b47ecf6",
+        "clean_sha256": "2ad21bc777f258fff72b4bcac7c27cc4891159cc1064ba6f722089839011e27b",
+        "rendered_sha256": "e98ad4c9cf0ab45676e52aeabcd396d1d15114ff414125af7e3ca153b6719b55",
         "operations": [
          {
           "op": "insert",
@@ -14535,7 +14535,7 @@
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "donor_private_rendering_only",
-      "rendering_identity_sha256": "f25718287df2d3162b6d7d1832672bfeb6ed5fd2716a639b58e581b4c94d3e0b",
+      "rendering_identity_sha256": "8dbf98cc2d79886312502fc2e69d2df8d8e85cfa5802753259f0bb76cd48f6ff",
       "authenticity_rationale": "Donor-private rendering of the checked-in header and translation unit by typed operations only: the member signature generator emits the declaration and the qualified definition header from identifiers that exist in the checked-in source, and the body is an authenticated relocated range of that same source. The donor object is a byte source only and never enters the link; the shipped tree keeps the inline definition untouched, which is why no includer is perturbed."
      }
     },
@@ -14607,7 +14607,7 @@
    "functions": [
     {
      "mangled": "?FindSoundByKey@LegoCacheSoundManager@@QAEPAVLegoCacheSound@@PBD@Z",
-     "donor": "d_dd9698d615dc",
+     "donor": "d_e1e0341d2c71",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 282,
      "expected_donor_length": 281,
@@ -14964,7 +14964,7 @@
     },
     {
      "mangled": "??1LegoCacheSoundManager@@QAE@XZ",
-     "donor": "d_f25718287df2",
+     "donor": "d_8dbf98cc2d79",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 274,
      "expected_donor_length": 258,
@@ -15617,7 +15617,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp",
-   "source_sha256": "588dad0bbeed8040c23e530cf20e42505f2b16744ac57d2e317eb9d37ebed16b",
+   "source_sha256": "2812f039dd343de6f0bdc5a2901cafcb8a8b7f091f2af493fb85c8cadad49939",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -16343,7 +16343,7 @@
    },
    "donors": [
     {
-     "id": "d_d56bf418a48e",
+     "id": "d_f0b36bb2f327",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -16387,8 +16387,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -16445,7 +16445,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -16559,7 +16559,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "d56bf418a48e72ad990c1536975516b6b258a325054c90d90b07c3282da85ab6"
+      "rendering_identity_sha256": "f0b36bb2f3273411ce9992869328f2379d9b70e77eb2d3f75674d9e46999cf82"
      }
     },
     {
@@ -16619,7 +16619,7 @@
       90
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_d56bf418a48e"
+     "donor": "d_f0b36bb2f327"
     },
     {
      "mangled": "?AddPartToBuildByName@LegoCarBuildAnimPresenter@@QAEXPBD@Z",
@@ -16897,7 +16897,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-   "source_sha256": "1c1727a4d521bcb05239db274a61f89a85f36994a79bb73d6ab54d7806d8cb91",
+   "source_sha256": "eed1d47cbbc1ab7b797ca3eb5912ffa1d9eedbdcc8bdb554d42deb6a06c40b9b",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -17028,7 +17028,7 @@
      }
     },
     {
-     "id": "d_e136bec64291",
+     "id": "d_1c7c53725e60",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -17043,8 +17043,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-        "clean_sha256": "f27b4cee688c180dbe618f73f642568d90cff6ee9a0eb85a82268d8f550640b9",
-        "rendered_sha256": "57ca794bc34e71e3a419045ea4d53b71d2511df4cf9beb30e40cccc39617c90e",
+        "clean_sha256": "78f8a312c6524cb5d900366ae8066bd98861b39fa8bedd28e598b30e4cb9e1ee",
+        "rendered_sha256": "31eba9e9e76d485888ac1e1a89a6252fcc50c2664baf997d0891479a06d4ab46",
         "operations": [
          {
           "op": "insert",
@@ -17095,8 +17095,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -17153,7 +17153,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -17267,11 +17267,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "e136bec642915fb6bee90c11f9a33edb083ea33144493729a475e4e857b6d821"
+      "rendering_identity_sha256": "1c7c53725e60d4062d0746eaf5bbc0ef34fb36b2d8f1f45a14bac0e54e84db2b"
      }
     },
     {
-     "id": "d_9448d88c53dd",
+     "id": "d_607cecef9b48",
      "recipe": {
       "kind": "donor_source_overlay",
       "compile_lane": {
@@ -17284,14 +17284,14 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-        "clean_sha256": "f27b4cee688c180dbe618f73f642568d90cff6ee9a0eb85a82268d8f550640b9",
-        "rendered_sha256": "1c1727a4d521bcb05239db274a61f89a85f36994a79bb73d6ab54d7806d8cb91",
+        "clean_sha256": "78f8a312c6524cb5d900366ae8066bd98861b39fa8bedd28e598b30e4cb9e1ee",
+        "rendered_sha256": "eed1d47cbbc1ab7b797ca3eb5912ffa1d9eedbdcc8bdb554d42deb6a06c40b9b",
         "operations": []
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -17348,7 +17348,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -17462,13 +17462,13 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "9448d88c53dd32c06d1453def5aced1df046f1e301f1bb489679d53d0fcd26f6"
+      "rendering_identity_sha256": "607cecef9b48dfc9c906004969c582908b1ba940ca0b0c921a69d894d2de9e36"
      },
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only"
     },
     {
-     "id": "d_fa110451eabf",
+     "id": "d_2f3b258ecd8d",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -17483,8 +17483,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-        "clean_sha256": "f27b4cee688c180dbe618f73f642568d90cff6ee9a0eb85a82268d8f550640b9",
-        "rendered_sha256": "d950b4f2f6a10635013e78248ea4ee27a6c8c9b735248bacc493331e9cf63c11",
+        "clean_sha256": "78f8a312c6524cb5d900366ae8066bd98861b39fa8bedd28e598b30e4cb9e1ee",
+        "rendered_sha256": "c37bd057257af9e18fbb7bc2906ee7c8f932e0a9d30b5de7b09fd18c94e8b08b",
         "operations": [
          {
           "op": "insert",
@@ -17535,8 +17535,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -17593,7 +17593,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -17707,11 +17707,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "fa110451eabf8c93ad3ba1b06dd87050f92406a833e0c6dea9d8bb6d81ecf06d"
+      "rendering_identity_sha256": "2f3b258ecd8d814592004419e079947ec2f6a7574c2541e3c27d4ba268521cc8"
      }
     },
     {
-     "id": "d_8cc0ea8ac45c",
+     "id": "d_f1b23264802d",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -17726,8 +17726,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-        "clean_sha256": "f27b4cee688c180dbe618f73f642568d90cff6ee9a0eb85a82268d8f550640b9",
-        "rendered_sha256": "a5442a4eaee9df8c858cd5c9f960c3102b815b6f0325e392310ec5ff83b8a6b4",
+        "clean_sha256": "78f8a312c6524cb5d900366ae8066bd98861b39fa8bedd28e598b30e4cb9e1ee",
+        "rendered_sha256": "f6402fea47cbfb121252c343db34c8da20ea63ed2bff183bb6911de47ebe6d5e",
         "operations": [
          {
           "op": "insert",
@@ -17757,8 +17757,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -17815,7 +17815,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -17929,11 +17929,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "8cc0ea8ac45c9cf56dff86361256251e463c031a28b6370a5efa261b8fef1fc1"
+      "rendering_identity_sha256": "f1b23264802d04c2eb071ac38801140f6faa6ef62e7b51edd107a657b92ec6b2"
      }
     },
     {
-     "id": "d_73b347e9bff9",
+     "id": "d_04371b936b6d",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -17948,8 +17948,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-        "clean_sha256": "f27b4cee688c180dbe618f73f642568d90cff6ee9a0eb85a82268d8f550640b9",
-        "rendered_sha256": "cf27113bd11ce72db2880ea9605967cdfab81e9b98a5a68b73743b9e649194e7",
+        "clean_sha256": "78f8a312c6524cb5d900366ae8066bd98861b39fa8bedd28e598b30e4cb9e1ee",
+        "rendered_sha256": "2b65a1248c182b4e90f95c1dad87a86879e679b5a83e222c8055283b5e1921ee",
         "operations": [
          {
           "op": "insert",
@@ -18000,8 +18000,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -18058,7 +18058,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -18172,7 +18172,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "73b347e9bff9487b190059ac6ce73af8192cf815672265cd081487d15b7336ae"
+      "rendering_identity_sha256": "04371b936b6dc724436fa79ecc86edfdcdd78a95c8a665411308bfa6fa31b410"
      }
     },
     {
@@ -18427,7 +18427,7 @@
     },
     {
      "mangled": "?FUN_10064b50@LegoAnimationManager@@AAEXJ@Z",
-     "donor": "d_e136bec64291",
+     "donor": "d_1c7c53725e60",
      "splice_class": "equal_body_eh_structural_local",
      "expected_body_sha256": "bc020d8dbf54db1aebec21a9d5bf907479f7042d0d42709cc13b9dd72ebddfff",
      "expected_body_length": 912,
@@ -18515,7 +18515,7 @@
     },
     {
      "mangled": "?FUN_10061010@LegoAnimationManager@@QAEXE@Z",
-     "donor": "d_9448d88c53dd",
+     "donor": "d_607cecef9b48",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_seed_length": 726,
      "expected_donor_length": 731,
@@ -19294,7 +19294,7 @@
     },
     {
      "mangled": "?ReadModelInfo@LegoAnimationManager@@QAEJPAVLegoStorage@@PAUModelInfo@@@Z",
-     "donor": "d_fa110451eabf",
+     "donor": "d_2f3b258ecd8d",
      "expected_body_sha256": "50c33378a84d2f84befaebfd73bd5d88c4be4a30b7db3e379dde07d177d7266b",
      "expected_body_length": 172,
      "expected_changed_offsets": [
@@ -19349,7 +19349,7 @@
     },
     {
      "mangled": "?FUN_10064120@LegoAnimationManager@@AAEEPAUBoundary@LegoLocation@@EE@Z",
-     "donor": "d_8cc0ea8ac45c",
+     "donor": "d_f1b23264802d",
      "splice_class": "equal_body_eh_structural_local",
      "expected_body_sha256": "bd1fa6efd2792dfe4d8320843d44c35416d60c6c897eeb8e56170c38427a0426",
      "expected_body_length": 594,
@@ -19990,7 +19990,7 @@
     },
     {
      "mangled": "?Tickle@LegoAnimationManager@@UAEJXZ",
-     "donor": "d_73b347e9bff9",
+     "donor": "d_04371b936b6d",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 595,
      "expected_section_count": 834,
@@ -22279,7 +22279,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp",
-   "source_sha256": "196d173d62a8dccd4342e423c5c270715fdf4c23e000b10265463033518cadfe",
+   "source_sha256": "0104b6a76312eada3534aeb8b49d586e0550478a164e6959e8ed759c3302fbd0",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -23027,7 +23027,7 @@
      }
     },
     {
-     "id": "d_b6d5a2b613ee",
+     "id": "d_d0e5e744aaa4",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -23073,8 +23073,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -23131,7 +23131,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -23246,26 +23246,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -23278,26 +23278,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -23310,26 +23310,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -23341,11 +23341,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "b6d5a2b613eead1780e947009bc53d42de1f561602d0e3b740e54bdce08b7d16"
+      "rendering_identity_sha256": "d0e5e744aaa4a6fe7a5b985017fcd70885ffa83e41a4e260684a2bfecf7803ae"
      }
     },
     {
-     "id": "d_40db820629e1",
+     "id": "d_24e2b795a156",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -24025,8 +24025,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -24083,7 +24083,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -24198,26 +24198,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -24230,26 +24230,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -24262,26 +24262,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -24294,8 +24294,8 @@
        },
        {
         "path": "LEGO1/viewmanager/viewlod.h",
-        "clean_sha256": "add7eac1ba7975d5c9a54b16e1d104c695f3b2abbbc9723a931fac2b9e375376",
-        "rendered_sha256": "bd264b178d0b149e66ba86dced30448481fea7071c82bb275450300e255de84f",
+        "clean_sha256": "25e0ce341dcec8bb14be669f45a0a503d761ce953eb5693d8e29a2e980711a9c",
+        "rendered_sha256": "53744e119b98c80ba57b03319e9c473bed9fbfadf11dff1cb096bb07c70273b9",
         "operations": [
          {
           "op": "insert",
@@ -24351,7 +24351,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "40db820629e17387134c9cc52f66228b3c95e542e7ffd7e0a0b9b5c54e88d067",
+      "rendering_identity_sha256": "24e2b795a156315e601e8f41ddaa1c2709acaaa04876b86316b0c6217f84384c",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor renders the CreateActorROI source state of the immediately preceding include topology (headers reversed; the LOD inline bodies made available as the landed .inl.h split provides them) plus one framework carrier op, reproducing the retail-matched body this row pinned before the include-topology change."
      }
@@ -24408,7 +24408,7 @@
    "functions": [
     {
      "mangled": "?CreateActorROI@LegoCharacterManager@@AAEPAVLegoROI@@PBD@Z",
-     "donor": "d_40db820629e1",
+     "donor": "d_24e2b795a156",
      "splice_class": "retail_exact_source_target_closure",
      "expected_seed_length": 2294,
      "expected_donor_length": 2294,
@@ -25940,7 +25940,7 @@
     },
     {
      "mangled": "?ReleaseAutoROI@LegoCharacterManager@@QAEXPAVLegoROI@@@Z",
-     "donor": "d_b6d5a2b613ee",
+     "donor": "d_d0e5e744aaa4",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_seed_length": 248,
      "expected_donor_length": 248,
@@ -27194,7 +27194,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legogamestate.cpp",
-   "source_sha256": "a85c26113de68349e83204e2967678d6ba627045191a160a58f038d50bd87fae",
+   "source_sha256": "9dfddb32e1bf19066195f9a0a5d52d036933960372cb77018749396c22431e6a",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -27487,7 +27487,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp",
-   "source_sha256": "7f149f0975e10161992f9fc698246af66ed0c03e26a63771fd663c3c65e4239c",
+   "source_sha256": "6aec0ab99d89fcaa98c24b08901f92c5869ad2406e62bf2b640148605548efbb",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -27714,7 +27714,7 @@
    },
    "donors": [
     {
-     "id": "d_914bef46c5a3",
+     "id": "d_da2ab90595f6",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -27729,8 +27729,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp",
-        "clean_sha256": "ad3ec7650202665c1129ea3460aee15e344b420b36153aa777a0c12e80d8953d",
-        "rendered_sha256": "1aa3ad01a8fb745c9932099dc093e685af673fbed0dec7a0dadb83faa1843b96",
+        "clean_sha256": "60df8ad8f42001309d7c17564f77c2ff21b666e9220701a7f5779a3f1c9ab0c2",
+        "rendered_sha256": "5b22a3147938adbe89878e3a285b391542f836a37601a361ba94958e1b5e484d",
         "operations": [
          {
           "op": "insert",
@@ -27760,8 +27760,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -27818,7 +27818,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -27932,7 +27932,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "914bef46c5a3e0e84adfd501e6812a65acc57df7e0f6b427ceecc527b55eb434"
+      "rendering_identity_sha256": "da2ab90595f6b42de7dcf0cd60b74c5205e5603f4a22210a6591099b210509c8"
      }
     },
     {
@@ -27957,7 +27957,7 @@
    "functions": [
     {
      "mangled": "?Create@LegoObjectFactory@@UAEPAVMxCore@@PBD@Z",
-     "donor": "d_914bef46c5a3",
+     "donor": "d_da2ab90595f6",
      "expected_body_sha256": "a834d102ad0fa7e011646fc308846851924df05d77976569f13878810cb3de00",
      "expected_body_length": 9112,
      "expected_changed_offsets": [
@@ -28868,7 +28868,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/legoutils.cpp",
-   "source_sha256": "c7fccb4eeff8e3ff0c541b4adff3dee972e0728ddfbac27e46f44a01fc145285",
+   "source_sha256": "f8f2b6d885e2390dc9691a2c2185ba457192bcb1e6b0956f8b58fd0ff34c57bb",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -29440,7 +29440,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp",
-   "source_sha256": "6a1e5040a1dd3819fd6050f34e4648b19b9b381a58b496eab62b087b4e520afe",
+   "source_sha256": "ea6e0b66ef371c937f53e3b855a0be69f9cd534e675f976b0e4c530b2403f23e",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -29585,7 +29585,7 @@
    },
    "donors": [
     {
-     "id": "d_58f4c69786d9",
+     "id": "d_75ab9d2bea2f",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -29631,8 +29631,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -29689,7 +29689,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -29803,11 +29803,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "58f4c69786d9619bac0b350d5ac38f244cc05ff4c3c03776a041ef1e79fb6c25"
+      "rendering_identity_sha256": "75ab9d2bea2f5dc074e8fdaf653888ba8a69f324011f5312c16eb2e0cd7826d5"
      }
     },
     {
-     "id": "d_3862f6494ffc",
+     "id": "d_935acd792953",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -29859,8 +29859,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -29917,7 +29917,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -30032,26 +30032,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -30064,26 +30064,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -30096,26 +30096,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -30130,7 +30130,7 @@
       "canonical_overlay_replay": "owning_translation_unit_v1",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor renders the DissolveTransition source refactor of the immediately preceding source state of the headers the campaign landing edited, reproducing the retail-matched body this row pinned before the include-topology change.",
-      "rendering_identity_sha256": "3862f6494ffc50dc99a4b7df1b82d7baad485e9ae43b12b29dd06599e7c39667"
+      "rendering_identity_sha256": "935acd79295390daab93abeeeddfd88caf4b560cdf9fbd483a8a17420c3f3a9e"
      }
     },
     {
@@ -30185,7 +30185,7 @@
    "functions": [
     {
      "mangled": "?DissolveTransition@MxTransitionManager@@AAEXXZ",
-     "donor": "d_3862f6494ffc",
+     "donor": "d_935acd792953",
      "splice_class": "retail_exact_source_equal_body",
      "expected_section_number": 55,
      "expected_section_count": 79,
@@ -30508,7 +30508,7 @@
       181
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_58f4c69786d9"
+     "donor": "d_75ab9d2bea2f"
     },
     {
      "mangled": "?WindowsTransition@MxTransitionManager@@AAEXXZ",
@@ -30706,7 +30706,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp",
-   "source_sha256": "fe5e7448052e5ba28197cfc60ccdcbc071aeadfc29126bddbaaf8e33ba78f387",
+   "source_sha256": "d6109484b389d962f903adef68ea09c5f5e3cd7d5dbfcfcb4765a85679312d92",
    "mode": "restore_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -30738,7 +30738,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/control/legometerpresenter.cpp",
-   "source_sha256": "6a26472d9b2a23bc0ba413c5ac76a80f7fb2ec39040551a656f24d3e36efe8b7",
+   "source_sha256": "40025f5e934256302607deafdf3392829741b218ac504646db5e62ace12d17bd",
    "mode": "restore_comdat_group_order",
    "command_policy": {
     "required_flags": [
@@ -30854,7 +30854,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
-   "source_sha256": "b2d12d7268c99edafee6ab02bad34ebd807cff6e74e7498c8ed0385a40960244",
+   "source_sha256": "8857440b7953ca3166204192a96c5d4dca02cb19d55a89eb008d7254c2edbe4e",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -34182,7 +34182,7 @@
      }
     },
     {
-     "id": "d_a52773f3a46c",
+     "id": "d_f18ecc84b334",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -34227,8 +34227,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -34285,7 +34285,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -34400,26 +34400,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -34432,26 +34432,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -34464,26 +34464,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -34495,7 +34495,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "a52773f3a46c662940eb3f7831620c2a24c4475b79dc7ffe6bc9334a19ecf097"
+      "rendering_identity_sha256": "f18ecc84b3343ecad07a6f2681b2c2f39aeeec6b42b23abda557f67630bacddb"
      }
     },
     {
@@ -34616,7 +34616,7 @@
    "functions": [
     {
      "mangled": "?erase@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_a52773f3a46c",
+     "donor": "d_f18ecc84b334",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 305,
      "expected_section_count": 641,
@@ -37035,7 +37035,7 @@
    },
    "donors": [
     {
-     "id": "d_90fde18bafb6",
+     "id": "d_67042bdc6961",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -37080,8 +37080,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -37138,7 +37138,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -37253,26 +37253,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -37285,26 +37285,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -37317,26 +37317,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -37348,7 +37348,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "90fde18bafb6e8aea62b49a60107c5050d8905deba3b9badf93193882e08b1ff"
+      "rendering_identity_sha256": "67042bdc69617cf31be459cfc375dfb37a7520705d9b01576e0a619698485a71"
      }
     },
     {
@@ -37471,7 +37471,7 @@
    "functions": [
     {
      "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_90fde18bafb6",
+     "donor": "d_67042bdc6961",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 130,
      "expected_section_count": 287,
@@ -38239,7 +38239,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legoanimactor.cpp",
-   "source_sha256": "f68954328f755e72bf445a10567913fe0e08b91c8ded8de68fef5e61913cec86",
+   "source_sha256": "7dc4c6ca17214447a1dd25aa6887d8e7922d000cb50d33bdb0a8037379f8ab27",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -38997,7 +38997,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
-   "source_sha256": "1cb7f952695d6cbe032c38da7c42be5b9eed60a810e18c40216202793c544baa",
+   "source_sha256": "7a5c166782f6feb48a5f8d650bf54f0535b5f12908ad39e99ef617594cf73c9e",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -39029,7 +39029,7 @@
      }
     },
     {
-     "id": "d_84baa2918028",
+     "id": "d_3fe18ad8b36c",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -39044,15 +39044,15 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
-        "clean_sha256": "49e409f406a7d8a1d1c78fdccdb033f68ef16583a3c3097a8f761adefbe610ff",
-        "rendered_sha256": "df13ee212893908a39005ee65b67cb12fc478bf83c0ae2209c3a148bbb91fe19",
+        "clean_sha256": "0751104548c5e55e8fc22678e841a01e663b25fe257373945af4b035038b9bec",
+        "rendered_sha256": "9f2fa14e427c2a274c0b8ac9140a40b2bf1050210c801de6d112b628912d2de8",
         "operations": [
          {
           "op": "insert",
           "id": "op_a3d_exth",
           "anchor": {
            "ctx": "04bcb0ca9f6ab88e78854ddfd3d422cca7ff698c3db1049d50395c04b0b007bb",
-           "line_before": "4f772bb3ac885f5dae253c572c46fd5bfc8f923cd55c219db342ed48b24e5ac2",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "7392062c721a17fb22e84a61b98ba73b8e2861f7cb80d458588ce43563d1af89"
           },
           "gen": {
@@ -39096,8 +39096,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -39154,7 +39154,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -39268,11 +39268,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "84baa2918028b1cce3078738fae3415f72f6b50913c3bd3da9971e8e0d9730a7"
+      "rendering_identity_sha256": "3fe18ad8b36c2bad94db5316df6805b4760c5155560f6d8fb8ae37f9fa76b882"
      }
     },
     {
-     "id": "d_1468b61fa98a",
+     "id": "d_8b0ea29e84e2",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -39287,15 +39287,15 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
-        "clean_sha256": "49e409f406a7d8a1d1c78fdccdb033f68ef16583a3c3097a8f761adefbe610ff",
-        "rendered_sha256": "8f877d0572cab300ca81decc21808934b0efdf631c67af39b7bff1d6ecfb9563",
+        "clean_sha256": "0751104548c5e55e8fc22678e841a01e663b25fe257373945af4b035038b9bec",
+        "rendered_sha256": "709a2628a981560867086365507e8424e421fea44f7543267dd603b9a17c8100",
         "operations": [
          {
           "op": "insert",
           "id": "op_a3d_exth",
           "anchor": {
            "ctx": "04bcb0ca9f6ab88e78854ddfd3d422cca7ff698c3db1049d50395c04b0b007bb",
-           "line_before": "4f772bb3ac885f5dae253c572c46fd5bfc8f923cd55c219db342ed48b24e5ac2",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "7392062c721a17fb22e84a61b98ba73b8e2861f7cb80d458588ce43563d1af89"
           },
           "gen": {
@@ -39339,8 +39339,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -39397,7 +39397,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -39511,7 +39511,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "1468b61fa98a5063c870dff34f5bf4165d95c646f0b9affea67adbb86e1955fe"
+      "rendering_identity_sha256": "8b0ea29e84e2e86ae0036f58ed0eadf585e20baccef9af329e8fe4b1af148a1c"
      }
     },
     {
@@ -39995,7 +39995,7 @@
       68,
       76
      ],
-     "donor": "d_1468b61fa98a"
+     "donor": "d_8b0ea29e84e2"
     },
     {
      "mangled": "?StepState@LegoExtraActor@@UAEIMAAVMatrix4@@@Z",
@@ -40105,7 +40105,7 @@
       ]
      ],
      "expected_xdata_rename_offsets": [],
-     "donor": "d_84baa2918028"
+     "donor": "d_3fe18ad8b36c"
     },
     {
      "mangled": "?_Copy@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@IAEXABV1@@Z",
@@ -40117,7 +40117,7 @@
       35,
       64
      ],
-     "expected_donor_section_number": 443
+     "expected_donor_section_number": 413
     },
     {
      "mangled": "??0LegoExtraActor@@QAE@XZ",
@@ -40642,7 +40642,7 @@
    },
    "donors": [
     {
-     "id": "d_afd1f78cb2d6",
+     "id": "d_c4ec94b2f6e5",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -40688,8 +40688,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -40746,7 +40746,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -40860,11 +40860,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "afd1f78cb2d6fa9949dfe597026a260b41a9f46d5b1501ddb8da29493dbda2ab"
+      "rendering_identity_sha256": "c4ec94b2f6e5ebd697f5546ee52d3809c61e0cdfb755ff000c6439034334ddec"
      }
     },
     {
-     "id": "d_ca52c9108b8e",
+     "id": "d_312505234223",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -40931,8 +40931,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -40989,7 +40989,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -41103,7 +41103,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "ca52c9108b8e4fa333eede6d200100842dcc91892db37f1e94d087ec6e1b5e27"
+      "rendering_identity_sha256": "312505234223ca2b385f0c7ed5fc94174321f8346760587c4dd2c26b171c6e3b"
      }
     },
     {
@@ -41210,11 +41210,11 @@
       ]
      ],
      "expected_xdata_rename_offsets": [],
-     "donor": "d_afd1f78cb2d6"
+     "donor": "d_c4ec94b2f6e5"
     },
     {
      "mangled": "?CalculateTransform@LegoPathActor@@UAEHMAAVMatrix4@@@Z",
-     "donor": "d_afd1f78cb2d6",
+     "donor": "d_c4ec94b2f6e5",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 1593,
      "expected_donor_length": 1590,
@@ -41575,11 +41575,11 @@
       299
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_afd1f78cb2d6"
+     "donor": "d_c4ec94b2f6e5"
     },
     {
      "mangled": "?CheckIntersections@LegoPathActor@@UAEHAAVVector3@@00@Z",
-     "donor": "d_ca52c9108b8e",
+     "donor": "d_312505234223",
      "expected_body_sha256": "610f8d81b83a0dd850669571d972350ddb51379b4de3bc7ef21b64f1491689ff",
      "expected_body_length": 485,
      "expected_changed_offsets": [
@@ -41935,7 +41935,7 @@
      }
     },
     {
-     "id": "d_c132f4e57722",
+     "id": "d_14a3add3ab9a",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -41956,8 +41956,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -42014,7 +42014,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -42099,26 +42099,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -42131,26 +42131,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -42163,26 +42163,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -42194,11 +42194,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "c132f4e57722495682157504c2d2179a707b5252ed7de2d1a2e61c25cead85bf"
+      "rendering_identity_sha256": "14a3add3ab9a88f591ec6c441cf875b54afe2dafd646feae6ff82d9347730c7b"
      }
     },
     {
-     "id": "d_017f8a742b3e",
+     "id": "d_fab5fa9060a0",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -42324,8 +42324,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -42382,7 +42382,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -42497,26 +42497,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -42529,26 +42529,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -42561,26 +42561,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -42592,7 +42592,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "017f8a742b3e863f7323e433aa4cc1eb073a1ca967027218ef2b7fb9fc3db02d"
+      "rendering_identity_sha256": "fab5fa9060a0483cb8f0fbdf5cd7bcf61b99c23401afd1f2918506cfe065af2c"
      }
     },
     {
@@ -42963,7 +42963,7 @@
     },
     {
      "mangled": "?_Erase@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@IAEXPAU_Node@1@@Z",
-     "donor": "d_c132f4e57722",
+     "donor": "d_14a3add3ab9a",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_seed_length": 57,
      "expected_donor_length": 57,
@@ -43304,7 +43304,7 @@
     },
     {
      "mangled": "?erase@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_017f8a742b3e",
+     "donor": "d_fab5fa9060a0",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 1106,
      "expected_donor_length": 1102,
@@ -44243,7 +44243,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-   "source_sha256": "1b14f3554ae7e8af05ba5dc3710ec479757bfb3bf5a7cf2b75f0132e4a3f08be",
+   "source_sha256": "30dad0121e657492a745db125a5166898d3be5631794981a95266a0558a398c7",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -44307,7 +44307,7 @@
      }
     },
     {
-     "id": "d_eb2874e4da35",
+     "id": "d_3dabc195e19e",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -44322,8 +44322,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-        "clean_sha256": "bd57189c551368a9d60da0c3ca071c77e09a829b3073ed8217389503c13769a0",
-        "rendered_sha256": "5941278ab52592c45d9a81bfb3ef9ef55dbf0e4a9d3435d8509a2502fb8f8f03",
+        "clean_sha256": "d9dcdae11c4e78eb121f157472be5ffa4b67cdf3564f706649b414a49adce0bb",
+        "rendered_sha256": "433f5559ec43b774814153b39614759d3f0925a9aebbdf2a842293891e1aa513",
         "operations": [
          {
           "op": "insert",
@@ -44353,8 +44353,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -44411,7 +44411,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -44525,7 +44525,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "eb2874e4da35d808de0dc4fcf862a5a36f36a4da8f3078599fcb468bfdb1703f"
+      "rendering_identity_sha256": "3dabc195e19e7699353578edc89ceab1a344b20865b697c130f4d6de6f3d7491"
      }
     },
     {
@@ -44549,7 +44549,7 @@
      }
     },
     {
-     "id": "d_a77bf1d7eb11",
+     "id": "d_3817a794da75",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -44564,16 +44564,16 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-        "clean_sha256": "bd57189c551368a9d60da0c3ca071c77e09a829b3073ed8217389503c13769a0",
-        "rendered_sha256": "df66d16172ea3ef0627a451319392458430a1f166ab6bd4b7c9e06cc9b9a9074",
+        "clean_sha256": "d9dcdae11c4e78eb121f157472be5ffa4b67cdf3564f706649b414a49adce0bb",
+        "rendered_sha256": "d6e968a7d2297e1045bffec6b100ad6f44e07ae252aeefef05a5db462d1b631c",
         "operations": [
          {
           "op": "insert",
           "id": "op_a3d_exth",
           "anchor": {
-           "ctx": "23a1a840f84d7c060652bba9071a002388520471c63f925dafeb57a1afb97d3c",
+           "ctx": "71541e5e26964f02e7382eb699e2310170e937f87f0475f8e38b4a151725ab60",
            "b": 21,
-           "line_before": "69412ba208e235f4f2d18a77874f4ee856e997629ef4274614e61b7363a7ad85",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "e8d1839b304eeae3ad36a686efbcc213fc0c2502854934df61b5ab297cb608ae"
           },
           "gen": {
@@ -44617,8 +44617,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -44675,7 +44675,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -44789,11 +44789,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "a77bf1d7eb11de4847e1eabc98580d66da4149e122621a93d3cb9c759b8d9eb5"
+      "rendering_identity_sha256": "3817a794da756e8e53b26d9b6ca81363ca3373df625f56fc06283b6cf14f61ff"
      }
     },
     {
-     "id": "d_3b8c2c007295",
+     "id": "d_829b70a8e5c3",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -44808,16 +44808,16 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-        "clean_sha256": "bd57189c551368a9d60da0c3ca071c77e09a829b3073ed8217389503c13769a0",
-        "rendered_sha256": "fc7ed7ee322598d6c7ef6293ee9dccbc5ba653c74f84b51c871757ccf7cfd795",
+        "clean_sha256": "d9dcdae11c4e78eb121f157472be5ffa4b67cdf3564f706649b414a49adce0bb",
+        "rendered_sha256": "9331b6b9fbe9dc8101447ef955bc675c05f5c583ff83e8bdd46b80ee0e2bc08a",
         "operations": [
          {
           "op": "insert",
           "id": "op_a3d_exth",
           "anchor": {
-           "ctx": "23a1a840f84d7c060652bba9071a002388520471c63f925dafeb57a1afb97d3c",
+           "ctx": "71541e5e26964f02e7382eb699e2310170e937f87f0475f8e38b4a151725ab60",
            "b": 21,
-           "line_before": "69412ba208e235f4f2d18a77874f4ee856e997629ef4274614e61b7363a7ad85",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "e8d1839b304eeae3ad36a686efbcc213fc0c2502854934df61b5ab297cb608ae"
           },
           "gen": {
@@ -44861,8 +44861,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -44919,7 +44919,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -45033,7 +45033,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "3b8c2c00729523c853288fdab3a50d9bcbe84f71f9be16716d6e25dca619361d"
+      "rendering_identity_sha256": "829b70a8e5c3bfa6d1c3d4bf0318e88c846283113d8322d573e6a835c4fa0f5c"
      }
     },
     {
@@ -45053,7 +45053,7 @@
      }
     },
     {
-     "id": "d_7575d14a18c4",
+     "id": "d_243faf1b1786",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -45068,16 +45068,16 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-        "clean_sha256": "bd57189c551368a9d60da0c3ca071c77e09a829b3073ed8217389503c13769a0",
-        "rendered_sha256": "1898c608feaea094c83e6aef81be3b862c3ed967f19a828bf3aa2cd0c1c2f176",
+        "clean_sha256": "d9dcdae11c4e78eb121f157472be5ffa4b67cdf3564f706649b414a49adce0bb",
+        "rendered_sha256": "4c1460e72bc1e55ed183572a82cb377709a90ddb2a0412ce443e84ab7686467a",
         "operations": [
          {
           "op": "insert",
           "id": "op_a3d_exth",
           "anchor": {
-           "ctx": "23a1a840f84d7c060652bba9071a002388520471c63f925dafeb57a1afb97d3c",
+           "ctx": "71541e5e26964f02e7382eb699e2310170e937f87f0475f8e38b4a151725ab60",
            "b": 21,
-           "line_before": "69412ba208e235f4f2d18a77874f4ee856e997629ef4274614e61b7363a7ad85",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "e8d1839b304eeae3ad36a686efbcc213fc0c2502854934df61b5ab297cb608ae"
           },
           "gen": {
@@ -45121,8 +45121,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -45179,7 +45179,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -45293,11 +45293,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "7575d14a18c4543ec669cfff26e5e2f94e63ef6870ca388ff1739c65bc952d65"
+      "rendering_identity_sha256": "243faf1b178609f44f4e497c9e25d552b768ea34f534e719c7159bda47683026"
      }
     },
     {
-     "id": "d_7c530ed1f3e5",
+     "id": "d_cf0165ff365f",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -45312,16 +45312,16 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-        "clean_sha256": "bd57189c551368a9d60da0c3ca071c77e09a829b3073ed8217389503c13769a0",
-        "rendered_sha256": "95ed365cf8c93c014ad01f00a619522ae39e0bad7baf255a1b4a3b210e66e220",
+        "clean_sha256": "d9dcdae11c4e78eb121f157472be5ffa4b67cdf3564f706649b414a49adce0bb",
+        "rendered_sha256": "9fb4767035946b278072bad52696af46fb9d94b85f03dacd487cf803a6077166",
         "operations": [
          {
           "op": "insert",
           "id": "op_a3d_exth",
           "anchor": {
-           "ctx": "23a1a840f84d7c060652bba9071a002388520471c63f925dafeb57a1afb97d3c",
+           "ctx": "71541e5e26964f02e7382eb699e2310170e937f87f0475f8e38b4a151725ab60",
            "b": 21,
-           "line_before": "69412ba208e235f4f2d18a77874f4ee856e997629ef4274614e61b7363a7ad85",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "e8d1839b304eeae3ad36a686efbcc213fc0c2502854934df61b5ab297cb608ae"
           },
           "gen": {
@@ -45365,8 +45365,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -45423,7 +45423,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -45537,7 +45537,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "7c530ed1f3e50201df325ece1b8424a0b4bd6cfa7e9350ff2cd75d813f89645f"
+      "rendering_identity_sha256": "cf0165ff365f68449f560d75cc206a9776c6c130fffb36ab276cd2f095c2bce3"
      }
     },
     {
@@ -46010,7 +46010,7 @@
      "expected_seed_length": 329,
      "expected_donor_length": 328,
      "expected_linked_span": 336,
-     "donor": "d_eb2874e4da35"
+     "donor": "d_3dabc195e19e"
     },
     {
      "mangled": "?PlaceActor@LegoPathController@@QAEJPAVLegoPathActor@@PBDHMHM@Z",
@@ -46028,7 +46028,7 @@
      "expected_seed_length": 696,
      "expected_donor_length": 703,
      "expected_linked_span": 704,
-     "donor": "d_7c530ed1f3e5"
+     "donor": "d_cf0165ff365f"
     },
     {
      "mangled": "?find@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QBE?AVconst_iterator@1@ABQAULegoPathCtrlEdge@@@Z",
@@ -46057,7 +46057,7 @@
       58
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_a77bf1d7eb11"
+     "donor": "d_3817a794da75"
     },
     {
      "mangled": "?_Copy@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IAEPAU_Node@1@PAU21@0@Z",
@@ -46095,7 +46095,7 @@
       98
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_a77bf1d7eb11"
+     "donor": "d_3817a794da75"
     },
     {
      "mangled": "?_Erase@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAEXPAU_Node@1@@Z",
@@ -46121,7 +46121,7 @@
       44
      ],
      "splice_class": "equal_body_strict",
-     "donor": "d_a77bf1d7eb11"
+     "donor": "d_3817a794da75"
     },
     {
      "mangled": "?erase@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE?AViterator@1@V21@@Z",
@@ -46130,7 +46130,7 @@
      "expected_seed_length": 1109,
      "expected_donor_length": 1110,
      "expected_linked_span": 1120,
-     "donor": "d_3b8c2c007295"
+     "donor": "d_829b70a8e5c3"
     },
     {
      "mangled": "?_Ubound@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IBEPAU_Node@1@ABQAULegoPathCtrlEdge@@@Z",
@@ -46546,7 +46546,7 @@
       ]
      ],
      "expected_xdata_rename_offsets": [],
-     "donor": "d_7575d14a18c4"
+     "donor": "d_243faf1b1786"
     },
     {
      "mangled": "?_Insert@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@IAE?AViterator@1@PAU_Node@1@0ABQAVLegoPathActor@@@Z",
@@ -48955,7 +48955,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/race/legoraceactor.cpp",
-   "source_sha256": "78b04dec30ed9fc170ea02c384212135ca58262d70e27dad08a110b9db2ce1af",
+   "source_sha256": "b68dc3721ad156599615152c4c0cc6de2e1d8a38931fed047b157247c3207c64",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -50648,7 +50648,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-   "source_sha256": "1756da462d54b2e64231aa6b2e8e1d4378743a9479870420e26a4791d6e20c67",
+   "source_sha256": "3005e8b61d465d08ebce71bf4550875b8233e05c69497c6b49f58affd0b8994b",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -50664,7 +50664,7 @@
    },
    "donors": [
     {
-     "id": "d_e0c9d7db3386",
+     "id": "d_fdcf0d0cb3f7",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -50679,8 +50679,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-        "clean_sha256": "f5b4d1bd7641729702411c41a1f85336d33b2aad4da38e2fd5a1cacf75ecdcee",
-        "rendered_sha256": "e79e056174f40c6bbedd83bd14efe7fe37e7b07cf452739f47d8da7c6ceac9d0",
+        "clean_sha256": "018ef97aace5d8a4656b7f8791fafcb1559aa40d39f7f85da9b01629eea19ae7",
+        "rendered_sha256": "402e8dd8130a7b95cb2afa7866c4ef3448fc9332f1a910e808a66959571aa3c4",
         "operations": [
          {
           "op": "insert",
@@ -50710,8 +50710,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -50768,7 +50768,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -50882,11 +50882,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "e0c9d7db3386c721df6a45e7c5e71152f78baaae9a37dcfb07f1602f5edff8f5"
+      "rendering_identity_sha256": "fdcf0d0cb3f714b341003a0be1f8a6ac9a0fe8d397aa253396a2dac11bf9df5b"
      }
     },
     {
-     "id": "d_12fccf32e8a3",
+     "id": "d_8281b55dfb85",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -50901,8 +50901,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-        "clean_sha256": "f5b4d1bd7641729702411c41a1f85336d33b2aad4da38e2fd5a1cacf75ecdcee",
-        "rendered_sha256": "3c4d76585e0fb62ee4b3687074556e2c165c1244d8e2d3353bd22ef2fa8c4ae4",
+        "clean_sha256": "018ef97aace5d8a4656b7f8791fafcb1559aa40d39f7f85da9b01629eea19ae7",
+        "rendered_sha256": "02a7c2404d8f2e40c399b326d2c7c83c932900037d42e00f29968e8c0750b67a",
         "operations": [
          {
           "op": "insert",
@@ -50910,8 +50910,8 @@
           "anchor": {
            "ctx": "b3bce41b70bb5a23fc0316d2cba292399920daff5bfb28e81e4c6cc2d8e4c828",
            "b": 31,
-           "line_before": "16a179aee3eb4b57dadbda2eb4f261e91c17415f6c8fb2bca1578b030a3c543e",
-           "line_after": "4968f12d25df5d91cbad61de122ed9d19c9f9104139911035794edeff972fbb9"
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "664b6c44c3a2ade4e3e8c0938a9d4801a0e48fc2e07360ac930af09ba56b880f"
           },
           "gen": {
            "k": "seq",
@@ -50954,8 +50954,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -51012,7 +51012,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -51127,26 +51127,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -51159,26 +51159,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -51191,26 +51191,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -51222,11 +51222,11 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "12fccf32e8a3a1fc1a069324178c94a2c4826348d0622b2d5f1e8af775c93876"
+      "rendering_identity_sha256": "8281b55dfb857ce788ce4f5eea71c7d31b2018ab530ed3f11d2350da250277ce"
      }
     },
     {
-     "id": "d_7136e489ffd7",
+     "id": "d_791dbee704ed",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -51241,8 +51241,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-        "clean_sha256": "f5b4d1bd7641729702411c41a1f85336d33b2aad4da38e2fd5a1cacf75ecdcee",
-        "rendered_sha256": "8b203b803380f0c93a3eb9137c7264f0a018baa21286cb50a866cdf06270c62a",
+        "clean_sha256": "018ef97aace5d8a4656b7f8791fafcb1559aa40d39f7f85da9b01629eea19ae7",
+        "rendered_sha256": "f3a40bf6eb536758383df7e497dc595916213d77df68c060effa0b28ace77041",
         "operations": [
          {
           "op": "insert",
@@ -51272,8 +51272,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -51330,7 +51330,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -51445,26 +51445,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -51477,26 +51477,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -51509,26 +51509,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -51540,7 +51540,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "7136e489ffd737678a7f494ac2327237d0421e00a0e8f4484bfde072924f86e8"
+      "rendering_identity_sha256": "791dbee704edd2e1e95c051e5d229cdef41660c4455eba2ee6a38a5f88b0c2ee"
      }
     },
     {
@@ -51563,7 +51563,7 @@
    "functions": [
     {
      "mangled": "?HandleJump@LegoCarRaceActor@@UAEHPAVLegoPathBoundary@@PAULegoEdge@@@Z",
-     "donor": "d_e0c9d7db3386",
+     "donor": "d_fdcf0d0cb3f7",
      "splice_class": "same_slot_resize",
      "expected_seed_length": 1023,
      "expected_donor_length": 1024,
@@ -51572,7 +51572,7 @@
     },
     {
      "mangled": "?CheckPresenterAndActorIntersections@LegoJetskiRaceActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
-     "donor": "d_12fccf32e8a3",
+     "donor": "d_8281b55dfb85",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 709,
      "expected_donor_length": 709,
@@ -51843,7 +51843,7 @@
     },
     {
      "mangled": "?CheckPresenterAndActorIntersections@LegoCarRaceActor@@UAEIPAVLegoPathBoundary@@AAVVector3@@1MM1@Z",
-     "donor": "d_7136e489ffd7",
+     "donor": "d_791dbee704ed",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 1173,
      "expected_donor_length": 1168,
@@ -53152,7 +53152,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-   "source_sha256": "a2b27db3b2efa74992135e014585a15a10eba540728b807797d9c29b5e6d8d97",
+   "source_sha256": "eabf6c1dc794c8fbc88fb882dbbe3118cf7aa607a9040468984e8d492790f040",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -53460,7 +53460,7 @@
      }
     },
     {
-     "id": "d_0a8bc2c9514d",
+     "id": "d_0f0dd4e2f509",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -53474,8 +53474,8 @@
       "renderings": [
        {
         "path": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-        "clean_sha256": "3927702f07408fab13729b0b5ce08e3ae04b5d47c8fd152b22ad22f67327020a",
-        "rendered_sha256": "8e37bf3b66a017c4c026090f7d766d8f47ba206fefc839d0f3c33e4f3071e504",
+        "clean_sha256": "30f892be429380163c64c34c3c6b8b4051f393ef886d582b0b0faa67fd768f07",
+        "rendered_sha256": "30fe186a84374618b06c18df1edfac2742eb6fce75f4c07534fc01f7906b61c9",
         "operations": [
          {
           "op": "insert",
@@ -53522,7 +53522,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "0a8bc2c9514dae2a75e13c6d3fb5432c8b8f7b4112dc582f00cdd3cca6ef20e5"
+      "rendering_identity_sha256": "0f0dd4e2f5098ab6e4f5f47133c31a37e7d1b1b7fe6e4c989d4deadbd6b27e05"
      }
     },
     {
@@ -56307,7 +56307,7 @@
     },
     {
      "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_0a8bc2c9514d",
+     "donor": "d_0f0dd4e2f509",
      "splice_class": "retail_exact_donor_rewriting",
      "expected_section_number": 291,
      "expected_section_count": 827,
@@ -57643,7 +57643,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp",
-   "source_sha256": "74925e5897588d5ce7e0435fd4df90e902afd7ed3ddf200fb08caef467e95708",
+   "source_sha256": "ce3716ddbc2e61fa3a9544f4b564af726b823ab32d6c26cf4bef4d837eff1c0c",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -57827,7 +57827,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legopartpresenter.cpp",
-   "source_sha256": "32598dd9c7c5a050217e4d8865b473f6ac3e072488b2bea39e18f0b1665e6c2b",
+   "source_sha256": "6e9a03e4575f1dcbb3f3d6d61a3f90138e6688857eb0251231919196e3ac789d",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -59438,7 +59438,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp",
-   "source_sha256": "a9ddaf1e686272e584a31dabb59393fcafe5472fa05e38d8cea2f05fcbdad648",
+   "source_sha256": "b8e6c651f4e77772b76e358b2b48e04f8da29c181e25d56764f555dbb525dea5",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -59579,7 +59579,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/video/legovideomanager.cpp",
-   "source_sha256": "dbb917c6876757090fe8f4f85988462f3f4b4dec1d27c617da056ac651ddd548",
+   "source_sha256": "a7b7bd1d39110cd411cd3a97d2db200e562c775c26f58d01c377dba070357be7",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -60024,7 +60024,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/act3.cpp",
-   "source_sha256": "07a0f6459e39fb41f915f3b04701ef940d254778be00dadde30d0077a58e0bb1",
+   "source_sha256": "e55133501274cd022c09b9fb0fe06a1c906226668e6ad9fe81d56424695420f8",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -61609,7 +61609,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/hospital.cpp",
-   "source_sha256": "04aed3a93a98501646621af71fb795cc69bfb26da93c00e7d1f14ef02e6f4f09",
+   "source_sha256": "4c2c4bf3c7b5e7baf4de47d8bd874b31d9051bb7a20d20fedefd3d9fca2a8cdf",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -65488,7 +65488,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/worlds/legoact2.cpp",
-   "source_sha256": "e1fc49b42127c07906aaa26a9b5f0abe13d8016c02fa1120cccb1da85710fe95",
+   "source_sha256": "52082b3994b55bbb5a01ac230a154bd378650176a5236dac8d0585c84cb13e6d",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -67219,7 +67219,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/modeldb/modeldb.cpp",
-   "source_sha256": "4b3a3d68cb49bba6dd45f1637004933a2eeb8634c0112d9156024613bcdd97c3",
+   "source_sha256": "69422309d40d019a339f3acd23d4c6d9ef7a53db4ff5f83c67585c70da664fa6",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -67768,7 +67768,7 @@
   {
    "target": "mxdirectx",
    "source": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-   "source_sha256": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
+   "source_sha256": "615baddc38e58c71d7e0d317201592ed881f4947101471acde6b82287f6a9f4f",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -68575,7 +68575,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/common/mxutilities.cpp",
-   "source_sha256": "60ce86949411d335921aa13d0fc577da594fd997f5aa2286439de7f5289814cc",
+   "source_sha256": "9907bdf70a13f9d857a91fce4dbbaa17cc5939d753f1659c54a7f6ea108e3657",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -68655,7 +68655,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/main/mxmain.cpp",
-   "source_sha256": "e1591ef87f1ec2b6de10acd3c3c8d0712875b6a3576655709b6c2be33472c5f0",
+   "source_sha256": "b2c275b2238650e0843b263666708fdc2792b75c0ffffddf91c58238348855f0",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -68798,7 +68798,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/notify/mxnotificationmanager.cpp",
-   "source_sha256": "b27af50c7ede09aa40f85e2de95890e6478d32b9633ffcaeb3a7cb6b65dd88ad",
+   "source_sha256": "0082ed936c96cfb912f49d849ec6595e50648888ee3b03c7ae2d30fc07795cb5",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -72246,7 +72246,7 @@
   {
    "target": "realtime",
    "source": "LEGO1/realtime/orientableroi.cpp",
-   "source_sha256": "09e31acb7dfa44e202e911dcf8f129b9110a5581f195748175923d7ba8b729ac",
+   "source_sha256": "07d98c1cceb3f56c2d34038c9b11e062d2c5e50c80f11503281d889b47ab5c7e",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -72294,7 +72294,7 @@
      }
     },
     {
-     "id": "d_ca4f06311da9",
+     "id": "d_46b43ed98835",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -72306,25 +72306,25 @@
       "renderings": [
        {
         "path": "LEGO1/realtime/orientableroi.cpp",
-        "clean_sha256": "31196f30b57de47c5a46e81563dcd240e3397eecf4c4713f4f6a665e262ea15c",
-        "rendered_sha256": "089c646ca25359ad456b75207d5fdd13cce58338411d5a8346ac0882e270f3eb",
+        "clean_sha256": "bf175ea18b815bea8191b353bced9ef0fdc39639b4a0e20bb3855e62a1d7cde0",
+        "rendered_sha256": "da732a6531155efae4519b78c11629dda19c44aa563db9e61bfc2f856cfb5f3a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_oro_seat",
           "from": {
-           "ctx": "7aa1bc91a61c438261ed7e99a1e1f6739cee9692a89e2a9c64c846bf3023d2d2",
+           "ctx": "7abc8a22be7268e4796a97799a311cc94d52e37f3dc935eda30399550e1c1b55",
            "b": 0,
            "at": "start"
           },
           "to": {
-           "ctx": "12d33ab3d3c6cb66965e2f212904991b3d00aa03fd3d4fa6c3ba09bc8af2c4a0",
+           "ctx": "600ac949f993edcc9cc03ec729c691354e203e8893287b653e09e803150e0660",
            "b": 6,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "f81d44be8df1a7809d1c61b8ff1336ac773396475a99b66b9c98e7d28d312b4b"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -72392,8 +72392,8 @@
        },
        {
         "path": "LEGO1/mxgeometry/mxmatrix.h",
-        "clean_sha256": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-        "rendered_sha256": "34e65020d919cbb59177940ca56519e6a07fd9ccc6021da39284c7a5ce9e535e",
+        "clean_sha256": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+        "rendered_sha256": "54a45827f7b6499c46bcc8e1fcbb9c1a63856f0e4522c98afcbdce6c4fed07ab",
         "operations": [
          {
           "op": "replace",
@@ -72450,7 +72450,7 @@
            "items": [
             {
              "k": "include",
-             "header": "realtime/vector3dtail.inl.h",
+             "header": "realtime/vectorlength.inl.h",
              "style": "quote",
              "line": 1
             }
@@ -72565,26 +72565,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legoactor.h",
-        "clean_sha256": "10fa827bc6bfda8aa972c323d604919456592fbebf65e1a5ce60e24a1133b98a",
+        "clean_sha256": "9b9605dc210c3f22d7c6186aad9c6e87d03c847ce08bef6f88791cf32ed9da62",
         "rendered_sha256": "ea731fb5b75c385403318f3ee222aa7b5e12013438d11814ef0f9af3bffa7766",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site0",
           "from": {
-           "ctx": "62b66170efa14f6a5166bc8467cbfd9deb7376e82811902c95362be3937a55ba",
+           "ctx": "c3623239540f7ab3f0de7a6e21bf4e0892d850f5c433bd3306ebb5e098e7a274",
            "b": 12,
            "line_before": "0e75f63ddaadd2c959f81644b5783b392b14bd2a37253c85c7eea6174377b737",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "e9b594107986887fb6190edb0e25abb7021a10f8af0e7a845c6045434d08f707",
+           "ctx": "643cb1eddabdf0cdc44e2175405bdcfe1d0ad54631fab1919020e7c89e91c754",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -72597,26 +72597,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legotraninfo.h",
-        "clean_sha256": "bc9271312e61d9ca0a8ae8f94f283befd9c36a281af0f52215a6f7543f988a19",
-        "rendered_sha256": "d8ac5ff152b21ac64c051d7b5c88628f31f11adc00dd979cc88d9f196f42bd74",
+        "clean_sha256": "b11b170a3d02e8a1065e0e911bed31db1cc94bd95c2ac23db707f9eb1afb1e6b",
+        "rendered_sha256": "e0b8498c933cf4042666499df051130b195584075b76cba3e5da12873107f08a",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site1",
           "from": {
-           "ctx": "0c9e2fab82a7a3764fe3077c67bb1484120a79d79f85c36c959e75f884163262",
+           "ctx": "5aecb4e28e66d2ade2b534d7c98c670181994128d3d4298812366ee8f64cef27",
            "b": 12,
-           "line_before": "db3244c82b2c8433197f3c809f5d7db4e0c44abf38946876e47dd9073b38eb8a",
+           "line_before": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "dabb81802a4b5f5b0dac0855dfb50fae7bf40b6621b6319779de6ab5c05ac9e4",
+           "ctx": "057624c2b520f379d95ee035196940d2bc8dad2e2c0ddda30df97acfccead270",
            "b": 18,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -72629,26 +72629,26 @@
        },
        {
         "path": "LEGO1/lego/legoomni/include/legocameracontroller.h",
-        "clean_sha256": "45a92291c21e3a1dbddfe3ad26b901f4ca3a7e90f948f925910c3d3974a092e0",
+        "clean_sha256": "bcd8c412467be5b81179dd6bee03a883b41492a1266fe223cbd2018568bdc42e",
         "rendered_sha256": "6dbe3043f180810061da632552f419e8afa37bda93ec334a8ee58b7611bf4073",
         "operations": [
          {
           "op": "replace",
           "id": "op_a3d_site2",
           "from": {
-           "ctx": "f81ced82d527b3b90cc217f27ba58d092d34ffef1004e009d79f3bb5587233a2",
+           "ctx": "e01eb645c1adb9b97d911423f2bdbd6c61fb3eea1ddd5a1048cb2c531d0b03bc",
            "b": 15,
            "line_before": "43ccbe3d839202373162eedf84fb383bfb8a626ec2c1065251a98a9aad66f0b9",
            "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
           },
           "to": {
-           "ctx": "3d84e778f3b42a1d87a3f4b6c4cf85d309249632f663ed3cfc633289c582a7f2",
+           "ctx": "f68f9c44d5f2aed5bd2294bcc6888e66730fc8d45b9e5c260c6594ca7975fd6e",
            "b": 21,
-           "line_before": "29d372312f5c51fc438a37ff74e6832167525fb7ea70f02aafb3a34867ffa860",
+           "line_before": "f139130b317daf121190ce06a4247a791b2bb1c3d3ebea6bc923543740e26eb0",
            "line_after": "98c764d9adb5e80cbb41c66bd9e7b4a9a57812fedd425b4a24deffddb49b8dc7"
           },
           "removed": {
-           "sha256": "de63c7551779aee5610162af2fb0b56f1b4df44fe8a536623c29b0bdb27f6d3d",
+           "sha256": "7ff57249b164bf9217222a6fdf33cffef2a545272dacc6ad59efe293cb8d409b",
            "size": 74
           },
           "gen": {
@@ -72660,7 +72660,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "ca4f06311da9c520e83526826b44fe9dba428fef92cb17f7603e7ae771f1aacc",
+      "rendering_identity_sha256": "46b43ed988350febc6f058ba534b4acb3a731e001e019dca1b14d80fe85a607c",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering leaves the target translation unit unchanged and applies two bounded, typed compiler-state source permutations in checked-in headers. The explicit default-constructor form is treated as an authenticated donor-only permutation, not a generally logic-neutral shipped-source change. Target-only extraction retains the seed object shell and admits only the retail-exact same-name target closure."
      }
@@ -73148,7 +73148,7 @@
     },
     {
      "mangled": "??0OrientableROI@@QAE@XZ",
-     "donor": "d_ca4f06311da9",
+     "donor": "d_46b43ed98835",
      "splice_class": "retail_exact_source_target_closure",
      "expected_seed_length": 520,
      "expected_donor_length": 514,
@@ -73482,7 +73482,7 @@
   {
    "target": "roi",
    "source": "LEGO1/lego/sources/roi/legolod.cpp",
-   "source_sha256": "88c8bf1271b9fcc97b34a969282d9d0dfb0ec0bfc1006fa1291d026d5684e5ec",
+   "source_sha256": "7acd92e86578851c0867bb07c5160f54b0d5d035b79b65c7f414d086e23d5a6b",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -74223,7 +74223,7 @@
   {
    "target": "roi",
    "source": "LEGO1/lego/sources/roi/legoroi.cpp",
-   "source_sha256": "bf578f5e2ca8126dc9ca0cddc11d82aef27b68a9dd522fd95a866ff6de671f6f",
+   "source_sha256": "e23c3498f2e05a6f6cd9017289fd8f48eb7860df0da52cc0d3d201b024a4ff61",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -76303,7 +76303,7 @@
   {
    "target": "tglrl",
    "source": "LEGO1/tgl/d3drm/tglrl40.cpp",
-   "source_sha256": "8825a9c917ea8df272c3ddcf93e171516da602dbc3b9ea6b904dd2a5eb6ba4ed",
+   "source_sha256": "e996da8968fa68f6326a853154fb75e05f784b713995dcd685795ce9bc7a798e",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -76957,16 +76957,16 @@
        "eof_count": 16,
        "generated_declarations_sha256": "5fb95a4722f1c1878ff1a0560c8f3aa1a8f04e851208065bd2e32d3b97f06a6e"
       },
-      "clean_source_sha256": "38ff05034357d0e1cb58ccac5f1af2b49831db21c483a04828f1f6dada40efb2",
-      "effective_source_sha256": "8825a9c917ea8df272c3ddcf93e171516da602dbc3b9ea6b904dd2a5eb6ba4ed",
-      "rendered_source_sha256": "673193639d75f304213237cbf4da2cbfe0db8c1a71422a4370a1f4e5db37f737",
-      "rendered_source_size": 12979,
+      "clean_source_sha256": "d8e26ce80fe30942bd87aa031db071b716cadcb18afed7f5e538e52db1475b6f",
+      "effective_source_sha256": "e996da8968fa68f6326a853154fb75e05f784b713995dcd685795ce9bc7a798e",
+      "rendered_source_sha256": "b7bd110c6dbc337907e9082d53499aeef09e959b113d10ff7f7d9299c301c0f4",
+      "rendered_source_size": 12746,
       "include_chain": [
        {
         "path": "LEGO1/tgl/d3drm/tglrl40.h",
         "overlaid": true,
-        "source_sha256": "a1d7a1e3eafe0064e7c237b3cc4e3188e2fbd9e462756d4e3960d5d496ba6caf",
-        "source_size": 38498,
+        "source_sha256": "dc6a922c1b7c2b955426ac1e46b228973a2c86b4b00f4b7c01dd1bed794c36d1",
+        "source_size": 37550,
         "include_line": {
          "baseline_sha256": "444066771c7ce6a4ca93a7b7c2dd6eeb2fe211fd0ae83a8a84512943076934c4",
          "baseline_size": 21,
@@ -76977,8 +76977,8 @@
       ],
       "owner_header": {
        "path": "LEGO1/tgl/d3drm/tglimpl.h",
-       "source_sha256": "7995b26c92cc161d88f11e5b10fbf7b4bfbbd9dd28562df4c37657ba7841381a",
-       "source_size": 46053,
+       "source_sha256": "29e764e77bf49d44f8850905c1ec66f5193510cf5f719b74226c630e5234897f",
+       "source_size": 45114,
        "owner_marker": "// VTABLE: LEGO1 0x100dbb18",
        "owner_range_sha256": "7bf1d6d6d720cfd0ce1708600556addcef46d26d23901c1ce1b4c0c5ecafafdf",
        "owner_range_size": 1348,
@@ -77528,7 +77528,7 @@
   {
    "target": "viewmanager",
    "source": "LEGO1/viewmanager/viewlodlist.cpp",
-   "source_sha256": "0e0a32b2984f65f3b2c6cd905169fc60e94aaffacc3393fa48fa8514df7610e3",
+   "source_sha256": "86952ff7ca782a41e2a10a30add41883d2aa47681919d0318ae054477ae1e95d",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -77544,7 +77544,7 @@
    },
    "donors": [
     {
-     "id": "d_2795d057cee6",
+     "id": "d_cf04dbad4ac6",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -77555,8 +77555,8 @@
       "renderings": [
        {
         "path": "LEGO1/viewmanager/viewlodlist.cpp",
-        "clean_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
-        "rendered_sha256": "854071869d8e55e05fc18ddc8499c81598407803fec9f6f144c6ada6fb05b930",
+        "clean_sha256": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+        "rendered_sha256": "ada36854a58ac8a17aa0b22f8217532890224c5dcdbefe2af09483d30f8602a8",
         "operations": [
          {
           "op": "insert",
@@ -77909,13 +77909,13 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "2795d057cee6329b2abc01ba458d51be0391afb87c134a8ce59e3ab000d2f662",
+      "rendering_identity_sha256": "cf04dbad4ac617805cddbfac9b30662c09bf053955e87e4c06a1d6038cf2f746",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. A framework-generated forward-declaration run is seated at the head of the rendering; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables or linker directives."
      }
     },
     {
-     "id": "d_d49b0c3393c9",
+     "id": "d_620a4f85bbf4",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -77926,8 +77926,8 @@
       "renderings": [
        {
         "path": "LEGO1/viewmanager/viewlodlist.cpp",
-        "clean_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
-        "rendered_sha256": "c1bc2f758114a93da9e091b301605c72a077fe8d9b52ced5ff2b23cbe4651662",
+        "clean_sha256": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+        "rendered_sha256": "855e2bf5039bac0cf7a2df6061b88ab779f76318196aa0d2600aab68e014459f",
         "operations": [
          {
           "op": "insert",
@@ -77935,7 +77935,7 @@
           "anchor": {
            "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
            "b": 16,
-           "line_before": "1e839e32685d525d4c1965f9ba99267582bb562cbb1d9eba94b1c8058cde2f2e",
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "a1af698b3a1b61f2464b83159a20c5227dd576939c430131e191397bcc284972"
           },
           "gen": {
@@ -78281,7 +78281,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "d49b0c3393c98d559779cadd266330aa7bc6426ac60faf5a7d739443a1de1659",
+      "rendering_identity_sha256": "620a4f85bbf4519e68aa016752cfab7ca3287f3a45388e70451707d3574e8501",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. A framework-generated forward-declaration run is seated immediately after the last include of the rendering; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables or linker directives."
      }
@@ -78335,7 +78335,7 @@
      }
     },
     {
-     "id": "d_b8c577edf01a",
+     "id": "d_9a578d664d02",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -78349,8 +78349,8 @@
       "renderings": [
        {
         "path": "LEGO1/viewmanager/viewlodlist.cpp",
-        "clean_sha256": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
-        "rendered_sha256": "dbc538168a3b967ef791f7f1fa89d7fb01c4c04c1ee625bb966174199aa174e0",
+        "clean_sha256": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+        "rendered_sha256": "52d1f6819827ec629b7cd154917625f738d8ac46927bacbb7ef04bb68ccae7a3",
         "operations": [
          {
           "op": "insert",
@@ -78418,14 +78418,14 @@
        "functions": 60,
        "generated_declarations_sha256": "b1bca8d999d475d179430411bb44094bd978d8beadfa209e7df897a03732f8fb"
       },
-      "rendering_identity_sha256": "b8c577edf01ac1881e6a2637b03ddbf964027bf1ef00591a72cb20205e189e51"
+      "rendering_identity_sha256": "9a578d664d024f0603c21f4625a745a6a71034c4337c1946d188616aefcc84f6"
      }
     }
    ],
    "functions": [
     {
      "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_d49b0c3393c9",
+     "donor": "d_620a4f85bbf4",
      "splice_class": "retail_exact_register_bijection_reencoding",
      "expected_section_number": 19,
      "expected_section_count": 71,
@@ -78757,7 +78757,7 @@
     },
     {
      "mangled": "?_Erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@IAEXPAU_Node@1@@Z",
-     "donor": "d_2795d057cee6",
+     "donor": "d_cf04dbad4ac6",
      "splice_class": "equal_body_strict",
      "expected_body_length": 57,
      "expected_body_sha256": "f4152ee5515dc9f2555f11464d3f277b18a146e04f11aa557934316a9f236749",
@@ -78783,7 +78783,7 @@
     {
      "mangled": "??1ViewLODListManager@@UAE@XZ",
      "splice_class": "retail_exact_donor_rewriting",
-     "donor": "d_b8c577edf01a",
+     "donor": "d_9a578d664d02",
      "donor_rewriting": {
       "kind": "donor_fp_bijection_rewriting_v1",
       "simulated_region_rewrites": [
@@ -79241,7 +79241,7 @@
   {
    "target": "viewmanager",
    "source": "LEGO1/viewmanager/viewmanager.cpp",
-   "source_sha256": "67ffd6b45bde884af5ecacf3758d8ffc2506932e2b170f9acf61ea8b4fabddac",
+   "source_sha256": "26fdc5bf050c7485fb811875c404c71fb693c17ce4d980773623e84812c834d1",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -79280,9 +79280,9 @@
        "centered_context_sha256": "39f78f35db506129b67f1e157fe2d54329a4889f4bc740e46f7e04fe600d5846"
       },
       "generated_header_sha256": "7a0499c7aeb6579cfa7af88e2f7dae2bdbfe7192e5070d56d7fc614834cc996c",
-      "rendered_source_sha256": "efb76a6998f5a103d0718fc5b5f85dd06071cf2e372a8a55fa8e27dc614040ad",
-      "rendered_source_size": 26571,
-      "rendered_source_line_count": 1153,
+      "rendered_source_sha256": "4a7b9d0e63c62c6768cb926bdf2fe6b21dfc35b3e42185bc7be70307f9479d93",
+      "rendered_source_size": 25970,
+      "rendered_source_line_count": 1145,
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -79362,9 +79362,9 @@
        "centered_context_sha256": "39f78f35db506129b67f1e157fe2d54329a4889f4bc740e46f7e04fe600d5846"
       },
       "generated_header_sha256": "834480df190e88e44eeaea3a72dfc55ea3cc74634257605d7cf2567f30377e24",
-      "rendered_source_sha256": "a87ed23fcf60baa8d8f1d96fc16d44607c398ce088435ee0ed98e5398151c497",
-      "rendered_source_size": 26718,
-      "rendered_source_line_count": 1160,
+      "rendered_source_sha256": "36d0a3212fea22cc1a2b8efcd35192810a11e08e2b4963a5095e1439b22e0a88",
+      "rendered_source_size": 26117,
+      "rendered_source_line_count": 1152,
       "compile_lane": {
        "required_define": "DIRECTX5_SDK"
       },
@@ -79373,7 +79373,7 @@
      }
     },
     {
-     "id": "d_aef448df393f",
+     "id": "d_98dcfb27bc04",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -79388,12 +79388,12 @@
       "renderings": [
        {
         "path": "LEGO1/viewmanager/viewmanager.cpp",
-        "clean_sha256": "1db2727436059a91cf2b546d958b7dffbf937112d2a41a05839fc2454b443886",
-        "rendered_sha256": "67ffd6b45bde884af5ecacf3758d8ffc2506932e2b170f9acf61ea8b4fabddac",
+        "clean_sha256": "4f05755377be1c1bfda54749721448f0a75d661a79a4a6ba151dc214b16cf4dd",
+        "rendered_sha256": "26fdc5bf050c7485fb811875c404c71fb693c17ce4d980773623e84812c834d1",
         "operations": []
        }
       ],
-      "rendering_identity_sha256": "aef448df393f386bea86d209473617818643660daa772bcd29921f07c675994c"
+      "rendering_identity_sha256": "98dcfb27bc0462b3e12aed9e69ff4608aa23feb84805bff0d8c444bab9878215"
      }
     }
    ],
@@ -79673,7 +79673,7 @@
     {
      "mangled": "?ProjectedSize@ViewManager@@QAEMABVBoundingSphere@@@Z",
      "splice_class": "retail_exact_composed_rewriting",
-     "donor": "d_aef448df393f",
+     "donor": "d_98dcfb27bc04",
      "composed_rewriting": {
       "kind": "schedule_bijection_relational_v1",
       "x87_squared_addend_exchanges": [
@@ -80888,9 +80888,9 @@
    },
    {
     "path": "CONFIG/config.cpp",
-    "clean": "266d94cf3e3c26e7d0c9f21588fdf0b32bdf9a5f3c27e671aba7dd6f3e87ebba",
-    "effective": "afb09566f3dcb0f1d98223b3ae70d90d6abc60f4e235bddbfef13c27151f7453",
-    "size": 11549,
+    "clean": "394013902bd6b609c629573b06f4a1b697349becc67b48b04ddb4c928719708d",
+    "effective": "837d1e59eb4d8f764b8d3b8c5ba88626739bcd2a75366705644a4c753f0e8cfc",
+    "size": 11401,
     "ops": [
      {
       "op": "insert",
@@ -80938,14 +80938,14 @@
    },
    {
     "path": "ISLE/isleapp.cpp",
-    "clean": "3a572aad7a918930d5b854d7c52f69995f16ef6900637500128ae6efa52bb831",
-    "effective": "e0acd77c800944fc1c847163196db00c46ba3b6e5f49c898cef78c5e641c1049",
-    "size": 22836,
+    "clean": "5c64a8525b5ffdec617c48223ed0bbff7bbfe58c433cfb0452f01ede815406e6",
+    "effective": "a090a29277ba8e500dc3671dd2abe22b8a2c225aca9b7b97ba53764e19e74747",
+    "size": 22797,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "44afecbaea328643f37751bb9a3d87c9a171c5413fb009a5173615d5f31ec48d",
+       "ctx": "9693e16991e4dc1d4170329adb0e23041dde6788889f436b570e17d8308c4252",
        "b": 0,
        "at": "start"
       },
@@ -82984,9 +82984,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-    "clean": "35488e2d5e531223235582721a54cde31b4d5775268bf76a1054f2be1df10c50",
-    "effective": "28d0a0987183d1a6f15e89693819e2bb168a0b7bf54e6072c9b3065abf93a040",
-    "size": 5046,
+    "clean": "2ad21bc777f258fff72b4bcac7c27cc4891159cc1064ba6f722089839011e27b",
+    "effective": "56c93bb959659ae73b818e77a761a7727d36d52444d0e663d83a34a12d406474",
+    "size": 5047,
     "ops": [
      {
       "op": "insert",
@@ -83124,14 +83124,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/audio/legosoundmanager.cpp",
-    "clean": "e1f50305ac330daafce9094b7203bf716f3be067498a8f6690b8e4dba799939d",
-    "effective": "588dad0bbeed8040c23e530cf20e42505f2b16744ac57d2e317eb9d37ebed16b",
+    "clean": "7423b0852e86830edcc82f705776a9f7e46fcfa1af41f1851f46ffa704ceeeeb",
+    "effective": "2812f039dd343de6f0bdc5a2901cafcb8a8b7f091f2af493fb85c8cadad49939",
     "size": 3681,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "1cf8814e96db119171f653a2b28b54ec2bb646dd9982f894adb6aa1ae8ca9cc2",
+       "ctx": "559c6237830e7180fd07311911b9e0db99a0abbed8d78668527dc61e74da70c1",
        "b": 0,
        "at": "start"
       },
@@ -83163,7 +83163,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "c3454043a3fa6a0706ef016bdd797ac6ca3b9d02d4c2f49eb32f00ebf77e4b1c",
+       "ctx": "c77e10007236d8fde2cb92dbc688e854efc9642f701873ef49a5c4d1b83d5bca",
        "b": 19,
        "at": "before_token"
       },
@@ -83639,9 +83639,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoanimationmanager.cpp",
-    "clean": "f27b4cee688c180dbe618f73f642568d90cff6ee9a0eb85a82268d8f550640b9",
-    "effective": "1c1727a4d521bcb05239db274a61f89a85f36994a79bb73d6ab54d7806d8cb91",
-    "size": 76027,
+    "clean": "78f8a312c6524cb5d900366ae8066bd98861b39fa8bedd28e598b30e4cb9e1ee",
+    "effective": "eed1d47cbbc1ab7b797ca3eb5912ffa1d9eedbdcc8bdb554d42deb6a06c40b9b",
+    "size": 75878,
     "ops": [
      {
       "op": "insert",
@@ -84316,9 +84316,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoanimmmpresenter.cpp",
-    "clean": "8991990f606630b0f328a1fe3a33c1b8c4567c65f35bbd08288ccf616bba7e19",
-    "effective": "196d173d62a8dccd4342e423c5c270715fdf4c23e000b10265463033518cadfe",
-    "size": 12355,
+    "clean": "72859f4dc8ea26c05e615d6b06c571d1d165bfcf9b8a41f795d779ba8349c687",
+    "effective": "0104b6a76312eada3534aeb8b49d586e0550478a164e6959e8ed759c3302fbd0",
+    "size": 12356,
     "ops": [
      {
       "op": "insert",
@@ -84447,7 +84447,7 @@
       "anchor": {
        "ctx": "a2ae7ea8f16236ebe096b35bda44f89da221a6736ac04cbef097411c0b4454e2",
        "line_before": "d10b36aa74a59bcf4a88185837f658afaf3646eff2bb16c3928d0e9335e945d2",
-       "line_after": "80107aecb7707b34d32372045dd9bd9f5b082b12c2f5d56c792dd00f2630871f"
+       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       "gen": {
        "k": "lines",
@@ -84459,7 +84459,7 @@
       "anchor": {
        "ctx": "a2ae7ea8f16236ebe096b35bda44f89da221a6736ac04cbef097411c0b4454e2",
        "line_before": "d10b36aa74a59bcf4a88185837f658afaf3646eff2bb16c3928d0e9335e945d2",
-       "line_after": "80107aecb7707b34d32372045dd9bd9f5b082b12c2f5d56c792dd00f2630871f"
+       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       "gen": {
        "k": "seq",
@@ -84959,9 +84959,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legogamestate.cpp",
-    "clean": "c47a32db704741db964b93d9f2f33c537d15bb5f3f16f74ef9978e23e40f9477",
-    "effective": "a85c26113de68349e83204e2967678d6ba627045191a160a58f038d50bd87fae",
-    "size": 54752,
+    "clean": "9dafa2d6a055b4e109e233f1542d4b739f555bffdebec370ee15036f65abc485",
+    "effective": "9dfddb32e1bf19066195f9a0a5d52d036933960372cb77018749396c22431e6a",
+    "size": 54248,
     "ops": [
      {
       "op": "insert",
@@ -85216,9 +85216,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoobjectfactory.cpp",
-    "clean": "ad3ec7650202665c1129ea3460aee15e344b420b36153aa777a0c12e80d8953d",
-    "effective": "7f149f0975e10161992f9fc698246af66ed0c03e26a63771fd663c3c65e4239c",
-    "size": 25406,
+    "clean": "60df8ad8f42001309d7c17564f77c2ff21b666e9220701a7f5779a3f1c9ab0c2",
+    "effective": "6aec0ab99d89fcaa98c24b08901f92c5869ad2406e62bf2b640148605548efbb",
+    "size": 25367,
     "ops": [
      {
       "op": "insert",
@@ -87001,9 +87001,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legotesttimer.cpp",
-    "clean": "2a8b703759d170d862c89ebb91cce05cab0b3350ac253fdd8ca96fae6c881a5b",
-    "effective": "1dbe191ab81c791abcc2cf338d2fe795a20ef1f6bb55d3842acaf4f8aaaca722",
-    "size": 3824,
+    "clean": "018000d26f3fa2d4c33b793ed8d35fc12629718d734a8573662640b888535353",
+    "effective": "8931d6ba48c8f33a0c28fbdde268cbf886db10d25e1d5e3d4bcbfe2b592d02a9",
+    "size": 3419,
     "ops": [
      {
       "op": "insert",
@@ -87106,9 +87106,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/legoutils.cpp",
-    "clean": "9c8d96ff7beab058084177c1fe1edafc8c690836d1fc4c09878fdf6b8ff41e24",
-    "effective": "c7fccb4eeff8e3ff0c541b4adff3dee972e0728ddfbac27e46f44a01fc145285",
-    "size": 21421,
+    "clean": "2f77f19748c5e8ac18b59ef3835fa735adf61935567feceffdd407b9eeeaec3f",
+    "effective": "f8f2b6d885e2390dc9691a2c2185ba457192bcb1e6b0956f8b58fd0ff34c57bb",
+    "size": 21081,
     "ops": [
      {
       "op": "insert",
@@ -87374,9 +87374,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/common/mxcontrolpresenter.cpp",
-    "clean": "e1836710efc201d77df409c4cfb2feaf56f52a7d423a9d5282252651c42d0e7b",
-    "effective": "6a1e5040a1dd3819fd6050f34e4648b19b9b381a58b496eab62b087b4e520afe",
-    "size": 9732,
+    "clean": "b0b45ed4fc8d90a3db15878f9796b25064b7a8b94cc36dfb9c686d3ff84c24ae",
+    "effective": "ea6e0b66ef371c937f53e3b855a0be69f9cd534e675f976b0e4c530b2403f23e",
+    "size": 9535,
     "ops": [
      {
       "op": "insert",
@@ -87661,14 +87661,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/control/legocontrolmanager.cpp",
-    "clean": "fa9a15b658c862179ce2393200e60f53015281ffc51d0b29f966c3feeb1e8610",
-    "effective": "fe5e7448052e5ba28197cfc60ccdcbc071aeadfc29126bddbaaf8e33ba78f387",
+    "clean": "e72088be8fc344f7a1c4e0d9ac8f95905fdafe7a7c9c0cd2ea4a9f9ee4c080fe",
+    "effective": "d6109484b389d962f903adef68ea09c5f5e3cd7d5dbfcfcb4765a85679312d92",
     "size": 6076,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "3f7f45d680aba1703685faca338ca495b4f941c5e275442ebcda700fd8c1b7cd",
+       "ctx": "93fc525580032dcad9a62ee5e20a43100bf0e307c8b80866718dfed7ceff0080",
        "b": 0,
        "at": "start"
       },
@@ -87750,9 +87750,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/control/legometerpresenter.cpp",
-    "clean": "e6619b35fb6cf42384a4408678cb29c230ddb6f396ecf305204e9deb989db998",
-    "effective": "6a26472d9b2a23bc0ba413c5ac76a80f7fb2ec39040551a656f24d3e36efe8b7",
-    "size": 4431,
+    "clean": "4a0d794415d019d3dd3b71d77ceee6a73d3db129acf83effa8f8570ab9441f7b",
+    "effective": "40025f5e934256302607deafdf3392829741b218ac504646db5e62ace12d17bd",
+    "size": 4272,
     "ops": [
      {
       "op": "insert",
@@ -87937,9 +87937,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/entity/legonavcontroller.cpp",
-    "clean": "b6566b42540946f0c8ae382280e08f4ebba8ff18a5eed28686df5d28b6dae01f",
-    "effective": "b2d12d7268c99edafee6ab02bad34ebd807cff6e74e7498c8ed0385a40960244",
-    "size": 42705,
+    "clean": "8c7eb2057737e0f54e98532437c3d8f59326f7b62958c37ae5b8d92f2ddd03c7",
+    "effective": "8857440b7953ca3166204192a96c5d4dca02cb19d55a89eb008d7254c2edbe4e",
+    "size": 42407,
     "ops": [
      {
       "op": "insert",
@@ -88857,9 +88857,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legoanimactor.cpp",
-    "clean": "acd30ea1ec87bf83f5ea80cd8a93af4f75a244bc4708f37fcf1c6212db735bc0",
-    "effective": "f68954328f755e72bf445a10567913fe0e08b91c8ded8de68fef5e61913cec86",
-    "size": 9098,
+    "clean": "1e167c1e855fa78770dc5aa0e94793b0eac499d02d8bea1fd1a622aac94c35a9",
+    "effective": "7dc4c6ca17214447a1dd25aa6887d8e7922d000cb50d33bdb0a8037379f8ab27",
+    "size": 9093,
     "ops": [
      {
       "op": "insert",
@@ -89181,9 +89181,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legoextraactor.cpp",
-    "clean": "49e409f406a7d8a1d1c78fdccdb033f68ef16583a3c3097a8f761adefbe610ff",
-    "effective": "1cb7f952695d6cbe032c38da7c42be5b9eed60a810e18c40216202793c544baa",
-    "size": 15647,
+    "clean": "0751104548c5e55e8fc22678e841a01e663b25fe257373945af4b035038b9bec",
+    "effective": "7a5c166782f6feb48a5f8d650bf54f0535b5f12908ad39e99ef617594cf73c9e",
+    "size": 15648,
     "ops": [
      {
       "op": "insert",
@@ -89854,14 +89854,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/paths/legopathcontroller.cpp",
-    "clean": "bd57189c551368a9d60da0c3ca071c77e09a829b3073ed8217389503c13769a0",
-    "effective": "1b14f3554ae7e8af05ba5dc3710ec479757bfb3bf5a7cf2b75f0132e4a3f08be",
-    "size": 28558,
+    "clean": "d9dcdae11c4e78eb121f157472be5ffa4b67cdf3564f706649b414a49adce0bb",
+    "effective": "30dad0121e657492a745db125a5166898d3be5631794981a95266a0558a398c7",
+    "size": 28560,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "77d85c31a3d8fae1c6654bf18aba0e31301e2d439cd86f5cb4169270acc616d3",
+       "ctx": "a694224514e5260aa94923e09654a46385ffe776aa6a6f99e61f26d5f6699540",
        "b": 0,
        "a": 16,
        "at": "start"
@@ -90418,7 +90418,7 @@
       "anchor": {
        "ctx": "5a073e38e210877a10270196a97d0defdbc41000fa21d6bf1db69325fc4040bb",
        "line_before": "d10b36aa74a59bcf4a88185837f658afaf3646eff2bb16c3928d0e9335e945d2",
-       "line_after": "dc657e7a03edb8f500385c0ca8df60374aca7a80b3283310cdd5352c7f873ecf"
+       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       "gen": {
        "k": "seq",
@@ -90442,7 +90442,7 @@
       "anchor": {
        "ctx": "5a073e38e210877a10270196a97d0defdbc41000fa21d6bf1db69325fc4040bb",
        "line_before": "d10b36aa74a59bcf4a88185837f658afaf3646eff2bb16c3928d0e9335e945d2",
-       "line_after": "dc657e7a03edb8f500385c0ca8df60374aca7a80b3283310cdd5352c7f873ecf"
+       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
       "gen": {
        "k": "seq",
@@ -92249,9 +92249,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/race/legoraceactor.cpp",
-    "clean": "a903aef64e8728222fa4cc8870b2b967f821aeac52b1ae9539fcf846b67a2046",
-    "effective": "78b04dec30ed9fc170ea02c384212135ca58262d70e27dad08a110b9db2ce1af",
-    "size": 3507,
+    "clean": "9de0ed419f9b9a665dfd94301d847e8f7148a4c2c4e5f254a8a8ec1bbb62d71e",
+    "effective": "b68dc3721ad156599615152c4c0cc6de2e1d8a38931fed047b157247c3207c64",
+    "size": 3210,
     "ops": [
      {
       "op": "insert",
@@ -92485,9 +92485,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/race/legoracespecial.cpp",
-    "clean": "f5b4d1bd7641729702411c41a1f85336d33b2aad4da38e2fd5a1cacf75ecdcee",
-    "effective": "1756da462d54b2e64231aa6b2e8e1d4378743a9479870420e26a4791d6e20c67",
-    "size": 15815,
+    "clean": "018ef97aace5d8a4656b7f8791fafcb1559aa40d39f7f85da9b01629eea19ae7",
+    "effective": "3005e8b61d465d08ebce71bf4550875b8233e05c69497c6b49f58affd0b8994b",
+    "size": 15680,
     "ops": [
      {
       "op": "insert",
@@ -92661,7 +92661,7 @@
       "anchor": {
        "ctx": "b3bce41b70bb5a23fc0316d2cba292399920daff5bfb28e81e4c6cc2d8e4c828",
        "b": 31,
-       "line_before": "16a179aee3eb4b57dadbda2eb4f261e91c17415f6c8fb2bca1578b030a3c543e",
+       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "4968f12d25df5d91cbad61de122ed9d19c9f9104139911035794edeff972fbb9"
       },
       "gen": {
@@ -92828,9 +92828,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legoanimpresenter.cpp",
-    "clean": "3927702f07408fab13729b0b5ce08e3ae04b5d47c8fd152b22ad22f67327020a",
-    "effective": "a2b27db3b2efa74992135e014585a15a10eba540728b807797d9c29b5e6d8d97",
-    "size": 51574,
+    "clean": "30f892be429380163c64c34c3c6b8b4051f393ef886d582b0b0faa67fd768f07",
+    "effective": "eabf6c1dc794c8fbc88fb882dbbe3118cf7aa607a9040468984e8d492790f040",
+    "size": 51396,
     "ops": [
      {
       "op": "insert",
@@ -93833,9 +93833,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legomodelpresenter.cpp",
-    "clean": "b035d7e706b1bbe825ca14e964c46ba72344dab9c688c5d718cf3a54e9f3164f",
-    "effective": "74925e5897588d5ce7e0435fd4df90e902afd7ed3ddf200fb08caef467e95708",
-    "size": 13322,
+    "clean": "e95c2d2821f10eb5949b75baafa60753adf0800660db474bb3252b3db666d50d",
+    "effective": "ce3716ddbc2e61fa3a9544f4b564af726b823ab32d6c26cf4bef4d837eff1c0c",
+    "size": 13323,
     "ops": [
      {
       "op": "insert",
@@ -94050,14 +94050,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legopartpresenter.cpp",
-    "clean": "8c0e036f398308ada0dcb7fa72f9e131a5488ac316b785852ad75ce6cd053263",
-    "effective": "32598dd9c7c5a050217e4d8865b473f6ac3e072488b2bea39e18f0b1665e6c2b",
+    "clean": "3bb3a725c08c09b8cccfe8457a8efa9616382f8e75c1c99a971313d19f782a8e",
+    "effective": "6e9a03e4575f1dcbb3f3d6d61a3f90138e6688857eb0251231919196e3ac789d",
     "size": 6375,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "737d4928e4bcde0adf74c7e9aac700127d28d9691c0617b0b033c1d1b57e953a",
+       "ctx": "1c914afb41e9052b6c770e4d5eaab2dd3f2c5bdb9cc74ada0dfb00be0ff5c6dd",
        "b": 0,
        "at": "start"
       },
@@ -94084,10 +94084,10 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "70e0ad6e05637588055b2f3b7d1262c5df0f056bfd18d1c8285dbeed96358ff7",
+       "ctx": "abe848e239af0522031592c7a936ec6817a0b59e4d4d7d460868ec5eac7e46fa",
        "b": 30,
-       "line_before": "356fb9ef23cea038b3dcb25cd6570bdea897da2c3c37a669970f408e1b9b1b3c",
-       "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+       "line_after": "5820f01011dd7d8fb11b4bc70dab37d48423c7d47050147483a0f9e30fad07fb"
       },
       "gen": {
        "k": "seq",
@@ -94128,14 +94128,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legotexturepresenter.cpp",
-    "clean": "baa7e31e9f182971b67b419bec1663225c8e3dd462ab171ad699bf75d304ed82",
-    "effective": "a9ddaf1e686272e584a31dabb59393fcafe5472fa05e38d8cea2f05fcbdad648",
+    "clean": "41b2b05b652e5dfddca08f54a484cf6153b1d184e16c36903f3950deab4e2726",
+    "effective": "b8e6c651f4e77772b76e358b2b48e04f8da29c181e25d56764f555dbb525dea5",
     "size": 5448,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "f1a835e40a99118d20ba64e19dd08cf0f3bb92f1db13ed3d2896acbf2121d86c",
+       "ctx": "1122e42018481b30d20792f969830e87f02d56a45b6306127d8ca85e905eccad",
        "b": 0,
        "at": "start"
       },
@@ -94157,7 +94157,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "f1a835e40a99118d20ba64e19dd08cf0f3bb92f1db13ed3d2896acbf2121d86c",
+       "ctx": "1122e42018481b30d20792f969830e87f02d56a45b6306127d8ca85e905eccad",
        "b": 0,
        "at": "start"
       },
@@ -94389,7 +94389,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "9c47c0fb881803674ab996f542b52fedc51fb0354db6e55ee818f3e1b9de402e",
+       "ctx": "0240992a0413b14d3e248de7da30e9b6fea8d5f98941fe57876aff19122d5cb7",
        "b": 27,
        "at": "before_token"
       },
@@ -94454,8 +94454,8 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/video/legovideomanager.cpp",
-    "clean": "98f3964878954c9374eccdbf12e7ccdd0271a01f5228abeb36f36d27392b73dc",
-    "effective": "dbb917c6876757090fe8f4f85988462f3f4b4dec1d27c617da056ac651ddd548",
+    "clean": "21596dcb6dfae32486bf2f189a5e242e8c45b540705560abaf1eacbdff40edf2",
+    "effective": "a7b7bd1d39110cd411cd3a97d2db200e562c775c26f58d01c377dba070357be7",
     "size": 20590,
     "ops": [
      {
@@ -94527,9 +94527,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/act3.cpp",
-    "clean": "4e2fdfdec250b4d18173a547bb9f4efb1379afd5dfd0b36f62a20082eecfa203",
-    "effective": "07a0f6459e39fb41f915f3b04701ef940d254778be00dadde30d0077a58e0bb1",
-    "size": 26889,
+    "clean": "f1972bb11eb0ce204ea8d0ee711428e3c92a15958c8e18bb76b8186b70e89f06",
+    "effective": "e55133501274cd022c09b9fb0fe06a1c906226668e6ad9fe81d56424695420f8",
+    "size": 26890,
     "ops": [
      {
       "op": "insert",
@@ -94892,9 +94892,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/hospital.cpp",
-    "clean": "0cc136e6054f0d320396bcb8fc4af307b5e57cd6e63165aa306af4fb6b0b3abb",
-    "effective": "04aed3a93a98501646621af71fb795cc69bfb26da93c00e7d1f14ef02e6f4f09",
-    "size": 20089,
+    "clean": "d7d1c96be6d3eb82d9f6f029bb1089cb8323acacb0a075650fae539548ae1cd3",
+    "effective": "4c2c4bf3c7b5e7baf4de47d8bd874b31d9051bb7a20d20fedefd3d9fca2a8cdf",
+    "size": 20090,
     "ops": [
      {
       "op": "insert",
@@ -95313,9 +95313,9 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/worlds/legoact2.cpp",
-    "clean": "e66f0fa23b86b81941016d4bfc9fbccdf4ea0b6948c7067b5fe8b935e672fa71",
-    "effective": "e1fc49b42127c07906aaa26a9b5f0abe13d8016c02fa1120cccb1da85710fe95",
-    "size": 32516,
+    "clean": "8d7b8218c24c861377a5d24830b7bcf87d7cea292c48a3bad47dab9ae0dceb8a",
+    "effective": "52082b3994b55bbb5a01ac230a154bd378650176a5236dac8d0585c84cb13e6d",
+    "size": 32517,
     "ops": [
      {
       "op": "insert",
@@ -95408,7 +95408,7 @@
       "op": "insert",
       "anchor": {
        "ctx": "a12adc664848bf86bfba26a143be01cd5595db73b24f40dad9c35a1b100ebb5f",
-       "line_before": "4e0dcf412ecdd407d658d12b8cbc6437fcf8b90f3e8ac135870e015157be2932",
+       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "be3684537e987def52e61d0c2a708074b06e9dc1e7244846dd9e149f7c1bc776"
       },
       "gen": {
@@ -95745,9 +95745,9 @@
    },
    {
     "path": "LEGO1/lego/sources/3dmanager/tglsurface.cpp",
-    "clean": "53e25119568a6db407fcb614b0ef4d3e7c854e7a9c528c37091556b042925065",
-    "effective": "bf4145368757c17a18b23fefe586bf6299fab6c1fe7f789765d83feb109cdb8a",
-    "size": 5986,
+    "clean": "687ea57ffe8b5a1a7fb43682f3ee2066a98ce6afb4518d754686e3370fb43e4a",
+    "effective": "40fbb14bc32dbbea6ae19136b6d8f4d57afda60158f51fd59742a05449a94c27",
+    "size": 5734,
     "ops": [
      {
       "op": "insert",
@@ -95781,9 +95781,9 @@
    },
    {
     "path": "LEGO1/lego/sources/anim/legoanim.cpp",
-    "clean": "24616fd74906b47c75e0111d589f45b6f4edc0a0b5ce42367ff6584481993dc1",
-    "effective": "ecdddb24f0e95cc2eb066db77f73a8b484de265977d8c0288fccac2f98be7b53",
-    "size": 21593,
+    "clean": "872fe92f64421eda32ee041bd4ade4f9033bd8ff6b4838d5b1d81f626c5e8ff1",
+    "effective": "90a4872fefb99697439cb0cc7985bccf50143bfb14beb36504789bf4fe54d5f6",
+    "size": 21341,
     "ops": [
      {
       "op": "insert",
@@ -95812,7 +95812,7 @@
       "op": "insert",
       "id": "op_9032_state_legoanim_suf",
       "anchor": {
-       "ctx": "872730136313b11b1635333cde2ebf087259ac25c5ae9dacabe6d745d88fad31",
+       "ctx": "9c585b210ca35d5e5fd52ef610d4534f9d370a132028f1b289e9791ca62fd603",
        "a": 0,
        "at": "end"
       },
@@ -95840,9 +95840,9 @@
    },
    {
     "path": "LEGO1/lego/sources/anim/legoanimscene.cpp",
-    "clean": "4bee9ded42ebffe25872be6bdecd5a4e51e1497da8e22ab0cb3781f2caa66ba7",
-    "effective": "45faec74459a3264fee8df8aceb3daa1c2c0b52e8abaf6064cec90b3789a0852",
-    "size": 8700,
+    "clean": "62ae91f8174acea90fb8ceb8efd6562307f50aa292428a410356a35d5de1096d",
+    "effective": "ce570fa3ce761dc2f37db928873d8b8317aec994b501dff83c085ee037787d43",
+    "size": 7784,
     "ops": [
      {
       "op": "insert",
@@ -95876,9 +95876,9 @@
    },
    {
     "path": "LEGO1/lego/sources/geom/legowegedge.cpp",
-    "clean": "d7689ef88a0ee4b671194760e239d8e5ce8926b84c70e861105ecb136c567162",
-    "effective": "0cd1f63572764c562a2d81d4472d19e362774b195d3ef84bea3be8487165bc87",
-    "size": 6705,
+    "clean": "edfade3606f99156f2e4f10c0c191cb5ea356dc0efbec9e924b5bfada34b1691",
+    "effective": "4e71766ce99ca4b124d7b11e7ac146c4d8b181d3a78cad5f4ab1890258d71af1",
+    "size": 6706,
     "ops": [
      {
       "op": "insert",
@@ -96044,14 +96044,14 @@
    },
    {
     "path": "LEGO1/lego/sources/misc/legospline.cpp",
-    "clean": "59c9452e1e5a0b0127ff6d70f0204ef46d31b26cd8e2b8b5121beb1eceadd617",
-    "effective": "402e1ed459f51b2ff75cf0661ffb08e16437b569505610b8bceecc590a978407",
-    "size": 2861,
+    "clean": "b3b6071f53fe2cb768fd56fd02438ea0a081732efa6badb39e3afb2283c0acd5",
+    "effective": "3ebabc0b54cecb9c6d0f606d300668c6cd3848753d538e20c7e47e639519e9a8",
+    "size": 2863,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "6a2427138da9d619892755af173c626ccd32182e9a9a20b800e38893ca5f99ce",
+       "ctx": "7391b31190857a18fd54a03aa34a16c5418eb7524f8fcba8305c280cb7431940",
        "b": 0,
        "at": "start"
       },
@@ -96085,7 +96085,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "29aaa7362df76960c161edc793b1ec0f00ebd0514edcc50c9988c5ea26479f57",
+       "ctx": "27503f659615a46d6b01ac7e9b6ba3736b55607ac1fcf2f26fd96067e11d7cc0",
        "b": 6,
        "at": "before_token"
       },
@@ -96386,14 +96386,14 @@
    },
    {
     "path": "LEGO1/lego/sources/roi/legolod.cpp",
-    "clean": "0343522cc45366025926e48b1c23e06e47354fc3bd820b9dbe5c1bb041c1b2ac",
-    "effective": "88c8bf1271b9fcc97b34a969282d9d0dfb0ec0bfc1006fa1291d026d5684e5ec",
-    "size": 15457,
+    "clean": "3b67b034f5b30c6aa14c7fbd6b982b686106b4bf400c974988939d13c9feb2d5",
+    "effective": "7acd92e86578851c0867bb07c5160f54b0d5d035b79b65c7f414d086e23d5a6b",
+    "size": 15458,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "5b1b00fed8082d12492225ac85225f010648ac4150d26523463cdf1a796583a5",
+       "ctx": "664cebddb5c9c8dd585131bacbe7cdf19ac0920ef5ec00d23a9f2b75ae889ba0",
        "b": 0,
        "at": "start"
       },
@@ -96425,7 +96425,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "1a3d752bbc14da04e7d90b16795a484e674eb412541758997ebbe97bede6da24",
+       "ctx": "7025c48e5019913c1be977edd2a35089250ee1d3f3ca89ca851dfefcb841f33e",
        "b": 22,
        "at": "before_token"
       },
@@ -96527,8 +96527,8 @@
    },
    {
     "path": "LEGO1/lego/sources/roi/legoroi.cpp",
-    "clean": "fb2dc5badce3951500fa5f7e86e3d40b5a858e56d301736627cd5c4e7bf3b2cd",
-    "effective": "bf578f5e2ca8126dc9ca0cddc11d82aef27b68a9dd522fd95a866ff6de671f6f",
+    "clean": "75ffbd0e7afff60320f2ea4c8be4f7fb990090d08a766ddcb0c8ec8a35568beb",
+    "effective": "e23c3498f2e05a6f6cd9017289fd8f48eb7860df0da52cc0d3d201b024a4ff61",
     "size": 24024,
     "ops": [
      {
@@ -96812,9 +96812,9 @@
    },
    {
     "path": "LEGO1/modeldb/modeldb.cpp",
-    "clean": "80ec349c6e1bc64360a46ce8c1a9455422546c36a368b845c66010ed5dba1cd1",
-    "effective": "4b3a3d68cb49bba6dd45f1637004933a2eeb8634c0112d9156024613bcdd97c3",
-    "size": 9112,
+    "clean": "0355517ab632adb9d0a9e3f9d253fc1dfdac79890140b63a2d63c936cfb4f82e",
+    "effective": "69422309d40d019a339f3acd23d4c6d9ef7a53db4ff5f83c67585c70da664fa6",
+    "size": 7740,
     "ops": [
      {
       "op": "insert",
@@ -96886,9 +96886,9 @@
    },
    {
     "path": "LEGO1/mxdirectx/legodxinfo.cpp",
-    "clean": "8dccb2ef8b1baaa5f39ce4fa54084df2fe0504a02c0bc2e88e26f5db7e0b03f4",
-    "effective": "870f23c3c475ed7d348ab0ba8991539fa5e2eb42599af9b596085f28473531f0",
-    "size": 11543,
+    "clean": "dc1576f5897939b8f1344ea83524d7ff12f628fa2bf373857dffe3ddfca599da",
+    "effective": "3f04a0a2dc265872b91b16af5c0c1b93eb6ff80eda4b6943e36ff2210676780f",
+    "size": 11312,
     "ops": [
      {
       "op": "insert",
@@ -96924,7 +96924,7 @@
       "anchor": {
        "ctx": "a3e4388738808670967a44aa350485113c19b0ea4944774ff07ff8fb2e249ea7",
        "b": 17,
-       "line_before": "1416c1bad651136f0739f791de421f5e1db3617eb01b46fa8455e4e24f19859c",
+       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "719a653b3e07d06e4d7bfe3e727927c939e1cb31d2c7d6438a89919f0e206ab1"
       },
       "gen": {
@@ -97427,9 +97427,9 @@
    },
    {
     "path": "LEGO1/mxdirectx/mxdirectxinfo.cpp",
-    "clean": "453cab6d6301d0a35f836806968d429dc90794cbb4e4353bb1e53591f630a633",
-    "effective": "4c2ca989265269c72ee8661164953ce46f9770f2c1d9dff3e7859f550aa9dd66",
-    "size": 21313,
+    "clean": "b8c7116fc8f32e7bdd57e2606d85e1fcaca6487f4cc43714631bb8d886cda594",
+    "effective": "615baddc38e58c71d7e0d317201592ed881f4947101471acde6b82287f6a9f4f",
+    "size": 20823,
     "ops": [
      {
       "op": "insert",
@@ -97727,9 +97727,9 @@
    },
    {
     "path": "LEGO1/mxgeometry/mxmatrix.h",
-    "clean": "b6395583005962160deb8eb9071617a1dfeb0eec549218d61779fe192ce40c86",
-    "effective": "eff336ae6cdefea6400236c140c6f9f23acd13265fa6c2a535ea27339ed5f7e0",
-    "size": 4819,
+    "clean": "5cc69dafa182560da11d5321674c481c8ead26aa1577877b6ffea88af10513f0",
+    "effective": "b137edf13bd85de2245baaaffb6fbbaecaedad0653c1d5278925c0d2b08a158d",
+    "size": 4395,
     "ops": [
      {
       "op": "insert",
@@ -99406,9 +99406,9 @@
    },
    {
     "path": "LEGO1/omni/src/main/mxmain.cpp",
-    "clean": "3b372550751c8df49ded0c3d539517367912635c6c5b2c0be6d7c98853859d91",
-    "effective": "e1591ef87f1ec2b6de10acd3c3c8d0712875b6a3576655709b6c2be33472c5f0",
-    "size": 11357,
+    "clean": "5fbb9acb8d2233c871dd0cb0834cc89429918ec872efd96d554f59ebf42956bc",
+    "effective": "b2c275b2238650e0843b263666708fdc2792b75c0ffffddf91c58238348855f0",
+    "size": 10639,
     "ops": [
      {
       "op": "insert",
@@ -99522,9 +99522,9 @@
    },
    {
     "path": "LEGO1/omni/src/notify/mxnotificationmanager.cpp",
-    "clean": "4a58b5014a99bdb1a217970a6a6af480534462ffbe00d543a07a2ce060cf512a",
-    "effective": "b27af50c7ede09aa40f85e2de95890e6478d32b9633ffcaeb3a7cb6b65dd88ad",
-    "size": 5764,
+    "clean": "3d98b069c9911337b3b3f44c78b5675ef67877929c0f484dec18addae8d35948",
+    "effective": "0082ed936c96cfb912f49d849ec6595e50648888ee3b03c7ae2d30fc07795cb5",
+    "size": 5765,
     "ops": [
      {
       "op": "insert",
@@ -102107,9 +102107,9 @@
    },
    {
     "path": "LEGO1/omni/src/video/mxsmk.cpp",
-    "clean": "37b563328cd2e77b2f1ad420aae787d2d426986323ab9c83b23c2d2152ea8746",
-    "effective": "2366031b3c0988ca16b01c5a6965a044d8fbc9bda608260291e2fbe532705db1",
-    "size": 6995,
+    "clean": "cb2a8402d84c5291d7eb0cf03de9cd7ead04d2bb3b0cc8330544f80d5d987863",
+    "effective": "766b295b2c348ba15c24bda60d5bc2365f1f237f35781a82ba545e3d582c81a3",
+    "size": 6839,
     "ops": [
      {
       "op": "insert",
@@ -102715,14 +102715,14 @@
    },
    {
     "path": "LEGO1/realtime/orientableroi.cpp",
-    "clean": "31196f30b57de47c5a46e81563dcd240e3397eecf4c4713f4f6a665e262ea15c",
-    "effective": "09e31acb7dfa44e202e911dcf8f129b9110a5581f195748175923d7ba8b729ac",
-    "size": 6575,
+    "clean": "bf175ea18b815bea8191b353bced9ef0fdc39639b4a0e20bb3855e62a1d7cde0",
+    "effective": "07d98c1cceb3f56c2d34038c9b11e062d2c5e50c80f11503281d889b47ab5c7e",
+    "size": 6576,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "7aa1bc91a61c438261ed7e99a1e1f6739cee9692a89e2a9c64c846bf3023d2d2",
+       "ctx": "7abc8a22be7268e4796a97799a311cc94d52e37f3dc935eda30399550e1c1b55",
        "b": 0,
        "at": "start"
       },
@@ -102926,37 +102926,6 @@
     ]
    },
    {
-    "path": "LEGO1/realtime/vector3dtail.inl.h",
-    "effective": "742aab103fbce88e367a01920a286b46a21f5693c9ddf6a15b6d7f23dbf9e673",
-    "size": 805,
-    "ops": [
-     {
-      "op": "insert",
-      "anchor": {
-       "ctx": "eec248d09557cf8495aceb038e8b0dd81f7119f34ea02811364af2c4acec03be",
-       "b": 9,
-       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-       "line_after": "72f296b9daecc26bb595b21097dfc0354b359c9d81cf677c54ae2b0749c05266"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 3,
-       "items": [
-        {
-         "k": "fwd_run",
-         "stem": "MxUnkRecordZ",
-         "first": 400,
-         "count": 2,
-         "width": 4,
-         "line": 1
-        }
-       ]
-      }
-     }
-    ],
-    "clean": "58e8db1f9e2041db67a8418bcae81e0552b75c6e8c9e5365940039625228ea6d"
-   },
-   {
     "path": "LEGO1/realtime/vector4d.inl.h",
     "clean": "8cf7ed928280f44be01febece73189a2ff7f3a74b284ad087b5845b296779c07",
     "effective": "ea87dfc9f483556caffc4930f761f907ab0e408ef3fdc0d65863781072f2ddde",
@@ -103009,10 +102978,41 @@
     ]
    },
    {
+    "path": "LEGO1/realtime/vectorlength.inl.h",
+    "effective": "755ea23eb26e59171cdedec1c3a7bf193becb5a9b0c428049a10269c16f99d0b",
+    "size": 805,
+    "ops": [
+     {
+      "op": "insert",
+      "anchor": {
+       "ctx": "88c4d6363edf98660384b4f99654578252dba318144bb969fc7a575079db0698",
+       "b": 9,
+       "line_before": "0efa0b22f51514d8d3a77f4f8b3a00aca8c90ce7d2191486cea940486288fe5b",
+       "line_after": "94f71e487a3f184b0aa46effd9c1e6a7088995db51b76e1f563c260a5ed6b40a"
+      },
+      "gen": {
+       "k": "seq",
+       "lines": 3,
+       "items": [
+        {
+         "k": "fwd_run",
+         "stem": "MxUnkRecordZ",
+         "first": 400,
+         "count": 2,
+         "width": 4,
+         "line": 1
+        }
+       ]
+      }
+     }
+    ],
+    "clean": "3fea4ddc3bc7e7d4fe79e1baa973ef7822a9df24a4b2d4a32dfbe6115541f6dd"
+   },
+   {
     "path": "LEGO1/tgl/d3drm/tglrl40.cpp",
-    "clean": "38ff05034357d0e1cb58ccac5f1af2b49831db21c483a04828f1f6dada40efb2",
-    "effective": "8825a9c917ea8df272c3ddcf93e171516da602dbc3b9ea6b904dd2a5eb6ba4ed",
-    "size": 12307,
+    "clean": "d8e26ce80fe30942bd87aa031db071b716cadcb18afed7f5e538e52db1475b6f",
+    "effective": "e996da8968fa68f6326a853154fb75e05f784b713995dcd685795ce9bc7a798e",
+    "size": 12074,
     "ops": [
      {
       "op": "insert",
@@ -103152,7 +103152,7 @@
       "op": "insert",
       "anchor": {
        "ctx": "5a3b96a900b50ddc743abdc9340e4bf1f9b5791ca68078be47014133975b3369",
-       "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+       "line_before": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
        "line_after": "21669f4e1a78da9e0cb5adad81bfce48346cd9b697532b3763018582eeeb9a33",
        "a": 6
       },
@@ -103290,9 +103290,9 @@
    },
    {
     "path": "LEGO1/tgl/d3drm/tglrl40.h",
-    "clean": "4efd8920de81a528b875d52d0f1622d96ad49c919c8cd6b1215d02bf248741cd",
-    "effective": "a1d7a1e3eafe0064e7c237b3cc4e3188e2fbd9e462756d4e3960d5d496ba6caf",
-    "size": 38498,
+    "clean": "64c3b9aecb50b758b9c968310833b8cf20d40470423c6dcab79c6167e90a9aee",
+    "effective": "dc6a922c1b7c2b955426ac1e46b228973a2c86b4b00f4b7c01dd1bed794c36d1",
+    "size": 37550,
     "ops": [
      {
       "op": "insert",
@@ -103355,9 +103355,9 @@
    },
    {
     "path": "LEGO1/viewmanager/viewlodlist.cpp",
-    "clean": "cdab47fe40f0dd50ddfa92784a06e9d76ff8afbf7a828feeaa36485bd44b348c",
-    "effective": "0e0a32b2984f65f3b2c6cd905169fc60e94aaffacc3393fa48fa8514df7610e3",
-    "size": 4986,
+    "clean": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+    "effective": "86952ff7ca782a41e2a10a30add41883d2aa47681919d0318ae054477ae1e95d",
+    "size": 4987,
     "ops": [
      {
       "op": "insert",
@@ -103710,7 +103710,7 @@
         },
         {
          "k": "include",
-         "header": "realtime/vector3dtail.inl.h",
+         "header": "realtime/vectorlength.inl.h",
          "style": "quote",
          "line": 4
         },
@@ -103727,14 +103727,14 @@
    },
    {
     "path": "LEGO1/viewmanager/viewmanager.cpp",
-    "clean": "1db2727436059a91cf2b546d958b7dffbf937112d2a41a05839fc2454b443886",
-    "effective": "67ffd6b45bde884af5ecacf3758d8ffc2506932e2b170f9acf61ea8b4fabddac",
-    "size": 21357,
+    "clean": "4f05755377be1c1bfda54749721448f0a75d661a79a4a6ba151dc214b16cf4dd",
+    "effective": "26fdc5bf050c7485fb811875c404c71fb693c17ce4d980773623e84812c834d1",
+    "size": 20756,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "86388f305e345174fd9b70b20172594c91bbbb87b29122300ab58309e6975a86",
+       "ctx": "a329dd28b11edda2a398c789e9ee8e7aa2ded37ee1c9c0633e5f779ca8eaa8eb",
        "b": 0,
        "at": "start"
       },

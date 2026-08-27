@@ -9,6 +9,7 @@
 #include "mxpresenterlist.h"
 
 #include <assert.h>
+
 // GLOBAL: LEGO1 0x101020e8
 void (*g_omniUserMessage)(const char*, MxS32) = NULL;
 

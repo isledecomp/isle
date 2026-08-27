@@ -21,6 +21,7 @@
 #include "scripts.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(Hospital, 0x12c)
 DECOMP_SIZE_ASSERT(HospitalState, 0x18)
 

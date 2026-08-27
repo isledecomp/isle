@@ -1,7 +1,8 @@
+
 #include "legolod.h"
 
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "legoroi.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"

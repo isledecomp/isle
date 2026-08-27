@@ -70,11 +70,6 @@ const float* MxMatrix::operator[](int idx) const
 	return m_data[idx];
 }
 
-// The non-virtual Matrix4 members are defined after the MxMatrix class.
-// BETA10 emission order attests this placement: RotateX (0x1001c6a0) directly
-// follows Matrix4::operator[] (0x1001c670), and RotateY/Scale (0x1001fd60,
-// 0x1001fe60) precede MxMatrix(const MxMatrix&) (0x1001ff30).
-
 // FUNCTION: BETA10 0x1001c6a0
 void Matrix4::RotateX(const float& p_angle)
 {
@@ -103,8 +98,7 @@ void Matrix4::RotateY(const float& p_angle)
 	}
 }
 
-// Must be included here (not at the bottom of this header) for correct ordering in binary.
-// NormalizeQuaternion and LenSquared depend on Vector4.
+// Must be included here (not before MxMatrix) for correct ordering in binary.
 // There's a chance they included mxgeometry4d.h after including this somewhere.
 #include "realtime/vector.h"
 
@@ -206,7 +200,6 @@ int Matrix4::Invert(Matrix4& p_mat)
 // FUNCTION: BETA10 0x1005aa20
 void Matrix4::Swap(int p_d1, int p_d2)
 {
-	// This function is affected by entropy even in debug builds
 	int i;
 	float e;
 	for (i = 0; i < 4; i++) {

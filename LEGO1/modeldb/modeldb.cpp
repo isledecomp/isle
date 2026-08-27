@@ -19,16 +19,6 @@ void ModelDbModel::Free()
 	delete[] m_presenterName;
 }
 
-// The model database had a writer half beside its reader: BETA10 carries
-// ModelDbModel::Dump (0x100e566b, 8 fprintf) and ModelDbModel::Write
-// (0x100e579b, 10 fwrite) between Free and Read, and the ModelDbPart pair
-// below it. Retail dropped every caller, so /OPT:REF discarded the bodies --
-// but not before the reference had made LINK pull fprintf.obj and fwrite.obj
-// out of LIBCMT, which is why retail seats them at module 110 (first scan,
-// immediately before fread.obj, in exactly this Dump->Write->Read order)
-// while a build without them can only reach fwrite through legostorage.cpp,
-// a library member, 131 module positions late.
-
 // FUNCTION: BETA10 0x100e566b
 void ModelDbModel::Dump(FILE* p_file)
 {
@@ -286,17 +276,6 @@ void FreeModelDbWorlds(ModelDbWorld*& p_worlds, MxS32 p_numWorlds)
 	delete[] p_worlds;
 	p_worlds = NULL;
 }
-
-// The writer half continues past FreeModelDbWorlds: BETA10 carries the
-// part-file packer at 0x100e65f0 (with a model-file twin at 0x100e681a and
-// the texture/part archive copier at 0x100e6a43) plus its two inline error
-// helpers (0x100e7900, 0x100e7970). Retail dropped every caller, so /OPT:REF
-// discarded the bodies -- but their references are why LINK pulled _file.obj,
-// fclose.obj, getch.obj, crt0dat.obj (exit), ftell.obj and fopen.obj out of
-// LIBCMT immediately after fread.obj (modeldb.obj is the first object that
-// names them; the symbol table lists a function's externals in reverse order
-// of last use, which puts stdout's "Error opening" block -- laid out after the
-// loop's fclose -- first).
 
 // FUNCTION: BETA10 0x100e7900
 inline void CheckRead(MxS32 p_result, MxS32 p_expected, const char* p_name)

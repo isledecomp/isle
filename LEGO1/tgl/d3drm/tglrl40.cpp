@@ -1,6 +1,7 @@
 #include "tglrl40.h"
 
 #include <assert.h>
+
 using namespace TglImpl;
 
 DECOMP_SIZE_ASSERT(Camera, 0x04);
@@ -125,9 +126,6 @@ Result ViewportPickImpl(
 	int& rPickedGroupCount
 )
 {
-	// The BETA10 body (tglRL40.cpp L140-L230, asserts at L153/L171/L193)
-	// walks the D3DRM pick array; left unimplemented in shipped game.
-
 	return Error;
 }
 
@@ -308,8 +306,6 @@ Result Image::InitializePalette(int paletteSize, PaletteEntry* pEntries)
 	return Success;
 }
 
-// The BETA10 assert at tglRL40.cpp L497 preserves the 1997 local name:
-// assert(pRenderer).
 // FUNCTION: LEGO1 0x100a15e0
 Renderer* Tgl::CreateRenderer()
 {

@@ -25,9 +25,7 @@ CConfigApp::CConfigApp()
 {
 }
 
-// The one and only CConfigApp object. Its dynamic initializer and atexit thunk
-// are emitted where it is defined, and retail has them between the destructor
-// group and InitInstance.
+// The one and only CConfigApp object
 // GLOBAL: CONFIG 0x00408e50
 CConfigApp g_theApp;
 

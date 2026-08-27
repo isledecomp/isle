@@ -2,6 +2,7 @@
 
 #include "legoworld.h"
 #include "misc.h"
+
 DECOMP_SIZE_ASSERT(LegoCacheSoundEntry, 0x08)
 DECOMP_SIZE_ASSERT(LegoCacheSoundManager, 0x20)
 

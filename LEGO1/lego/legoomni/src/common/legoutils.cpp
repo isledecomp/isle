@@ -469,11 +469,6 @@ void ConvertHSVToRGB(float p_h, float p_s, float p_v, float* p_rOut, float* p_gO
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-// ConvertHSVToRGB's counterpart. Present in BETA10 and compiled into the
-// retail LEGO1 object file, but stripped by /OPT:REF since nothing references
-// it. Its parse-time-pooled literals (5.0, 3.0, 1.0/6.0) remain in retail
-// .rdata, which is why this translation unit's constant pool only matches
-// retail with the function present.
 // FUNCTION: BETA10 0x100d4801
 void ConvertRGBToHSV(float p_r, float p_g, float p_b, float* p_hOut, float* p_sOut, float* p_vOut)
 {

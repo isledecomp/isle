@@ -4,10 +4,8 @@
 #include "mxtypes.h"
 
 // mmsystem.h requires inclusion of windows.h before
-// clang-format off
 #include <windows.h>
 #include <mmsystem.h>
-// clang-format on
 
 #if defined(_M_IX86) || defined(__i386__)
 #define MXIO_MINFO_MFILE

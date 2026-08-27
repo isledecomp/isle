@@ -39,9 +39,6 @@ class MeshImpl;
 class TextureImpl;
 class MeshBuilderImpl;
 
-// Helper implementations live in tglrl40.h; the method bodies below only
-// need their prototypes. BETA10 places every assert of these helpers in
-// tglRL40.h and every assert of the Impl methods in tglImpl.h.
 Result RendererCreateDevice(IDirect3DRM2*, const DeviceDirect3DCreateData&, IDirect3DRMDevice2*&);
 Result RendererCreateDevice(IDirect3DRM2*, const DeviceDirectDrawCreateData&, IDirect3DRMDevice2*&);
 Result
@@ -129,7 +126,6 @@ void TextureDestroy(IDirect3DRMTexture*);
 
 } /* namespace TglImpl */
 
-// Global scope like the viewport destroy callback, matching the 1997 manglings.
 Tgl::Result ViewportPickImpl(
 	IDirect3DRMViewport*,
 	int x,
@@ -236,8 +232,6 @@ private:
 	RendererDataType m_data;
 };
 
-// The 1997 name of this global is preserved in the BETA10 assert at
-// tglRL40.h L313: (g_pTheRenderer->AddRef(), g_pTheRenderer->Release()) == 1
 extern IDirect3DRM2* g_pTheRenderer;
 
 // VTABLE: LEGO1 0x100db988
@@ -268,9 +262,7 @@ public:
 	void HandlePaint(void*) override;
 
 	// FUNCTION: BETA10 0x1016e490
-	// Not in retail: nothing calls it, so /Gy dropped it. BETA10 places it at
-	// tglImpl.h L643 with its assert(m_data) at L646, directly after Update
-	// (L636). Non-virtual -- a virtual would have been kept alive by the vtable.
+	// Not in retail: nothing calls it.
 	unsigned long GetTrianglesDrawn();
 
 	typedef IDirect3DRMDevice2* DeviceDataType;
@@ -670,11 +662,6 @@ public:
 private:
 	TextureDataType m_data;
 };
-
-// The inline method bodies below follow the 1997 tglImpl.h layout: BETA10
-// records every assert with its tglImpl.h line number, which fixes both the
-// order of the definitions and the file they lived in. Impl-level overloads
-// come first within each interface family, then the public (vtable) methods.
 
 // FUNCTION: BETA10 0x1016cf40
 inline Result RendererImpl::CreateDevice(const DeviceDirectDrawCreateData& rCreateData, DeviceImpl& rDevice)

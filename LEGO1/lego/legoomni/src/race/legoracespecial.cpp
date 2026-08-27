@@ -9,6 +9,7 @@
 #include "mxvariabletable.h"
 
 #include <vec.h>
+
 // File name verified by BETA10 0x100cedf7
 
 DECOMP_SIZE_ASSERT(LegoCarRaceActor, 0x1a0)
@@ -105,8 +106,6 @@ MxS32 LegoCarRaceActor::HandleJump(LegoPathBoundary* p_boundary, LegoEdge* p_edg
 	Mx3DPointFloat targetPosition;
 	Mx3DPointFloat destEdgeUnknownVector;
 	Mx3DPointFloat targetDirection;
-	// Shadowed by the two `for (MxS32 i ...)` loops below, but its presence is
-	// what gives the last loop retail's register assignment.
 	MxS32 i;
 
 	if (m_actorState == c_ready) {

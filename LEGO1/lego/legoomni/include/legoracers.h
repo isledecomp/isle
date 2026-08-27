@@ -1,9 +1,7 @@
 #ifndef LEGORACERS_H
 #define LEGORACERS_H
 
-// clang-format off
 #include "legoracespecial.h"
-// clang-format on
 #include "legoracemap.h"
 
 #define LEGORACECAR_NONE 0

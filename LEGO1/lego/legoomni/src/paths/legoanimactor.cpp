@@ -67,8 +67,7 @@ float LegoAnimActorStruct::GetDistance(float p_time)
 	for (i = 1; i < m_unk0x10.size(); i++) {
 		if (((LegoDistanceKey*) m_unk0x10[i])->GetTime() >= p_time) {
 			f = (p_time - ((LegoDistanceKey*) m_unk0x10[i - 1])->GetTime()) /
-				(((LegoDistanceKey*) m_unk0x10[i])->GetTime() -
-				 ((LegoDistanceKey*) m_unk0x10[i - 1])->GetTime());
+				(((LegoDistanceKey*) m_unk0x10[i])->GetTime() - ((LegoDistanceKey*) m_unk0x10[i - 1])->GetTime());
 			return ((LegoDistanceKey*) m_unk0x10[i - 1])->GetDistance() +
 				   (((LegoDistanceKey*) m_unk0x10[i])->GetDistance() -
 					((LegoDistanceKey*) m_unk0x10[i - 1])->GetDistance()) *

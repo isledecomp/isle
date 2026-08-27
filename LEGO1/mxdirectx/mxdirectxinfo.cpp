@@ -213,10 +213,6 @@ BOOL MxDeviceEnumerate::EnumDirectDrawCallback(LPGUID p_guid, LPSTR p_driverDesc
 	driver.m_driverName = NULL;
 	memset(&driver.m_ddCaps, 0, sizeof(driver.m_ddCaps));
 
-	// The two 1997 builds disagree here: CONFIG.EXE schedules the `lpDD` init
-	// ahead of the NULL argument push and keeps the list cursor live across the
-	// insert, LEGO1.DLL does neither. Per-target declaration order reproduces
-	// both. See the CONFIG 0x00401770 / LEGO1 0x1009c070 pair.
 #ifdef MXDIRECTX_FOR_CONFIG
 	LPDIRECTDRAW lpDD = NULL;
 	LPDIRECT3D2 lpDirect3d2 = NULL;
@@ -593,9 +589,6 @@ const char* MxDeviceEnumerate::EnumerateErrorToString(HRESULT p_error)
 }
 
 #ifdef MXDIRECTX_FOR_CONFIG
-// CONFIG.EXE compiles this file without mxdirectdraw.cpp, so it keeps its own
-// copy of the two DeviceModesInfo bodies; LEGO1 takes them from
-// mxdirectdraw.cpp, which is where retail emits them.
 DeviceModesInfo::DeviceModesInfo()
 {
 	memset(this, 0, sizeof(*this));

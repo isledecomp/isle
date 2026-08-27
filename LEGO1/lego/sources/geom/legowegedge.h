@@ -105,9 +105,9 @@ protected:
 	Mx3DPointFloat* m_direction;    // 0x50
 };
 
-// In 1997 the LegoOrientedEdge class and its inlines lived in this header
-// (BETA10 places their assert sites at legowegedge.h lines 179-253);
-// legoorientededge.h was a decompilation-era split, now re-merged.
+// An edge shared by two faces, oriented so that face A lies on the side the
+// edge direction points away from and face B on the other; the flag bits say
+// which of the two sides may be traversed.
 // VTABLE: LEGO1 0x100db7f4
 // VTABLE: BETA10 0x101c3794
 // SIZE 0x40

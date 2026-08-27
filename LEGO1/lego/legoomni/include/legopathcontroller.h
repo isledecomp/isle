@@ -3,11 +3,8 @@
 
 #include "decomp.h"
 #include "geom/legowegedge.h"
-// clang-format off
-// See viewroi.h: parse order decides .rdata layout.
 #include "legopathboundary.h"
 #include "legopathactor.h"
-// clang-format on
 #include "legopathstruct.h"
 #include "mxstl/stlcompat.h"
 

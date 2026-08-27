@@ -1,13 +1,11 @@
 #include "isleapp.h"
 
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "realtime/orientableroi.h"
 
-// clang-format off
 #include "legoanimationmanager.h"
 #include "3dmanager/lego3dmanager.h"
-// clang-format on
 #include "decomp.h"
 #include "legobuildingmanager.h"
 #include "legogamestate.h"

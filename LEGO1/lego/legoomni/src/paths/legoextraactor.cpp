@@ -10,6 +10,7 @@
 #include "mxtimer.h"
 
 #include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 
 // GLOBAL: LEGO1 0x100f31d0

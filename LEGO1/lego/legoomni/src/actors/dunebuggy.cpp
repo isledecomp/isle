@@ -32,8 +32,6 @@ const char* g_varDUNEFUEL = "duneFUEL";
 // STRING: LEGO1 0x100f7634
 const char* g_varDBFRFNY4 = "C_DBFRFNY4";
 
-// Unreferenced zero dword that retail keeps between g_varDBFRFNY4 and the
-// "DuneCarHorn_Sound" literal in this object's .data.
 // GLOBAL: LEGO1 0x100f7664
 undefined4 g_unk0x100f7664 = 0;
 

@@ -1,14 +1,11 @@
 #ifndef LEGOTRANINFO_H
 #define LEGOTRANINFO_H
 
-// clang-format off
-// See viewroi.h: parse order decides .rdata layout.
 #include "roi/legoroi.h"
 
 #include "decomp.h"
-// clang-format on
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxtypes.h"
 

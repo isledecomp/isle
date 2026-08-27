@@ -1,7 +1,7 @@
 #include "viewmanager.h"
 
 #include "realtime/matrix4d.inl.h"
-#include "realtime/vector3dtail.inl.h"
+#include "realtime/vectorlength.inl.h"
 
 #include "mxdirectx/mxstopwatch.h"
 #include "tgl/d3drm/tglimpl.h"
@@ -230,15 +230,7 @@ int ViewManager::FlushBuffers()
 	return 0;
 }
 
-// The texture-refresh walk that vtable+0x04 held until late in development:
-// Beta 9.0 (1997-07-25) still has it at 0x100a1880 and has no device/viewport
-// FlushBuffers at all. By the August build the virtual had been rewritten into
-// the form above and this recursion lost its only caller, so /OPT:REF discarded
-// the code -- but the link had already resolved IID_IDirect3DRMFrame2 and
-// pulled dxguid.lib(guid72.obj), whose 16 `.rdata` bytes are a whole-object,
-// non-COMDAT contribution and so survive. That is why retail carries a twelfth
-// SDK GUID at 0x100dd210 with zero references to it, and why a build without
-// this function is 16 `.rdata` bytes short.
+// Unreferenced in the shipped game; present in Beta 9.0 at 0x100a1880.
 int FlushFrameBuffers(IDirect3DRMFrame2* p_frame)
 {
 	LPDIRECT3DRMVISUALARRAY visuals = NULL;
