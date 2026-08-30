@@ -15,6 +15,7 @@ import os
 import platform
 import re
 import shutil
+import struct
 import subprocess
 import sys
 import time
@@ -47,6 +48,30 @@ def _file_fact(path: Path) -> dict[str, object] | None:
         return None
     payload = path.read_bytes()
     return {"bytes": len(payload), "sha256": _sha256(payload)}
+
+
+def _pdb_fact(path: Path) -> dict[str, object] | None:
+    fact = _file_fact(path)
+    if fact is None:
+        return None
+    payload = path.read_bytes()
+    magic = b"Microsoft C/C++ program database 2.00\r\n\x1aJG\0\0"
+    if len(payload) < 60 or payload[:44] != magic:
+        fact["msf2_header"] = None
+        return fact
+    page_size, active_fpm, page_count, table_bytes, page_map_pointer = struct.unpack_from(
+        "<IHHII", payload, 44
+    )
+    fact["msf2_header"] = {
+        "page_size": page_size,
+        "active_free_page_map": active_fpm,
+        "page_count": page_count,
+        "stream_table_bytes": table_bytes,
+        # VC4.2 persists SI::mpspnpn here.  Later Microsoft PDB sources
+        # explicitly clear this in-memory pointer before writing page zero.
+        "persisted_stream_table_page_map_pointer": f"0x{page_map_pointer:08x}",
+    }
+    return fact
 
 
 def _logical_path(root: Path, value: str, drive: str) -> Path:
@@ -299,6 +324,12 @@ def _probe(args: argparse.Namespace) -> dict[str, object]:
         ("control-01", None, False, False, False),
         ("brepro-00", None, False, False, True),
         ("brepro-01", None, False, False, True),
+        ("brepro-emulateheap-00", "EmulateHeap", False, False, True),
+        ("brepro-emulateheap-01", "EmulateHeap", False, False, True),
+        ("brepro-win95-00", "WIN95", False, False, True),
+        ("brepro-win95-01", "WIN95", False, False, True),
+        ("brepro-winxpsp3-00", "WINXPSP3", False, False, True),
+        ("brepro-winxpsp3-01", "WINXPSP3", False, False, True),
         ("compat-win95", "WIN95", False, False, False),
         ("compat-win98", "WIN98", False, False, False),
         ("compat-emulateheap", "EmulateHeap", False, False, False),
@@ -329,7 +360,7 @@ def _probe(args: argparse.Namespace) -> dict[str, object]:
         },
         "original": {
             "object": _coff_fact(physical_object),
-            "pdb": _file_fact(physical_pdb),
+            "pdb": _pdb_fact(physical_pdb),
         },
         "wine_visible_temp": {
             "path": str(wine_temp),
@@ -395,7 +426,7 @@ def _probe(args: argparse.Namespace) -> dict[str, object]:
                         record["analysis_error"] = f"{type(error).__name__}: {error}"
                 else:
                     record["object"] = None
-                record["pdb"] = _file_fact(physical_pdb)
+                record["pdb"] = _pdb_fact(physical_pdb)
                 if (
                     physical_object.is_file()
                     and physical_object.stat().st_size <= 2 * 1024 * 1024
