@@ -1,5 +1,3 @@
-
-
 // LIBRARY: LEGO1 0x100861d0
 // ?shi_New@@YAPAXKIPAU_SHI_Pool@@@Z
 

@@ -5,7 +5,6 @@
 ; name on the disc is the ISO 9660 master, not the linker's. Without this the
 ; linker derives the export name from /OUT: and writes "LEGO1.DLL", which also
 ; propagates into LEGO1.lib and so into ISLE.EXE's .idata.
-; MEASURED (ISLE.EXE vs retail): 486 -> 480 differing bytes.
 LIBRARY      Lego1.dll
 
 ; LINK 4.20 copies a double-quoted DESCRIPTION into .rdata verbatim, quotes and

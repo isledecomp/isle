@@ -1,5 +1,3 @@
-
-
 // LIBRARY: ISLE 0x402f10
 // ?shi_New@@YAPAXKIPAU_SHI_Pool@@@Z
 

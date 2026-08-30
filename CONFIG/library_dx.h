@@ -1,4 +1,4 @@
-#ifdef 0
+#if 0
 // DirectX library data (dxguid.lib) referenced by CONFIG
 
 // GLOBAL: CONFIG 0x4064e8
