@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONUNBUFFERED: "1"
-      REPROBIT_REVISION: e7dbf8f8ca4de93c2c627ab4b381b225fffce04c
+      REPROBIT_REVISION: eb15dbe50318a8977f7176a0de9b0470cd0894c4
 
     steps:
       - name: Configure a byte-stable checkout
@@ -97,7 +97,7 @@ jobs:
 
       - name: Build cold and verify exact bytes
         id: reprobit
-        uses: foxtacles/reprobit@e7dbf8f8ca4de93c2c627ab4b381b225fffce04c
+        uses: foxtacles/reprobit@eb15dbe50318a8977f7176a0de9b0470cd0894c4
         with:
           project-directory: .
           toolchain-root: ${{ runner.temp }}\msvc42
@@ -138,6 +138,9 @@ jobs:
               throw "Legacy sibling comparison output is still present: $path"
             }
           }
+
+      - name: Export the matching effective source view
+        run: rbit source export build/reprobit-debug/source
 
       - name: Collect bounded native failure diagnostics
         if: failure()
@@ -289,32 +292,46 @@ jobs:
           "colorama==0.4.6"
 
       - name: Detect original and recompiled binaries
+        shell: pwsh
         run: |
-          reccmp-project detect --what original --search-path legobin
-          reccmp-project detect --what recompiled --search-path build/reprobit-debug
+          $sourceRoot = (Resolve-Path "build/reprobit-debug/source").Path
+          $originalRoot = (Resolve-Path "legobin").Path
+          $recompiledRoot = (Resolve-Path "build/reprobit-debug").Path
+          Push-Location $sourceRoot
+          try {
+            reccmp-project detect --what original --search-path $originalRoot
+            reccmp-project detect --what recompiled --search-path $recompiledRoot
+          }
+          finally {
+            Pop-Location
+          }
 
       - name: Generate accuracy reports and SVGs
         shell: bash
         run: |
-          reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG --json CONFIGPROGRESS.json
-          reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE --json ISLEPROGRESS.json
-          reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 --json LEGO1PROGRESS.json
+          source_root="$GITHUB_WORKSPACE/build/reprobit-debug/source"
+          cd "$source_root"
+          reccmp-reccmp -S "$GITHUB_WORKSPACE/CONFIGPROGRESS.SVG" --svg-icon assets/config.png --target CONFIG --json "$GITHUB_WORKSPACE/CONFIGPROGRESS.json"
+          reccmp-reccmp -S "$GITHUB_WORKSPACE/ISLEPROGRESS.SVG" --svg-icon assets/isle.png --target ISLE --json "$GITHUB_WORKSPACE/ISLEPROGRESS.json"
+          reccmp-reccmp -S "$GITHUB_WORKSPACE/LEGO1PROGRESS.SVG" --svg-icon assets/lego1.png --target LEGO1 --json "$GITHUB_WORKSPACE/LEGO1PROGRESS.json"
 
       - name: Compare accuracy with current master
         shell: bash
         env:
           RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
         run: |
-          curl -fLSs -o CONFIGPROGRESS-old.json "$RELEASE_URL/CONFIGPROGRESS.json" || echo "" >CONFIGPROGRESS-old.json
-          curl -fLSs -o ISLEPROGRESS-old.json "$RELEASE_URL/ISLEPROGRESS.json" || echo "" >ISLEPROGRESS-old.json
-          curl -fLSs -o LEGO1PROGRESS-old.json "$RELEASE_URL/LEGO1PROGRESS.json" || echo "" >LEGO1PROGRESS-old.json
-          reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
-          reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
-          reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
+          curl -fLSs -o "$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json" "$RELEASE_URL/CONFIGPROGRESS.json" || echo "" >"$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json"
+          curl -fLSs -o "$GITHUB_WORKSPACE/ISLEPROGRESS-old.json" "$RELEASE_URL/ISLEPROGRESS.json" || echo "" >"$GITHUB_WORKSPACE/ISLEPROGRESS-old.json"
+          curl -fLSs -o "$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json" "$RELEASE_URL/LEGO1PROGRESS.json" || echo "" >"$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json"
+          cd "$GITHUB_WORKSPACE/build/reprobit-debug/source"
+          reccmp-reccmp --target CONFIG --diff "$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json" || echo "Current master not found"
+          reccmp-reccmp --target ISLE --diff "$GITHUB_WORKSPACE/ISLEPROGRESS-old.json" || echo "Current master not found"
+          reccmp-reccmp --target LEGO1 --diff "$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json" || echo "Current master not found"
 
       - name: Check exports, vtables, and variables
         shell: bash
         run: |
+          cd "$GITHUB_WORKSPACE/build/reprobit-debug/source"
           reccmp-verexp --target LEGO1
           reccmp-vtable --target CONFIG
           reccmp-vtable --target ISLE
