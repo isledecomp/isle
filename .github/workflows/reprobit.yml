@@ -409,6 +409,20 @@ jobs:
           name: ReproBit-Verification-Report
           path: reprobit-report
 
+      - name: Download matched comparison files
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Win32-Comparison
+          path: reprobit-debug
+
+      # The PDBs only pair with the matched debug binaries and their exported
+      # source view, never with the byte-exact release binaries (which carry
+      # no debug directory), so they ship together as one bundle.
+      - name: Bundle the debug companion
+        run: |
+          set -euo pipefail
+          (cd reprobit-debug && zip -rq ../ReproBit-Debug-Companion.zip .)
+
       - name: Publish complete continuous release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -427,6 +441,7 @@ jobs:
             LEGO1PROGRESS.SVG
             reprobit-report/report.html
             reprobit-report/report.json
+            ReproBit-Debug-Companion.zip
           )
           for path in "${files[@]}"; do
             test -s "$path"
