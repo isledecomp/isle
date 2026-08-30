@@ -38,6 +38,10 @@ if (MSVC)
   # Visual C++ 4.2 -> cl version 10.2.0
   if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "11.0")
     set(MSVC_FOR_DECOMP TRUE)
+  else()
+    # The decompiled source preserves 1997 semantics where a for-loop
+    # variable leaks into the enclosing scope.
+    add_compile_options("/Zc:forScope-")
   endif()
 endif()
 
@@ -474,6 +478,8 @@ if(ISLE_BUILD_BETA10)
     OUT_TARGETS beta10_targets
   )
   reccmp_add_target(beta10 ID BETA10)
+
+  target_link_libraries(beta10 PRIVATE dxguid)
 
   # Enable `#ifdef BETA10` conditions
   target_compile_definitions(beta10 PRIVATE BETA10)
