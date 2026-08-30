@@ -44,33 +44,44 @@ both: after this patch ISLE.EXE's .text differs from retail only in import
 address-table operands (a .idata ordering issue) and .reloc is byte-identical.
 
 Usage:
-  python3 tools/patch_smartheap_331.py --from-git <rev-with-3.30-lib> --check
+  python3 tools/patch_smartheap_331.py --check
   python3 tools/patch_smartheap_331.py --input SHLW32MT.LIB.330 [--output PATH]
 
 --check compares the regenerated archive against the lib currently in the
-tree and exits nonzero on any difference.
+tree and exits nonzero on any difference. By default, the 3.30 input is read
+from its pinned revision in this repository's history.
 """
 import argparse
+import os
 import re
 import struct
 import subprocess
 import sys
-import os
-
-try:
-    import pefile
-    from capstone import Cs, CS_ARCH_X86, CS_MODE_32
-except ImportError:
-    sys.exit("pefile and capstone are required (pip install pefile capstone)")
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIB_REL = "3rdparty/smartheap/SHLW32MT.LIB"
+DEFAULT_330_REV = "2ffe227d82916ae37b4916cbd8a714f4ef627f78"
 
 IMAGE_REL_I386_DIR32 = 6
 IMAGE_REL_I386_REL32 = 20
 RELOC_TYPES = {6: "DIR32", 7: "DIR32NB", 20: "REL32", 11: "SECTION", 12: "SECREL"}
 
-md = Cs(CS_ARCH_X86, CS_MODE_32)
+pefile = None
+md = None
+
+
+def load_dependencies(parser):
+    global pefile, md
+    try:
+        import pefile as pefile_module
+        from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+    except ImportError:
+        parser.error(
+            "missing pefile or capstone; install the tool dependencies with "
+            "python -m pip install -r tools/requirements.txt"
+        )
+    pefile = pefile_module
+    md = Cs(CS_ARCH_X86, CS_MODE_32)
 
 # ---------------------------------------------------------------- 3.31 splices
 # Retail ISLE.EXE addresses of the SmartHeap symbols referenced by the five
@@ -260,24 +271,44 @@ def load_annotations(path, tag):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    src = ap.add_mutually_exclusive_group(required=True)
+    src = ap.add_mutually_exclusive_group()
     src.add_argument("--input", help="path to the SmartHeap 3.30 SHLW32MT.LIB")
     src.add_argument("--from-git", metavar="REV",
-                     help=f"read the 3.30 lib from `git show REV:{LIB_REL}`")
-    ap.add_argument("--output", default=os.path.join(REPO, LIB_REL))
+                     help=f"read the 3.30 lib from git revision REV at {LIB_REL}")
+    ap.add_argument("--output", default=os.path.join(REPO, LIB_REL),
+                    help=f"archive to write (default: {LIB_REL})")
     ap.add_argument("--check", action="store_true",
                     help="compare the result against the lib in the tree; do not write")
     args = ap.parse_args()
 
-    if args.from_git:
-        lib330 = subprocess.run(["git", "-C", REPO, "show", f"{args.from_git}:{LIB_REL}"],
-                                capture_output=True, check=True).stdout
-    else:
+    load_dependencies(ap)
+    retail = os.path.join(REPO, "legobin/ISLE.EXE")
+    if not os.path.isfile(retail):
+        ap.error("missing legobin/ISLE.EXE; place the English 1.1 retail executable there")
+    if args.check and not os.path.isfile(os.path.join(REPO, LIB_REL)):
+        ap.error(f"missing checked-in archive: {LIB_REL}")
+
+    if args.input:
+        if not os.path.isfile(args.input):
+            ap.error(f"SmartHeap 3.30 input does not exist: {args.input}")
         lib330 = open(args.input, "rb").read()
+    else:
+        source_rev = args.from_git or DEFAULT_330_REV
+        try:
+            lib330 = subprocess.run(
+                ["git", "-C", REPO, "show", f"{source_rev}:{LIB_REL}"],
+                capture_output=True,
+                check=True,
+            ).stdout
+        except subprocess.CalledProcessError:
+            ap.error(
+                f"could not read {LIB_REL} from Git revision {source_rev}; "
+                "fetch that revision or provide --input"
+            )
     assert b"SmartHeap330MutexMovShrName" in lib330, "input lib is not SmartHeap 3.30"
 
     ann = load_annotations(os.path.join(REPO, "ISLE/library_smartheap.h"), "ISLE")
-    pe = pefile.PE(os.path.join(REPO, "legobin/ISLE.EXE"))
+    pe = pefile.PE(retail)
     base = pe.OPTIONAL_HEADER.ImageBase
     assert base == 0x400000
     iat = {}

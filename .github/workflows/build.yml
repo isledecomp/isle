@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Set up MSYS2
         if: ${{ !!matrix.toolchain.msystem }}
-        uses: msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884 # v2
+        uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.toolchain.msystem }}
           install: >-
@@ -42,7 +42,7 @@ jobs:
 
       - name: Setup cmake
         if: matrix.toolchain.setup-cmake
-        uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3 # v2
+        uses: jwlawson/actions-setup-cmake@v2
 
       - name: Check Ninja
         if: matrix.toolchain.setup-ninja
@@ -50,11 +50,11 @@ jobs:
 
       - name: Setup vcvars
         if: matrix.toolchain.setup-msvc
-        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
+        uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
 
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7
 
       - name: Build
         run: |
@@ -72,16 +72,16 @@ jobs:
     timeout-minutes: 60
 
     steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/checkout@v7
 
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/checkout@v7
       with:
         repository: itsmattkc/msvc420
         ref: df2c13aad74c094988c6c7e784234c2e778a0e91
         path: msvc420
 
     - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3 # v2
+      uses: jwlawson/actions-setup-cmake@v2
       with:
         # Use minimum supported version
         cmake-version: '3.15.x'
@@ -98,7 +98,7 @@ jobs:
         cmake --build build
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@v7
       with:
         name: CMake-MSVC420-Development
         path: |
@@ -116,16 +116,16 @@ jobs:
     timeout-minutes: 45
 
     steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/checkout@v7
 
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/checkout@v7
       with:
         repository: itsmattkc/msvc420
         ref: df2c13aad74c094988c6c7e784234c2e778a0e91
         path: msvc420
 
     - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3 # v2
+      uses: jwlawson/actions-setup-cmake@v2
       with:
         # Use minimum supported version
         cmake-version: '3.15.x'
@@ -142,7 +142,7 @@ jobs:
         cmake --build build
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@v7
       with:
         name: CMake-MSVC420-BETA10-Development
         path: |

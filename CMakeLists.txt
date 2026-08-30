@@ -5,12 +5,6 @@ cmake_policy(SET CMP0091 NEW)
 
 project(isle CXX)
 
-# MSVC < 12 writes one compiler PDB per TARGET (/Fd<target>.dir/) and cannot
-# have two cl processes writing it at once ("fatal error C1033: cannot open
-# program database"), which is why the build has been -j1 for MSVC 4.20.
-# One PDB per OBJECT removes the shared resource. /Fo and /Fd are codegen- and
-# emission-order-inert, and the final images are identical apart from the
-# linker's timestamps (which vary between any two links anyway).
 option(ISLE_PER_OBJECT_PDB "Emit one compiler PDB per object file so MSVC < 12 can compile in parallel" ON)
 if(ISLE_PER_OBJECT_PDB AND CMAKE_CXX_COMPILE_OBJECT MATCHES "/Fd<TARGET_COMPILE_PDB>")
   string(REPLACE "/Fd<TARGET_COMPILE_PDB>" "/Fd<OBJECT>.pdb"
@@ -130,9 +124,6 @@ function(add_lego_libraries NAME)
   target_include_directories(realtime${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(realtime${ARG_SUFFIX} PRIVATE Vec::Vec)
 
-  # ViewLOD::~ViewLOD lives in viewmanager.cpp: retail seats it directly before
-  # ViewManager::ViewManager and ViewLOD's vtable group (LODObject dtor/sdd,
-  # AveragePolyArea, NVerts, ViewLOD sdd) in viewmanager's COMDAT tail.
   add_library(viewmanager${ARG_SUFFIX} STATIC
     LEGO1/viewmanager/viewmanager.cpp
     LEGO1/viewmanager/viewlodlist.cpp
@@ -153,10 +144,6 @@ function(add_lego_libraries NAME)
   target_include_directories(mxdirectx${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(mxdirectx${ARG_SUFFIX} PRIVATE ddraw)
 
-  # ViewROI's out-of-line members live in legoroi.cpp: retail seats them
-  # between LegoROI::SetDisplayBB and LegoROI::IntrinsicImportance, inside
-  # legoroi's block (0x100a9eb0..0x100aa180), with legoroi's trailing COMDATs
-  # (ViewROI sdd, ~OrientableROI) after them -- one object, not two.
   add_library(roi${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/roi/legoroi.cpp
     LEGO1/lego/sources/roi/legolod.cpp
@@ -166,10 +153,6 @@ function(add_lego_libraries NAME)
   target_include_directories(roi${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(roi${ARG_SUFFIX} PRIVATE viewmanager${ARG_SUFFIX} Vec::Vec)
 
-  # legospline.cpp lives in the geom library: retail's LEGO1 .text runs
-  # legotree, legospline, legoweedge, legowegedge, mxdirect3d .. mxdirectdraw,
-  # legoanim, tglrl40 -- the spline sits in the library searched right after
-  # misc, and anim is searched after MxDirectX in the lego1 link order below.
   add_library(geom${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/geom/legoweedge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
@@ -192,9 +175,6 @@ function(add_lego_libraries NAME)
   target_include_directories(shape${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/LEGO1/lego/sources" "${PROJECT_SOURCE_DIR}/util")
   target_link_libraries(shape${ARG_SUFFIX} PRIVATE)
 
-  # Two translation units, in this order: retail seats legoanimscene.cpp's
-  # contribution first (its .text runs 0x1009f000-0x1009f8f0, legoanim.cpp's
-  # starts at 0x1009f900) and its constant pool immediately before legoanim's.
   add_library(anim${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/anim/legoanimscene.cpp
     LEGO1/lego/sources/anim/legoanim.cpp
@@ -250,13 +230,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/common/mxmediapresenter.cpp
     LEGO1/omni/src/common/mxcompositepresenter.cpp
     LEGO1/omni/src/system/mxcriticalsection.cpp
-    # The action-extra keyword table is an omni-side TU: retail seats its 40
-    # globals at 0x10102048..0x101020e4, i.e. between mxcriticalsection's
-    # .data and mxutilities', and a `lego1.dir` object's .data can never land
-    # there (LINK emits every command-line object before any library member).
-    # `g_parseExtraTokens` -- referenced by mxpresenter.cpp among others --
-    # is what pulls it, immediately ahead of mxutilities' KeyValueStringParse,
-    # reproducing retail's adjacency exactly.
     LEGO1/define.cpp
     LEGO1/omni/src/common/mxutilities.cpp
     LEGO1/omni/src/common/mxvariabletable.cpp
@@ -310,17 +283,6 @@ function(add_lego_libraries NAME)
   set_property(TARGET omni${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
   target_include_directories(omni${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
 
-  # The two stream providers were NOT members of the library that holds the
-  # stream controllers. LINK 4.20 pulls library members per library, to a
-  # fixpoint, in link-line order (measured with synthetic archives), so a
-  # member referenced by an already-pulled member of the same library lands
-  # inside that library's block. MxDiskStreamController::Open and
-  # MxRAMStreamController::Open call the provider constructors, yet retail
-  # seats both provider objects AFTER smackw32.obj (0x100d0730..0x100d1ec0,
-  # smackw32 at 0x100cd782): they came from a library scanned after
-  # smackw32.lib. Keeping them in their own archive, linked behind Smacker,
-  # reproduces that block; in omni.lib they land 13,392 bytes early and drag
-  # smackw32 6,832 bytes late.
   add_library(streamprovider${ARG_SUFFIX} STATIC
     LEGO1/omni/src/stream/mxramstreamprovider.cpp
     LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
@@ -459,11 +421,6 @@ function(add_lego_libraries NAME)
     geom${ARG_SUFFIX}
     mxdirectx${ARG_SUFFIX}
     anim${ARG_SUFFIX}
-    # shape.lib was scanned BEFORE the libraries that reference it (roi/3dmanager
-    # via LegoLOD::Read / LegoROI::Read): retail seats its five objects in the
-    # linker's second pass, behind the second-pass LIBCMT members (LegoBox::Read
-    # at 0x100d3740, after _strnicmp/_strupr/_vsprintf/87ctran/strstr/threadex).
-    # Listed after omni it is pulled in the first pass, 19,648 bytes early.
     shape${ARG_SUFFIX}
     tglrl${ARG_SUFFIX}
     realtime${ARG_SUFFIX}
@@ -490,36 +447,11 @@ endfunction()
 
 set(lego1_link_libraries )
 if (ISLE_USE_SMARTHEAP)
-  # OLDNAMES.LIB directly behind LIBCMT: the game's own objects call the
-  # pre-ANSI names strnicmp/strupr, which only OLDNAMES resolves (to the
-  # LIBCMT members __strnicmp/__strupr). Left to the compiler's /DEFAULTLIB
-  # directive, OLDNAMES is scanned last, so those two LIBCMT members are queued
-  # after _vsprintf/__CIpow/_strstr/__beginthreadex in the second LIBCMT pass.
-  # Retail has them FIRST in that pass (0x100d1ed0, 0x100d1fd0): OLDNAMES was
-  # scanned right after LIBCMT's first pass, ahead of the game's libraries.
   list(APPEND lego1_link_libraries SmartHeap::SmartHeap libcmt oldnames)
 endif()
 
-# 1997 scanned the OS/DirectX import libraries BEFORE the game's own static
-# libraries, so the imports those static libraries demand arrive in a SECOND
-# library pass. That is directly visible in the retail image: LEGO1.DLL's
-# `.idata$6` hint/name pool is in library-scan order and comes out in two
-# waves -- WINMM 3, DINPUT 1, KERNEL32 85, USER32 10, GDI32 9, then WINMM 12,
-# DSOUND 1, DDRAW 2, KERNEL32 11, USER32 7, GDI32 6, d3drm 2. Listing these
-# eight import libraries here (i.e. ahead of misc/geom/omni/... on the link
-# line) reproduces that structure exactly, and the import-descriptor order
-# with it. Purely a link-order property: no object changes, and reccmp is
-# unaffected because it masks IAT operands.
 list(APPEND lego1_link_libraries winmm dinput dsound ddraw kernel32 user32 gdi32 d3drm)
 
-# dxguid.lib belongs to that first wave too, not after the game's own static
-# libraries. Retail's .rdata proves it: five GUID objects -- IID_IDirectSound-
-# 3DBuffer, IID_IDirectSound3DListener, GUID_SysKeyboard, IID_IDirect3DRMTexture2
-# and GUID_Key, i.e. exactly the ones LEGO1's own objects reference -- sit at
-# .rdata 0x76c0, roughly 6.7 KB ahead of the seven Direct3D/Direct3DRM GUIDs that
-# only tglrl40/3dmanager pull. Scanning dxguid.lib early reproduces that split:
-# the seven land at retail's exact offsets and the five come within 80 bytes,
-# where before ALL TWELVE sat together 6,744 bytes late.
 list(APPEND lego1_link_libraries dxguid)
 
 if(ISLE_BUILD_LEGO1)
@@ -567,28 +499,12 @@ if (ISLE_BUILD_APP)
   endif()
 
   # Link DSOUND, WINMM, and LEGO1.
-  # Goal 2: the .idata import-descriptor order IS the link line's library order,
-  # and retail's is winmm, advapi32, gdi32, user32, dsound, Lego1, kernel32.
-  # MEASURED (ISLE.EXE vs retail): .idata 4634 -> 988, .text 1289 -> 1130.
-  # Later duplicates from the default library list are inert (a second occurrence
-  # loads nothing new), and SmartHeap must stay first.
   target_link_libraries(isle PRIVATE winmm advapi32 gdi32 user32 dsound)
   if(ISLE_BUILD_LEGO1)
     target_link_libraries(isle PRIVATE lego1)
   else()
     target_link_libraries(isle PRIVATE beta10)
   endif()
-  # kernel32 is deliberately NOT listed. Naming it here (or leaving it in CMake's
-  # default library list) puts kernel32.lib AHEAD of LIBCMT in the search order,
-  # so LINK scans it twice and pulls __IMPORT_DESCRIPTOR_KERNEL32 at the end of
-  # the FIRST scan. That member carries the "KERNEL32.dll" name string, which
-  # then lands in the MIDDLE of .idata$6 and displaces ~42 hint/name entries by
-  # 12 bytes. Retail has it at the very END of .idata$6, i.e. kernel32.lib was
-  # searched exactly once, after LIBCMT, reached only through the
-  # /DEFAULTLIB:kernel32.lib directive the compiler embeds in every object.
-  # MEASURED (ISLE.EXE vs retail): 1254 -> 486 differing bytes, .idata 988 -> 218.
-  # Both occurrences must go; removing only one leaves 1248.
-  # The import DESCRIPTOR order above is unaffected - kernel32 still comes last.
   string(REPLACE "kernel32.lib" "" CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES}")
   string(REPLACE "kernel32.lib" "" CMAKE_C_STANDARD_LIBRARIES "${CMAKE_C_STANDARD_LIBRARIES}")
 
@@ -615,10 +531,6 @@ if (ISLE_BUILD_CONFIG)
     target_link_libraries(config PRIVATE DirectX5::DirectX5)
   endif()
   target_compile_definitions(config PRIVATE DIRECT3D_VERSION=0x500)
-  # Retail CONFIG.EXE carries a DSOUND.dll import descriptor with zero
-  # functions: the original link consumed dsound.lib and /OPT:REF discarded
-  # the referencing code (Detect3DSound in detectdx5.cpp) after the import
-  # members were pulled.  dsound is therefore original build configuration.
   target_link_libraries(config PRIVATE ddraw dsound dxguid)
   set_property(TARGET config PROPERTY OUTPUT_NAME "CONFIG")
   set_property(TARGET config PROPERTY SUFFIX ".EXE")
@@ -669,28 +581,11 @@ if (MSVC_FOR_DECOMP)
   # They ensure a recompilation that can be byte/instruction accurate to the original binaries.
   if (ISLE_BUILD_APP)
     target_link_options(isle PRIVATE "/OPT:REF")
-    # Goal 2 note: ISLE.EXE's CRT member load order is a single global FIFO seeded
-    # by isleapp.obj's undefined-symbol table. Retail seats LIBCMT's hooks.obj
-    # (terminate/unexpected/_inconsistency/__pInconsistency) at 0x4092e0. We used
-    # to force that with /INCLUDE:?terminate@@YAXXZ, which reproduced the RESULT
-    # by fiat but seated the member at the FRONT of the CRT region and left
-    # .reloc's VirtualSize 28 bytes short. The CAUSE is a `delete[]` of a
-    # destructible type in 1997's isleapp.cpp that /OPT:REF stripped; its
-    # stand-in is owned by ReproBit's reviewed source overlay (the checked
-    # source stays clean). With that in place the /INCLUDE is actively
-    # harmful, so it is deliberately NOT used.
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   endif()
 
   if (ISLE_BUILD_CONFIG)
     target_link_options(config PRIVATE "/OPT:REF")
-    # Import-descriptor order is library-scan order, and retail CONFIG.EXE's is
-    # DDRAW, MFC42, MSVCRT, KERNEL32, USER32, ADVAPI32. Left implicit, MSVCRT
-    # and KERNEL32 arrive only via /DEFAULTLIB after CMake's standard library
-    # list, which puts USER32 and ADVAPI32 ahead of them. Naming them here --
-    # the same thing `lego1_link_libraries` does for LEGO1, and for the same
-    # reason -- reproduces retail's descriptor order exactly.
-    # MEASURED: .idata differing 1577 -> 1537, CONFIG total 2881 -> 2837.
     target_link_libraries(config PRIVATE mfc42 msvcrt kernel32)
   endif()
 
@@ -724,18 +619,6 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
   if(REPROBIT_TERMINAL)
-    # ReproBit terminal links: the retail images carry NO debug data
-    # directory, while linking with /debug adds one (a 28-byte
-    # IMAGE_DEBUG_DIRECTORY plus its MISC record) at the head of .rdata --
-    # measured at 88 bytes in ISLE.EXE.
-    #
-    # Drop ONLY the linker's /debug. /Zi MUST STAY: it is a compile flag, and
-    # removing it measurably CHANGES CODEGEN -- 31 of 561 COMDATs in the first
-    # 16 objects flipped, all of them commutative `cmp` operand-direction
-    # tie-breaks. Debug records occupy the compiler's symbol arena, which is
-    # exactly the entropy channel this project's per-TU tuning rides on, so a
-    # /Zi-less build silently re-rolls the tuned state. Compile identically,
-    # link without debug info.
     foreach(_cfg "" _DEBUG _RELEASE _RELWITHDEBINFO _MINSIZEREL)
       foreach(_kind EXE SHARED STATIC)
         string(REPLACE "/debug" "" CMAKE_${_kind}_LINKER_FLAGS${_cfg}
@@ -747,8 +630,6 @@ if (MSVC_FOR_DECOMP)
 
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
-  # Giving every object its own PDB (see ISLE_PER_OBJECT_PDB) removes the shared
-  # resource, so the 1-job pools are only needed when that option is off.
   if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12 AND NOT ISLE_PER_OBJECT_PDB)
     foreach(tgt IN LISTS lego1_targets beta10_targets)
       set_property(GLOBAL APPEND PROPERTY JOB_POOLS "msvc_${tgt}=1")
@@ -768,11 +649,6 @@ if (MSVC_FOR_DECOMP)
   endif()
 endif()
 
-# ReproBit owns all rendered source bytes and graph declarations.  The normal
-# project only provides a deliberately thin, opt-in CMake discovery seat: the
-# generated plan may insert already-receipted TUs, register existing targets,
-# and emit their resolved paths.  Ordinary standalone builds do not define
-# REPROBIT_PROJECT_PLAN and therefore never load this integration.
 if(DEFINED REPROBIT_PROJECT_PLAN AND NOT REPROBIT_PROJECT_PLAN STREQUAL "")
   if(NOT DEFINED REPROBIT_CMAKE_MODULE OR REPROBIT_CMAKE_MODULE STREQUAL "")
     message(FATAL_ERROR "REPROBIT_CMAKE_MODULE is required with REPROBIT_PROJECT_PLAN")
