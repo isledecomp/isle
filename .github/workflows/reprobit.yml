@@ -54,7 +54,7 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONUNBUFFERED: "1"
-      REPROBIT_REVISION: 707f6c2f76899f9cb3b03df118017f88adb306a5
+      REPROBIT_REVISION: main
 
     steps:
       - name: Configure a byte-stable checkout
@@ -85,8 +85,10 @@ jobs:
           python tools/gen_smacker_lib.py --check
 
       # The CLI used to provision the compiler and the Action that verifies the
-      # project must always come from the same immutable ReproBit revision.
-      - name: Install the pinned ReproBit CLI
+      # project must always come from the same ReproBit ref. Both reference the
+      # latest main; the Action reinstalls the CLI from its own checkout, so the
+      # verification step is always self-consistent.
+      - name: Install the latest ReproBit CLI
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
@@ -101,7 +103,7 @@ jobs:
 
       - name: Build cold and verify exact bytes
         id: reprobit
-        uses: foxtacles/reprobit@707f6c2f76899f9cb3b03df118017f88adb306a5
+        uses: foxtacles/reprobit@main
         with:
           project-directory: .
           toolchain-root: ${{ runner.temp }}\msvc42
