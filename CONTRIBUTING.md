@@ -46,7 +46,7 @@ One important aspect of this compiler is that it keeps hidden bookkeeping state.
 A seemingly unrelated declaration, file path, or compiler-process boundary can
 therefore change the machine code produced for a function. The project used to
 call this effect "compiler randomness" or entropy. The
-[ReproBit](https://github.com/foxtacles/reprobit) build now records and verifies
+[ReproBit](https://github.com/isledecomp/reprobit) build now records and verifies
 the required compiler conditions, allowing the project to reproduce the retail
 binaries byte for byte without hiding source changes from review.
 

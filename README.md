@@ -11,7 +11,7 @@ This is a complete decompilation of LEGO Island (Version 1.1, English). It aims 
 <a href="https://isledecomp.github.io/isle/ISLEPROGRESS.HTML"><img src="https://isledecomp.github.io/isle/ISLEPROGRESS.SVG" width="50%"></a><a href="https://isledecomp.github.io/isle/LEGO1PROGRESS.HTML"><img src="https://isledecomp.github.io/isle/LEGO1PROGRESS.SVG" width="50%"></a>
 
 `CONFIG.EXE`, `ISLE.EXE`, and `LEGO1.DLL` are completely decompiled. The
-project's reviewed [ReproBit](https://github.com/foxtacles/reprobit) build uses
+project's reviewed [ReproBit](https://github.com/isledecomp/reprobit) build uses
 the original Microsoft Visual C++ 4.2 toolchain and reproduces all three retail
 binaries byte for byte. Work continues on naming, documentation, and source
 clarity without changing those results.
@@ -27,7 +27,7 @@ There are two build paths:
 ### Reproduce the retail binaries exactly
 
 Start with a fresh checkout and install Python 3.11 or newer, Git, and
-[ReproBit](https://github.com/foxtacles/reprobit#install-and-set-up-the-pre-release).
+[ReproBit](https://github.com/isledecomp/reprobit#install-and-set-up-the-pre-release).
 macOS and Linux also need Wine. Place your English 1.1 retail files at
 `legobin/CONFIG.EXE`, `legobin/ISLE.EXE`, and `legobin/LEGO1.DLL`, then run these
 commands from the repository root:

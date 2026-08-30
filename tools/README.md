@@ -2,7 +2,6 @@
 
 Most shared comparison tooling lives in [reccmp](https://github.com/isledecomp/reccmp). This directory contains the few helpers that are specific to LEGO Island.
 
-- [`patch_c2.py`](/tools/patch_c2.py) fixes a broken warning in the MSVC 4.20 compiler.
 - [`patch_smartheap_331.py`](/tools/patch_smartheap_331.py) recreates the exact SmartHeap 3.31 library used by the original game.
 - [`gen_smacker_lib.py`](/tools/gen_smacker_lib.py) recreates the exact Win32 Smacker library used by the original game.
 - [`ncc/`](/tools/ncc/) checks source naming and style in CI.

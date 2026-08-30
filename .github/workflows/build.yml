@@ -74,11 +74,10 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
-    - uses: actions/checkout@v7
+    - uses: actions/setup-python@v7
       with:
-        repository: itsmattkc/msvc420
-        ref: df2c13aad74c094988c6c7e784234c2e778a0e91
-        path: msvc420
+        python-version: '3.11'
+        cache: pip
 
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v2
@@ -86,14 +85,21 @@ jobs:
         # Use minimum supported version
         cmake-version: '3.15.x'
 
-    - name: Patch MSVC 4.2
+    # Provision the authenticated MSVC 4.2 toolchain (already carries the
+    # C4786 fix that tools/patch_c2.py used to apply) through ReproBit.
+    - name: Provision MSVC 4.2
+      shell: pwsh
       run: |
-        tools/patch_c2.py msvc420/bin/C2.EXE
+        python -m pip install "git+https://github.com/isledecomp/reprobit.git@master"
+        rbit toolchain provision --destination "$env:RUNNER_TEMP\msvc42" --no-save
 
     - name: Build
       shell: cmd
       run: |
-        call .\msvc420\bin\VCVARS32.BAT x86
+        set "MSVC_ROOT=%RUNNER_TEMP%\msvc42"
+        set "PATH=%MSVC_ROOT%\bin;%PATH%"
+        set "INCLUDE=%MSVC_ROOT%\include;%MSVC_ROOT%\mfc\include"
+        set "LIB=%MSVC_ROOT%\lib;%MSVC_ROOT%\mfc\lib"
         cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G "NMake Makefiles"
         cmake --build build
 
@@ -118,11 +124,10 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
-    - uses: actions/checkout@v7
+    - uses: actions/setup-python@v7
       with:
-        repository: itsmattkc/msvc420
-        ref: df2c13aad74c094988c6c7e784234c2e778a0e91
-        path: msvc420
+        python-version: '3.11'
+        cache: pip
 
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v2
@@ -130,14 +135,21 @@ jobs:
         # Use minimum supported version
         cmake-version: '3.15.x'
 
-    - name: Patch MSVC 4.2
+    # Provision the authenticated MSVC 4.2 toolchain (already carries the
+    # C4786 fix that tools/patch_c2.py used to apply) through ReproBit.
+    - name: Provision MSVC 4.2
+      shell: pwsh
       run: |
-        tools/patch_c2.py msvc420/bin/C2.EXE
+        python -m pip install "git+https://github.com/isledecomp/reprobit.git@master"
+        rbit toolchain provision --destination "$env:RUNNER_TEMP\msvc42" --no-save
 
     - name: Build
       shell: cmd
       run: |
-        call .\msvc420\bin\VCVARS32.BAT x86
+        set "MSVC_ROOT=%RUNNER_TEMP%\msvc42"
+        set "PATH=%MSVC_ROOT%\bin;%PATH%"
+        set "INCLUDE=%MSVC_ROOT%\include;%MSVC_ROOT%\mfc\include"
+        set "LIB=%MSVC_ROOT%\lib;%MSVC_ROOT%\mfc\lib"
         cmake -B build -DCMAKE_BUILD_TYPE=Debug -DISLE_BUILD_BETA10=ON -DISLE_BUILD_LEGO1=OFF -DISLE_BUILD_APP=OFF -DISLE_BUILD_CONFIG=OFF -G "NMake Makefiles"
         cmake --build build
 
