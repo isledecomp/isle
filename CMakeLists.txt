@@ -724,7 +724,7 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-  if(ISLE_BYTE_IDENTITY_TERMINAL)
+  if(ISLE_BYTE_IDENTITY_TERMINAL OR REPROBIT_TERMINAL)
     # Byte-identical terminal links: the retail images carry NO debug data
     # directory, while linking with /debug adds one (a 28-byte
     # IMAGE_DEBUG_DIRECTORY plus its MISC record) at the head of .rdata --
@@ -776,6 +776,23 @@ if(ISLE_BYTE_IDENTITY_PLAN)
   include("${PROJECT_SOURCE_DIR}/cmake/byte_identity.cmake")
   include("${ISLE_BYTE_IDENTITY_PLAN}")
   _isle_apply_byte_identity_source_overlay_graph()
+endif()
+
+# ReproBit owns all rendered source bytes and graph declarations.  The normal
+# project only provides a deliberately thin, opt-in CMake discovery seat: the
+# generated plan may insert already-receipted TUs, register existing targets,
+# and emit their resolved paths.  Ordinary standalone builds do not define
+# REPROBIT_PROJECT_PLAN and therefore never load this integration.
+if(DEFINED REPROBIT_PROJECT_PLAN AND NOT REPROBIT_PROJECT_PLAN STREQUAL "")
+  if(NOT DEFINED REPROBIT_CMAKE_MODULE OR REPROBIT_CMAKE_MODULE STREQUAL "")
+    message(FATAL_ERROR "REPROBIT_CMAKE_MODULE is required with REPROBIT_PROJECT_PLAN")
+  endif()
+  if(NOT EXISTS "${REPROBIT_CMAKE_MODULE}" OR
+     NOT EXISTS "${REPROBIT_PROJECT_PLAN}")
+    message(FATAL_ERROR "ReproBit CMake module or generated project plan is absent")
+  endif()
+  include("${REPROBIT_CMAKE_MODULE}")
+  include("${REPROBIT_PROJECT_PLAN}")
 endif()
 
 find_program(CLANGFORMAT_BIN NAMES clang-format)

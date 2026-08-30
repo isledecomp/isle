@@ -49,6 +49,9 @@ LOAD = bytes.fromhex("8b442418")
 LEA = bytes.fromhex("8d542414")
 PLAIN = bytes.fromhex("8b0a")
 PUSH = bytes.fromhex("52")
+NONESP_LOAD = bytes.fromhex("8b01")       # mov eax,[ecx]
+NONESP_LOAD_2 = bytes.fromhex("8b5904")   # mov ebx,[ecx+4]
+STACK_FRONTIER = byte_identity.IA32_SCHEDULE_STACK_FRONTIER_THEOREM
 
 
 class DerivationTest(unittest.TestCase):
@@ -183,6 +186,90 @@ class ApplicationTest(unittest.TestCase):
             byte_identity.apply_instruction_schedule(
                 body, [window], frozenset(), "s")
         self.assertIn("differs from its declaration", str(caught.exception))
+
+
+class StackFrontierProjectionTest(unittest.TestCase):
+
+    @staticmethod
+    def window(theorem=STACK_FRONTIER):
+        return {
+            "start": 0,
+            "end": len(NONESP_LOAD + PUSH + NONESP_LOAD_2),
+            "source_instruction_lengths": [2, 1, 3],
+            "target_order": [1, 0, 2],
+            "stack_frontier_theorem": theorem,
+            "expected_dependence_edges": [[1, 2, ["memory"]]],
+            "expected_line_rows": [],
+        }
+
+    def test_only_the_crossed_push_memory_reason_is_projected(self):
+        body = NONESP_LOAD + PUSH + NONESP_LOAD_2
+        image, proof = byte_identity.apply_instruction_schedule(
+            body, [self.window()], frozenset(), "frontier")
+
+        self.assertEqual(image, PUSH + NONESP_LOAD + NONESP_LOAD_2)
+        window = proof["windows"][0]
+        self.assertEqual(window["dependence_edges"], [[1, 2, ["memory"]]])
+        receipt = window["stack_frontier"]
+        self.assertEqual(
+            receipt["strict_dependence_edges"],
+            [[0, 1, ["memory"]], [1, 2, ["memory"]]],
+        )
+        self.assertEqual(
+            [item["source_pair"]
+             for item in receipt["discharged_memory_pairs"]],
+            [[0, 1]],
+        )
+
+    def test_a_non_memory_reason_on_the_crossed_pair_is_retained(self):
+        # mov edx,[ecx] / push edx: the memory reason is theorem-scoped, but
+        # the true register flow remains and therefore forbids the swap.
+        body = bytes.fromhex("8b1152")
+        window = {
+            "start": 0,
+            "end": len(body),
+            "source_instruction_lengths": [2, 1],
+            "target_order": [1, 0],
+            "stack_frontier_theorem": STACK_FRONTIER,
+            "expected_dependence_edges": [[0, 1, ["register_raw"]]],
+            "expected_line_rows": [],
+        }
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_instruction_schedule(
+                body, [window], frozenset(), "frontier")
+        self.assertIn("dependence DAG forbids", str(caught.exception))
+
+    def test_the_exact_marker_is_validated_and_preserved(self):
+        body = NONESP_LOAD + PUSH + NONESP_LOAD_2
+        normalized = byte_identity._validate_schedule_windows(
+            [self.window()], "frontier", len(body))
+        self.assertEqual(
+            normalized[0]["stack_frontier_theorem"], STACK_FRONTIER)
+
+        invalid = self.window("msvc-4.20-win32-register-push-frontier-v0")
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity._validate_schedule_windows(
+                [invalid], "frontier", len(body))
+        self.assertIn("stack_frontier_theorem differs",
+                      str(caught.exception))
+
+    def test_a_marker_without_a_crossed_memory_edge_refuses(self):
+        body = NONESP_LOAD + NONESP_LOAD_2 + PUSH
+        window = {
+            "start": 0,
+            "end": len(body),
+            "source_instruction_lengths": [2, 3, 1],
+            "target_order": [1, 0, 2],
+            "stack_frontier_theorem": STACK_FRONTIER,
+            "expected_dependence_edges": [
+                [0, 2, ["memory"]], [1, 2, ["memory"]]],
+            "expected_line_rows": [],
+        }
+        with self.assertRaises(byte_identity.ByteIdentityError) as caught:
+            byte_identity.apply_instruction_schedule(
+                body, [window], frozenset(), "frontier")
+        self.assertIn("discharges no crossed PUSH-memory edge",
+                      str(caught.exception))
 
 
 if __name__ == "__main__":

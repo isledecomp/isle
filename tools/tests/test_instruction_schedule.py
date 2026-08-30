@@ -417,7 +417,8 @@ class DisambiguationTests(unittest.TestCase):
         self.assertIn("dependence DAG forbids", str(caught.exception))
 
     def test_two_pushes_can_never_be_reordered(self):
-        # both read AND write esp, so every pair of pushes carries an edge
+        # Both read/write ESP and both write its next stack seat, so every
+        # pair of pushes carries register and memory reasons.
         decoded = [
             byte_identity.decode_ia32_bijection_instruction(
                 bytes.fromhex("5051"), offset, "decode")
@@ -427,7 +428,8 @@ class DisambiguationTests(unittest.TestCase):
             decoded, "dag")
         self.assertEqual([edge[:2] for edge in edges], [[0, 1]])
         self.assertEqual(edges[0][2],
-                         ["register_raw", "register_war", "register_waw"])
+                         ["memory", "register_raw", "register_war",
+                          "register_waw"])
 
     def test_a_push_transposes_with_an_esp_free_instruction(self):
         # `lea ecx, [esi+0x4220]` accesses no memory and names no esp, so it

@@ -33584,19 +33584,12 @@ def _ia32_schedule_flag_table() -> dict:
     return table
 
 
-# The stack obligation, ruled on by the owner.  On Win32 there is no red zone,
-# so memory strictly BELOW esp is volatile and can hold no live value: a
-# `push`'s store at [esp-4] cannot alias a live cell, and it is therefore
-# admitted into a window without a memory descriptor.  But a push also
-# MODIFIES esp, so moving one across an esp-relative access changes that
-# access's effective address.  This class admits only the first branch of the
-# ruling -- a window that carries a push may carry NO esp-relative memory
-# operand at all.  The second branch (track the stack delta instruction by
-# instruction and prove esp equal at every esp-relative access) is
-# deliberately not implemented, so a window that would need it refuses.
-# `pop` is NOT admitted: it READS [esp], which is live memory, and the
-# below-esp axiom says nothing about it.  Two pushes can never be reordered
-# relative to each other because both read and write esp, which is an edge.
+# PUSH's implicit store at [esp-4] participates in the ordinary conservative
+# memory DAG.  A separate exact VC 4.20 Win32 theorem marker may discharge
+# only that store against explicit memory; absent the marker, an unknown alias
+# remains an edge.  ESP-relative addresses retain their independently derived
+# displacement-adjustment obligation in either case.  `pop` remains outside
+# the table because it reads live memory at [esp].
 _IA32_SCHEDULE_STACK_PUSH_OPCODES = frozenset(range(0x50, 0x58))
 
 
@@ -33604,6 +33597,10 @@ IA32_SCHEDULE_FLAG_EFFECTS = _ia32_schedule_flag_table()
 
 
 IA32_STACK_SLOT_BYTES = 4
+
+
+IA32_SCHEDULE_STACK_FRONTIER_THEOREM = (
+    "msvc-4.20-win32-register-push-stack-frontier-v1")
 
 
 def ia32_esp_relative_displacement(body: bytes, item: dict) -> tuple | None:
@@ -33723,6 +33720,18 @@ def ia32_schedule_instruction_facts(instruction: dict, context: str) -> dict:
             f"{context}: a control-transfer instruction is outside the "
             "instruction-schedule table")
     memory = instruction["memory"]
+    if opcode in _IA32_SCHEDULE_STACK_PUSH_OPCODES:
+        require(memory is None,
+                f"{context}: a register push also reports an explicit "
+                "memory operand")
+        # Model the four-byte seat below incoming ESP explicitly.  This is the
+        # fail-closed default; only the exact stack-frontier theorem below may
+        # discharge it against an explicit memory operand.
+        memory = {
+            "base": "esp", "index": None, "scale": 1,
+            "displacement": -4, "absolute": False, "width": 4,
+            "read": False, "write": True, "unknown": False,
+        }
     if memory is not None:
         require(not memory.get("unknown"),
                 f"{context}: a repeated string operation's memory span is an "
@@ -33766,6 +33775,152 @@ def ia32_memory_provably_disjoint(left: dict, right: dict) -> bool:
             or right["displacement"] + right["width"] <= left["displacement"])
 
 
+def _require_ia32_schedule_stack_frontier(
+    theorem: object, instructions: list[dict], facts: list[dict],
+    body: bytes | None, stack_adjusted: bool, context: str,
+) -> None:
+    """Bind the exact VC 4.20 Win32 register-PUSH frontier theorem."""
+    require(type(theorem) is str
+            and theorem == IA32_SCHEDULE_STACK_FRONTIER_THEOREM,
+            f"{context}: stack-frontier theorem differs")
+    require(body is not None,
+            f"{context}: the stack-frontier theorem needs its body")
+    pushes = [index for index, item in enumerate(facts)
+              if item["opcode"] in _IA32_SCHEDULE_STACK_PUSH_OPCODES]
+    require(pushes,
+            f"{context}: the stack-frontier theorem names no register PUSH")
+    for index, (instruction, fact) in enumerate(zip(instructions, facts)):
+        if index in pushes:
+            offset = instruction["offset"]
+            require(instruction["length"] == 1
+                    and 0 <= offset < len(body)
+                    and body[offset] == fact["opcode"],
+                    f"{context}: the stack-frontier theorem only admits an "
+                    "unprefixed 32-bit register PUSH")
+        else:
+            require("esp" not in fact["writes"],
+                    f"{context}: the non-PUSH instruction at "
+                    f"{fact['offset']} changes ESP inside a stack-frontier "
+                    "window")
+            if "esp" not in fact["reads"]:
+                continue
+            direct = ia32_esp_used_only_as_a_base(body, instruction)
+            if direct:
+                found = ia32_esp_relative_displacement(body, instruction)
+                require(stack_adjusted,
+                        f"{context}: the ESP-derived address at "
+                        f"{fact['offset']} has no exact stack-adjustment "
+                        "declaration")
+                require(found is not None
+                        and found[0] != "no_displacement"
+                        and found[2] >= 0,
+                        f"{context}: the ESP-derived address at "
+                        f"{fact['offset']} is not a nonnegative directly "
+                        "encoded displacement")
+            else:
+                require(fact["memory"] is None,
+                        f"{context}: the explicit memory instruction at "
+                        f"{fact['offset']} uses ESP as more than its directly "
+                        "adjusted base")
+
+
+def _require_ia32_schedule_stack_frontier_taint(
+    instructions: list[dict], facts: list[dict], order: list[int], context: str,
+) -> None:
+    """Refuse an ESP-derived value that becomes an explicit memory address."""
+    tainted = {"esp"}
+    for position in order:
+        _instruction, fact = instructions[position], facts[position]
+        is_push = fact["opcode"] in _IA32_SCHEDULE_STACK_PUSH_OPCODES
+        memory = None if is_push else fact["memory"]
+        address_registers = set()
+        if memory is not None:
+            address_registers = {
+                name for name in (memory["base"], memory["index"])
+                if name is not None
+            }
+            escaped = sorted((address_registers & tainted) - {"esp"})
+            require(not escaped,
+                    f"{context}: the ESP-derived register {escaped[:1]} "
+                    f"becomes an explicit memory address at {fact['offset']}")
+        reads_tainted_value = bool(
+            (set(fact["reads"]) & tainted) - address_registers)
+        written = set(fact["writes"]) - {"esp"}
+        tainted -= written
+        if reads_tainted_value:
+            tainted |= written
+
+
+def _ia32_schedule_stack_frontier_pair(
+    left: int, right: int, facts: list[dict],
+) -> tuple[int, int] | None:
+    """Return (PUSH, explicit-memory instruction), if that is this pair."""
+    left_push = facts[left]["opcode"] in _IA32_SCHEDULE_STACK_PUSH_OPCODES
+    right_push = facts[right]["opcode"] in _IA32_SCHEDULE_STACK_PUSH_OPCODES
+    if left_push == right_push:
+        return None
+    push, explicit = ((left, right) if left_push else (right, left))
+    memory = facts[explicit]["memory"]
+    return ((push, explicit)
+            if memory is not None and memory["base"] != "esp" else None)
+
+
+def _ia32_schedule_stack_frontier_projection(
+    instructions: list[dict], facts: list[dict], strict_edges: list[list],
+    order: list[int], theorem: str, body: bytes,
+    stack_adjusted: bool, context: str,
+) -> tuple[list[list], dict]:
+    """Project only crossed PUSH/explicit-memory reasons from one strict DAG."""
+    _require_ia32_schedule_stack_frontier(
+        theorem, instructions, facts, body, stack_adjusted, context)
+    _require_ia32_schedule_stack_frontier_taint(
+        instructions, facts, list(range(len(facts))),
+        f"{context} source order")
+    _require_ia32_schedule_stack_frontier_taint(
+        instructions, facts, order, f"{context} target order")
+    projected_edges = []
+    discharged = []
+    position = {source: target for target, source in enumerate(order)}
+    for left, right, reasons in strict_edges:
+        push_pair = _ia32_schedule_stack_frontier_pair(
+            left, right, facts)
+        if push_pair is None:
+            projected_edges.append([left, right, list(reasons)])
+            continue
+        push, explicit = push_pair
+        crossed = ((push < explicit)
+                   != (position[push] < position[explicit]))
+        if not crossed or "memory" not in reasons:
+            projected_edges.append([left, right, list(reasons)])
+            continue
+        kept = [reason for reason in reasons if reason != "memory"]
+        if kept:
+            projected_edges.append([left, right, kept])
+        memory = facts[explicit]["memory"]
+        discharged.append({
+            "source_pair": [left, right],
+            "push_instruction": push,
+            "push_offset": facts[push]["offset"],
+            "memory_instruction": explicit,
+            "memory_offset": facts[explicit]["offset"],
+            "memory": {
+                "base": memory["base"],
+                "displacement": memory["displacement"],
+                "width": memory["width"],
+                "read": memory["read"],
+                "write": memory["write"],
+            },
+        })
+    require(discharged,
+            f"{context}: the stack-frontier theorem discharges no "
+            "crossed PUSH-memory edge")
+    return projected_edges, {
+        "theorem": theorem,
+        "strict_dependence_edges": strict_edges,
+        "discharged_memory_pairs": discharged,
+    }
+
+
 def ia32_schedule_dependence_edges(
     instructions: list[dict], context: str,
     body: bytes | None = None, stack_adjusted: bool = False,
@@ -33791,7 +33946,9 @@ def ia32_schedule_dependence_edges(
            for item in facts):
         offending = sorted(
             item["offset"] for item in facts
-            if item["memory"] is not None and item["memory"]["base"] == "esp")
+            if item["opcode"] not in _IA32_SCHEDULE_STACK_PUSH_OPCODES
+            and item["memory"] is not None
+            and item["memory"]["base"] == "esp")
         require(not offending or stack_adjusted,
                 f"{context}: a push shares the window with the esp-relative "
                 f"memory operand at {offending[:1]}, whose address the push's "
@@ -34170,12 +34327,21 @@ def apply_instruction_schedule(
                     f"{window_context}: the measured relocation reseat "
                     f"{window_reseat} differs from its declaration")
         declared_stack = window.get("stack_adjustments")
-        facts, edges = ia32_schedule_dependence_edges(
+        facts, strict_edges = ia32_schedule_dependence_edges(
             inside, window_context, body, declared_stack is not None)
+        order = list(window["target_order"])
+        theorem = window.get("stack_frontier_theorem")
+        stack_frontier_receipt = None
+        if theorem is None:
+            edges = strict_edges
+        else:
+            edges, stack_frontier_receipt = (
+                _ia32_schedule_stack_frontier_projection(
+                    inside, facts, strict_edges, order, theorem, body,
+                    declared_stack is not None, window_context))
         require(edges == window["expected_dependence_edges"],
                 f"{window_context}: the measured dependence DAG differs from "
                 "its declaration")
-        order = list(window["target_order"])
         require_topological_instruction_order(
             len(inside), edges, order, window_context)
         original = [bytes(body[item["offset"]:item["offset"] + item["length"]])
@@ -34231,7 +34397,7 @@ def apply_instruction_schedule(
         require(len(reordered) == end - start,
                 f"{window_context}: the reordering changed the window length")
         image[start:end] = reordered
-        detail.append({
+        window_detail = {
             "start": start, "end": end,
             "relocation_reseat": window_reseat,
             "stack_adjustments": window_stack,
@@ -34252,7 +34418,10 @@ def apply_instruction_schedule(
                 for position, item in enumerate(facts)
                 if item["memory"] is not None
             ],
-        })
+        }
+        if stack_frontier_receipt is not None:
+            window_detail["stack_frontier"] = stack_frontier_receipt
+        detail.append(window_detail)
     image = bytes(image)
     require(len(image) == len(body),
             f"{context}: the reordering changed the body length")
@@ -34461,8 +34630,10 @@ def _validate_schedule_windows(
             "start", "end", "source_instruction_lengths", "target_order",
             "expected_dependence_edges", "expected_line_rows",
             "relocation_reseat", "stack_adjustments",
+            "stack_frontier_theorem",
         }, window_context, optional={"relocation_reseat",
-                                     "stack_adjustments"})
+                                     "stack_adjustments",
+                                     "stack_frontier_theorem"})
         start = require_exact_int(window.get("start"),
                                   f"{window_context}.start",
                                   minimum=0, maximum=body_length - 1)
@@ -34556,6 +34727,11 @@ def _validate_schedule_windows(
                     and any(pair[0] != pair[1] for pair in reseat),
                     f"{window_context}.relocation_reseat is invalid")
             normalized_reseat = [list(pair) for pair in reseat]
+        theorem = window.get("stack_frontier_theorem")
+        if theorem is not None:
+            require(type(theorem) is str
+                    and theorem == IA32_SCHEDULE_STACK_FRONTIER_THEOREM,
+                    f"{window_context}.stack_frontier_theorem differs")
         normalized_window = {
             "start": start, "end": end,
             "source_instruction_lengths": list(lengths),
@@ -34568,6 +34744,8 @@ def _validate_schedule_windows(
             normalized_window["relocation_reseat"] = normalized_reseat
         if normalized_stack is not None:
             normalized_window["stack_adjustments"] = normalized_stack
+        if theorem is not None:
+            normalized_window["stack_frontier_theorem"] = theorem
         normalized_windows.append(normalized_window)
     return normalized_windows
 

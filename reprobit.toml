@@ -1,0 +1,60 @@
+schema_version = 3
+project_id = "isle"
+state_dir = ".reprobit-state"
+
+[build]
+kind = "producer-graph"
+
+[toolchain]
+adapter = "classic-msvc"
+profile = "msvc_4_2"
+lock_file = "reprobit/toolchain.lock.json"
+
+[paths]
+id = "migrated-pinned-v1"
+source = "Z:\\Users\\foxtacles\\Projects\\isle-build-lean\\src"
+build = "Z:\\Users\\foxtacles\\Projects\\isle-build-lean\\build"
+toolchain = "Z:\\Users\\foxtacles\\Projects\\MSVC420"
+
+[verifier]
+kind = "literal"
+
+[authenticity]
+policy = "allow-quarantine"
+
+[[authenticity.legacy_allowlist]]
+intervention_id = "fn_bfe8cb452c7596dc"
+allowlist_digest = { algorithm = "sha256", value = "040969f47b233075cef49844a00f73eafbabed9bdd31220f703ae5b48204b9a0" }
+proof_receipt_digest = { algorithm = "sha256", value = "350ce7a51a35578b699561859a989a05890315aff45286534d9e8b43e4f9b6c9" }
+range_count = 17
+byte_count = 485
+maximum_oracle_payload_bytes = 2651
+
+[[authenticity.legacy_allowlist]]
+intervention_id = "fn_dd28ceb1c15db3c7"
+allowlist_digest = { algorithm = "sha256", value = "376fb612fb374adab97e2523fbc322515bff34ca2dc2e1ffd3ca75cc83fba24e" }
+proof_receipt_digest = { algorithm = "sha256", value = "e3ad70ba7e0767d7779965b7156d9a05ca79df94d9e4489876e45d4784ceea55" }
+range_count = 6
+byte_count = 87
+maximum_oracle_payload_bytes = 1260
+
+[layout]
+build_plan = "reprobit/build-plan.json"
+interventions = "reprobit/interventions"
+proofs = "reprobit/proofs"
+oracles = "reprobit/oracles"
+
+[[targets]]
+id = "config"
+artifact = "build/CONFIG.EXE"
+oracle = "legobin/CONFIG.EXE"
+
+[[targets]]
+id = "isle"
+artifact = "build/ISLE.EXE"
+oracle = "legobin/ISLE.EXE"
+
+[[targets]]
+id = "lego1"
+artifact = "build/LEGO1.DLL"
+oracle = "legobin/LEGO1.DLL"

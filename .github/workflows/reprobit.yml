@@ -1,0 +1,277 @@
+name: ReproBit
+
+on:
+  push:
+    branches: [entropy-stabilization]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish_continuous:
+        description: Publish the verified artifacts from upstream master
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: reprobit-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fetch-deps:
+    name: Download original binaries
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download the three retail references
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir legobin
+          curl -fLSs https://legoisland.org/download/CONFIG.EXE -o legobin/CONFIG.EXE
+          curl -fLSs https://legoisland.org/download/ISLE.EXE -o legobin/ISLE.EXE
+          curl -fLSs https://legoisland.org/download/LEGO1.DLL -o legobin/LEGO1.DLL
+          cd legobin
+          sha256sum --check <<'EOF'
+          864766d024d78330fed5e1f6efb2faf815f1b1c3405713a9718059dc9a54e52c  CONFIG.EXE
+          5cf57c284973fce9d14f5677a2e4435fd989c5e938970764d00c8932ed5128ca  ISLE.EXE
+          14645225bbe81212e9bc1919cd8a692b81b8622abb6561280d99b0fc4151ce17  LEGO1.DLL
+          EOF
+
+      - name: Upload authenticated retail references
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ISLE-Retail-Win32
+          path: legobin/
+          if-no-files-found: error
+          retention-days: 1
+
+  exact:
+    name: Reproduce exact Win32 binaries
+    needs: fetch-deps
+    runs-on: windows-2022
+    timeout-minutes: 90
+    env:
+      PYTHONUNBUFFERED: "1"
+      REPROBIT_REVISION: d3c51a9a58576d90962d790b0547d200cb5c041f
+
+    steps:
+      - name: Configure a byte-stable checkout
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Restore original binaries
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ISLE-Retail-Win32
+          path: legobin
+
+      # The CLI used to provision the compiler and the Action that verifies the
+      # project must always come from the same immutable ReproBit revision.
+      - name: Install the pinned ReproBit CLI
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "git+https://github.com/foxtacles/reprobit.git@$env:REPROBIT_REVISION"
+
+      - name: Provision and authenticate MSVC 4.2
+        shell: pwsh
+        run: >-
+          rbit toolchain provision
+          --destination "$env:RUNNER_TEMP\msvc42"
+          --no-save
+
+      - name: Build cold and verify exact bytes
+        id: reprobit
+        uses: foxtacles/reprobit@d3c51a9a58576d90962d790b0547d200cb5c041f
+        with:
+          project-directory: .
+          toolchain-root: ${{ runner.temp }}\msvc42
+          report-directory: build/reprobit-report
+
+      - name: Check the certified publication set
+        shell: pwsh
+        env:
+          ACCEPTED: ${{ steps.reprobit.outputs.accepted }}
+          BYTE_EXACT: ${{ steps.reprobit.outputs.byte-exact }}
+          LOGIC_CERTIFIED: ${{ steps.reprobit.outputs.logic-certified }}
+          REPORT_PRODUCED: ${{ steps.reprobit.outputs.report-produced }}
+        run: |
+          foreach ($claim in @("ACCEPTED", "BYTE_EXACT", "LOGIC_CERTIFIED", "REPORT_PRODUCED")) {
+            if ((Get-Item "env:$claim").Value -ne "true") {
+              throw "ReproBit did not certify $claim"
+            }
+          }
+          foreach ($path in @(
+            "build/CONFIG.EXE", "build/CONFIG.PDB",
+            "build/ISLE.EXE", "build/ISLE.PDB",
+            "build/LEGO1.DLL", "build/LEGO1.PDB"
+          )) {
+            if (-not (Test-Path -PathType Leaf $path)) {
+              throw "ReproBit did not publish $path"
+            }
+          }
+
+      - name: Upload the exact build and its evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ReproBit-Win32
+          path: |
+            build/CONFIG.EXE
+            build/CONFIG.PDB
+            build/ISLE.EXE
+            build/ISLE.PDB
+            build/LEGO1.DLL
+            build/LEGO1.PDB
+            build/reprobit-report/
+          if-no-files-found: warn
+          retention-days: 14
+
+  compare:
+    name: Compare the ReproBit build
+    needs: [fetch-deps, exact]
+    runs-on: windows-2022
+    timeout-minutes: 30
+
+    steps:
+      - name: Configure a byte-stable checkout
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Download the exact ReproBit build
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ReproBit-Win32
+          path: build
+
+      - name: Restore original binaries
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ISLE-Retail-Win32
+          path: legobin
+
+      - name: Install comparison tools
+        run: >-
+          python -m pip install
+          "reccmp @ git+https://github.com/isledecomp/reccmp@7a4f197ccf33a2c2b3668e9dd223d2052cc0a5b8"
+          "clang==16.0.6"
+          "pyyaml==6.0.3"
+          "colorama==0.4.6"
+
+      - name: Detect original and recompiled binaries
+        run: |
+          reccmp-project detect --what original --search-path legobin
+          reccmp-project detect --what recompiled --search-path build
+
+      - name: Generate accuracy reports and SVGs
+        shell: bash
+        run: |
+          reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG --json CONFIGPROGRESS.json
+          reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE --json ISLEPROGRESS.json
+          reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 --json LEGO1PROGRESS.json
+
+      - name: Compare accuracy with current master
+        shell: bash
+        env:
+          RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
+        run: |
+          curl -fLSs -o CONFIGPROGRESS-old.json "$RELEASE_URL/CONFIGPROGRESS.json" || echo "" >CONFIGPROGRESS-old.json
+          curl -fLSs -o ISLEPROGRESS-old.json "$RELEASE_URL/ISLEPROGRESS.json" || echo "" >ISLEPROGRESS-old.json
+          curl -fLSs -o LEGO1PROGRESS-old.json "$RELEASE_URL/LEGO1PROGRESS.json" || echo "" >LEGO1PROGRESS-old.json
+          reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
+          reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
+          reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
+
+      - name: Check exports, vtables, and variables
+        shell: bash
+        run: |
+          reccmp-verexp --target LEGO1
+          reccmp-vtable --target CONFIG
+          reccmp-vtable --target ISLE
+          reccmp-vtable --target LEGO1
+          reccmp-datacmp --target CONFIG
+          reccmp-datacmp --target ISLE
+          reccmp-datacmp --target LEGO1
+
+      - name: Upload accuracy reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ReproBit-Accuracy-Report
+          path: |
+            CONFIGPROGRESS.json
+            CONFIGPROGRESS.SVG
+            ISLEPROGRESS.json
+            ISLEPROGRESS.SVG
+            LEGO1PROGRESS.json
+            LEGO1PROGRESS.SVG
+          if-no-files-found: warn
+          retention-days: 14
+
+  # Keep publishing opt-in while the existing Build workflow remains the
+  # continuous-release owner. At final cutover this gate can become the same
+  # ordinary upstream-master push condition used by the legacy workflow.
+  publish:
+    name: Publish continuous release
+    needs: [exact, compare]
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' &&
+          inputs.publish_continuous &&
+          github.ref == 'refs/heads/master' &&
+          github.repository == 'isledecomp/isle' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: probonopd/uploadtool
+          ref: 9a2c60466b8cfc1948c3b593c5bb775e5d9080af
+
+      - name: Download exact binaries
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ReproBit-Win32
+          path: build
+
+      - name: Download accuracy reports
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ReproBit-Accuracy-Report
+
+      - name: Upload continuous release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./upload.sh \
+            build/CONFIG.EXE \
+            build/ISLE.EXE \
+            build/LEGO1.DLL \
+            CONFIGPROGRESS.json \
+            CONFIGPROGRESS.SVG \
+            ISLEPROGRESS.json \
+            ISLEPROGRESS.SVG \
+            LEGO1PROGRESS.json \
+            LEGO1PROGRESS.SVG

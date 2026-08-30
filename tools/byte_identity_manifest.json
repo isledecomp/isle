@@ -14033,7 +14033,7 @@
   {
    "target": "lego1",
    "source": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-   "source_sha256": "56c93bb959659ae73b818e77a761a7727d36d52444d0e663d83a34a12d406474",
+   "source_sha256": "0a16ac9e97d110a0c7f949d8e6e6c242d04a58fa1f60caa0dd8dd880f954aa95",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -14049,7 +14049,7 @@
    },
    "donors": [
     {
-     "id": "d_e1e0341d2c71",
+     "id": "d_02f59b588bbc",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -14100,13 +14100,13 @@
        },
        {
         "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-        "clean_sha256": "2ad21bc777f258fff72b4bcac7c27cc4891159cc1064ba6f722089839011e27b",
-        "rendered_sha256": "7b9584ca80d142df5912d79a3b06381596aa867c1ee8b0ffa69851385e8b1c5a",
+        "clean_sha256": "68d1c5b173754bc37648d8112da504b8589d27e56f4a73fd54d0ee2293f1f8a9",
+        "rendered_sha256": "3053b98478dee57e8418a6238a853cfcb694208e2635cadb00f97dd3d678d40f",
         "operations": [
          {
           "op": "insert",
           "anchor": {
-           "ctx": "0a7c90f578fd0474bf09c54e2bcce742ab9be911532485ebac75a8b780af7992",
+           "ctx": "da6c73c58427c161978e072d08fd0c87852e8c4c18e56c6abe00e0a6f90c527f",
            "b": 0,
            "at": "start"
           },
@@ -14130,7 +14130,7 @@
          {
           "op": "insert",
           "anchor": {
-           "ctx": "2c0d43387189baf756baca2af2b8116c40977ec1e187a02862d71018e636a788",
+           "ctx": "c26e7d40cbf5923ac08390e8d5f63251dbd46d3d0e579fe388b1d3aa10021d39",
            "b": 9,
            "at": "before_token"
           },
@@ -14213,7 +14213,7 @@
          {
           "op": "insert",
           "anchor": {
-           "ctx": "a936115a43770489e768473374567a15e510cc475ddb255cfc445c2dd3e8a3d9",
+           "ctx": "e3de3cac51b695f105e0055cc25fb8de1c156bd7438ecd3416d8731b1d67afac",
            "b": 21,
            "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "dae9eb0f0e3b0d7b494366d76a500266543bdb4d6757c0a9c8ef11eba58983cd"
@@ -14378,7 +14378,7 @@
        }
       ],
       "emission_policy": "donor_private_rendering_only",
-      "rendering_identity_sha256": "e1e0341d2c71a29e01a8fa00e30b86ed9ae871266ddee4dcd79b07eb411a1a60",
+      "rendering_identity_sha256": "02f59b588bbccb1096267569d716089874df14a8ab3a45f70ddb21ec26c34489",
       "authenticity_rationale": "Donor-private rendering of the checked-in header and translation unit by typed operations only: the member signature generator emits one fresh constructor declaration and its qualified inline definition header from a closed typed parameter list, and the constructor body plus its one call site are two renderings of a single closed parameter set whose inverse reconstructs the checked-in statements byte for byte. The donor object is a byte source only and never enters the link; the shipped tree keeps the caller's allocation untouched, which is why no includer is perturbed."
      }
     },
@@ -14399,7 +14399,7 @@
      }
     },
     {
-     "id": "d_8dbf98cc2d79",
+     "id": "d_4edb247c1eeb",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -14470,8 +14470,8 @@
        },
        {
         "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-        "clean_sha256": "2ad21bc777f258fff72b4bcac7c27cc4891159cc1064ba6f722089839011e27b",
-        "rendered_sha256": "e98ad4c9cf0ab45676e52aeabcd396d1d15114ff414125af7e3ca153b6719b55",
+        "clean_sha256": "68d1c5b173754bc37648d8112da504b8589d27e56f4a73fd54d0ee2293f1f8a9",
+        "rendered_sha256": "d87f4ac026921a65fb63b09f7d44097cea606d0b8f0f36a2c23b8590d1b80811",
         "operations": [
          {
           "op": "insert",
@@ -14535,7 +14535,7 @@
        "required_define": "DIRECTX5_SDK"
       },
       "emission_policy": "donor_private_rendering_only",
-      "rendering_identity_sha256": "8dbf98cc2d79886312502fc2e69d2df8d8e85cfa5802753259f0bb76cd48f6ff",
+      "rendering_identity_sha256": "4edb247c1eeb578f0a00b692120d34428e7579a0f1110bb7a8538cadf3db8ed3",
       "authenticity_rationale": "Donor-private rendering of the checked-in header and translation unit by typed operations only: the member signature generator emits the declaration and the qualified definition header from identifiers that exist in the checked-in source, and the body is an authenticated relocated range of that same source. The donor object is a byte source only and never enters the link; the shipped tree keeps the inline definition untouched, which is why no includer is perturbed."
      }
     },
@@ -14607,7 +14607,7 @@
    "functions": [
     {
      "mangled": "?FindSoundByKey@LegoCacheSoundManager@@QAEPAVLegoCacheSound@@PBD@Z",
-     "donor": "d_e1e0341d2c71",
+     "donor": "d_02f59b588bbc",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 282,
      "expected_donor_length": 281,
@@ -14964,7 +14964,7 @@
     },
     {
      "mangled": "??1LegoCacheSoundManager@@QAE@XZ",
-     "donor": "d_8dbf98cc2d79",
+     "donor": "d_4edb247c1eeb",
      "splice_class": "retail_exact_reloc_divergent",
      "expected_seed_length": 274,
      "expected_donor_length": 258,
@@ -65905,12 +65905,20 @@
          1,
          5
         ],
+        "stack_frontier_theorem": "msvc-4.20-win32-register-push-stack-frontier-v1",
         "expected_dependence_edges": [
          [
           0,
           1,
           [
            "register_raw"
+          ]
+         ],
+         [
+          1,
+          5,
+          [
+           "memory"
           ]
          ],
          [
@@ -66210,6 +66218,7 @@
          4,
          5
         ],
+        "stack_frontier_theorem": "msvc-4.20-win32-register-push-stack-frontier-v1",
         "expected_dependence_edges": [
          [
           0,
@@ -66224,6 +66233,13 @@
           5,
           [
            "register_war"
+          ]
+         ],
+         [
+          0,
+          6,
+          [
+           "memory"
           ]
          ],
          [
@@ -68914,7 +68930,7 @@
   {
    "target": "omni",
    "source": "LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp",
-   "source_sha256": "95cbea9f42992abf5da347ada35056949424d782818d971efa08f6bc6126b52d",
+   "source_sha256": "7bd202b9aaf96f1a128054644d4f895ff7172749f27d118f8dd583bdea06828e",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -73482,7 +73498,7 @@
   {
    "target": "roi",
    "source": "LEGO1/lego/sources/roi/legolod.cpp",
-   "source_sha256": "7acd92e86578851c0867bb07c5160f54b0d5d035b79b65c7f414d086e23d5a6b",
+   "source_sha256": "8bd78def69e3cd62415b72e0f95adaa2138ec48416af0d865d2411041600ec25",
    "mode": "compose_equal_body_comdat",
    "command_policy": {
     "required_flags": [
@@ -74416,6 +74432,7 @@
          14,
          13
         ],
+        "stack_frontier_theorem": "msvc-4.20-win32-register-push-stack-frontier-v1",
         "expected_dependence_edges": [
          [
           0,
@@ -74503,6 +74520,34 @@
          ],
          [
           2,
+          9,
+          [
+           "memory"
+          ]
+         ],
+         [
+          2,
+          10,
+          [
+           "memory"
+          ]
+         ],
+         [
+          2,
+          11,
+          [
+           "memory"
+          ]
+         ],
+         [
+          2,
+          13,
+          [
+           "memory"
+          ]
+         ],
+         [
+          2,
           14,
           [
            "register_war"
@@ -74517,9 +74562,37 @@
          ],
          [
           3,
+          9,
+          [
+           "memory"
+          ]
+         ],
+         [
+          3,
+          10,
+          [
+           "memory"
+          ]
+         ],
+         [
+          3,
+          11,
+          [
+           "memory"
+          ]
+         ],
+         [
+          3,
           12,
           [
            "register_war"
+          ]
+         ],
+         [
+          3,
+          13,
+          [
+           "memory"
           ]
          ],
          [
@@ -74538,6 +74611,34 @@
          ],
          [
           5,
+          9,
+          [
+           "memory"
+          ]
+         ],
+         [
+          5,
+          10,
+          [
+           "memory"
+          ]
+         ],
+         [
+          5,
+          11,
+          [
+           "memory"
+          ]
+         ],
+         [
+          5,
+          13,
+          [
+           "memory"
+          ]
+         ],
+         [
+          5,
           14,
           [
            "register_war"
@@ -74566,9 +74667,37 @@
          ],
          [
           7,
+          9,
+          [
+           "memory"
+          ]
+         ],
+         [
+          7,
+          10,
+          [
+           "memory"
+          ]
+         ],
+         [
+          7,
+          11,
+          [
+           "memory"
+          ]
+         ],
+         [
+          7,
           12,
           [
            "register_war"
+          ]
+         ],
+         [
+          7,
+          13,
+          [
+           "memory"
           ]
          ],
          [
@@ -74596,6 +74725,7 @@
           9,
           10,
           [
+           "memory",
            "register_raw",
            "register_war",
            "register_waw"
@@ -74605,6 +74735,7 @@
           9,
           11,
           [
+           "memory",
            "register_raw",
            "register_war",
            "register_waw"
@@ -74621,15 +74752,24 @@
           9,
           13,
           [
+           "memory",
            "register_raw",
            "register_war",
            "register_waw"
           ]
          ],
          [
+          9,
+          14,
+          [
+           "memory"
+          ]
+         ],
+         [
           10,
           11,
           [
+           "memory",
            "register_raw",
            "register_war",
            "register_waw"
@@ -74639,6 +74779,7 @@
           10,
           13,
           [
+           "memory",
            "register_raw",
            "register_war",
            "register_waw"
@@ -74648,6 +74789,7 @@
           10,
           14,
           [
+           "memory",
            "register_war"
           ]
          ],
@@ -74655,9 +74797,17 @@
           11,
           13,
           [
+           "memory",
            "register_raw",
            "register_war",
            "register_waw"
+          ]
+         ],
+         [
+          11,
+          14,
+          [
+           "memory"
           ]
          ],
          [
@@ -77544,7 +77694,7 @@
    },
    "donors": [
     {
-     "id": "d_cf04dbad4ac6",
+     "id": "d_c3f23ff553ef",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -77555,14 +77705,40 @@
       "renderings": [
        {
         "path": "LEGO1/viewmanager/viewlodlist.cpp",
-        "clean_sha256": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+        "clean_sha256": "8a14c5a92206a98edebe462c0d1d26b89820c8e683f7c3cea4b7fcd0fa229e1a",
         "rendered_sha256": "ada36854a58ac8a17aa0b22f8217532890224c5dcdbefe2af09483d30f8602a8",
         "operations": [
+         {
+          "op": "replace",
+          "id": "op_vll_precanonical_include_group_va",
+          "from": {
+           "ctx": "ce636a58ef228e13b86b96e749fe8aaffebf50ce7d89221982a73ade66da7aff",
+           "b": 3,
+           "a": 32,
+           "line_before": "214cc7f64fcdc469c10ddfc680825ca20045e40f66b82b973acf52021b9c9d72",
+           "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "to": {
+           "ctx": "f9570886af9ae7ed55e1a0e95a9482618fd46276e94668b56a2708c0ee373094",
+           "b": 15,
+           "a": 32,
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03"
+          },
+          "removed": {
+           "sha256": "d98f6a6f1bbcf716af7923498cfa40899637fa25002ec8b5763aad081dce953e",
+           "size": 137
+          },
+          "gen": {
+           "k": "lines",
+           "n": 1
+          }
+         },
          {
           "op": "insert",
           "id": "op_c_prefix_mxunkrecva_38",
           "anchor": {
-           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "ctx": "15119f3b53ee57382c50b83a2237e0b6debfd705cdc03a915e05cbb50e6a08cf",
            "b": 0,
            "at": "start"
           },
@@ -77584,7 +77760,7 @@
          {
           "op": "insert",
           "anchor": {
-           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "ctx": "15119f3b53ee57382c50b83a2237e0b6debfd705cdc03a915e05cbb50e6a08cf",
            "b": 0,
            "at": "start"
           },
@@ -77626,7 +77802,7 @@
          {
           "op": "insert",
           "anchor": {
-           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "ctx": "5d7b62ca19dc3dedae384060ecfde65e55eeb43572847eff0fd31eeeaabfc221",
            "b": 16,
            "at": "before_token"
           },
@@ -77909,13 +78085,13 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "cf04dbad4ac617805cddbfac9b30662c09bf053955e87e4c06a1d6038cf2f746",
+       "rendering_identity_sha256": "c3f23ff553ef4899cebe3683ce1e9d3ca6926ddcacc390d86b55c3d527ab76f9",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. A framework-generated forward-declaration run is seated at the head of the rendering; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables or linker directives."
      }
     },
     {
-     "id": "d_620a4f85bbf4",
+     "id": "d_e9613bda6e7e",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -77926,14 +78102,40 @@
       "renderings": [
        {
         "path": "LEGO1/viewmanager/viewlodlist.cpp",
-        "clean_sha256": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+        "clean_sha256": "8a14c5a92206a98edebe462c0d1d26b89820c8e683f7c3cea4b7fcd0fa229e1a",
         "rendered_sha256": "855e2bf5039bac0cf7a2df6061b88ab779f76318196aa0d2600aab68e014459f",
         "operations": [
+         {
+          "op": "replace",
+          "id": "op_vll_precanonical_include_group_vb",
+          "from": {
+           "ctx": "ce636a58ef228e13b86b96e749fe8aaffebf50ce7d89221982a73ade66da7aff",
+           "b": 3,
+           "a": 32,
+           "line_before": "214cc7f64fcdc469c10ddfc680825ca20045e40f66b82b973acf52021b9c9d72",
+           "line_after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "to": {
+           "ctx": "f9570886af9ae7ed55e1a0e95a9482618fd46276e94668b56a2708c0ee373094",
+           "b": 15,
+           "a": 32,
+           "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+           "line_after": "74206e7d7959f47673b5b57c9d13581398a20a4f1846861c1305c9a5d8c97c03"
+          },
+          "removed": {
+           "sha256": "d98f6a6f1bbcf716af7923498cfa40899637fa25002ec8b5763aad081dce953e",
+           "size": 137
+          },
+          "gen": {
+           "k": "lines",
+           "n": 1
+          }
+         },
          {
           "op": "insert",
           "id": "op_c_afterinc_mxunkrecvb_27",
           "anchor": {
-           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "ctx": "5d7b62ca19dc3dedae384060ecfde65e55eeb43572847eff0fd31eeeaabfc221",
            "b": 16,
            "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
            "line_after": "a1af698b3a1b61f2464b83159a20c5227dd576939c430131e191397bcc284972"
@@ -77956,7 +78158,7 @@
          {
           "op": "insert",
           "anchor": {
-           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "ctx": "15119f3b53ee57382c50b83a2237e0b6debfd705cdc03a915e05cbb50e6a08cf",
            "b": 0,
            "at": "start"
           },
@@ -77998,7 +78200,7 @@
          {
           "op": "insert",
           "anchor": {
-           "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+           "ctx": "5d7b62ca19dc3dedae384060ecfde65e55eeb43572847eff0fd31eeeaabfc221",
            "b": 16,
            "at": "before_token"
           },
@@ -78281,7 +78483,7 @@
         ]
        }
       ],
-      "rendering_identity_sha256": "620a4f85bbf4519e68aa016752cfab7ca3287f3a45388e70451707d3574e8501",
+       "rendering_identity_sha256": "e9613bda6e7e24eb3f885747ebb856192a9fd6c2edbc8d53768c1d6bb78d2d61",
       "emission_policy": "donor_private_rendering_only",
       "authenticity_rationale": "The donor-private rendering is this translation unit as its shipped overlay rendered it before the mxgeometry/mxmatrix.h dependency was seated: the shipped declarations are replayed at their own seats and the restored include is simply absent, so the donor reproduces the compile whose bodies these functions already had. A framework-generated forward-declaration run is seated immediately after the last include of the rendering; bare forward declarations allocate compiler name records only and can emit no code, data, strings, vtables or linker directives."
      }
@@ -78335,7 +78537,7 @@
      }
     },
     {
-     "id": "d_9a578d664d02",
+     "id": "d_9d44b885e26d",
      "status": "compiler_generated_current_source",
      "authenticity": "synthetic_baseline_only",
      "recipe": {
@@ -78349,14 +78551,14 @@
       "renderings": [
        {
         "path": "LEGO1/viewmanager/viewlodlist.cpp",
-        "clean_sha256": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+        "clean_sha256": "8a14c5a92206a98edebe462c0d1d26b89820c8e683f7c3cea4b7fcd0fa229e1a",
         "rendered_sha256": "52d1f6819827ec629b7cd154917625f738d8ac46927bacbb7ef04bb68ccae7a3",
         "operations": [
          {
           "op": "insert",
           "id": "op_vll_dtor_dial",
           "anchor": {
-           "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+           "ctx": "15119f3b53ee57382c50b83a2237e0b6debfd705cdc03a915e05cbb50e6a08cf",
            "b": 0,
            "at": "start"
           },
@@ -78418,14 +78620,14 @@
        "functions": 60,
        "generated_declarations_sha256": "b1bca8d999d475d179430411bb44094bd978d8beadfa209e7df897a03732f8fb"
       },
-      "rendering_identity_sha256": "9a578d664d024f0603c21f4625a745a6a71034c4337c1946d188616aefcc84f6"
+       "rendering_identity_sha256": "9d44b885e26db5f760e90311499dc58a586c51693ce174f5ed521d3b5476b6aa"
      }
     }
    ],
    "functions": [
     {
      "mangled": "?erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@1@V21@@Z",
-     "donor": "d_620a4f85bbf4",
+      "donor": "d_e9613bda6e7e",
      "splice_class": "retail_exact_register_bijection_reencoding",
      "expected_section_number": 19,
      "expected_section_count": 71,
@@ -78757,7 +78959,7 @@
     },
     {
      "mangled": "?_Erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@IAEXPAU_Node@1@@Z",
-     "donor": "d_cf04dbad4ac6",
+      "donor": "d_c3f23ff553ef",
      "splice_class": "equal_body_strict",
      "expected_body_length": 57,
      "expected_body_sha256": "f4152ee5515dc9f2555f11464d3f277b18a146e04f11aa557934316a9f236749",
@@ -78783,7 +78985,7 @@
     {
      "mangled": "??1ViewLODListManager@@UAE@XZ",
      "splice_class": "retail_exact_donor_rewriting",
-     "donor": "d_9a578d664d02",
+      "donor": "d_9d44b885e26d",
      "donor_rewriting": {
       "kind": "donor_fp_bijection_rewriting_v1",
       "simulated_region_rewrites": [
@@ -79957,7 +80159,7 @@
       "SmartHeap::SmartHeap",
       "libcmt"
      ],
-     "occurrences": 2
+     "occurrences": 3
     },
     {
      "target": "isle",
@@ -79983,11 +80185,11 @@
    "imported_target": "Smacker::Smacker",
    "link_contract": [
     {
-     "target": "omni",
+     "target": "lego1",
      "direct_link_sequence": [
-      "dsound",
-      "winmm",
-      "Smacker::Smacker"
+      "viewmanager",
+      "Smacker::Smacker",
+      "streamprovider"
      ],
      "occurrences": 1
     }
@@ -81109,7 +81311,7 @@
    },
    {
     "path": "LEGO1/lego/legoomni/include/helicopterrecords.h",
-    "effective": "28761eab57025216761dda2c5e19975d33a07826c28ab564a61a4cbf7ca47499",
+    "effective": "dabaf4ac07b0dfc89d324027d5322fe368eb4bab3dd121bdb9b7f46e8fb85cff",
     "size": 305,
     "ops": [
      {
@@ -81122,23 +81324,23 @@
         "guard": "HELICOPTERRECORDS_H",
         "items": [
          {
-          "name": "MxUnkRecordBA",
+          "name": "MxRbtRecordBA",
           "enumerator": "e_unkRecordBA"
          },
          {
-          "name": "MxUnkRecordBB",
+          "name": "MxRbtRecordBB",
           "enumerator": "e_unkRecordBB"
          },
          {
-          "name": "MxUnkRecordBC",
+          "name": "MxRbtRecordBC",
           "enumerator": "e_unkRecordBC"
          },
          {
-          "name": "MxUnkRecordBD",
+          "name": "MxRbtRecordBD",
           "enumerator": "e_unkRecordBD"
          },
          {
-          "name": "MxUnkRecordBE",
+          "name": "MxRbtRecordBE",
           "enumerator": "e_unkRecordBE"
          },
          {
@@ -82984,14 +83186,14 @@
    },
    {
     "path": "LEGO1/lego/legoomni/src/audio/legocachesoundmanager.cpp",
-    "clean": "2ad21bc777f258fff72b4bcac7c27cc4891159cc1064ba6f722089839011e27b",
-    "effective": "56c93bb959659ae73b818e77a761a7727d36d52444d0e663d83a34a12d406474",
-    "size": 5047,
+    "clean": "68d1c5b173754bc37648d8112da504b8589d27e56f4a73fd54d0ee2293f1f8a9",
+    "effective": "0a16ac9e97d110a0c7f949d8e6e6c242d04a58fa1f60caa0dd8dd880f954aa95",
+    "size": 5048,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "0a7c90f578fd0474bf09c54e2bcce742ab9be911532485ebac75a8b780af7992",
+       "ctx": "da6c73c58427c161978e072d08fd0c87852e8c4c18e56c6abe00e0a6f90c527f",
        "b": 0,
        "at": "start"
       },
@@ -83015,7 +83217,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "2c0d43387189baf756baca2af2b8116c40977ec1e187a02862d71018e636a788",
+       "ctx": "c26e7d40cbf5923ac08390e8d5f63251dbd46d3d0e579fe388b1d3aa10021d39",
        "b": 9,
        "at": "before_token"
       },
@@ -83098,7 +83300,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "a936115a43770489e768473374567a15e510cc475ddb255cfc445c2dd3e8a3d9",
+       "ctx": "e3de3cac51b695f105e0055cc25fb8de1c156bd7438ecd3416d8731b1d67afac",
        "b": 21,
        "line_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
        "line_after": "dae9eb0f0e3b0d7b494366d76a500266543bdb4d6757c0a9c8ef11eba58983cd"
@@ -86995,29 +87197,6 @@
          "line": 8
         }
        ]
-      }
-     }
-    ]
-   },
-   {
-    "path": "LEGO1/lego/legoomni/src/common/legotesttimer.cpp",
-    "clean": "018000d26f3fa2d4c33b793ed8d35fc12629718d734a8573662640b888535353",
-    "effective": "8931d6ba48c8f33a0c28fbdde268cbf886db10d25e1d5e3d4bcbfe2b592d02a9",
-    "size": 3419,
-    "ops": [
-     {
-      "op": "insert",
-      "id": "op_9002_qrdata_testtimer",
-      "anchor": {
-       "ctx": "ba3adae2ebb80d2e2ebff66ab87318489de7f2206893bc275f935f579dd91ee8",
-       "b": 9,
-       "line_before": "dfba8b2fd8256f01fcded1f23472a6e8545f50ba124826ec07aa20bf0252b76d",
-       "line_after": "e0f453b6b4d7a92d59452081faf72191de20a5912341b24ffc11674c06daff34"
-      },
-      "gen": {
-       "k": "include",
-       "header": "legovideomanager.h",
-       "style": "quote"
       }
      }
     ]
@@ -96387,7 +96566,7 @@
    {
     "path": "LEGO1/lego/sources/roi/legolod.cpp",
     "clean": "3b67b034f5b30c6aa14c7fbd6b982b686106b4bf400c974988939d13c9feb2d5",
-    "effective": "7acd92e86578851c0867bb07c5160f54b0d5d035b79b65c7f414d086e23d5a6b",
+    "effective": "8bd78def69e3cd62415b72e0f95adaa2138ec48416af0d865d2411041600ec25",
     "size": 15458,
     "ops": [
      {
@@ -96509,7 +96688,7 @@
         },
         {
          "k": "class",
-         "id": "MxUnkRecordRN",
+         "id": "MxRbtRecordRN",
          "members": [
           {
            "decl": "Record0"
@@ -98778,7 +98957,7 @@
    {
     "path": "LEGO1/omni/src/common/mxcompositepresenter.cpp",
     "clean": "bb977844039a8db57af9cdf1557f166308b31caa6419de3f0abf1a7529e4a609",
-    "effective": "03e8b25e07f197b9a46f57f71c808b0bf97dc75b8c979e9d276375ae1129f9a6",
+    "effective": "9be49c9165c6749810a206acb092d574e61818df13b4798aa6ba748f2caff4ee",
     "size": 7029,
     "ops": [
      {
@@ -98875,7 +99054,7 @@
         },
         {
          "k": "class",
-         "id": "MxUnkRecordWQ",
+         "id": "MxRbtRecordWQ",
          "members": [
           {
            "decl": "Record0"
@@ -99706,7 +99885,7 @@
    {
     "path": "LEGO1/omni/src/stream/mxdiskstreamcontroller.cpp",
     "clean": "29af93104cd3290dc754f11154f5bdf69b85c40b9b82f8ccd0e06a9eb4ba4feb",
-    "effective": "95cbea9f42992abf5da347ada35056949424d782818d971efa08f6bc6126b52d",
+    "effective": "7bd202b9aaf96f1a128054644d4f895ff7172749f27d118f8dd583bdea06828e",
     "size": 14232,
     "ops": [
      {
@@ -99745,7 +99924,7 @@
         },
         {
          "k": "class",
-         "id": "QqM0",
+         "id": "RbM0",
          "members": [
           "qqm0",
           "qqm1"
@@ -99760,7 +99939,7 @@
         },
         {
          "k": "class",
-         "id": "QqM1",
+         "id": "RbM1",
          "members": [
           "qqm0",
           "qqm1"
@@ -99775,7 +99954,7 @@
         },
         {
          "k": "class",
-         "id": "QqM2",
+         "id": "RbM2",
          "members": [
           "qqm0",
           "qqm1"
@@ -99790,7 +99969,7 @@
         },
         {
          "k": "class",
-         "id": "QqM3",
+         "id": "RbM3",
          "members": [
           "qqm0",
           "qqm1"
@@ -99805,7 +99984,7 @@
         },
         {
          "k": "class",
-         "id": "QqM4",
+         "id": "RbM4",
          "members": [
           "qqm0",
           "qqm1"
@@ -99820,7 +99999,7 @@
         },
         {
          "k": "class",
-         "id": "QqM5",
+         "id": "RbM5",
          "members": [
           "qqm0",
           "qqm1"
@@ -99835,7 +100014,7 @@
         },
         {
          "k": "class",
-         "id": "QqM6",
+         "id": "RbM6",
          "members": [
           "qqm0",
           "qqm1"
@@ -99850,7 +100029,7 @@
         },
         {
          "k": "class",
-         "id": "QqM7",
+         "id": "RbM7",
          "members": [
           "qqm0",
           "qqm1"
@@ -99865,7 +100044,7 @@
         },
         {
          "k": "class",
-         "id": "QqM8",
+         "id": "RbM8",
          "members": [
           "qqm0",
           "qqm1"
@@ -99880,7 +100059,7 @@
         },
         {
          "k": "class",
-         "id": "QqM9",
+         "id": "RbM9",
          "members": [
           "qqm0",
           "qqm1"
@@ -99895,7 +100074,7 @@
         },
         {
          "k": "class",
-         "id": "QqM10",
+         "id": "RbM10",
          "members": [
           "qqm0",
           "qqm1"
@@ -99910,7 +100089,7 @@
         },
         {
          "k": "class",
-         "id": "QqM11",
+         "id": "RbM11",
          "members": [
           "qqm0",
           "qqm1"
@@ -99925,7 +100104,7 @@
         },
         {
          "k": "class",
-         "id": "QqM12",
+         "id": "RbM12",
          "members": [
           "qqm0",
           "qqm1"
@@ -99940,7 +100119,7 @@
         },
         {
          "k": "class",
-         "id": "QqM13",
+         "id": "RbM13",
          "members": [
           "qqm0",
           "qqm1"
@@ -99955,7 +100134,7 @@
         },
         {
          "k": "class",
-         "id": "QqM14",
+         "id": "RbM14",
          "members": [
           "qqm0",
           "qqm1"
@@ -103354,15 +103533,15 @@
     ]
    },
    {
-    "path": "LEGO1/viewmanager/viewlodlist.cpp",
-    "clean": "1abcb4a1e2fce7702eac7f795e00934aec73d8ec9abbf34d30a8de166e8335e7",
+   "path": "LEGO1/viewmanager/viewlodlist.cpp",
+    "clean": "8a14c5a92206a98edebe462c0d1d26b89820c8e683f7c3cea4b7fcd0fa229e1a",
     "effective": "86952ff7ca782a41e2a10a30add41883d2aa47681919d0318ae054477ae1e95d",
     "size": 4987,
     "ops": [
      {
       "op": "insert",
       "anchor": {
-       "ctx": "43e81b877da54930ce37e0eac8c3d05f970b09c54ace8f24ab32761547ff91ef",
+       "ctx": "15119f3b53ee57382c50b83a2237e0b6debfd705cdc03a915e05cbb50e6a08cf",
        "b": 0,
        "at": "start"
       },
@@ -103404,7 +103583,7 @@
      {
       "op": "insert",
       "anchor": {
-       "ctx": "fb1f28ad5aea5f64fedfeedae8ab68b0a6381bce392a25bc1024e752f344dc33",
+       "ctx": "5d7b62ca19dc3dedae384060ecfde65e55eeb43572847eff0fd31eeeaabfc221",
        "b": 16,
        "at": "before_token"
       },
@@ -103679,45 +103858,6 @@
         {
          "k": "fwd",
          "id": "MxUnkRecordSK",
-         "line": 5
-        }
-       ]
-      }
-     },
-     {
-      "op": "insert",
-      "id": "op_9020_rdata_viewlodlist",
-      "anchor": {
-       "ctx": "781a157d35d32c32b6cf721c0da6bf1214ce2edb24ba9a16a788c5500a65f4d4",
-       "b": 3,
-       "at": "before_token"
-      },
-      "gen": {
-       "k": "seq",
-       "lines": 6,
-       "items": [
-        {
-         "k": "include",
-         "header": "tgl/tglvector.h",
-         "style": "quote",
-         "line": 1
-        },
-        {
-         "k": "include",
-         "header": "realtime/matrix4d.inl.h",
-         "style": "quote",
-         "line": 3
-        },
-        {
-         "k": "include",
-         "header": "realtime/vectorlength.inl.h",
-         "style": "quote",
-         "line": 4
-        },
-        {
-         "k": "include",
-         "header": "mxgeometry/mxmatrix.h",
-         "style": "quote",
          "line": 5
         }
        ]
