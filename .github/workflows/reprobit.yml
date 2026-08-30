@@ -183,6 +183,24 @@ jobs:
           Copy-Item "reprobit/interventions/tus/lego1--tu_03bd32af8500c013.json" $diagnostics
           Copy-Item "reprobit/proofs/tus/lego1--tu_03bd32af8500c013.json" $diagnostics
 
+      # TEMPORARY transition probe: remove with the native-failure collector
+      # once Windows emits the same raw compiler products as the Wine backend.
+      - name: Probe the retained TU's native compiler entropy
+        if: failure()
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $run = Get-ChildItem ".reprobit-state\runs" -Directory -Filter "verify-*" |
+            Sort-Object LastWriteTimeUtc -Descending |
+            Select-Object -First 1
+          if ($null -eq $run) {
+            throw "ReproBit failed without retaining a verification workspace"
+          }
+          python ".github/scripts/reprobit-native-tu-probe.py" `
+            --project "$PWD" `
+            --run $run.FullName `
+            --output "$env:RUNNER_TEMP\reprobit-native-failure\native-tu-probe"
+
       - name: Upload native failure diagnostics
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
