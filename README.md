@@ -2,7 +2,7 @@
 
 [Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2Db4xcAsT_xOfOwRk-2DPHL) | [Contributing](/CONTRIBUTING.md) | [Matrix](https://matrix.to/#/#isledecomp:matrix.org) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)
   
-This is a functionally complete decompilation of LEGO Island (Version 1.1, English). It aims to be as accurate as possible, matching the recompiled instructions to the original machine code as much as possible. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
+This is a complete decompilation of LEGO Island (Version 1.1, English). It aims to be as accurate as possible, matching the recompiled instructions to the original machine code as much as possible. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
 
 > **Note:** This repository is for decompilation only and its code is true to the original release. It will not compile for targets other than 32-bit Windows. For a modern adaptation of the LEGO Island codebase with native compatibility for all major platforms and the Web, see [isle-portable](https://github.com/isledecomp/isle-portable) instead.
 
@@ -24,25 +24,31 @@ There are two build paths:
 - The ordinary CMake build is useful for day-to-day development, but its
   outputs are not release-certified.
 
-### Exact release build
+### Reproduce the retail binaries exactly
 
-For an exact local build, first place the three English 1.1 retail files at
-`legobin/CONFIG.EXE`, `legobin/ISLE.EXE`, and `legobin/LEGO1.DLL`. Then follow
-the [ReproBit setup guide](https://github.com/foxtacles/reprobit#install-and-set-up-the-pre-release)
-and run:
+Start with a fresh checkout and install Python 3.11 or newer, Git, and
+[ReproBit](https://github.com/foxtacles/reprobit#install-and-set-up-the-pre-release).
+macOS and Linux also need Wine. Place your English 1.1 retail files at
+`legobin/CONFIG.EXE`, `legobin/ISLE.EXE`, and `legobin/LEGO1.DLL`, then run these
+commands from the repository root:
 
 ```console
 rbit setup .
-rbit build .
 rbit verify .
 ```
 
-Use `rbit build .` for fast incremental builds while you work. Run
-`rbit verify .` before sharing or releasing a result; it performs the cold,
-byte-for-byte verification and produces a readable report.
+`setup` obtains and checks the original compiler. `verify` builds everything
+from scratch and checks every byte against the retail files. A successful run
+writes `build/CONFIG.EXE`, `build/ISLE.EXE`, and `build/LEGO1.DLL`; open
+`.reprobit-state/reports/report.html` to review the result.
+Use `rbit build .` for faster incremental builds while editing, then run
+`rbit verify .` before sharing a result.
 
-The same path runs in GitHub Actions and is the only path used to publish the
-continuous release.
+GitHub Actions uses the same verification for the continuous release, which
+includes the exact binaries, reccmp progress files, and ReproBit's readable
+`report.html` plus its full `report.json` record. The ordinary CMake
+instructions below remain useful for development builds, but only ReproBit
+certifies byte-for-byte release outputs.
 
 ### Ordinary developer build
 
@@ -79,7 +85,7 @@ cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
   - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. While `Debug` builds can be compiled and used, they are not recommended as the primary goal is to match the code to the original binary. This is because the retail binaries were compiled as `Release` builds.
   - `NMake Makefiles` is most recommended because it will be immediately compatible with Visual C++ 4.2. For faster builds, you can use `Ninja` (if you have it installed), however due to limitations in Visual C++ 4.2, you can only build `Release` builds this way (debug symbols cannot be generated with `Ninja`).
 1. Build the project by running `nmake` or `cmake --build <build-folder>`
-1. When this is done, there should be a recompiled `ISLE.EXE` and `LEGO1.DLL` in the build folder.
+1. When this is done, there should be recompiled `CONFIG.EXE`, `ISLE.EXE`, and `LEGO1.DLL` files in the build folder.
 1. Note that `nmake` must be run twice under certain conditions, so it is advisable to always (re-)compile using `nmake && nmake`.
 
 If you have a CMake-compatible IDE, it should be pretty straightforward to use this repository, as long as you can use `VCVARS32.BAT` and set the generator to `NMake Makefiles`.

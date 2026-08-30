@@ -131,7 +131,7 @@ jobs:
             "build/CONFIG.PDB", "build/ISLE.PDB", "build/LEGO1.PDB"
           )) {
             if (Test-Path $path) {
-              throw "Legacy sibling comparison output is still present: $path"
+              throw "Unexpected sibling comparison output is present: $path"
             }
           }
           foreach ($name in @("CONFIG.EXE", "ISLE.EXE", "LEGO1.DLL")) {
@@ -348,6 +348,12 @@ jobs:
         with:
           name: ReproBit-Accuracy-Report
 
+      - name: Download ReproBit verification report
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ReproBit-Verification-Report
+          path: reprobit-report
+
       - name: Publish complete continuous release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -364,6 +370,8 @@ jobs:
             ISLEPROGRESS.SVG
             LEGO1PROGRESS.json
             LEGO1PROGRESS.SVG
+            reprobit-report/report.html
+            reprobit-report/report.json
           )
           for path in "${files[@]}"; do
             test -s "$path"

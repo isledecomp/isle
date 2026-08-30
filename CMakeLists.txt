@@ -169,8 +169,7 @@ function(add_lego_libraries NAME)
   # legospline.cpp lives in the geom library: retail's LEGO1 .text runs
   # legotree, legospline, legoweedge, legowegedge, mxdirect3d .. mxdirectdraw,
   # legoanim, tglrl40 -- the spline sits in the library searched right after
-  # misc, and anim is searched after MxDirectX (see the lego1 link order below
-  # and docs/goal2-layout-ledger.md).
+  # misc, and anim is searched after MxDirectX in the lego1 link order below.
   add_library(geom${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/geom/legoweedge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp

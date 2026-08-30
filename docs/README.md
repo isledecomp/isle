@@ -32,8 +32,11 @@ See the [Kaitai Struct Visualizer installation instructions](https://github.com/
 ### Kaitai Struct Visualizer (ksv)
 
 The [Kaitai Struct Visualizer](https://github.com/kaitai-io/kaitai_struct_visualizer) (`ksv`) provides an interactive terminal UI for exploring binary files.
+Run these examples from the `docs` directory:
 
 ```bash
+cd docs
+
 # View a save game file
 ksv samples/G0.GS savegame.ksy
 
@@ -59,6 +62,7 @@ ksv samples/Dbfrfn.tex tex.ksy
 ### Kaitai Struct Dump (ksdump)
 
 `ksdump` outputs the parsed structure as JSON or YAML for scripting and inspection.
+The examples below also assume that your terminal is in the `docs` directory.
 
 ```bash
 # Dump a save game to JSON
