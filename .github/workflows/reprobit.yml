@@ -237,7 +237,7 @@ jobs:
       - name: Install comparison tools
         run: >-
           python -m pip install
-          "reccmp @ git+https://github.com/foxtacles/reccmp@f91e245099638f0c698b144d97bead64d4be9977"
+          "reccmp @ git+https://github.com/foxtacles/reccmp@e9f544948c509782d45e3c025b822f1e80b03d33"
           "clang==16.0.6"
           "pyyaml==6.0.3"
           "colorama==0.4.6"

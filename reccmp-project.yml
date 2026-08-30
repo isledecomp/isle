@@ -4,6 +4,13 @@ targets:
     source-root: .
     hash:
       sha256: 5cf57c284973fce9d14f5677a2e4435fd989c5e938970764d00c8932ed5128ca
+    report:
+      ignore-functions:
+        # CRT statics that exist in the image but have no PDB symbol; they
+        # cannot be matched by name, and their bytes are already certified
+        # by the ReproBit literal comparison.
+        - _write_multi_char
+        - _write_string
   LEGO1:
     filename: LEGO1.DLL
     source-root: LEGO1
