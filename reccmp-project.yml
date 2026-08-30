@@ -16,6 +16,10 @@ targets:
     source-root: LEGO1
     hash:
       sha256: 14645225bbe81212e9bc1919cd8a692b81b8622abb6561280d99b0fc4151ce17
+    data-sources:
+      # DirectDraw error strings are spelled with an explicit trailing \0 in
+      # the 1997 source; automated string search cannot see the extra byte.
+      - LEGO1/reccmp-strings.csv
   CONFIG:
     filename: CONFIG.EXE
     source-root: .
@@ -23,6 +27,7 @@ targets:
       sha256: 864766d024d78330fed5e1f6efb2faf815f1b1c3405713a9718059dc9a54e52c
     data-sources:
       - CONFIG/reccmp.csv
+      - CONFIG/reccmp-strings.csv
   BETA10:
     filename: BETA10.DLL
     source-root: LEGO1
