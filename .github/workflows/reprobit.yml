@@ -226,10 +226,13 @@ jobs:
           name: ISLE-Retail-Win32
           path: legobin
 
+      # Temporarily pinned to the fork carrying the exact-match comparison
+      # fixes; repin to isledecomp/reccmp once
+      # https://github.com/isledecomp/reccmp/pull/522 is merged.
       - name: Install comparison tools
         run: >-
           python -m pip install
-          "reccmp @ git+https://github.com/isledecomp/reccmp@7a4f197ccf33a2c2b3668e9dd223d2052cc0a5b8"
+          "reccmp @ git+https://github.com/foxtacles/reccmp@54f0ed7585abeab67bf6b11e353efa0dc43defe5"
           "clang==16.0.6"
           "pyyaml==6.0.3"
           "colorama==0.4.6"
@@ -257,6 +260,34 @@ jobs:
           reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/CONFIGPROGRESS.SVG" --svg-icon assets/config.png --target CONFIG --json "$GITHUB_WORKSPACE/CONFIGPROGRESS.json"
           reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/ISLEPROGRESS.SVG" --svg-icon assets/isle.png --target ISLE --json "$GITHUB_WORKSPACE/ISLEPROGRESS.json"
           reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/LEGO1PROGRESS.SVG" --svg-icon assets/lego1.png --target LEGO1 --json "$GITHUB_WORKSPACE/LEGO1PROGRESS.json"
+
+      - name: Require a 100% reccmp match on the ReproBit outcome
+        shell: bash
+        run: |
+          python - <<'EOF'
+          import json
+          import sys
+
+          failed = False
+          for target in ("CONFIG", "ISLE", "LEGO1"):
+              with open(f"{target}PROGRESS.json", encoding="utf-8") as handle:
+                  report = json.load(handle)
+              offending = []
+              for entity in report["data"]:
+                  matching = entity.get("matching")
+                  if not isinstance(matching, (int, float)) or matching < 1.0:
+                      offending.append(entity)
+              print(f"{target}: {len(report['data'])} rows, {len(offending)} below 100%")
+              for entity in offending:
+                  failed = True
+                  name = entity.get("name", "?")
+                  print(f"  {entity.get('address')}  {entity.get('matching')}  {name}")
+          if failed:
+              sys.exit(
+                  "reccmp did not score every row at 100%."
+                  " The ReproBit comparison build must match retail exactly."
+              )
+          EOF
 
       - name: Download current continuous reports
         shell: bash
