@@ -117,17 +117,17 @@ private:
 // TEMPLATE: BETA10 0x10178ac0
 // Map<char const *,ViewLODList *,ROINameComparator>::~Map<char const *,ViewLODList *,ROINameComparator>
 
-// TEMPLATE: LEGO1 0x100a7800
-// TEMPLATE: BETA10 0x10179580
-// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x100a7800 SYMBOL
+// TEMPLATE: BETA10 0x10179580 SYMBOL
+// ?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x100a7850
-// TEMPLATE: BETA10 0x10178cc0
-// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x100a7850 SYMBOL
+// TEMPLATE: BETA10 0x10178cc0 SYMBOL
+// ?_Inc@iterator@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x100a7890
-// TEMPLATE: BETA10 0x1017b040
-// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::~_Tree<char const *,pair<char const * const,ViewLODList *>,map<char c
+// TEMPLATE: LEGO1 0x100a7890 SYMBOL
+// TEMPLATE: BETA10 0x1017b040 SYMBOL
+// ??1?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x100a7960
 // TEMPLATE: BETA10 0x1017a070
@@ -136,17 +136,17 @@ private:
 // TEMPLATE: BETA10 0x1017ab40
 // ?erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE?AViterator@1@V21@0@Z
 
-// TEMPLATE: LEGO1 0x100a7db0
-// TEMPLATE: BETA10 0x1017aca0
-// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::_Erase
+// TEMPLATE: LEGO1 0x100a7db0 SYMBOL
+// TEMPLATE: BETA10 0x1017aca0 SYMBOL
+// ?_Erase@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x100a7df0
-// TEMPLATE: BETA10 0x101796b0
-// _Tree<char const *,pair<char const * const,ViewLODList *>,map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::_Kfn,ROINameComparator,allocator<ViewLODList *> >::_Insert
+// TEMPLATE: LEGO1 0x100a7df0 SYMBOL
+// TEMPLATE: BETA10 0x101796b0 SYMBOL
+// ?_Insert@?$_Tree@PBDU?$pair@QBDPAVViewLODList@@@@U_Kfn@?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPAVViewLODList@@@@@Z
 
-// TEMPLATE: LEGO1 0x100a80a0
-// TEMPLATE: BETA10 0x1017b1e0
-// map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >::~map<char const *,ViewLODList *,ROINameComparator,allocator<ViewLODList *> >
+// TEMPLATE: LEGO1 0x100a80a0 SYMBOL
+// TEMPLATE: BETA10 0x1017b1e0 SYMBOL
+// ??1?$map@PBDPAVViewLODList@@UROINameComparator@@V?$allocator@PAVViewLODList@@@@@@QAE@XZ
 
 // GLOBAL: LEGO1 0x10101068
 // GLOBAL: BETA10 0x10205eb4

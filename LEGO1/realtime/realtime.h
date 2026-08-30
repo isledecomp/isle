@@ -173,8 +173,8 @@ protected:
 	unsigned char m_visible; // 0x0c
 };
 
-// TEMPLATE: LEGO1 0x10084930
-// list<ROI *,allocator<ROI *> >::~list<ROI *,allocator<ROI *> >
+// TEMPLATE: LEGO1 0x10084930 SYMBOL
+// ??1?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE@XZ
 
 // SYNTHETIC: LEGO1 0x100a5d50
 // SYNTHETIC: BETA10 0x101686a0

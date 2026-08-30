@@ -61,8 +61,8 @@ private:
 	void FlushPending(MxCore* p_object);
 };
 
-// TEMPLATE: LEGO1 0x100ac320
-// list<unsigned int,allocator<unsigned int> >::~list<unsigned int,allocator<unsigned int> >
+// TEMPLATE: LEGO1 0x100ac320 SYMBOL
+// ??1?$list@IV?$allocator@I@@@@QAE@XZ
 
 // FUNCTION: LEGO1 0x100ac3b0
 // MxIdList::~MxIdList
@@ -73,20 +73,20 @@ private:
 // TEMPLATE: LEGO1 0x100ac540
 // List<MxNotification *>::~List<MxNotification *>
 
-// TEMPLATE: LEGO1 0x100ac590
-// list<MxNotification *,allocator<MxNotification *> >::~list<MxNotification *,allocator<MxNotification *> >
+// TEMPLATE: LEGO1 0x100ac590 SYMBOL
+// ??1?$list@PAVMxNotification@@V?$allocator@PAVMxNotification@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x100acbf0
-// list<MxNotification *,allocator<MxNotification *> >::begin
+// TEMPLATE: LEGO1 0x100acbf0 SYMBOL
+// ?begin@?$list@PAVMxNotification@@V?$allocator@PAVMxNotification@@@@@@QAE?AViterator@1@XZ
 
-// TEMPLATE: LEGO1 0x100acc00
-// list<MxNotification *,allocator<MxNotification *> >::insert
+// TEMPLATE: LEGO1 0x100acc00 SYMBOL
+// ?insert@?$list@PAVMxNotification@@V?$allocator@PAVMxNotification@@@@@@QAE?AViterator@1@V21@ABQAVMxNotification@@@Z
 
-// TEMPLATE: LEGO1 0x100acc50
-// list<MxNotification *,allocator<MxNotification *> >::erase
+// TEMPLATE: LEGO1 0x100acc50 SYMBOL
+// ?erase@?$list@PAVMxNotification@@V?$allocator@PAVMxNotification@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x100acca0
-// list<MxNotification *,allocator<MxNotification *> >::_Buynode
+// TEMPLATE: LEGO1 0x100acca0 SYMBOL
+// ?_Buynode@?$list@PAVMxNotification@@V?$allocator@PAVMxNotification@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
 // SYNTHETIC: LEGO1 0x100accd0
 // MxNotificationPtrList::~MxNotificationPtrList

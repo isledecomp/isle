@@ -111,18 +111,18 @@ private:
 // MxAtom::~MxAtom
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100ad480
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x100ad480 SYMBOL
+// ?_Dec@iterator@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAEXXZ
 // clang-format on
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100ad780
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::_Lbound
+// TEMPLATE: LEGO1 0x100ad780 SYMBOL
+// ?_Lbound@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@IBEPAU_Node@1@ABQAVMxAtom@@@Z
 // clang-format on
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100ad4d0
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::_Insert
+// TEMPLATE: LEGO1 0x100ad4d0 SYMBOL
+// ?_Insert@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@IAE?AViterator@1@PAU_Node@1@0ABQAVMxAtom@@@Z
 // clang-format on
 
 // clang-format off
@@ -131,14 +131,14 @@ private:
 // clang-format on
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100af6d0
-// TEMPLATE: BETA10 0x10131170
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::~_Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >
+// TEMPLATE: LEGO1 0x100af6d0 SYMBOL
+// TEMPLATE: BETA10 0x10131170 SYMBOL
+// ??1?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE@XZ
 // clang-format on
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100af7a0
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x100af7a0 SYMBOL
+// ?_Inc@iterator@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAEXXZ
 // clang-format on
 
 // clang-format off
@@ -155,14 +155,14 @@ private:
 // clang-format on
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100afc40
-// _Tree<MxAtom *,MxAtom *,set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::_Kfn,MxAtomCompare,allocator<MxAtom *> >::_Erase
+// TEMPLATE: LEGO1 0x100afc40 SYMBOL
+// ?_Erase@?$_Tree@PAVMxAtom@@PAV1@U_Kfn@?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@IAEXPAU_Node@1@@Z
 // clang-format on
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100afc80
-// TEMPLATE: BETA10 0x10132080
-// set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >::~set<MxAtom *,MxAtomCompare,allocator<MxAtom *> >
+// TEMPLATE: LEGO1 0x100afc80 SYMBOL
+// TEMPLATE: BETA10 0x10132080 SYMBOL
+// ??1?$set@PAVMxAtom@@UMxAtomCompare@@V?$allocator@PAVMxAtom@@@@@@QAE@XZ
 // clang-format on
 
 // TEMPLATE: LEGO1 0x100afe40

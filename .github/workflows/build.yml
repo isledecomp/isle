@@ -5,10 +5,18 @@ on:
     branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-current-toolchain:
     name: Current ${{ matrix.toolchain.name }}
     runs-on: windows-latest
+    timeout-minutes: 30
     defaults:
       run:
         shell: ${{ matrix.toolchain.shell }}
@@ -23,7 +31,7 @@ jobs:
     steps:
       - name: Set up MSYS2
         if: ${{ !!matrix.toolchain.msystem }}
-        uses: msys2/setup-msys2@v2
+        uses: msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884 # v2
         with:
           msystem: ${{ matrix.toolchain.msystem }}
           install: >-
@@ -34,19 +42,19 @@ jobs:
 
       - name: Setup cmake
         if: matrix.toolchain.setup-cmake
-        uses: jwlawson/actions-setup-cmake@v2
+        uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3 # v2
 
-      - name: Setup ninja
+      - name: Check Ninja
         if: matrix.toolchain.setup-ninja
-        uses: ashutoshvarma/setup-ninja@master
+        run: ninja --version
 
       - name: Setup vcvars
         if: matrix.toolchain.setup-msvc
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
         with:
           arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Build
         run: |
@@ -60,18 +68,20 @@ jobs:
 
   build:
     name: 'MSVC 4.20'
-    runs-on: windows-latest
+    runs-on: windows-2022
+    timeout-minutes: 60
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: itsmattkc/msvc420
+        ref: df2c13aad74c094988c6c7e784234c2e778a0e91
         path: msvc420
 
     - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@v2
+      uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3 # v2
       with:
         # Use minimum supported version
         cmake-version: '3.15.x'
@@ -88,9 +98,9 @@ jobs:
         cmake --build build
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
-        name: Win32
+        name: CMake-MSVC420-Development
         path: |
           build/CONFIG.EXE
           build/CONFIG.PDB
@@ -98,21 +108,24 @@ jobs:
           build/ISLE.PDB
           build/LEGO1.DLL
           build/LEGO1.PDB
+        if-no-files-found: error
 
   build-beta:
     name: 'MSVC 4.20 (BETA10)'
-    runs-on: windows-latest
+    runs-on: windows-2022
+    timeout-minutes: 45
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: itsmattkc/msvc420
+        ref: df2c13aad74c094988c6c7e784234c2e778a0e91
         path: msvc420
 
     - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@v2
+      uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3 # v2
       with:
         # Use minimum supported version
         cmake-version: '3.15.x'
@@ -129,9 +142,10 @@ jobs:
         cmake --build build
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
-        name: Win32-beta
+        name: CMake-MSVC420-BETA10-Development
         path: |
           build/BETA10.DLL
           build/BETA10.PDB
+        if-no-files-found: error

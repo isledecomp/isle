@@ -178,14 +178,14 @@ private:
 // FUNCTION: LEGO1 0x1003ff10
 // Act3Actor::`vbase destructor'
 
-// TEMPLATE: LEGO1 0x10042c20
-// list<Act3Ammo *,allocator<Act3Ammo *> >::~list<Act3Ammo *,allocator<Act3Ammo *> >
+// TEMPLATE: LEGO1 0x10042c20 SYMBOL
+// ??1?$list@PAVAct3Ammo@@V?$allocator@PAVAct3Ammo@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x10042c90
 // List<Act3Ammo *>::~List<Act3Ammo *>
 
-// TEMPLATE: LEGO1 0x10042ee0
-// list<Act3Ammo *,allocator<Act3Ammo *> >::erase
+// TEMPLATE: LEGO1 0x10042ee0 SYMBOL
+// ?erase@?$list@PAVAct3Ammo@@V?$allocator@PAVAct3Ammo@@@@@@QAE?AViterator@1@V21@@Z
 
 // GLOBAL: LEGO1 0x100d7660
 // Act3Actor::`vbtable'

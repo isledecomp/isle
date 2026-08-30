@@ -75,23 +75,23 @@ private:
 // TODO: Function names subject to change.
 
 // clang-format off
-// TEMPLATE: LEGO1 0x10029c30
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::~_Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >
+// TEMPLATE: LEGO1 0x10029c30 SYMBOL
+// ??1?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10029d10
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x10029d10 SYMBOL
+// ?_Inc@iterator@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x10029d50
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::erase
+// TEMPLATE: LEGO1 0x10029d50 SYMBOL
+// ?erase@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x1002a1b0
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Erase
+// TEMPLATE: LEGO1 0x1002a1b0 SYMBOL
+// ?_Erase@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x1002a210
-// list<LegoCacheSoundEntry,allocator<LegoCacheSoundEntry> >::~list<LegoCacheSoundEntry,allocator<LegoCacheSoundEntry> >
+// TEMPLATE: LEGO1 0x1002a210 SYMBOL
+// ??1?$list@ULegoCacheSoundEntry@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1002a2a0
-// set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::~set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >
+// TEMPLATE: LEGO1 0x1002a2a0 SYMBOL
+// ??1?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1002a2f0
 // Set<LegoCacheSoundEntry,Set100d6b4cComparator>::~Set<LegoCacheSoundEntry,Set100d6b4cComparator>
@@ -99,26 +99,26 @@ private:
 // TEMPLATE: LEGO1 0x1002a340
 // List<LegoCacheSoundEntry>::~List<LegoCacheSoundEntry>
 
-// TEMPLATE: LEGO1 0x1003dab0
-// list<LegoCacheSoundEntry,allocator<LegoCacheSoundEntry> >::_Buynode
+// TEMPLATE: LEGO1 0x1003dab0 SYMBOL
+// ?_Buynode@?$list@ULegoCacheSoundEntry@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
-// TEMPLATE: LEGO1 0x1003d450
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::insert
+// TEMPLATE: LEGO1 0x1003d450 SYMBOL
+// ?insert@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAE?AU?$pair@Viterator@?$_Tree@ULegoCacheSoundEntry@@U
 
-// TEMPLATE: LEGO1 0x1003d6f0
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x1003d6f0 SYMBOL
+// ?_Dec@iterator@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x1003d740
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Buynode
+// TEMPLATE: LEGO1 0x1003d740 SYMBOL
+// ?_Buynode@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAEPAU_Node@1@PAU21@W4_Redbl@1@@Z
 
-// TEMPLATE: LEGO1 0x1003d760
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Insert
+// TEMPLATE: LEGO1 0x1003d760 SYMBOL
+// ?_Insert@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAE?AViterator@1@PAU_Node@1@0ABULegoCacheSoundEntry@@
 
-// TEMPLATE: LEGO1 0x1003d9f0
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Lrotate
+// TEMPLATE: LEGO1 0x1003d9f0 SYMBOL
+// ?_Lrotate@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x1003da50
-// _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Rrotate
+// TEMPLATE: LEGO1 0x1003da50 SYMBOL
+// ?_Rrotate@?$_Tree@ULegoCacheSoundEntry@@U1@U_Kfn@?$set@ULegoCacheSoundEntry@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@USet100d6b4cComparator@@V?$allocator@ULegoCacheSoundEntry@@@@@@IAEXPAU_Node@1@@Z
 
 // GLOBAL: LEGO1 0x100f31cc
 // _Tree<LegoCacheSoundEntry,LegoCacheSoundEntry,set<LegoCacheSoundEntry,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Kfn,Set100d6b4cComparator,allocator<LegoCacheSoundEntry> >::_Nil

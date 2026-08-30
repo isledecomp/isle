@@ -144,62 +144,62 @@ protected:
 };
 
 // clang-format off
-// TEMPLATE: LEGO1 0x1001d780
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::~_Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >
+// TEMPLATE: LEGO1 0x1001d780 SYMBOL
+// ??1?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1001d850
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x1001d850 SYMBOL
+// ?_Inc@iterator@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x1001d890
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::erase
+// TEMPLATE: LEGO1 0x1001d890 SYMBOL
+// ?erase@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x1001dcf0
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Erase
+// TEMPLATE: LEGO1 0x1001dcf0 SYMBOL
+// ?_Erase@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x1001dd30
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Init
+// TEMPLATE: LEGO1 0x1001dd30 SYMBOL
+// ?_Init@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@IAEXXZ
 
-// TEMPLATE: LEGO1 0x1001ddf0
-// list<LegoROI *,allocator<LegoROI *> >::~list<LegoROI *,allocator<LegoROI *> >
+// TEMPLATE: LEGO1 0x1001ddf0 SYMBOL
+// ??1?$list@PAVLegoROI@@V?$allocator@PAVLegoROI@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1001df50
 // List<LegoROI *>::~List<LegoROI *>
 
-// TEMPLATE: LEGO1 0x1001de60
-// list<LegoROI *,allocator<LegoROI *> >::_Buynode
+// TEMPLATE: LEGO1 0x1001de60 SYMBOL
+// ?_Buynode@?$list@PAVLegoROI@@V?$allocator@PAVLegoROI@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
-// TEMPLATE: LEGO1 0x1001de90
-// set<MxCore *,CoreSetCompare,allocator<MxCore *> >::~set<MxCore *,CoreSetCompare,allocator<MxCore *> >
+// TEMPLATE: LEGO1 0x1001de90 SYMBOL
+// ??1?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1001df00
 // Set<MxCore *,CoreSetCompare>::~Set<MxCore *,CoreSetCompare>
 
-// TEMPLATE: LEGO1 0x1001f590
-// list<LegoROI *,allocator<LegoROI *> >::erase
+// TEMPLATE: LEGO1 0x1001f590 SYMBOL
+// ?erase@?$list@PAVLegoROI@@V?$allocator@PAVLegoROI@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x100208b0
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::insert
+// TEMPLATE: LEGO1 0x100208b0 SYMBOL
+// ?insert@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@
 
-// TEMPLATE: LEGO1 0x10020b20
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x10020b20 SYMBOL
+// ?_Dec@iterator@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x10020b70
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::lower_bound
+// TEMPLATE: LEGO1 0x10020b70 SYMBOL
+// ?lower_bound@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QBE?AVconst_iterator@1@ABQAVMxCore@@@Z
 
-// TEMPLATE: LEGO1 0x10020bb0
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Buynode
+// TEMPLATE: LEGO1 0x10020bb0 SYMBOL
+// ?_Buynode@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@IAEPAU_Node@1@PAU21@W4_Redbl@1@@Z
 
-// TEMPLATE: LEGO1 0x10020bd0
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Insert
+// TEMPLATE: LEGO1 0x10020bd0 SYMBOL
+// ?_Insert@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@IAE?AViterator@1@PAU_Node@1@0ABQAVMxCore@@@Z
 
-// TEMPLATE: LEGO1 0x10020e50
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Lrotate
+// TEMPLATE: LEGO1 0x10020e50 SYMBOL
+// ?_Lrotate@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x10020eb0
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::_Rrotate
+// TEMPLATE: LEGO1 0x10020eb0 SYMBOL
+// ?_Rrotate@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x10021340
-// _Tree<MxCore *,MxCore *,set<MxCore *,CoreSetCompare,allocator<MxCore *> >::_Kfn,CoreSetCompare,allocator<MxCore *> >::find
+// TEMPLATE: LEGO1 0x10021340 SYMBOL
+// ?find@?$_Tree@PAVMxCore@@PAV1@U_Kfn@?$set@PAVMxCore@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@UCoreSetCompare@@V?$allocator@PAVMxCore@@@@@@QBE?AVconst_iterator@1@ABQAVMxCore@@@Z
 
 // TEMPLATE: LEGO1 0x10022360
 // ?_Construct@@YAXPAPAVMxCore@@ABQAV1@@Z

@@ -18,13 +18,13 @@ clarity without changing those results.
 
 ## Building
 
-There are two useful build paths:
+There are two build paths:
 
-- The ordinary CMake build below is best for day-to-day development and debug
-  symbols.
-- ReproBit is the reproducible release path. It controls the original compiler
-  environment, checks every output against the retail files, and produces a
-  readable verification report.
+- ReproBit produces and certifies the exact release binaries.
+- The ordinary CMake build is useful for day-to-day development, but its
+  outputs are not release-certified.
+
+### Exact release build
 
 For an exact local build, first place the three English 1.1 retail files at
 `legobin/CONFIG.EXE`, `legobin/ISLE.EXE`, and `legobin/LEGO1.DLL`. Then follow
@@ -33,16 +33,28 @@ and run:
 
 ```console
 rbit setup .
+rbit build .
 rbit verify .
 ```
+
+Use `rbit build .` for fast incremental builds while you work. Run
+`rbit verify .` before sharing or releasing a result; it performs the cold,
+byte-for-byte verification and produces a readable report.
 
 The same path runs in GitHub Actions and is the only path used to publish the
 continuous release.
 
-This project uses the [CMake](https://cmake.org/) build system, which allows for a high degree of versatility regarding compilers and development environments. For the most accurate results, Microsoft Visual C++ 4.20 (the same compiler used to build the original game) is recommended. Since we're trying to match the output of this code to the original executables as closely as possible, all contributions will be graded with the output of this compiler.
+### Ordinary developer build
 
+This project uses the [CMake](https://cmake.org/) build system with several
+compilers and development environments. Microsoft Visual C++ 4.20 is the
+original game's compiler and remains the most representative choice. ReproBit's
+byte-for-byte verification is the authoritative result for contributions and
+releases.
 
-These instructions will outline how to compile this repository using Visual C++ 4.2 into highly-accurate binaries where the majority of functions are instruction-matching with retail. If you wish, you can try using other compilers, but this is at your own risk and won't be covered in this guide.
+These instructions build useful local binaries with Visual C++ 4.2. They do
+not replace ReproBit's exact verification. Other compilers may work for
+experimentation, but are not covered here.
 
 #### Prerequisites
 
@@ -58,7 +70,7 @@ You will need the following software installed:
 1. Make a folder for compiled objects to go, such as a `build` folder inside the source repository (the folder you cloned/downloaded to).
 1. In your Command Prompt, `cd` to the build folder.
 1. Configure the project with CMake by running:
-```
+```console
 cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
 ```
   - **Visual C++ 4.2 has issues with paths containing spaces**. If you get configure or build errors, make sure neither CMake, the repository, nor Visual C++ 4.2 is in a path that contains spaces.
@@ -78,7 +90,7 @@ Alternatively, we support Docker as a method of compilation. This is ideal for u
 
 Compilation should be as simple as configuring and running the following command:
 
-```
+```console
 docker run -d \
 	-e CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo" \
 	-v <path-to-source>:/isle:rw \

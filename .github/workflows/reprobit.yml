@@ -54,7 +54,7 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONUNBUFFERED: "1"
-      REPROBIT_REVISION: 9fe541e35d4cf7a2865f10ebcf15037847fb9f27
+      REPROBIT_REVISION: 4cca91437156494935e2dc13ce280ec9a7eee293
 
     steps:
       - name: Configure a byte-stable checkout
@@ -93,7 +93,7 @@ jobs:
 
       - name: Build cold and verify exact bytes
         id: reprobit
-        uses: foxtacles/reprobit@9fe541e35d4cf7a2865f10ebcf15037847fb9f27
+        uses: foxtacles/reprobit@4cca91437156494935e2dc13ce280ec9a7eee293
         with:
           project-directory: .
           toolchain-root: ${{ runner.temp }}\msvc42
@@ -134,22 +134,16 @@ jobs:
               throw "Legacy sibling comparison output is still present: $path"
             }
           }
+          foreach ($name in @("CONFIG.EXE", "ISLE.EXE", "LEGO1.DLL")) {
+            $built = (Get-FileHash "build/$name" -Algorithm SHA256).Hash
+            $retail = (Get-FileHash "legobin/$name" -Algorithm SHA256).Hash
+            if ($built -ne $retail) {
+              throw "Published $name does not match its authenticated retail reference"
+            }
+          }
 
       - name: Export the matching effective source view
         run: rbit source export build/reprobit-debug/source
-
-      - name: Upload the exact build and its evidence
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: ReproBit-Win32
-          path: |
-            build/CONFIG.EXE
-            build/ISLE.EXE
-            build/LEGO1.DLL
-            build/reprobit-report/
-          if-no-files-found: warn
-          retention-days: 14
 
       - name: Upload matched comparison files
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -158,6 +152,34 @@ jobs:
           path: build/reprobit-debug/
           if-no-files-found: error
           retention-days: 14
+
+      - name: Upload verification report
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ReproBit-Verification-Report
+          path: build/reprobit-report/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload exact binaries
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ReproBit-Win32
+          path: |
+            build/CONFIG.EXE
+            build/ISLE.EXE
+            build/LEGO1.DLL
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload failed verification diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ReproBit-Failure-Diagnostics
+          path: build/reprobit-report/
+          if-no-files-found: warn
+          retention-days: 7
 
   compare:
     name: Compare the ReproBit build
@@ -219,22 +241,28 @@ jobs:
         run: |
           source_root="$GITHUB_WORKSPACE/build/reprobit-debug/source"
           cd "$source_root"
-          reccmp-reccmp -S "$GITHUB_WORKSPACE/CONFIGPROGRESS.SVG" --svg-icon assets/config.png --target CONFIG --json "$GITHUB_WORKSPACE/CONFIGPROGRESS.json"
-          reccmp-reccmp -S "$GITHUB_WORKSPACE/ISLEPROGRESS.SVG" --svg-icon assets/isle.png --target ISLE --json "$GITHUB_WORKSPACE/ISLEPROGRESS.json"
-          reccmp-reccmp -S "$GITHUB_WORKSPACE/LEGO1PROGRESS.SVG" --svg-icon assets/lego1.png --target LEGO1 --json "$GITHUB_WORKSPACE/LEGO1PROGRESS.json"
+          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/CONFIGPROGRESS.SVG" --svg-icon assets/config.png --target CONFIG --json "$GITHUB_WORKSPACE/CONFIGPROGRESS.json"
+          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/ISLEPROGRESS.SVG" --svg-icon assets/isle.png --target ISLE --json "$GITHUB_WORKSPACE/ISLEPROGRESS.json"
+          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/LEGO1PROGRESS.SVG" --svg-icon assets/lego1.png --target LEGO1 --json "$GITHUB_WORKSPACE/LEGO1PROGRESS.json"
 
-      - name: Compare accuracy with current master
+      - name: Download current continuous reports
         shell: bash
         env:
           RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
         run: |
-          curl -fLSs -o "$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json" "$RELEASE_URL/CONFIGPROGRESS.json" || echo "" >"$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json"
-          curl -fLSs -o "$GITHUB_WORKSPACE/ISLEPROGRESS-old.json" "$RELEASE_URL/ISLEPROGRESS.json" || echo "" >"$GITHUB_WORKSPACE/ISLEPROGRESS-old.json"
-          curl -fLSs -o "$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json" "$RELEASE_URL/LEGO1PROGRESS.json" || echo "" >"$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json"
+          set -euo pipefail
+          curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 -fLSs -o "$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json" "$RELEASE_URL/CONFIGPROGRESS.json"
+          curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 -fLSs -o "$GITHUB_WORKSPACE/ISLEPROGRESS-old.json" "$RELEASE_URL/ISLEPROGRESS.json"
+          curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 -fLSs -o "$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json" "$RELEASE_URL/LEGO1PROGRESS.json"
+
+      - name: Show comparison with the continuous release
+        shell: bash
+        run: |
+          set -euo pipefail
           cd "$GITHUB_WORKSPACE/build/reprobit-debug/source"
-          reccmp-reccmp --target CONFIG --diff "$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json" || echo "Current master not found"
-          reccmp-reccmp --target ISLE --diff "$GITHUB_WORKSPACE/ISLEPROGRESS-old.json" || echo "Current master not found"
-          reccmp-reccmp --target LEGO1 --diff "$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json" || echo "Current master not found"
+          reccmp-reccmp --target CONFIG --diff "$GITHUB_WORKSPACE/CONFIGPROGRESS-old.json"
+          reccmp-reccmp --target ISLE --diff "$GITHUB_WORKSPACE/ISLEPROGRESS-old.json"
+          reccmp-reccmp --target LEGO1 --diff "$GITHUB_WORKSPACE/LEGO1PROGRESS-old.json"
 
       - name: Check exports, vtables, and variables
         shell: bash
@@ -248,8 +276,24 @@ jobs:
           reccmp-datacmp --target ISLE
           reccmp-datacmp --target LEGO1
 
+      - name: Check accuracy report files
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=false
+          for path in \
+            CONFIGPROGRESS.json CONFIGPROGRESS.SVG \
+            ISLEPROGRESS.json ISLEPROGRESS.SVG \
+            LEGO1PROGRESS.json LEGO1PROGRESS.SVG
+          do
+            if ! test -s "$path"; then
+              echo "::error file=$path::Missing or empty accuracy report"
+              missing=true
+            fi
+          done
+          test "$missing" = false
+
       - name: Upload accuracy reports
-        if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ReproBit-Accuracy-Report
@@ -260,8 +304,23 @@ jobs:
             ISLEPROGRESS.SVG
             LEGO1PROGRESS.json
             LEGO1PROGRESS.SVG
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
+
+      - name: Upload failed comparison diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ReproBit-Accuracy-Failure-Diagnostics
+          path: |
+            CONFIGPROGRESS.json
+            CONFIGPROGRESS.SVG
+            ISLEPROGRESS.json
+            ISLEPROGRESS.SVG
+            LEGO1PROGRESS.json
+            LEGO1PROGRESS.SVG
+          if-no-files-found: warn
+          retention-days: 7
 
   publish:
     name: Publish continuous release
@@ -275,11 +334,6 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: probonopd/uploadtool
-          ref: 9a2c60466b8cfc1948c3b593c5bb775e5d9080af
-
       - name: Download exact binaries
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -291,17 +345,140 @@ jobs:
         with:
           name: ReproBit-Accuracy-Report
 
-      - name: Upload continuous release
+      - name: Publish complete continuous release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
-          ./upload.sh \
-            build/CONFIG.EXE \
-            build/ISLE.EXE \
-            build/LEGO1.DLL \
-            CONFIGPROGRESS.json \
-            CONFIGPROGRESS.SVG \
-            ISLEPROGRESS.json \
-            ISLEPROGRESS.SVG \
-            LEGO1PROGRESS.json \
+          set -euo pipefail
+          files=(
+            build/CONFIG.EXE
+            build/ISLE.EXE
+            build/LEGO1.DLL
+            CONFIGPROGRESS.json
+            CONFIGPROGRESS.SVG
+            ISLEPROGRESS.json
+            ISLEPROGRESS.SVG
+            LEGO1PROGRESS.json
             LEGO1PROGRESS.SVG
+          )
+          for path in "${files[@]}"; do
+            test -s "$path"
+          done
+
+          staging_tag="continuous-staging-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          gh release create "$staging_tag" "${files[@]}" \
+            --target "$GITHUB_SHA" \
+            --title "Continuous build" \
+            --notes "Automatically reproduced and verified from $GITHUB_SHA." \
+            --draft
+
+          test "$(gh release view "$staging_tag" --json assets --jq '.assets | length')" -eq "${#files[@]}"
+          for path in "${files[@]}"; do
+            name="$(basename "$path")"
+            expected_size="$(stat -c %s "$path")"
+            expected_digest="sha256:$(sha256sum "$path" | cut -d' ' -f1)"
+            asset="$(gh release view "$staging_tag" --json assets \
+              --jq ".assets[] | select(.name == \"$name\") | [.size, .digest] | @tsv")"
+            IFS=$'\t' read -r actual_size actual_digest <<<"$asset"
+            test "$actual_size" = "$expected_size"
+            test "$actual_digest" = "$expected_digest"
+          done
+
+          # GitHub uploads all assets before exposing a release created this
+          # way. Back up the old release before the short tag swap so a failed
+          # API call cannot leave the project without a continuous release.
+          release_tags="$(gh api --paginate \
+            "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            --jq '.[].tag_name')"
+          had_continuous=false
+          rollback_root="$RUNNER_TEMP/continuous-rollback-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          rollback_assets="$rollback_root/assets"
+          rollback_release="$rollback_root/release.json"
+          rollback_notes="$rollback_root/notes.md"
+          mkdir -p "$rollback_assets"
+          if grep -Fxq continuous <<<"$release_tags"; then
+            had_continuous=true
+            gh release view continuous \
+              --json name,body,targetCommitish,isPrerelease,assets \
+              >"$rollback_release"
+            jq -r '.body // ""' "$rollback_release" >"$rollback_notes"
+            gh release download continuous --dir "$rollback_assets"
+            while IFS=$'\t' read -r name size digest; do
+              test "$(stat -c %s "$rollback_assets/$name")" = "$size"
+              test "sha256:$(sha256sum "$rollback_assets/$name" | cut -d' ' -f1)" = "$digest"
+            done < <(jq -r '.assets[] | [.name, .size, .digest] | @tsv' "$rollback_release")
+          fi
+
+          restore_needed=false
+          restore_continuous() {
+            status=$?
+            trap - EXIT
+            if [[ "$status" -ne 0 && "$restore_needed" == true ]]; then
+              echo "::warning::Continuous release swap failed; restoring the previous release"
+              set +e
+              current_release="$rollback_root/current.json"
+              release_projection='{name, body, targetCommitish, isPrerelease,
+                assets: ([.assets[] | {name, size, digest}] | sort_by(.name))}'
+              if gh release view continuous \
+                --json name,body,targetCommitish,isPrerelease,assets \
+                >"$current_release" && diff -q \
+                  <(jq -S "$release_projection" "$rollback_release") \
+                  <(jq -S "$release_projection" "$current_release") \
+                  >/dev/null; then
+                echo "Previous continuous release is still intact"
+              else
+                gh release delete continuous --cleanup-tag --yes >/dev/null 2>&1
+                gh release delete "$staging_tag" --cleanup-tag --yes >/dev/null 2>&1
+                gh api --method DELETE \
+                  "repos/$GITHUB_REPOSITORY/git/refs/tags/continuous" \
+                  >/dev/null 2>&1
+
+                mapfile -d '' -t rollback_files \
+                  < <(find "$rollback_assets" -maxdepth 1 -type f -print0 | sort -z)
+                rollback_flags=(--latest=false)
+                if [[ "$(jq -r '.isPrerelease' "$rollback_release")" == true ]]; then
+                  rollback_flags+=(--prerelease)
+                fi
+                if gh release create continuous "${rollback_files[@]}" \
+                  --target "$(jq -r '.targetCommitish' "$rollback_release")" \
+                  --title "$(jq -r '.name // "Continuous build"' "$rollback_release")" \
+                  --notes-file "$rollback_notes" \
+                  "${rollback_flags[@]}"; then
+                  if ! diff -u \
+                    <(jq -S '[.assets[] | {name, size, digest}] | sort_by(.name)' "$rollback_release") \
+                    <(gh release view continuous --json assets \
+                      --jq '[.assets[] | {name, size, digest}] | sort_by(.name)'); then
+                    echo "::error::Restored continuous release assets differ from the backup"
+                  fi
+                else
+                  echo "::error::Could not restore the previous continuous release"
+                fi
+              fi
+            fi
+            exit "$status"
+          }
+          trap restore_continuous EXIT
+
+          if [[ "$had_continuous" == true ]]; then
+            restore_needed=true
+            gh release delete continuous --cleanup-tag --yes
+          fi
+          continuous_refs="$(gh api \
+            "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/continuous" \
+            --jq '.[].ref')"
+          if grep -Fxq refs/tags/continuous <<<"$continuous_refs"; then
+            gh api --method DELETE "repos/$GITHUB_REPOSITORY/git/refs/tags/continuous"
+          fi
+
+          gh release edit "$staging_tag" \
+            --tag continuous \
+            --target "$GITHUB_SHA" \
+            --title "Continuous build" \
+            --notes "Automatically reproduced and verified from $GITHUB_SHA." \
+            --draft=false \
+            --latest=false
+
+          test "$(gh release view continuous --json assets --jq '.assets | length')" -eq "${#files[@]}"
+          restore_needed=false
+          trap - EXIT

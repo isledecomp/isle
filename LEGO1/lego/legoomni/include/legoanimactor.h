@@ -86,8 +86,8 @@ protected:
 // GLOBAL: LEGO1 0x100d5438
 // LegoAnimActor::`vbtable'
 
-// TEMPLATE: LEGO1 0x1000da20
-// vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::~vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >
+// TEMPLATE: LEGO1 0x1000da20 SYMBOL
+// ??1?$vector@PAULegoAnimActorStruct@@V?$allocator@PAULegoAnimActorStruct@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1000da60
 // Vector<LegoAnimActorStruct *>::~Vector<LegoAnimActorStruct *>
@@ -96,21 +96,21 @@ protected:
 // SYNTHETIC: BETA10 0x1000fad0
 // LegoAnimActor::`vbase destructor'
 
-// TEMPLATE: LEGO1 0x1001c010
-// vector<unsigned char *,allocator<unsigned char *> >::~vector<unsigned char *,allocator<unsigned char *> >
+// TEMPLATE: LEGO1 0x1001c010 SYMBOL
+// ??1?$vector@PAEV?$allocator@PAE@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1001c050
 // Vector<unsigned char *>::~Vector<unsigned char *>
 
-// TEMPLATE: LEGO1 0x1001c7c0
-// TEMPLATE: BETA10 0x1000fb40
-// vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::size
+// TEMPLATE: LEGO1 0x1001c7c0 SYMBOL
+// TEMPLATE: BETA10 0x1000fb40 SYMBOL
+// ?size@?$vector@PAULegoAnimActorStruct@@V?$allocator@PAULegoAnimActorStruct@@@@@@QBEIXZ
 
 // TEMPLATE: BETA10 0x1000fb90
 // vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::operator[]
 
-// TEMPLATE: LEGO1 0x1001c7e0
-// vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::_Destroy
+// TEMPLATE: LEGO1 0x1001c7e0 SYMBOL
+// ?_Destroy@?$vector@PAULegoAnimActorStruct@@V?$allocator@PAULegoAnimActorStruct@@@@@@IAEXPAPAULegoAnimActorStruct@@0@Z
 
 // TEMPLATE: BETA10 0x1000fbc0
 // vector<LegoAnimActorStruct *,allocator<LegoAnimActorStruct *> >::begin

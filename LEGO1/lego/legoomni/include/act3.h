@@ -195,17 +195,17 @@ protected:
 	LegoGameState::Area m_destLocation;        // 0x4270
 };
 
-// TEMPLATE: LEGO1 0x10071f10
-// list<Act3ListElement,allocator<Act3ListElement> >::insert
+// TEMPLATE: LEGO1 0x10071f10 SYMBOL
+// ?insert@?$list@UAct3ListElement@@V?$allocator@UAct3ListElement@@@@@@QAE?AViterator@1@V21@ABUAct3ListElement@@@Z
 
-// TEMPLATE: LEGO1 0x10071f70
-// list<Act3ListElement,allocator<Act3ListElement> >::_Buynode
+// TEMPLATE: LEGO1 0x10071f70 SYMBOL
+// ?_Buynode@?$list@UAct3ListElement@@V?$allocator@UAct3ListElement@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
-// TEMPLATE: LEGO1 0x10072220
-// list<Act3ListElement,allocator<Act3ListElement> >::erase
+// TEMPLATE: LEGO1 0x10072220 SYMBOL
+// ?erase@?$list@UAct3ListElement@@V?$allocator@UAct3ListElement@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x10072440
-// list<Act3ListElement,allocator<Act3ListElement> >::~list<Act3ListElement,allocator<Act3ListElement> >
+// TEMPLATE: LEGO1 0x10072440 SYMBOL
+// ??1?$list@UAct3ListElement@@V?$allocator@UAct3ListElement@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x100724b0
 // List<Act3ListElement>::~List<Act3ListElement>

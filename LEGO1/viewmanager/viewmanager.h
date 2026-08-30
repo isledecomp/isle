@@ -74,8 +74,8 @@ private:
 	float seconds_allowed;          // 0x1b8
 };
 
-// TEMPLATE: LEGO1 0x10022030
-// list<ROI *,allocator<ROI *> >::insert
+// TEMPLATE: LEGO1 0x10022030 SYMBOL
+// ?insert@?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE?AViterator@1@V21@ABQAVROI@@@Z
 
 // TEMPLATE: BETA10 0x1007b0b0
 // List<ROI *>::List<ROI *>
@@ -90,7 +90,7 @@ private:
 // TEMPLATE: BETA10 0x10174510
 // Vector<ROI const *>::~Vector<ROI const *>
 
-// TEMPLATE: LEGO1 0x100a6f80
-// vector<ROI const *,allocator<ROI const *> >::~vector<ROI const *,allocator<ROI const *> >
+// TEMPLATE: LEGO1 0x100a6f80 SYMBOL
+// ??1?$vector@PBVROI@@V?$allocator@PBVROI@@@@@@QAE@XZ
 
 #endif // VIEWMANAGER_H

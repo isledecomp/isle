@@ -209,50 +209,50 @@ private:
 };
 
 // clang-format off
-// TEMPLATE: LEGO1 0x1001fd70
-// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Lbound
+// TEMPLATE: LEGO1 0x1001fd70 SYMBOL
+// ?_Lbound@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@IBEPAU_Node@1@ABQAVLegoPathActor@@@Z
 
-// TEMPLATE: LEGO1 0x1002c4a0
-// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Buynode
+// TEMPLATE: LEGO1 0x1002c4a0 SYMBOL
+// ?_Buynode@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@IAEPAU_Node@1@PAU21@W4_Redbl@1@@Z
 
-// TEMPLATE: LEGO1 0x100451a0
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::~_Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathControl
+// TEMPLATE: LEGO1 0x100451a0 SYMBOL
+// ??1?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10045270
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x10045270 SYMBOL
+// ?_Inc@iterator@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAEXXZ
 
 // TEMPLATE: LEGO1 0x100452b0
 // ?erase@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x10045700
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Erase
+// TEMPLATE: LEGO1 0x10045700 SYMBOL
+// ?_Erase@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IAEXPAU_Node@1@@Z
 
 // TEMPLATE: LEGO1 0x100457e0
 // Set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare>::~Set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare>
 
-// TEMPLATE: LEGO1 0x10045830
-// set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::~set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >
+// TEMPLATE: LEGO1 0x10045830 SYMBOL
+// ??1?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10046640
-// _Tree<LegoAnimPresenter *,LegoAnimPresenter *,set<LegoAnimPresenter *,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::_Kfn,LegoAnimPresenterSetCompare,allocator<LegoAnimPresenter *> >::find
+// TEMPLATE: LEGO1 0x10046640 SYMBOL
+// ?find@?$_Tree@PAVLegoAnimPresenter@@PAV1@U_Kfn@?$set@PAVLegoAnimPresenter@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@ULegoAnimPresenterSetCompare@@V?$allocator@PAVLegoAnimPresenter@@@@@@QBE?AVconst_iterator@1@ABQAVLegoAnimPresen
 
-// TEMPLATE: LEGO1 0x100468c0
-// _Tree<LegoPathActor *,LegoPathActor *,set<LegoPathActor *,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Kfn,LegoPathActorSetCompare,allocator<LegoPathActor *> >::_Ubound
+// TEMPLATE: LEGO1 0x100468c0 SYMBOL
+// ?_Ubound@?$_Tree@PAVLegoPathActor@@PAV1@U_Kfn@?$set@PAVLegoPathActor@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@ULegoPathActorSetCompare@@V?$allocator@PAVLegoPathActor@@@@@@IBEPAU_Node@1@ABQAVLegoPathActor@@@Z
 
-// TEMPLATE: LEGO1 0x10047550
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Insert
+// TEMPLATE: LEGO1 0x10047550 SYMBOL
+// ?_Insert@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IAE?AViterator@1@PAU_Node@1@0ABQAULegoPathCtrlEdge@
 
-// TEMPLATE: LEGO1 0x100474e0
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x100474e0 SYMBOL
+// ?_Dec@iterator@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x10047530
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Buynode
+// TEMPLATE: LEGO1 0x10047530 SYMBOL
+// ?_Buynode@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IAEPAU_Node@1@PAU21@W4_Redbl@1@@Z
 
-// TEMPLATE: LEGO1 0x100477d0
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Lrotate
+// TEMPLATE: LEGO1 0x100477d0 SYMBOL
+// ?_Lrotate@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x10047830
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Rrotate
+// TEMPLATE: LEGO1 0x10047830 SYMBOL
+// ?_Rrotate@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IAEXPAU_Node@1@@Z
 
 // SYNTHETIC: LEGO1 0x10047940
 // LegoPathCtrlEdge::`vector deleting destructor'
@@ -266,71 +266,71 @@ private:
 // SYNTHETIC: LEGO1 0x10047ae0
 // LegoOrientedEdge::~LegoOrientedEdge
 
-// TEMPLATE: LEGO1 0x10048f00
-// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::begin
+// TEMPLATE: LEGO1 0x10048f00 SYMBOL
+// ?begin@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@XZ
 
-// TEMPLATE: LEGO1 0x10048f10
-// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::insert
+// TEMPLATE: LEGO1 0x10048f10 SYMBOL
+// ?insert@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@ABULegoBoundaryEdge@@@Z
 
-// TEMPLATE: LEGO1 0x10048f70
-// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::erase
+// TEMPLATE: LEGO1 0x10048f70 SYMBOL
+// ?erase@?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x10048fc0
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,Le
+// TEMPLATE: LEGO1 0x10048fc0 SYMBOL
+// ??0?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAE@ABV0@@Z
 
 // TEMPLATE: LEGO1 0x10049160
 // ?erase@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QAEIABQAULegoPathCtrlEdge@@@Z
 
-// TEMPLATE: LEGO1 0x10049290
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::find
+// TEMPLATE: LEGO1 0x10049290 SYMBOL
+// ?find@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@QBE?AVconst_iterator@1@ABQAULegoPathCtrlEdge@@@Z
 
-// TEMPLATE: LEGO1 0x100492f0
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Copy
+// TEMPLATE: LEGO1 0x100492f0 SYMBOL
+// ?_Copy@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
-// TEMPLATE: LEGO1 0x10049370
-// _Tree<LegoPathCtrlEdge *,LegoPathCtrlEdge *,set<LegoPathCtrlEdge *,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Kfn,LegoPathCtrlEdgeCompare,allocator<LegoPathCtrlEdge *> >::_Ubound
+// TEMPLATE: LEGO1 0x10049370 SYMBOL
+// ?_Ubound@?$_Tree@PAULegoPathCtrlEdge@@PAU1@U_Kfn@?$set@PAULegoPathCtrlEdge@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@ULegoPathCtrlEdgeCompare@@V?$allocator@PAULegoPathCtrlEdge@@@@@@IBEPAU_Node@1@ABQAULegoPathCtrlEdge@@@Z
 
-// TEMPLATE: LEGO1 0x100493a0
-// list<LegoBEWithMidpoint,allocator<LegoBEWithMidpoint> >::~list<LegoBEWithMidpoint,allocator<LegoBEWithMidpoint> >
+// TEMPLATE: LEGO1 0x100493a0 SYMBOL
+// ??1?$list@ULegoBEWithMidpoint@@V?$allocator@ULegoBEWithMidpoint@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10049410
-// list<LegoBEWithMidpoint,allocator<LegoBEWithMidpoint> >::insert
+// TEMPLATE: LEGO1 0x10049410 SYMBOL
+// ?insert@?$list@ULegoBEWithMidpoint@@V?$allocator@ULegoBEWithMidpoint@@@@@@QAE?AViterator@1@V21@ABULegoBEWithMidpoint@@@Z
 
-// TEMPLATE: LEGO1 0x10049470
-// list<LegoBEWithMidpoint,allocator<LegoBEWithMidpoint> >::_Buynode
+// TEMPLATE: LEGO1 0x10049470 SYMBOL
+// ?_Buynode@?$list@ULegoBEWithMidpoint@@V?$allocator@ULegoBEWithMidpoint@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
-// TEMPLATE: LEGO1 0x100494a0
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x100494a0 SYMBOL
+// ?_Inc@iterator@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x100494e0
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::~_Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithFlo
+// TEMPLATE: LEGO1 0x100494e0 SYMBOL
+// ??1?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x100495b0
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::insert
+// TEMPLATE: LEGO1 0x100495b0 SYMBOL
+// ?insert@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE?AU?$pair@Viterator@?$_Tre
 
-// TEMPLATE: LEGO1 0x10049840
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x10049840 SYMBOL
+// ?_Dec@iterator@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x10049890
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::erase
+// TEMPLATE: LEGO1 0x10049890 SYMBOL
+// ?erase@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x10049cf0
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Buynode
+// TEMPLATE: LEGO1 0x10049cf0 SYMBOL
+// ?_Buynode@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAEPAU_Node@1@PAU21@W4_Redb
 
-// TEMPLATE: LEGO1 0x10049d50
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Init
+// TEMPLATE: LEGO1 0x10049d50 SYMBOL
+// ?_Init@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAEXXZ
 
-// TEMPLATE: LEGO1 0x10049e00
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Insert
+// TEMPLATE: LEGO1 0x10049e00 SYMBOL
+// ?_Insert@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAE?AViterator@1@PAU_Node@1@
 
-// TEMPLATE: LEGO1 0x10049d10
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Erase
+// TEMPLATE: LEGO1 0x10049d10 SYMBOL
+// ?_Erase@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x1004a090
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Lrotate
+// TEMPLATE: LEGO1 0x1004a090 SYMBOL
+// ?_Lrotate@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x1004a0f0
-// _Tree<LegoBEWithMidpoint *,LegoBEWithMidpoint *,multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Kfn,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::_Rrotate
+// TEMPLATE: LEGO1 0x1004a0f0 SYMBOL
+// ?_Rrotate@?$_Tree@PAULegoBEWithMidpoint@@PAU1@U_Kfn@?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@IAEXPAU_Node@1@@Z
 
 // TEMPLATE: LEGO1 0x1004a150
 // List<LegoBEWithMidpoint>::~List<LegoBEWithMidpoint>
@@ -338,8 +338,8 @@ private:
 // TEMPLATE: LEGO1 0x1004a1a0
 // Multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator>::~Multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator>
 
-// TEMPLATE: LEGO1 0x1004a1f0
-// multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >::~multiset<LegoBEWithMidpoint *,LegoBEWithMidpointComparator,allocator<LegoBEWithMidpoint *> >
+// TEMPLATE: LEGO1 0x1004a1f0 SYMBOL
+// ??1?$multiset@PAULegoBEWithMidpoint@@ULegoBEWithMidpointComparator@@V?$allocator@PAULegoBEWithMidpoint@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1004a760
 // ?_Construct@@YAXPAPAULegoBEWithMidpoint@@ABQAU1@@Z

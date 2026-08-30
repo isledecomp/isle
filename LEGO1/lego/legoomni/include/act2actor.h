@@ -87,7 +87,7 @@ private:
 	LegoEntity* m_nextEntity;           // 0x4c
 };
 
-// TEMPLATE: LEGO1 0x100194f0
-// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >
+// TEMPLATE: LEGO1 0x100194f0 SYMBOL
+// ??0?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE@ABV?$allocator@ULegoBoundaryEdge@@@@@Z
 
 #endif // ACT2ACTOR_H
