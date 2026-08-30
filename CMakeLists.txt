@@ -677,7 +677,7 @@ if (MSVC_FOR_DECOMP)
     # by fiat but seated the member at the FRONT of the CRT region and left
     # .reloc's VirtualSize 28 bytes short. The CAUSE is a `delete[]` of a
     # destructible type in 1997's isleapp.cpp that /OPT:REF stripped; its
-    # stand-in is owned by the byte-identity manifest overlay (the checked
+    # stand-in is owned by ReproBit's reviewed source overlay (the checked
     # source stays clean). With that in place the /INCLUDE is actively
     # harmful, so it is deliberately NOT used.
     set_property(TARGET isle ${lego1_targets} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -724,8 +724,8 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
-  if(ISLE_BYTE_IDENTITY_TERMINAL OR REPROBIT_TERMINAL)
-    # Byte-identical terminal links: the retail images carry NO debug data
+  if(REPROBIT_TERMINAL)
+    # ReproBit terminal links: the retail images carry NO debug data
     # directory, while linking with /debug adds one (a 28-byte
     # IMAGE_DEBUG_DIRECTORY plus its MISC record) at the head of .rdata --
     # measured at 88 bytes in ISLE.EXE.
@@ -743,7 +743,7 @@ if (MSVC_FOR_DECOMP)
                "${CMAKE_${_kind}_LINKER_FLAGS${_cfg}}")
       endforeach()
     endforeach()
-    message(STATUS "ISLE_BYTE_IDENTITY_TERMINAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
+    message(STATUS "REPROBIT_TERMINAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
   endif()
 
   # Older MSVC versions don't support building in parallel.
@@ -767,15 +767,6 @@ if (MSVC_FOR_DECOMP)
       set_property(TARGET config PROPERTY JOB_POOL_LINK "msvc_config")
     endif()
   endif()
-endif()
-
-# The source-controlled manifest is deliberately invisible to normal builds.
-# tools/isle_build.py materializes the effective source view and writes the
-# overlay plan; only the graph seating runs here.
-if(ISLE_BYTE_IDENTITY_PLAN)
-  include("${PROJECT_SOURCE_DIR}/cmake/byte_identity.cmake")
-  include("${ISLE_BYTE_IDENTITY_PLAN}")
-  _isle_apply_byte_identity_source_overlay_graph()
 endif()
 
 # ReproBit owns all rendered source bytes and graph declarations.  The normal

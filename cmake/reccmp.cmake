@@ -46,10 +46,9 @@ function(reccmp_configure)
         get_property(id TARGET "${target}" PROPERTY INTERFACE_RECCMP_ID)
         string(APPEND build_yml_txt "  ${id}:\n")
         string(APPEND build_yml_txt "    path: '$<TARGET_FILE:${target}>'\n")
-        # A byte-identity build emits no debug information, so there is no PDB to
-        # point at and reccmp cannot be run against it (use a separate default
-        # build directory for that).
-        if(WIN32 AND MSVC AND NOT ISLE_BYTE_IDENTICAL)
+        # ReproBit's exact terminal image has no PDB. Its separately published
+        # comparison image/PDB pair is consumed outside this ordinary build.
+        if(WIN32 AND MSVC AND NOT REPROBIT_TERMINAL)
             string(APPEND build_yml_txt "    pdb: '$<TARGET_PDB_FILE:${target}>'\n")
         endif()
     endforeach()

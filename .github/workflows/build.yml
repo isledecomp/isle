@@ -6,10 +6,6 @@ on:
   pull_request:
 
 jobs:
-  fetch-deps:
-    name: Download original binaries
-    uses: ./.github/workflows/legobin.yml
-
   build-current-toolchain:
     name: Current ${{ matrix.toolchain.name }}
     runs-on: windows-latest
@@ -20,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         toolchain:
-        - { name: 'MSVC',           shell: 'sh',        setup-cmake: true, setup-ninja: true, setup-msvc: true }
+        - { name: 'MSVC', shell: 'sh', setup-cmake: true, setup-ninja: true, setup-msvc: true, msystem: '', msys-env: '', no-dx5-libs: false, clang-tidy: false, werror: false }
         # - { name: 'msys2 mingw32',  shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686,        clang-tidy: true, werror: true }
         # - { name: 'msys2 clang32',  shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686,  clang-tidy: true, werror: true, no-dx5-libs: true }
 
@@ -139,118 +135,3 @@ jobs:
         path: |
           build/BETA10.DLL
           build/BETA10.PDB
-
-  verify:
-    name: Verify decomp
-    needs: [build, fetch-deps]
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@main
-
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-
-    - uses: actions/download-artifact@main
-      with:
-       name: Win32
-       path: build
-
-    - name: Restore cached original binaries
-      id: cache-original-binaries
-      uses: actions/cache/restore@v4
-      with:
-        enableCrossOsArchive: true
-        path: legobin
-        key: legobin
-
-    - name: Install python packages
-      shell: bash
-      run: |
-        pip install -r tools/requirements.txt
-
-    - name: Detect binaries
-      run: |
-        reccmp-project detect --what original   --search-path legobin
-        reccmp-project detect --what recompiled --search-path build
-
-    - name: Summarize Accuracy
-      shell: bash
-      run: |
-        reccmp-reccmp -S CONFIGPROGRESS.SVG --svg-icon assets/config.png --target CONFIG --json CONFIGPROGRESS.json
-        reccmp-reccmp -S ISLEPROGRESS.SVG --svg-icon assets/isle.png --target ISLE --json ISLEPROGRESS.json
-        reccmp-reccmp -S LEGO1PROGRESS.SVG --svg-icon assets/lego1.png --target LEGO1 --json LEGO1PROGRESS.json
-
-    - name: Compare Accuracy With Current Master
-      shell: bash
-      env:
-        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
-      run: |
-        # Download the current master state
-        curl -fLSs -o CONFIGPROGRESS-old.json $RELEASE_URL/CONFIGPROGRESS.json || echo "" >CONFIGPROGRESS-old.json
-        curl -fLSs -o ISLEPROGRESS-old.json $RELEASE_URL/ISLEPROGRESS.json || echo "" >ISLEPROGRESS-old.json
-        curl -fLSs -o LEGO1PROGRESS-old.json $RELEASE_URL/LEGO1PROGRESS.json || echo "" >LEGO1PROGRESS-old.json
-        
-        # Compare with current master
-        reccmp-reccmp --target CONFIG --diff CONFIGPROGRESS-old.json || echo "Current master not found"
-        reccmp-reccmp --target ISLE --diff ISLEPROGRESS-old.json || echo "Current master not found"
-        reccmp-reccmp --target LEGO1 --diff LEGO1PROGRESS-old.json || echo "Current master not found"
-
-    - name: Test Exports
-      shell: bash
-      run: |
-        reccmp-verexp --target LEGO1
-
-    - name: Check Vtables
-      shell: bash
-      run: |
-        reccmp-vtable --target CONFIG
-        reccmp-vtable --target ISLE
-        reccmp-vtable --target LEGO1
-
-    - name: Check Variables
-      shell: bash
-      run: |
-        reccmp-datacmp --target CONFIG
-        reccmp-datacmp --target ISLE
-        reccmp-datacmp --target LEGO1
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@main
-      with:
-        name: Accuracy Report
-        path: |
-          CONFIGPROGRESS*
-          ISLEPROGRESS*
-          LEGO1PROGRESS*
-
-  upload:
-    name: Upload artifacts
-    needs: [verify]
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        repository: probonopd/uploadtool
-
-    - uses: actions/download-artifact@main
-      with:
-       name: Win32
-       path: build
-
-    - uses: actions/download-artifact@main
-      with:
-        name: Accuracy Report
-
-    - name: Upload Continuous Release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        ./upload.sh \
-          build/CONFIG.EXE \
-          build/ISLE.EXE \
-          build/LEGO1.DLL \
-          CONFIGPROGRESS* \
-          ISLEPROGRESS* \
-          LEGO1PROGRESS*

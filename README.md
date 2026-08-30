@@ -10,11 +10,34 @@ This is a functionally complete decompilation of LEGO Island (Version 1.1, Engli
 
 <a href="https://isledecomp.github.io/isle/ISLEPROGRESS.HTML"><img src="https://isledecomp.github.io/isle/ISLEPROGRESS.SVG" width="50%"></a><a href="https://isledecomp.github.io/isle/LEGO1PROGRESS.HTML"><img src="https://isledecomp.github.io/isle/LEGO1PROGRESS.SVG" width="50%"></a>
 
-Both `ISLE.EXE` and `LEGO1.DLL` are completely decompiled and, to the best of our knowledge, are functionally identical to the originals. However, work is still ongoing to improve the accuracy, naming, documentation, and structure of the source code. While there may still be unresolved bugs that are not present in retail, the game should be fully playable with the binaries derived from this source code.
-
-Due to various complexities with regard to the compiler, these binaries are not a byte-for-byte match of the original executables. We remain hopeful that this can be resolved at some point.
+`CONFIG.EXE`, `ISLE.EXE`, and `LEGO1.DLL` are completely decompiled. The
+project's reviewed [ReproBit](https://github.com/foxtacles/reprobit) build uses
+the original Microsoft Visual C++ 4.2 toolchain and reproduces all three retail
+binaries byte for byte. Work continues on naming, documentation, and source
+clarity without changing those results.
 
 ## Building
+
+There are two useful build paths:
+
+- The ordinary CMake build below is best for day-to-day development and debug
+  symbols.
+- ReproBit is the reproducible release path. It controls the original compiler
+  environment, checks every output against the retail files, and produces a
+  readable verification report.
+
+For an exact local build, first place the three English 1.1 retail files at
+`legobin/CONFIG.EXE`, `legobin/ISLE.EXE`, and `legobin/LEGO1.DLL`. Then follow
+the [ReproBit setup guide](https://github.com/foxtacles/reprobit#install-and-set-up-the-pre-release)
+and run:
+
+```console
+rbit setup .
+rbit verify .
+```
+
+The same path runs in GitHub Actions and is the only path used to publish the
+continuous release.
 
 This project uses the [CMake](https://cmake.org/) build system, which allows for a high degree of versatility regarding compilers and development environments. For the most accurate results, Microsoft Visual C++ 4.20 (the same compiler used to build the original game) is recommended. Since we're trying to match the output of this code to the original executables as closely as possible, all contributions will be graded with the output of this compiler.
 
