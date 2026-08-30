@@ -169,7 +169,19 @@ def _native_environment(paths: dict[str, str], lane: str) -> dict[str, str]:
         _rooted_without_drive(str(PureWindowsPath(toolchain) / relative))
         for relative in ("lib", "mfc/lib")
     )
-    temporary = str(PureWindowsPath(paths["build"]) / ".reprobit-tmp" / lane)
+    # Match ReproBit's compiler-visible profile exactly.  The directory is
+    # shared by clean producer processes; /Brepro is responsible for removing
+    # the compiler's process/time entropy, not a per-lane path spelling.
+    temporary = str(
+        PureWindowsPath(
+            PureWindowsPath(paths["build"]).drive + "\\",
+            "Users",
+            "reprobit",
+            "AppData",
+            "Local",
+            "Temp",
+        )
+    )
     environment = {
         "PATH": ";".join((_rooted_without_drive(tool_bin), tool_bin, os.defpath)),
         "INCLUDE": include,
@@ -280,18 +292,20 @@ def _probe(args: argparse.Namespace) -> dict[str, object]:
     wine_temp = Path(r"C:\users\reprobit\AppData\Local\Temp")
     owned_wine_temp_directories = _create_owned_directory(wine_temp)
     wine_temp_initial = sorted(path.name for path in wine_temp.iterdir())
-    # id, __COMPAT_LAYER, inherited single-core affinity, Wine-visible TEMP
+    # id, __COMPAT_LAYER, inherited single-core affinity, legacy C: TEMP,
+    # compiler-owned reproducibility mode.
     variants = (
-        ("control-00", None, False, False),
-        ("control-01", None, False, False),
-        ("compat-win95", "WIN95", False, False),
-        ("compat-win98", "WIN98", False, False),
-        ("compat-emulateheap", "EmulateHeap", False, False),
-        ("compat-winnt4sp5", "WINNT4SP5", False, False),
-        ("compat-winxpsp3", "WINXPSP3", False, False),
-        ("single-core", None, True, False),
-        ("wine-temp", None, False, True),
-        ("wine-temp-single-core", None, True, True),
+        ("control-00", None, False, False, False),
+        ("control-01", None, False, False, False),
+        ("brepro-00", None, False, False, True),
+        ("brepro-01", None, False, False, True),
+        ("compat-win95", "WIN95", False, False, False),
+        ("compat-win98", "WIN98", False, False, False),
+        ("compat-emulateheap", "EmulateHeap", False, False, False),
+        ("compat-winnt4sp5", "WINNT4SP5", False, False, False),
+        ("compat-winxpsp3", "WINXPSP3", False, False, False),
+        ("single-core", None, True, False, False),
+        ("legacy-c-temp", None, False, True, False),
     )
     result: dict[str, object] = {
         "schema_version": 1,
@@ -336,12 +350,13 @@ def _probe(args: argparse.Namespace) -> dict[str, object]:
     try:
         _subst_drive(drive, logical_root)
         mapped = True
-        for run_id, compat_layer, single_core, use_wine_temp in variants:
+        for run_id, compat_layer, single_core, use_wine_temp, use_brepro in variants:
             record: dict[str, object] = {
                 "id": run_id,
                 "compat_layer": compat_layer,
                 "single_core": single_core,
                 "wine_temp": use_wine_temp,
+                "brepro": use_brepro,
             }
             record["started_unix"] = time.time()
             run_environment = dict(environment)
@@ -360,7 +375,7 @@ def _probe(args: argparse.Namespace) -> dict[str, object]:
             try:
                 with _single_core(single_core) as affinity:
                     completed = subprocess.run(
-                        argv,
+                        [argv[0], *(["/Brepro"] if use_brepro else []), *argv[1:]],
                         cwd=logical_cwd,
                         env=run_environment,
                         stdout=subprocess.PIPE,
