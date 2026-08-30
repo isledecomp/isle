@@ -123,6 +123,75 @@ jobs:
             }
           }
 
+      - name: Collect bounded native failure diagnostics
+        if: failure()
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $diagnostics = Join-Path $env:RUNNER_TEMP "reprobit-native-failure"
+          New-Item -ItemType Directory -Path $diagnostics | Out-Null
+
+          $run = Get-ChildItem ".reprobit-state\runs" -Directory -Filter "verify-*" |
+            Sort-Object LastWriteTimeUtc -Descending |
+            Select-Object -First 1
+          if ($null -eq $run) {
+            throw "ReproBit failed without retaining a verification workspace"
+          }
+
+          $outcome = Join-Path $run.FullName ".outcome.json"
+          if (Test-Path -PathType Leaf $outcome) {
+            Copy-Item $outcome (Join-Path $diagnostics "outcome.json")
+          }
+
+          $classic = Join-Path $run.FullName "classic"
+          $logs = Join-Path $classic "logs"
+          if (Test-Path -PathType Container $logs) {
+            Copy-Item $logs (Join-Path $diagnostics "logs") -Recurse
+          }
+
+          $files = @(Get-ChildItem $classic -File -Recurse | Where-Object {
+            $relative = $_.FullName.Substring($classic.Length + 1)
+            $isTarget = $_.Name -in @(
+              "legopartpresenter.cpp", "legopartpresenter.cpp.obj",
+              "legopartpresenter.cpp.obj.pdb"
+            )
+            $isTargetDonor =
+              $relative -match "(?i)[\\/]donors[\\/]composed-lego1-LEGO1_lego_legoomni_src_video_legopartpresenter\.cpp-" -and
+              $_.Name -in @("o.obj", "o.pdb", "s.cpp", "run.h")
+            ($isTarget -or $isTargetDonor) -and $_.Length -le 20MB
+          })
+          $payloads = Join-Path $diagnostics "payloads"
+          New-Item -ItemType Directory -Path $payloads | Out-Null
+          $inventory = @()
+          $index = 0
+          foreach ($file in $files) {
+            $name = "{0:D3}-{1}" -f $index, $file.Name
+            Copy-Item $file.FullName (Join-Path $payloads $name)
+            $inventory += [ordered]@{
+              artifact = "payloads/$name"
+              source = $file.FullName.Substring($run.FullName.Length + 1)
+              bytes = $file.Length
+              sha256 = (Get-FileHash $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            }
+            $index += 1
+          }
+          ConvertTo-Json -InputObject $inventory -Depth 3 |
+            Set-Content (Join-Path $diagnostics "inventory.json") -Encoding utf8
+
+          Copy-Item "reprobit.toml" $diagnostics
+          Copy-Item "reprobit/producer-graph.json" $diagnostics
+          Copy-Item "reprobit/interventions/tus/lego1--tu_03bd32af8500c013.json" $diagnostics
+          Copy-Item "reprobit/proofs/tus/lego1--tu_03bd32af8500c013.json" $diagnostics
+
+      - name: Upload native failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ReproBit-Native-Failure
+          path: ${{ runner.temp }}/reprobit-native-failure/
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Upload the exact build and its evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
