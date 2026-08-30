@@ -30,9 +30,12 @@ jobs:
         run: |
           set -euo pipefail
           mkdir legobin
-          curl -fLSs https://legoisland.org/download/CONFIG.EXE -o legobin/CONFIG.EXE
-          curl -fLSs https://legoisland.org/download/ISLE.EXE -o legobin/ISLE.EXE
-          curl -fLSs https://legoisland.org/download/LEGO1.DLL -o legobin/LEGO1.DLL
+          curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 \
+            -fLSs https://legoisland.org/download/CONFIG.EXE -o legobin/CONFIG.EXE
+          curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 \
+            -fLSs https://legoisland.org/download/ISLE.EXE -o legobin/ISLE.EXE
+          curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 \
+            -fLSs https://legoisland.org/download/LEGO1.DLL -o legobin/LEGO1.DLL
           cd legobin
           sha256sum --check <<'EOF'
           864766d024d78330fed5e1f6efb2faf815f1b1c3405713a9718059dc9a54e52c  CONFIG.EXE
