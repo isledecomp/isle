@@ -54,7 +54,7 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONUNBUFFERED: "1"
-      REPROBIT_REVISION: 4cca91437156494935e2dc13ce280ec9a7eee293
+      REPROBIT_REVISION: 3b6b0d4a8a862f97a4becf245e0429711b20af95
 
     steps:
       - name: Configure a byte-stable checkout
@@ -93,7 +93,7 @@ jobs:
 
       - name: Build cold and verify exact bytes
         id: reprobit
-        uses: foxtacles/reprobit@4cca91437156494935e2dc13ce280ec9a7eee293
+        uses: foxtacles/reprobit@3b6b0d4a8a862f97a4becf245e0429711b20af95
         with:
           project-directory: .
           toolchain-root: ${{ runner.temp }}\msvc42
@@ -177,8 +177,11 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ReproBit-Failure-Diagnostics
-          path: build/reprobit-report/
-          if-no-files-found: warn
+          path: |
+            build/reprobit-report/
+            .reprobit-state/runs/verify-*/classic/logs/producers/*.log
+          include-hidden-files: true
+          if-no-files-found: error
           retention-days: 7
 
   compare:
