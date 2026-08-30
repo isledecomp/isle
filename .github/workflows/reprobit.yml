@@ -55,7 +55,7 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONUNBUFFERED: "1"
-      REPROBIT_REVISION: 39705240ef138d92d05293a2c7c1256f311bb2d8
+      REPROBIT_REVISION: ad86f15d1082c38f0f66a564d249003ca9574533
 
     steps:
       - name: Configure a byte-stable checkout
@@ -94,7 +94,7 @@ jobs:
 
       - name: Build cold and verify exact bytes
         id: reprobit
-        uses: foxtacles/reprobit@39705240ef138d92d05293a2c7c1256f311bb2d8
+        uses: foxtacles/reprobit@ad86f15d1082c38f0f66a564d249003ca9574533
         with:
           project-directory: .
           toolchain-root: ${{ runner.temp }}\msvc42
