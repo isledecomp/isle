@@ -189,7 +189,8 @@ jobs:
           name: ReproBit-Failure-Diagnostics
           path: |
             build/reprobit-report/
-            .reprobit-state/runs/verify-*/classic/logs/producers/*.log
+            .reprobit-state/runs/verify-*/classic/logs/**/*.log
+            .reprobit-state/runs/verify-*/classic/logical-drive/**/.reprobit-analysis/**
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
