@@ -293,9 +293,9 @@ jobs:
         run: |
           source_root="$GITHUB_WORKSPACE/build/reprobit-debug/source"
           cd "$source_root"
-          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/CONFIGPROGRESS.SVG" --svg-icon assets/config.png --target CONFIG --json "$GITHUB_WORKSPACE/CONFIGPROGRESS.json"
-          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/ISLEPROGRESS.SVG" --svg-icon assets/isle.png --target ISLE --json "$GITHUB_WORKSPACE/ISLEPROGRESS.json"
-          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/LEGO1PROGRESS.SVG" --svg-icon assets/lego1.png --target LEGO1 --json "$GITHUB_WORKSPACE/LEGO1PROGRESS.json"
+          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/CONFIGPROGRESS.SVG" --svg-icon assets/config.png --target CONFIG --json "$GITHUB_WORKSPACE/CONFIGPROGRESS.json" --html "$GITHUB_WORKSPACE/CONFIGPROGRESS.HTML"
+          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/ISLEPROGRESS.SVG" --svg-icon assets/isle.png --target ISLE --json "$GITHUB_WORKSPACE/ISLEPROGRESS.json" --html "$GITHUB_WORKSPACE/ISLEPROGRESS.HTML"
+          reccmp-reccmp --silent -S "$GITHUB_WORKSPACE/LEGO1PROGRESS.SVG" --svg-icon assets/lego1.png --target LEGO1 --json "$GITHUB_WORKSPACE/LEGO1PROGRESS.json" --html "$GITHUB_WORKSPACE/LEGO1PROGRESS.HTML"
 
       - name: Require a 100% reccmp match on the ReproBit outcome
         shell: bash
@@ -371,9 +371,9 @@ jobs:
           set -euo pipefail
           missing=false
           for path in \
-            CONFIGPROGRESS.json CONFIGPROGRESS.SVG \
-            ISLEPROGRESS.json ISLEPROGRESS.SVG \
-            LEGO1PROGRESS.json LEGO1PROGRESS.SVG
+            CONFIGPROGRESS.json CONFIGPROGRESS.SVG CONFIGPROGRESS.HTML \
+            ISLEPROGRESS.json ISLEPROGRESS.SVG ISLEPROGRESS.HTML \
+            LEGO1PROGRESS.json LEGO1PROGRESS.SVG LEGO1PROGRESS.HTML
           do
             if ! test -s "$path"; then
               echo "::error file=$path::Missing or empty accuracy report"
@@ -389,10 +389,13 @@ jobs:
           path: |
             CONFIGPROGRESS.json
             CONFIGPROGRESS.SVG
+            CONFIGPROGRESS.HTML
             ISLEPROGRESS.json
             ISLEPROGRESS.SVG
+            ISLEPROGRESS.HTML
             LEGO1PROGRESS.json
             LEGO1PROGRESS.SVG
+            LEGO1PROGRESS.HTML
           if-no-files-found: error
           retention-days: 14
 
@@ -404,10 +407,13 @@ jobs:
           path: |
             CONFIGPROGRESS.json
             CONFIGPROGRESS.SVG
+            CONFIGPROGRESS.HTML
             ISLEPROGRESS.json
             ISLEPROGRESS.SVG
+            ISLEPROGRESS.HTML
             LEGO1PROGRESS.json
             LEGO1PROGRESS.SVG
+            LEGO1PROGRESS.HTML
           if-no-files-found: warn
           retention-days: 7
 
@@ -621,3 +627,37 @@ jobs:
           test "$(gh release view continuous --json assets --jq '.assets | length')" -eq "${#files[@]}"
           restore_needed=false
           trap - EXIT
+
+  pages:
+    name: Publish progress pages
+    needs: [exact, compare]
+    if: >-
+      ${{ github.event_name == 'push' &&
+          github.ref == 'refs/heads/master' &&
+          github.repository == 'isledecomp/isle' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Download accuracy reports
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Accuracy-Report
+
+      - name: Prepare the progress pages
+        run: |
+          set -euo pipefail
+          mkdir -p progress
+          cp CONFIGPROGRESS.SVG CONFIGPROGRESS.HTML progress/
+          cp ISLEPROGRESS.SVG ISLEPROGRESS.HTML progress/
+          cp LEGO1PROGRESS.SVG LEGO1PROGRESS.HTML progress/
+
+      - name: Upload the pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: progress/
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v5
