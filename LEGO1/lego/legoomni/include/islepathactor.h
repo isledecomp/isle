@@ -85,4 +85,13 @@ protected:
 	MxFloat m_previousVel;          // 0x15c
 };
 
+// FUNCTION: LEGO1 0x1001a6f0
+// ??0SpawnLocation@@QAE@XZ
+
+// FUNCTION: LEGO1 0x1001b1b0
+// ??0SpawnLocation@@QAE@W4Area@LegoGameState@@PAVMxAtomId@@HPBDFMFMIW4Script@JukeboxScript@@@Z
+
+// FUNCTION: LEGO1 0x1001b230
+// ??4SpawnLocation@@QAEAAU0@ABU0@@Z
+
 #endif // ISLEPATHACTOR_H

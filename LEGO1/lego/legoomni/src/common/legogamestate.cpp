@@ -145,7 +145,6 @@ const char* g_reset = "reset";
 const char* g_strEnable = "enable";
 
 // GLOBAL: LEGO1 0x100f3fc0
-// STRING: LEGO1 0x100f3bf4
 const char* g_strDisable = "disable";
 
 // FUNCTION: LEGO1 0x10039550

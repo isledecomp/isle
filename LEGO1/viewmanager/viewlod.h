@@ -38,6 +38,10 @@ public:
 	void SetFlag(unsigned char p_flag) { m_flags |= p_flag; }
 	void ClearFlag(unsigned char p_flag) { m_flags &= ~p_flag; }
 
+	// FUNCTION: LEGO1 0x100a5e40
+	// FUNCTION: BETA10 0x10171bdf
+	// ??1ViewLOD@@UAE@XZ
+
 	// SYNTHETIC: LEGO1 0x100a6f60
 	// SYNTHETIC: BETA10 0x10174f10
 	// ViewLOD::`scalar deleting destructor'

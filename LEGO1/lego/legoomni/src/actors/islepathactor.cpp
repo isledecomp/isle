@@ -19,10 +19,8 @@
 
 // SIZE 0x38
 struct SpawnLocation {
-	// FUNCTION: LEGO1 0x1001a6f0
 	SpawnLocation() {}
 
-	// FUNCTION: LEGO1 0x1001b1b0
 	SpawnLocation(
 		LegoGameState::Area p_area,
 		MxAtomId* p_script,
@@ -48,7 +46,6 @@ struct SpawnLocation {
 		m_music = p_music;
 	}
 
-	// FUNCTION: LEGO1 0x1001b230
 	SpawnLocation& operator=(const SpawnLocation& p_location)
 	{
 		m_area = p_location.m_area;
