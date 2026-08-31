@@ -7,10 +7,10 @@
 *.html  diff=html
 
 # These historical inputs are intentionally stored with CRLF bytes.
-.editorconfig                         text eol=crlf
-3rdparty/dx5/inc/d3dvec.inl          text eol=crlf
-3rdparty/smartheap/SMRTHEAP.HPP      text eol=crlf
-*.mak                                 text eol=crlf
+.editorconfig                         -text
+3rdparty/dx5/inc/d3dvec.inl          -text
+3rdparty/smartheap/SMRTHEAP.HPP      -text
+*.mak                                 -text
 
 *.ani   binary
 *.bmp   binary

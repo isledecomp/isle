@@ -144,7 +144,7 @@ jobs:
             QUARANTINE_COUNT = "2"
             QUARANTINE_BYTES = "572"
             QUARANTINE_RANGES = "23"
-            QUARANTINE_DIGEST = "7529776bbd4a92c1c83df87c387ccfa7a83ecb265c183b83b41015db360e01ff"
+            QUARANTINE_DIGEST = "e3e1cee99edab2459f51f9e7bd1d1facfba610b61c128a2b4fcd4391c3b4a895"
           }
           foreach ($claim in $expectedQuarantine.Keys) {
             $actual = (Get-Item "env:$claim").Value
@@ -496,7 +496,7 @@ jobs:
           gh release create "$staging_tag" "${files[@]}" \
             --target "$GITHUB_SHA" \
             --title "Continuous build" \
-            --notes "" \
+            --notes "Automatically reproduced and verified from $GITHUB_SHA." \
             --draft
 
           test "$(gh release view "$staging_tag" --json assets --jq '.assets | length')" -eq "${#files[@]}"
@@ -614,6 +614,7 @@ jobs:
             --tag continuous \
             --target "$GITHUB_SHA" \
             --title "Continuous build" \
+            --notes "Automatically reproduced and verified from $GITHUB_SHA." \
             --draft=false \
             --latest=false
 
