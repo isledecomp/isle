@@ -54,7 +54,6 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONUNBUFFERED: "1"
-      REPROBIT_REVISION: master
 
     steps:
       - name: Configure a byte-stable checkout
@@ -64,6 +63,14 @@ jobs:
           git config --global core.eol lf
 
       - uses: actions/checkout@v7
+
+      - name: Check out ReproBit once for provisioning and verification
+        uses: actions/checkout@v7
+        with:
+          repository: isledecomp/reprobit
+          ref: master
+          path: .reprobit-action
+          persist-credentials: false
 
       - uses: actions/setup-python@v7
         with:
@@ -84,15 +91,11 @@ jobs:
           python tools/patch_smartheap_331.py --check
           python tools/gen_smacker_lib.py --check
 
-      # The CLI used to provision the compiler and the Action that verifies the
-      # project must always come from the same ReproBit ref. Both reference the
-      # latest main; the Action reinstalls the CLI from its own checkout, so the
-      # verification step is always self-consistent.
-      - name: Install the latest ReproBit CLI
+      - name: Install the checked-out ReproBit CLI
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
-          python -m pip install "git+https://github.com/isledecomp/reprobit.git@$env:REPROBIT_REVISION"
+          python -m pip install "$env:GITHUB_WORKSPACE\.reprobit-action"
 
       - name: Provision and authenticate MSVC 4.2
         shell: pwsh
@@ -103,7 +106,7 @@ jobs:
 
       - name: Build cold and verify exact bytes
         id: reprobit
-        uses: isledecomp/reprobit@master
+        uses: ./.reprobit-action
         with:
           project-directory: .
           toolchain-root: ${{ runner.temp }}\msvc42
@@ -116,10 +119,37 @@ jobs:
           BYTE_EXACT: ${{ steps.reprobit.outputs.byte-exact }}
           LOGIC_CERTIFIED: ${{ steps.reprobit.outputs.logic-certified }}
           REPORT_PRODUCED: ${{ steps.reprobit.outputs.report-produced }}
+          CLEAN: ${{ steps.reprobit.outputs.clean }}
+          TOOLCHAIN_ORIGIN: ${{ steps.reprobit.outputs.toolchain-origin }}
+          QUARANTINED: ${{ steps.reprobit.outputs.quarantined }}
+          QUARANTINE_COUNT: ${{ steps.reprobit.outputs.quarantine-count }}
+          QUARANTINE_BYTES: ${{ steps.reprobit.outputs.quarantine-bytes }}
+          QUARANTINE_RANGES: ${{ steps.reprobit.outputs.quarantine-ranges }}
+          QUARANTINE_DIGEST: ${{ steps.reprobit.outputs.quarantine-digest }}
         run: |
           foreach ($claim in @("ACCEPTED", "BYTE_EXACT", "LOGIC_CERTIFIED", "REPORT_PRODUCED")) {
             if ((Get-Item "env:$claim").Value -ne "true") {
               throw "ReproBit did not certify $claim"
+            }
+          }
+          foreach ($claim in @("CLEAN", "TOOLCHAIN_ORIGIN")) {
+            if ((Get-Item "env:$claim").Value -ne "false") {
+              throw "ISLE's reviewed quarantine boundary unexpectedly changed $claim"
+            }
+          }
+          if ($env:QUARANTINED -ne "true") {
+            throw "ISLE's two reviewed quarantine exceptions did not run"
+          }
+          $expectedQuarantine = @{
+            QUARANTINE_COUNT = "2"
+            QUARANTINE_BYTES = "572"
+            QUARANTINE_RANGES = "23"
+            QUARANTINE_DIGEST = "b3070825543bf30072e264525bc8feb38367e1a058c94cdd9531809938dee62a"
+          }
+          foreach ($claim in $expectedQuarantine.Keys) {
+            $actual = (Get-Item "env:$claim").Value
+            if ($actual -ne $expectedQuarantine[$claim]) {
+              throw "ISLE's reviewed quarantine boundary changed ${claim}: $actual"
             }
           }
           foreach ($path in @(
@@ -466,7 +496,7 @@ jobs:
           gh release create "$staging_tag" "${files[@]}" \
             --target "$GITHUB_SHA" \
             --title "Continuous build" \
-            --notes "Automatically reproduced and verified from $GITHUB_SHA." \
+            --notes "" \
             --draft
 
           test "$(gh release view "$staging_tag" --json assets --jq '.assets | length')" -eq "${#files[@]}"
@@ -584,7 +614,6 @@ jobs:
             --tag continuous \
             --target "$GITHUB_SHA" \
             --title "Continuous build" \
-            --notes "Automatically reproduced and verified from $GITHUB_SHA." \
             --draft=false \
             --latest=false
 

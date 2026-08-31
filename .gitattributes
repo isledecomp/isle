@@ -1,7 +1,27 @@
-*.MD    text eol=lf diff=markdown
-*.cpp   text eol=lf diff=cpp
-*.h     text eol=lf diff=cpp
-*.py    text eol=lf diff=python
-*.html  text eol=lf diff=html
+*       text=auto eol=lf
+
+*.MD    diff=markdown
+*.cpp   diff=cpp
+*.h     diff=cpp
+*.py    diff=python
+*.html  diff=html
+
+# These historical inputs are intentionally stored with CRLF bytes.
+.editorconfig                         text eol=crlf
+3rdparty/dx5/inc/d3dvec.inl          text eol=crlf
+3rdparty/smartheap/SMRTHEAP.HPP      text eol=crlf
+*.mak                                 text eol=crlf
+
+*.ani   binary
+*.bmp   binary
+*.cur   binary
+*.DTA   binary
+*.GS    binary
+*.gsi   binary
+*.ico   binary
+*.lbw   binary
+*.lib   binary
+*.LIB   binary
 *.mdp   binary
-*.mak   text eol=crlf
+*.png   binary
+*.tex   binary
