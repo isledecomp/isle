@@ -144,7 +144,7 @@ jobs:
             QUARANTINE_COUNT = "2"
             QUARANTINE_BYTES = "572"
             QUARANTINE_RANGES = "23"
-            QUARANTINE_DIGEST = "e3e1cee99edab2459f51f9e7bd1d1facfba610b61c128a2b4fcd4391c3b4a895"
+            QUARANTINE_DIGEST = "f55d274cf6948c6f944794b03686e52f86ef060ba487cc152d3ff1140edf5ba2"
           }
           foreach ($claim in $expectedQuarantine.Keys) {
             $actual = (Get-Item "env:$claim").Value
