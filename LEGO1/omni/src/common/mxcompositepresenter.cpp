@@ -33,18 +33,18 @@ MxResult MxCompositePresenter::StartAction(MxStreamController* p_controller, MxD
 	MxResult result = FAILURE;
 	MxDSActionList* actions = ((MxDSMultiAction*) p_action)->GetActionList();
 	MxObjectFactory* factory = ObjectFactory();
-	MxDSActionListCursor cursor(actions);
+	MxDSActionListCursor actionCursor(actions);
 	MxDSAction* action;
 
 	if (MxPresenter::StartAction(p_controller, p_action) == SUCCESS) {
-		cursor.Head();
+		actionCursor.Head();
 
-		while (cursor.Current(action)) {
+		while (actionCursor.Current(action)) {
 			MxBool success = FALSE;
 			const char* presenterName;
 			MxPresenter* presenter = NULL;
 
-			cursor.Next();
+			actionCursor.Next();
 
 			if (m_action->GetFlags() & MxDSAction::c_looping) {
 				action->SetFlags(action->GetFlags() | MxDSAction::c_looping);
@@ -148,10 +148,10 @@ void MxCompositePresenter::HandleEndAction(MxEndActionNotificationParam& p_param
 
 	if (m_action) {
 		MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
-		MxDSActionListCursor cursor(actions);
+		MxDSActionListCursor actionCursor(actions);
 
-		if (cursor.Find(action)) {
-			cursor.Detach();
+		if (actionCursor.Find(action)) {
+			actionCursor.Detach();
 		}
 	}
 
@@ -191,10 +191,10 @@ void MxCompositePresenter::HandlePresenter(MxNotificationParam& p_param)
 				}
 
 				MxDSActionList* actions = ((MxDSMultiAction*) m_action)->GetActionList();
-				MxDSActionListCursor cursor(actions);
+				MxDSActionListCursor actionCursor(actions);
 
-				if (cursor.Find(presenter->GetAction())) {
-					cursor.Detach();
+				if (actionCursor.Find(presenter->GetAction())) {
+					actionCursor.Detach();
 				}
 
 				if (m_list.empty()) {

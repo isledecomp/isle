@@ -108,7 +108,6 @@ public:
 		MxU16 m_height;  // 0x08
 	};
 
-	inline MxS32 PrepareRects(RECT& p_rectDest, RECT& p_rectSrc);
 	MxBitmap* GetBitmap() { return m_frameBitmap; }
 	AlphaMask* GetAlphaMask() { return m_alpha; }
 

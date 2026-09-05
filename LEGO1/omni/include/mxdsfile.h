@@ -50,7 +50,7 @@ public:
 	// FUNCTION: BETA10 0x1015e110
 	void SetFileName(const char* p_filename) { m_filename = p_filename; }
 
-	MxS32 CalcFileSize() { return GetFileSize(m_io.m_info.hmmio, NULL); }
+	MxS32 CalcFileSize() { return GetFileSize(m_io.hmmio, NULL); }
 
 	// SYNTHETIC: LEGO1 0x100c01e0
 	// SYNTHETIC: BETA10 0x10148e40
