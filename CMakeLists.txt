@@ -211,8 +211,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/audio/mxsoundmanager.cpp
     LEGO1/omni/src/main/mxmain.cpp
     LEGO1/omni/src/notify/mxactionnotificationparam.cpp
-    LEGO1/omni/src/main/mxomnicreateflags.cpp
-    LEGO1/omni/src/main/mxomnicreateparam.cpp
     LEGO1/omni/src/common/mxobjectfactory.cpp
     LEGO1/omni/src/audio/mxsoundpresenter.cpp
     LEGO1/omni/src/audio/mxwavepresenter.cpp
@@ -225,6 +223,7 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/common/mxmediapresenter.cpp
     LEGO1/omni/src/common/mxcompositepresenter.cpp
     LEGO1/omni/src/system/mxcriticalsection.cpp
+    LEGO1/define.cpp
     LEGO1/omni/src/common/mxutilities.cpp
     LEGO1/omni/src/common/mxvariabletable.cpp
     LEGO1/omni/src/stream/mxdssubscriber.cpp
@@ -243,7 +242,6 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/video/mxvideoparamflags.cpp
     LEGO1/omni/src/video/mxvideoparam.cpp
     LEGO1/omni/src/video/mxpalette.cpp
-    LEGO1/omni/src/system/mxscheduler.cpp
     LEGO1/omni/src/system/mxthread.cpp
     LEGO1/omni/src/action/mxdsobject.cpp
     LEGO1/omni/src/event/mxeventmanager.cpp
@@ -273,13 +271,18 @@ function(add_lego_libraries NAME)
     LEGO1/omni/src/stream/mxdsfile.cpp
     LEGO1/omni/src/stream/mxio.cpp
     LEGO1/omni/src/action/mxdsstreamingaction.cpp
-    LEGO1/omni/src/stream/mxramstreamprovider.cpp
-    LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
   )
   list(APPEND list_targets omni${ARG_SUFFIX})
   set_property(TARGET omni${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
   target_include_directories(omni${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
-  target_link_libraries(omni${ARG_SUFFIX} PRIVATE dsound winmm Smacker::Smacker)
+  add_library(streamprovider${ARG_SUFFIX} STATIC
+    LEGO1/omni/src/stream/mxramstreamprovider.cpp
+    LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
+  )
+  list(APPEND list_targets streamprovider${ARG_SUFFIX})
+  set_property(TARGET streamprovider${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "streamprovider$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
+  target_include_directories(streamprovider${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
+  target_link_libraries(omni${ARG_SUFFIX} PRIVATE dsound winmm Smacker::Smacker streamprovider${ARG_SUFFIX})
 
   add_library(${NAME} SHARED
     LEGO1/res/lego1.rc
@@ -387,11 +390,9 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
     # We need to get rid of / refactor the below units into existing/other ones
-    LEGO1/main.cpp
     LEGO1/lego/legoomni/src/entity/legolocations.cpp
     LEGO1/lego/legoomni/src/common/legoactors.cpp
     LEGO1/lego/legoomni/src/common/legoplants.cpp
-    LEGO1/define.cpp
   )
   list(APPEND list_targets ${NAME})
 
