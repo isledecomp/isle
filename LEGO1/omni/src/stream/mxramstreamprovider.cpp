@@ -158,7 +158,7 @@ MxU32 ReadData(MxU8* p_buffer, MxU32 p_size)
 	}
 
 	*MxStreamChunk::IntoFlags(data2) &= ~DS_CHUNK_SPLIT;
-	return MxDSChunk::Size(data2) + (MxU32) (data2 - p_buffer);
+	return MxDSChunk::End(data2) - p_buffer;
 
 #undef IntoType
 }
