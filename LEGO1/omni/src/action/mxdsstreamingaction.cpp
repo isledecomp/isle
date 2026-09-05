@@ -71,14 +71,14 @@ MxDSStreamingAction* MxDSStreamingAction::CopyFrom(MxDSStreamingAction& p_dsStre
 	m_unk0xa4 = NULL;
 	m_unk0xac = p_dsStreamingAction.m_unk0xac;
 	m_unk0xa8 = p_dsStreamingAction.m_unk0xa8;
-	SetInternalAction(p_dsStreamingAction.m_internalAction ? p_dsStreamingAction.m_internalAction->Clone() : NULL);
+	SetAction(p_dsStreamingAction.m_internalAction ? p_dsStreamingAction.m_internalAction->Clone() : NULL);
 
 	return this;
 }
 
 // FUNCTION: LEGO1 0x100cd2a0
 // FUNCTION: BETA10 0x1015f698
-void MxDSStreamingAction::SetInternalAction(MxDSAction* p_dsAction)
+void MxDSStreamingAction::SetAction(MxDSAction* p_dsAction)
 {
 	if (m_internalAction) {
 		delete m_internalAction;
