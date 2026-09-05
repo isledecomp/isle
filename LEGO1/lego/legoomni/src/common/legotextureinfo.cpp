@@ -1,13 +1,21 @@
 #include "legotextureinfo.h"
+#include "realtime/matrix4d.inl.h"
 
 #include "legovideomanager.h"
 #include "misc.h"
 #include "misc/legoimage.h"
 #include "misc/legotexture.h"
 #include "mxdirectx/mxdirect3d.h"
-#include "tgl/d3drm/impl.h"
+#include "tgl/d3drm/tglimpl.h"
 
 DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10)
+
+inline void GetMeshData(IDirect3DRMMesh** p_mesh, D3DRMGROUPINDEX& p_index, Tgl::Mesh* p_tglElem)
+{
+	TglImpl::MeshImpl* meshImpl = (TglImpl::MeshImpl*) p_tglElem;
+	*p_mesh = meshImpl->ImplementationData()->groupMesh;
+	p_index = meshImpl->ImplementationData()->groupIndex;
+}
 
 // FUNCTION: LEGO1 0x10065bf0
 LegoTextureInfo::LegoTextureInfo()
@@ -156,18 +164,21 @@ done:
 // FUNCTION: LEGO1 0x10065f60
 BOOL LegoTextureInfo::SetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo* p_textureInfo)
 {
-	TglImpl::MeshImpl::MeshData* data = ((TglImpl::MeshImpl*) pMesh)->ImplementationData();
-	data->groupMesh->SetGroupTexture(data->groupIndex, p_textureInfo->m_texture);
+	IDirect3DRMMesh* mesh;
+	D3DRMGROUPINDEX id;
+	GetMeshData(&mesh, id, pMesh);
+
+	mesh->SetGroupTexture(id, p_textureInfo->m_texture);
 	return TRUE;
 }
 
 // FUNCTION: LEGO1 0x10065f90
 BOOL LegoTextureInfo::GetGroupTexture(Tgl::Mesh* pMesh, LegoTextureInfo*& p_textureInfo)
 {
-	TglImpl::MeshImpl::MeshData* data = ((TglImpl::MeshImpl*) pMesh)->ImplementationData();
+	IDirect3DRMMesh* mesh;
+	D3DRMGROUPINDEX id;
+	GetMeshData(&mesh, id, pMesh);
 
-	IDirect3DRMMesh* mesh = data->groupMesh;
-	D3DRMGROUPINDEX id = data->groupIndex;
 	LPDIRECT3DRMTEXTURE returnPtr = NULL;
 	LPDIRECT3DRMTEXTURE2 texture = NULL;
 
