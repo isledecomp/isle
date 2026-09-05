@@ -16,6 +16,7 @@ RaceSkel::RaceSkel()
 }
 
 // FUNCTION: LEGO1 0x10071ad0
+// FUNCTION: BETA10 0x100f1333
 RaceSkel::~RaceSkel()
 {
 }

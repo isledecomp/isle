@@ -1,4 +1,3 @@
-
 // For ISLE symbols only
 
 // aka `operator new`
@@ -321,6 +320,9 @@
 // GLOBAL: ISLE 0x410d98
 // ___small_block_heap
 
+// GLOBAL: ISLE 0x4115d0
+// __iob
+
 // GLOBAL: ISLE 0x411850
 // __cflush
 
@@ -329,6 +331,12 @@
 
 // GLOBAL: ISLE 0x41288c
 // ___unguarded_readlc_active
+
+// GLOBAL: ISLE 0x412890
+// ___piob
+
+// GLOBAL: ISLE 0x4138a0
+// __nstream
 
 // GLOBAL: ISLE 0x4138a4
 // __crtheap
@@ -339,8 +347,22 @@
 // GLOBAL: ISLE 0x4139b0
 // __nhandle
 
+// GLOBAL: ISLE 0x4139b4
+// ___onexitend
+
+// GLOBAL: ISLE 0x4139b8
+// ___onexitbegin
+
 // GLOBAL: ISLE 0x4139bc
 // __FPinit
 
 // GLOBAL: ISLE 0x4139c0
 // __acmdln
+
+/// Globals from libraries without symbols
+
+// STRING: ISLE 0x40f4a4
+// "\0"
+
+// STRING: ISLE 0x40f4a8
+// L"\0"

@@ -77,6 +77,7 @@ MxResult MxStreamChunk::SendChunk(MxDSSubscriberList& p_subscriberList, MxBool p
 }
 
 // FUNCTION: LEGO1 0x100c3170
+// FUNCTION: BETA10 0x101515d0
 void MxStreamChunk::SetBuffer(MxDSBuffer* p_buffer)
 {
 	m_buffer = p_buffer;
@@ -90,6 +91,7 @@ MxU16* MxStreamChunk::IntoFlags(MxU8* p_buffer)
 }
 
 // FUNCTION: LEGO1 0x100c3190
+// FUNCTION: BETA10 0x10151607
 MxU32* MxStreamChunk::IntoObjectId(MxU8* p_buffer)
 {
 	return (MxU32*) (p_buffer + 0x0a);

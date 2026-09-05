@@ -1,5 +1,3 @@
-
-
 // LIBRARY: LEGO1 0x100861d0
 // ?shi_New@@YAPAXKIPAU_SHI_Pool@@@Z
 
@@ -251,6 +249,9 @@
 
 // GLOBAL: LEGO1 0x100fc530
 // _MemDefaultPool
+
+// GLOBAL: LEGO1 0x100fc538
+// __shi_freeFns
 
 // GLOBAL: LEGO1 0x100fc54c
 // __shi_compactPoolFn
