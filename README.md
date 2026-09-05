@@ -2,7 +2,7 @@
 
 [Development Vlog](https://www.youtube.com/playlist?list=PLbpl-gZkNl2Db4xcAsT_xOfOwRk-2DPHL) | [Contributing](/CONTRIBUTING.md) | [Matrix](https://matrix.to/#/#isledecomp:matrix.org) | [Forums](https://forum.mattkc.com/viewforum.php?f=1) | [Patreon](https://www.patreon.com/mattkc)
   
-This is a functionally complete decompilation of LEGO Island (Version 1.1, English). It aims to be as accurate as possible, matching the recompiled instructions to the original machine code as much as possible. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
+This is a complete decompilation of LEGO Island (Version 1.1, English). It aims to be as accurate as possible, matching the recompiled instructions to the original machine code as much as possible. The goal is to provide a workable codebase that can be modified, improved, and ported to other platforms later on.
 
 > **Note:** This repository is for decompilation only and its code is true to the original release. It will not compile for targets other than 32-bit Windows. For a modern adaptation of the LEGO Island codebase with native compatibility for all major platforms and the Web, see [isle-portable](https://github.com/isledecomp/isle-portable) instead.
 
@@ -10,16 +10,57 @@ This is a functionally complete decompilation of LEGO Island (Version 1.1, Engli
 
 <a href="https://isledecomp.github.io/isle/ISLEPROGRESS.HTML"><img src="https://isledecomp.github.io/isle/ISLEPROGRESS.SVG" width="50%"></a><a href="https://isledecomp.github.io/isle/LEGO1PROGRESS.HTML"><img src="https://isledecomp.github.io/isle/LEGO1PROGRESS.SVG" width="50%"></a>
 
-Both `ISLE.EXE` and `LEGO1.DLL` are completely decompiled and, to the best of our knowledge, are functionally identical to the originals. However, work is still ongoing to improve the accuracy, naming, documentation, and structure of the source code. While there may still be unresolved bugs that are not present in retail, the game should be fully playable with the binaries derived from this source code.
-
-Due to various complexities with regard to the compiler, these binaries are not a byte-for-byte match of the original executables. We remain hopeful that this can be resolved at some point.
+`CONFIG.EXE`, `ISLE.EXE`, and `LEGO1.DLL` are completely decompiled. The
+project's reviewed [ReproBit](https://github.com/isledecomp/reprobit) build uses
+the original Microsoft Visual C++ 4.2 toolchain and reproduces all three retail
+binaries byte for byte. Work continues on naming, documentation, and source
+clarity without changing those results.
 
 ## Building
 
-This project uses the [CMake](https://cmake.org/) build system, which allows for a high degree of versatility regarding compilers and development environments. For the most accurate results, Microsoft Visual C++ 4.20 (the same compiler used to build the original game) is recommended. Since we're trying to match the output of this code to the original executables as closely as possible, all contributions will be graded with the output of this compiler.
+There are two build paths:
 
+- ReproBit produces and certifies the exact release binaries.
+- The ordinary CMake build is useful for day-to-day development, but its
+  outputs are not release-certified.
 
-These instructions will outline how to compile this repository using Visual C++ 4.2 into highly-accurate binaries where the majority of functions are instruction-matching with retail. If you wish, you can try using other compilers, but this is at your own risk and won't be covered in this guide.
+### Reproduce the retail binaries exactly
+
+Start with a fresh checkout and install Python 3.11 or newer, Git, and
+[ReproBit](https://github.com/isledecomp/reprobit#install-and-set-up-the-pre-release).
+macOS and Linux also need Wine. Place your English 1.1 retail files at
+`legobin/CONFIG.EXE`, `legobin/ISLE.EXE`, and `legobin/LEGO1.DLL`, then run these
+commands from the repository root:
+
+```console
+rbit setup .
+rbit verify .
+```
+
+`setup` obtains and checks the original compiler. `verify` builds everything
+from scratch and checks every byte against the retail files. A successful run
+writes `build/CONFIG.EXE`, `build/ISLE.EXE`, and `build/LEGO1.DLL`; open
+`.reprobit-state/reports/report.html` to review the result.
+Use `rbit build .` for faster incremental builds while editing, then run
+`rbit verify .` before sharing a result.
+
+GitHub Actions uses the same verification for the continuous release, which
+includes the exact binaries, reccmp progress files, and ReproBit's readable
+`report.html` plus its full `report.json` record. The ordinary CMake
+instructions below remain useful for development builds, but only ReproBit
+certifies byte-for-byte release outputs.
+
+### Ordinary developer build
+
+This project uses the [CMake](https://cmake.org/) build system with several
+compilers and development environments. Microsoft Visual C++ 4.20 is the
+original game's compiler and remains the most representative choice. ReproBit's
+byte-for-byte verification is the authoritative result for contributions and
+releases.
+
+These instructions build useful local binaries with Visual C++ 4.2. They do
+not replace ReproBit's exact verification. Other compilers may work for
+experimentation, but are not covered here.
 
 #### Prerequisites
 
@@ -35,7 +76,7 @@ You will need the following software installed:
 1. Make a folder for compiled objects to go, such as a `build` folder inside the source repository (the folder you cloned/downloaded to).
 1. In your Command Prompt, `cd` to the build folder.
 1. Configure the project with CMake by running:
-```
+```console
 cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
 ```
   - **Visual C++ 4.2 has issues with paths containing spaces**. If you get configure or build errors, make sure neither CMake, the repository, nor Visual C++ 4.2 is in a path that contains spaces.
@@ -44,7 +85,7 @@ cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo
   - `RelWithDebInfo` is recommended because it will produce debug symbols useful for further decompilation work. However, you can change this to `Release` if you don't need them. While `Debug` builds can be compiled and used, they are not recommended as the primary goal is to match the code to the original binary. This is because the retail binaries were compiled as `Release` builds.
   - `NMake Makefiles` is most recommended because it will be immediately compatible with Visual C++ 4.2. For faster builds, you can use `Ninja` (if you have it installed), however due to limitations in Visual C++ 4.2, you can only build `Release` builds this way (debug symbols cannot be generated with `Ninja`).
 1. Build the project by running `nmake` or `cmake --build <build-folder>`
-1. When this is done, there should be a recompiled `ISLE.EXE` and `LEGO1.DLL` in the build folder.
+1. When this is done, there should be recompiled `CONFIG.EXE`, `ISLE.EXE`, and `LEGO1.DLL` files in the build folder.
 1. Note that `nmake` must be run twice under certain conditions, so it is advisable to always (re-)compile using `nmake && nmake`.
 
 If you have a CMake-compatible IDE, it should be pretty straightforward to use this repository, as long as you can use `VCVARS32.BAT` and set the generator to `NMake Makefiles`.
@@ -55,7 +96,7 @@ Alternatively, we support Docker as a method of compilation. This is ideal for u
 
 Compilation should be as simple as configuring and running the following command:
 
-```
+```console
 docker run -d \
 	-e CMAKE_FLAGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo" \
 	-v <path-to-source>:/isle:rw \
