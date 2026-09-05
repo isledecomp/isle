@@ -2,7 +2,7 @@
 #define LEGOPATHCONTROLLER_H
 
 #include "decomp.h"
-#include "geom/legoorientededge.h"
+#include "geom/legowegedge.h"
 #include "legopathactor.h"
 #include "legopathboundary.h"
 #include "legopathstruct.h"

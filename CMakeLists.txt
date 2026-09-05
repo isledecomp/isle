@@ -101,15 +101,7 @@ function(add_lego_libraries NAME)
   set(SUFFIX "${ARG_SUFFIX}")
 
   add_library(tglrl${ARG_SUFFIX} STATIC
-    LEGO1/tgl/d3drm/renderer.cpp
-    LEGO1/tgl/d3drm/texture.cpp
-    LEGO1/tgl/d3drm/view.cpp
-    LEGO1/tgl/d3drm/device.cpp
-    LEGO1/tgl/d3drm/group.cpp
-    LEGO1/tgl/d3drm/camera.cpp
-    LEGO1/tgl/d3drm/light.cpp
-    LEGO1/tgl/d3drm/meshbuilder.cpp
-    LEGO1/tgl/d3drm/mesh.cpp
+    LEGO1/tgl/d3drm/tglrl40.cpp
   )
   list(APPEND list_targets tglrl${ARG_SUFFIX})
   set_property(TARGET tglrl${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -118,7 +110,6 @@ function(add_lego_libraries NAME)
 
   add_library(realtime${ARG_SUFFIX} STATIC
     LEGO1/realtime/orientableroi.cpp
-    LEGO1/realtime/realtime.cpp
     LEGO1/realtime/realtimeview.cpp
   )
   list(APPEND list_targets realtime${ARG_SUFFIX})
@@ -127,10 +118,8 @@ function(add_lego_libraries NAME)
   target_link_libraries(realtime${ARG_SUFFIX} PRIVATE Vec::Vec)
 
   add_library(viewmanager${ARG_SUFFIX} STATIC
-    LEGO1/viewmanager/viewlod.cpp
     LEGO1/viewmanager/viewmanager.cpp
     LEGO1/viewmanager/viewlodlist.cpp
-    LEGO1/viewmanager/viewroi.cpp
   )
   list(APPEND list_targets viewmanager${ARG_SUFFIX})
   set_property(TARGET viewmanager${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -158,10 +147,9 @@ function(add_lego_libraries NAME)
   target_link_libraries(roi${ARG_SUFFIX} PRIVATE viewmanager${ARG_SUFFIX} Vec::Vec)
 
   add_library(geom${ARG_SUFFIX} STATIC
-    LEGO1/lego/sources/geom/legoedge.cpp
     LEGO1/lego/sources/geom/legoweedge.cpp
-    LEGO1/lego/sources/geom/legoorientededge.cpp
     LEGO1/lego/sources/geom/legowegedge.cpp
+    LEGO1/lego/sources/misc/legospline.cpp
   )
   list(APPEND list_targets geom${ARG_SUFFIX})
   set_property(TARGET geom${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "geom$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
@@ -181,6 +169,7 @@ function(add_lego_libraries NAME)
   target_link_libraries(shape${ARG_SUFFIX} PRIVATE)
 
   add_library(anim${ARG_SUFFIX} STATIC
+    LEGO1/lego/sources/anim/legoanimscene.cpp
     LEGO1/lego/sources/anim/legoanim.cpp
   )
   list(APPEND list_targets anim${ARG_SUFFIX})
@@ -189,7 +178,6 @@ function(add_lego_libraries NAME)
 
   add_library(misc${ARG_SUFFIX} STATIC
     LEGO1/lego/sources/misc/legotexture.cpp
-    LEGO1/lego/sources/misc/legospline.cpp
     LEGO1/lego/sources/misc/legostorage.cpp
     LEGO1/lego/sources/misc/legoimage.cpp
     LEGO1/lego/sources/misc/legocontainer.cpp

@@ -2,7 +2,7 @@
 #define VIEWLOD_H
 
 #include "decomp.h"
-#include "realtime/roi.h"
+#include "realtime/realtime.h"
 #include "tgl/tgl.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -23,13 +23,8 @@ public:
 
 	~ViewLOD() override;
 
-	// FUNCTION: LEGO1 0x100a6f30
-	// FUNCTION: BETA10 0x10174db0
-	double AveragePolyArea() const override { return 2 * 3.14159 * 10.0 / NumPolys(); } // vtable+0x04
-
-	// FUNCTION: LEGO1 0x100a6f50
-	// FUNCTION: BETA10 0x10174de0
-	int NVerts() const override { return NumPolys() * 2; } // vtable+0x08
+	inline double AveragePolyArea() const override; // vtable+0x04
+	inline int NVerts() const override;             // vtable+0x08
 
 	Tgl::MeshBuilder* GetMeshBuilder() { return m_meshBuilder; }
 	const Tgl::MeshBuilder* GetMeshBuilder() const { return m_meshBuilder; }
@@ -42,6 +37,10 @@ public:
 
 	void SetFlag(unsigned char p_flag) { m_flags |= p_flag; }
 	void ClearFlag(unsigned char p_flag) { m_flags &= ~p_flag; }
+
+	// FUNCTION: LEGO1 0x100a5e40
+	// FUNCTION: BETA10 0x10171bdf
+	// ??1ViewLOD@@UAE@XZ
 
 	// SYNTHETIC: LEGO1 0x100a6f60
 	// SYNTHETIC: BETA10 0x10174f10

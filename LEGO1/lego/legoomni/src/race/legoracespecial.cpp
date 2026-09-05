@@ -1,6 +1,6 @@
 #include "legoracespecial.h"
 
-#include "geom/legoorientededge.h"
+#include "geom/legowegedge.h"
 #include "legonavcontroller.h"
 #include "legopathboundary.h"
 #include "legopathcontroller.h"
