@@ -4,6 +4,14 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 jobs:
   fetch-deps:
@@ -12,7 +20,7 @@ jobs:
 
   build-current-toolchain:
     name: Current ${{ matrix.toolchain.name }}
-    runs-on: windows-latest
+    runs-on: windows-2022
     defaults:
       run:
         shell: ${{ matrix.toolchain.shell }}
@@ -50,7 +58,7 @@ jobs:
         with:
           arch: amd64_x86  # Use the 64-bit x64-native cross tools to build 32-bit x86 code
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build
         run: |
@@ -64,12 +72,12 @@ jobs:
 
   build:
     name: 'MSVC 4.20'
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         repository: itsmattkc/msvc420
         path: msvc420
@@ -92,7 +100,7 @@ jobs:
         cmake --build build
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@v7
       with:
         name: Win32
         path: |
@@ -105,12 +113,12 @@ jobs:
 
   build-beta:
     name: 'MSVC 4.20 (BETA10)'
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         repository: itsmattkc/msvc420
         path: msvc420
@@ -129,11 +137,11 @@ jobs:
       shell: cmd
       run: |
         call .\msvc420\bin\VCVARS32.BAT x86
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DISLE_INCLUDE_ENTROPY=OFF -DISLE_BUILD_BETA10=ON -DISLE_BUILD_LEGO1=OFF -DISLE_BUILD_APP=OFF -DISLE_BUILD_CONFIG=OFF -G "NMake Makefiles"
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DISLE_BUILD_BETA10=ON -DISLE_BUILD_LEGO1=OFF -DISLE_BUILD_APP=OFF -DISLE_BUILD_CONFIG=OFF -G "NMake Makefiles"
         cmake --build build
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@v7
       with:
         name: Win32-beta
         path: |
@@ -143,9 +151,9 @@ jobs:
   verify:
     name: Verify decomp
     needs: [build, fetch-deps]
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v7
 
     - uses: actions/setup-python@v5
       with:
@@ -216,7 +224,7 @@ jobs:
         reccmp-datacmp --target LEGO1
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@main
+      uses: actions/upload-artifact@v7
       with:
         name: Accuracy Report
         path: |
@@ -230,7 +238,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle' }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         repository: probonopd/uploadtool
 
