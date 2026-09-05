@@ -225,14 +225,14 @@ protected:
 // TEMPLATE: LEGO1 0x10018b70
 // List<LegoBoundaryEdge>::~List<LegoBoundaryEdge>
 
-// TEMPLATE: LEGO1 0x10018bc0
-// list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >::~list<LegoBoundaryEdge,allocator<LegoBoundaryEdge> >
+// TEMPLATE: LEGO1 0x10018bc0 SYMBOL
+// ??1?$list@ULegoBoundaryEdge@@V?$allocator@ULegoBoundaryEdge@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1002ef10
-// list<LegoPathBoundary *,allocator<LegoPathBoundary *> >::~list<LegoPathBoundary *,allocator<LegoPathBoundary *> >
+// TEMPLATE: LEGO1 0x1002ef10 SYMBOL
+// ??1?$list@PAVLegoPathBoundary@@V?$allocator@PAVLegoPathBoundary@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1002ef80
-// list<LegoPathBoundary *,allocator<LegoPathBoundary *> >::insert
+// TEMPLATE: LEGO1 0x1002ef80 SYMBOL
+// ?insert@?$list@PAVLegoPathBoundary@@V?$allocator@PAVLegoPathBoundary@@@@@@QAE?AViterator@1@V21@ABQAVLegoPathBoundary@@@Z
 
 // TEMPLATE: LEGO1 0x1002efd0
 // List<LegoPathBoundary *>::~List<LegoPathBoundary *>

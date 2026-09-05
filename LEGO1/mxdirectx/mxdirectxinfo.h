@@ -94,6 +94,7 @@ struct Direct3DDeviceInfo {
 // SIZE 0x0c
 struct MxDisplayMode {
 	MxDisplayMode() {}
+
 	// FUNCTION: BETA10 0x1011f920
 	MxDisplayMode(DWORD p_width, DWORD p_height, DWORD p_bitsPerPixel)
 	{
@@ -129,15 +130,15 @@ struct MxDriver {
 	int operator<(MxDriver) const { return 0; }
 };
 
-// TEMPLATE: CONFIG 0x401000
-// TEMPLATE: LEGO1 0x1009b900
-// TEMPLATE: BETA10 0x1011ee40
-// list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >::~list<Direct3DDeviceInfo,allocator<Direct3DDeviceInfo> >
+// TEMPLATE: CONFIG 0x401000 SYMBOL
+// TEMPLATE: LEGO1 0x1009b900 SYMBOL
+// TEMPLATE: BETA10 0x1011ee40 SYMBOL
+// ??1?$list@UDirect3DDeviceInfo@@V?$allocator@UDirect3DDeviceInfo@@@@@@QAE@XZ
 
-// TEMPLATE: CONFIG 0x401070
-// TEMPLATE: LEGO1 0x1009b970
-// TEMPLATE: BETA10 0x1011f0a0
-// list<MxDisplayMode,allocator<MxDisplayMode> >::~list<MxDisplayMode,allocator<MxDisplayMode> >
+// TEMPLATE: CONFIG 0x401070 SYMBOL
+// TEMPLATE: LEGO1 0x1009b970 SYMBOL
+// TEMPLATE: BETA10 0x1011f0a0 SYMBOL
+// ??1?$list@UMxDisplayMode@@V?$allocator@UMxDisplayMode@@@@@@QAE@XZ
 
 // TEMPLATE: CONFIG 0x4010e0
 // TEMPLATE: LEGO1 0x1009b9e0
@@ -149,10 +150,10 @@ struct MxDriver {
 // TEMPLATE: BETA10 0x1011f430
 // List<MxDisplayMode>::~List<MxDisplayMode>
 
-// TEMPLATE: CONFIG 0x401650
-// TEMPLATE: LEGO1 0x1009bf50
-// TEMPLATE: BETA10 0x1011f550
-// list<MxDriver,allocator<MxDriver> >::~list<MxDriver,allocator<MxDriver> >
+// TEMPLATE: CONFIG 0x401650 SYMBOL
+// TEMPLATE: LEGO1 0x1009bf50 SYMBOL
+// TEMPLATE: BETA10 0x1011f550 SYMBOL
+// ??1?$list@UMxDriver@@V?$allocator@UMxDriver@@@@@@QAE@XZ
 
 // TEMPLATE: CONFIG 0x4016c0
 // TEMPLATE: LEGO1 0x1009bfc0

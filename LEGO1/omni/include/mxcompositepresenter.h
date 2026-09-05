@@ -62,11 +62,11 @@ protected:
 	MxCompositePresenterList m_list; // 0x40
 };
 
-// TEMPLATE: LEGO1 0x1004ae90
-// list<MxPresenter *,allocator<MxPresenter *> >::_Buynode
+// TEMPLATE: LEGO1 0x1004ae90 SYMBOL
+// ?_Buynode@?$list@PAVMxPresenter@@V?$allocator@PAVMxPresenter@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
-// TEMPLATE: LEGO1 0x100b61a0
-// list<MxPresenter *,allocator<MxPresenter *> >::~list<MxPresenter *,allocator<MxPresenter *> >
+// TEMPLATE: LEGO1 0x100b61a0 SYMBOL
+// ??1?$list@PAVMxPresenter@@V?$allocator@PAVMxPresenter@@@@@@QAE@XZ
 
 // SYNTHETIC: LEGO1 0x100b62d0
 // MxCompositePresenter::`scalar deleting destructor'

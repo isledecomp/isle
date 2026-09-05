@@ -120,6 +120,7 @@ void LegoActor::ParseAction(char* p_extra)
 }
 
 // FUNCTION: LEGO1 0x1002d660
+// FUNCTION: BETA10 0x1003d617
 const char* LegoActor::GetActorName(MxU8 p_id)
 {
 	return g_actorNames[p_id];

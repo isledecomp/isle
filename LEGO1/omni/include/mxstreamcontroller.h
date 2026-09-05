@@ -88,22 +88,22 @@ protected:
 	MxDSAction* m_action0x60;                   // 0x60
 };
 
-// TEMPLATE: LEGO1 0x100c0d60
-// list<MxDSObject *,allocator<MxDSObject *> >::~list<MxDSObject *,allocator<MxDSObject *> >
+// TEMPLATE: LEGO1 0x100c0d60 SYMBOL
+// ??1?$list@PAVMxDSObject@@V?$allocator@PAVMxDSObject@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x100c0dd0
-// list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::~list<MxDSSubscriber *,allocator<MxDSSubscriber *> >
+// TEMPLATE: LEGO1 0x100c0dd0 SYMBOL
+// ??1?$list@PAVMxDSSubscriber@@V?$allocator@PAVMxDSSubscriber@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x100c0e40
-// list<MxDSSubscriber *,allocator<MxDSSubscriber *> >::_Buynode
+// TEMPLATE: LEGO1 0x100c0e40 SYMBOL
+// ?_Buynode@?$list@PAVMxDSSubscriber@@V?$allocator@PAVMxDSSubscriber@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100c0e70
-// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::~list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >
+// TEMPLATE: LEGO1 0x100c0e70 SYMBOL
+// ??1?$list@PAVMxNextActionDataStart@@V?$allocator@PAVMxNextActionDataStart@@@@@@QAE@XZ
 // clang-format on
 
-// TEMPLATE: LEGO1 0x100c0ee0
-// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::_Buynode
+// TEMPLATE: LEGO1 0x100c0ee0 SYMBOL
+// ?_Buynode@?$list@PAVMxNextActionDataStart@@V?$allocator@PAVMxNextActionDataStart@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
 // SYNTHETIC: LEGO1 0x100c0fa0
 // MxStreamController::`scalar deleting destructor'
@@ -135,8 +135,8 @@ protected:
 // TEMPLATE: LEGO1 0x100c1240
 // List<MxNextActionDataStart *>::~List<MxNextActionDataStart *>
 
-// TEMPLATE: LEGO1 0x100c1bc0
-// list<MxDSObject *,allocator<MxDSObject *> >::insert
+// TEMPLATE: LEGO1 0x100c1bc0 SYMBOL
+// ?insert@?$list@PAVMxDSObject@@V?$allocator@PAVMxDSObject@@@@@@QAE?AViterator@1@V21@ABQAVMxDSObject@@@Z
 
 // TEMPLATE: BETA10 0x10150b90
 // MxUtilityList<MxDSSubscriber *>::PushBack

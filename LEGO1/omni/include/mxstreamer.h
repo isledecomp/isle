@@ -122,9 +122,9 @@ private:
 };
 
 // clang-format off
-// TEMPLATE: LEGO1 0x100b9090
-// TEMPLATE: BETA10 0x10146020
-// list<MxStreamController *,allocator<MxStreamController *> >::~list<MxStreamController *,allocator<MxStreamController *> >
+// TEMPLATE: LEGO1 0x100b9090 SYMBOL
+// TEMPLATE: BETA10 0x10146020 SYMBOL
+// ??1?$list@PAVMxStreamController@@V?$allocator@PAVMxStreamController@@@@@@QAE@XZ
 // clang-format on
 
 // TEMPLATE: BETA10 0x10146090

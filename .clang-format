@@ -17,7 +17,6 @@ BraceWrapping:
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
 EmptyLineBeforeAccessModifier: Always
-IncludeBlocks: Regroup
 IndentAccessModifiers: false
 IndentWidth: 4
 InsertBraces: true
@@ -32,6 +31,7 @@ QualifierOrder:
   - volatile
   - type
 RemoveSemicolon: true
+SortIncludes: Never
 SpaceAfterCStyleCast: true
 TabWidth: 4
 UseTab: ForContinuationAndIndentation

@@ -90,11 +90,11 @@ private:
 // GLOBAL: LEGO1 0x100d6bf0
 // LegoExtraActor::`vbtable'{for `LegoExtraActor'}
 
-// TEMPLATE: LEGO1 0x1002b200
-// vector<unsigned char *,allocator<unsigned char *> >::vector<unsigned char *,allocator<unsigned char *> >
+// TEMPLATE: LEGO1 0x1002b200 SYMBOL
+// ??0?$vector@PAEV?$allocator@PAE@@@@QAE@ABV0@@Z
 
-// TEMPLATE: LEGO1 0x1002b270
-// vector<unsigned char *,allocator<unsigned char *> >::size
+// TEMPLATE: LEGO1 0x1002b270 SYMBOL
+// ?size@?$vector@PAEV?$allocator@PAE@@@@QBEIXZ
 
 // TEMPLATE: LEGO1 0x1002b720
 // ?uninitialized_copy@@YAPAPAEPAPAE00@Z

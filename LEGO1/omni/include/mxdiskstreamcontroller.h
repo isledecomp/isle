@@ -73,17 +73,17 @@ private:
 	void FUN_100c8720();
 };
 
-// TEMPLATE: LEGO1 0x100c14d0
-// list<MxDSObject *,allocator<MxDSObject *> >::erase
+// TEMPLATE: LEGO1 0x100c14d0 SYMBOL
+// ?erase@?$list@PAVMxDSObject@@V?$allocator@PAVMxDSObject@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x100c7330
-// list<MxDSObject *,allocator<MxDSObject *> >::_Buynode
+// TEMPLATE: LEGO1 0x100c7330 SYMBOL
+// ?_Buynode@?$list@PAVMxDSObject@@V?$allocator@PAVMxDSObject@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
-// TEMPLATE: LEGO1 0x100c7420
-// list<MxDSBuffer *,allocator<MxDSBuffer *> >::~list<MxDSBuffer *,allocator<MxDSBuffer *> >
+// TEMPLATE: LEGO1 0x100c7420 SYMBOL
+// ??1?$list@PAVMxDSBuffer@@V?$allocator@PAVMxDSBuffer@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x100c7490
-// list<MxDSBuffer *,allocator<MxDSBuffer *> >::_Buynode
+// TEMPLATE: LEGO1 0x100c7490 SYMBOL
+// ?_Buynode@?$list@PAVMxDSBuffer@@V?$allocator@PAVMxDSBuffer@@@@@@IAEPAU_Node@1@PAU21@0@Z
 
 // SYNTHETIC: LEGO1 0x100c74c0
 // MxDiskStreamController::`scalar deleting destructor'
@@ -91,8 +91,8 @@ private:
 // TEMPLATE: LEGO1 0x100c74e0
 // List<MxDSBuffer *>::~List<MxDSBuffer *>
 
-// TEMPLATE: LEGO1 0x100c7ef0
-// list<MxNextActionDataStart *,allocator<MxNextActionDataStart *> >::insert
+// TEMPLATE: LEGO1 0x100c7ef0 SYMBOL
+// ?insert@?$list@PAVMxNextActionDataStart@@V?$allocator@PAVMxNextActionDataStart@@@@@@QAE?AViterator@1@V21@ABQAVMxNextActionDataStart@@@Z
 
 // TEMPLATE: BETA10 0x10150e60
 // MxUtilityList<MxNextActionDataStart *>::PushBack

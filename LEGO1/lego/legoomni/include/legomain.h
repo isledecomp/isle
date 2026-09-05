@@ -152,17 +152,22 @@ public:
 	// FUNCTION: BETA10 0x100e5400
 	LegoTextureContainer* GetTextureContainer() { return m_textureContainer; }
 
+	// FUNCTION: BETA10 0x100e5430
 	ViewLODListManager* GetViewLODListManager() { return m_viewLODListManager; }
 
 	// FUNCTION: BETA10 0x100969b0
 	LegoWorld* GetCurrentWorld() { return m_currentWorld; }
 
+	// FUNCTION: BETA10 0x100e5310
 	LegoNavController* GetNavController() { return m_navController; }
+
+	// FUNCTION: BETA10 0x100e5340
 	LegoPathActor* GetUserActor() { return m_userActor; }
 
 	// FUNCTION: BETA10 0x100e53a0
 	LegoPlantManager* GetPlantManager() { return m_plantManager; }
 
+	// FUNCTION: BETA10 0x100e52e0
 	LegoAnimationManager* GetAnimationManager() { return m_animationManager; }
 
 	// FUNCTION: BETA10 0x100e53d0
@@ -176,7 +181,11 @@ public:
 
 	MxTransitionManager* GetTransitionManager() { return m_transitionManager; }
 	MxDSAction& GetCurrentAction() { return m_action; }
+
+	// FUNCTION: BETA10 0x100e5370
 	LegoCharacterManager* GetCharacterManager() { return m_characterManager; }
+
+	// FUNCTION: BETA10 0x100e5460
 	LegoWorldList* GetWorldList() { return m_worldList; }
 
 	void SetNavController(LegoNavController* p_navController) { m_navController = p_navController; }
