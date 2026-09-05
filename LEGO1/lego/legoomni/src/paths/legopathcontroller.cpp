@@ -1,3 +1,5 @@
+#include "realtime/vectorlength.inl.h"
+
 #include "legopathcontroller.h"
 
 #include "legopathedgecontainer.h"
@@ -12,10 +14,10 @@ DECOMP_SIZE_ASSERT(LegoPathController::CtrlBoundary, 0x08)
 DECOMP_SIZE_ASSERT(LegoPathController::CtrlEdge, 0x08)
 
 // GLOBAL: LEGO1 0x100d7cc8
-MxU32 g_ctrlEdgesNamesA[] = {2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0};
+const MxU32 g_ctrlEdgesNamesA[] = {2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0};
 
 // GLOBAL: LEGO1 0x100d7d08
-MxU32 g_ctrlEdgesNamesB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const MxU32 g_ctrlEdgesNamesB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 // GLOBAL: LEGO1 0x100f42e8
 // GLOBAL: BETA10 0x101f25f0
@@ -222,7 +224,7 @@ MxResult LegoPathController::PlaceActor(
 
 	assert(pSrcE && pDestE);
 
-	float time = Timer()->GetTime();
+	float time = (float) Timer()->GetTime();
 	MxResult result = p_actor->SetTransformAndDestinationFromEdge(
 		pBoundary,
 		time,
@@ -252,7 +254,7 @@ MxResult LegoPathController::PlaceActor(
 )
 {
 	LegoPathBoundary* boundary = NULL;
-	float time = Timer()->GetTime();
+	float time = (float) Timer()->GetTime();
 
 	if (p_actor->GetController() != NULL) {
 		p_actor->GetController()->RemoveActor(p_actor);
@@ -264,7 +266,7 @@ MxResult LegoPathController::PlaceActor(
 		LegoAnimPresenterSet& presenters = b.GetPresenters();
 		LegoAnimPresenter* presenter = p_presenter;
 
-		if (presenters.find(presenter) != presenters.end()) {
+		if (presenters.end() != presenters.find(presenter)) {
 			MxS32 j;
 
 			for (j = 0; j < b.GetNumEdges(); j++) {
@@ -285,32 +287,35 @@ MxResult LegoPathController::PlaceActor(
 		}
 	}
 
-	if (boundary == NULL) {
-		return FAILURE;
-	}
+	if (boundary != NULL) {
+		for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
+			LegoOrientedEdge* edge = (LegoOrientedEdge*) boundary->GetEdges()[j];
 
-	for (MxS32 j = 0; j < boundary->GetNumEdges(); j++) {
-		LegoOrientedEdge* edge = (LegoOrientedEdge*) boundary->GetEdges()[j];
+			if (edge->GetMask0x03()) {
+				Mx3DPointFloat vec;
 
-		if (edge->GetMask0x03()) {
-			Mx3DPointFloat vec;
+				if (((LegoOrientedEdge*) edge->GetClockwiseEdge(*boundary))->GetFaceNormal(*boundary, vec) == SUCCESS &&
+					vec.Dot(vec, p_direction) < 0.0f) {
+					edge =
+						(LegoOrientedEdge*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary
+						);
+				}
 
-			if (((LegoOrientedEdge*) edge->GetClockwiseEdge(*boundary))->GetFaceNormal(*boundary, vec) == SUCCESS &&
-				vec.Dot(vec, p_direction) < 0.0f) {
-				edge = (LegoOrientedEdge*) edge->GetCounterclockwiseEdge(*boundary)->GetCounterclockwiseEdge(*boundary);
-			}
+				if (!edge->GetMask0x03()) {
+					return FAILURE;
+				}
 
-			if (!edge->GetMask0x03()) {
-				return FAILURE;
-			}
-
-			if (p_actor->SetTransformAndDestinationFromPoints(boundary, time, p_position, p_direction, edge, 0.5f) ==
-				SUCCESS) {
-				p_actor->SetController(this);
-				m_actors.insert(p_actor);
-				return SUCCESS;
+				if (p_actor
+						->SetTransformAndDestinationFromPoints(boundary, time, p_position, p_direction, edge, 0.5f) ==
+					SUCCESS) {
+					p_actor->SetController(this);
+					m_actors.insert(p_actor);
+					return SUCCESS;
+				}
 			}
 		}
+
+		return FAILURE;
 	}
 
 	return FAILURE;
@@ -379,7 +384,7 @@ void LegoPathController::AnimateActors()
 	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
 		LegoPathActor* actor = *itpa;
 
-		if (m_actors.find(actor) != m_actors.end()) {
+		if (m_actors.end() != m_actors.find(actor)) {
 			if (!((MxU8) actor->GetActorState() & LegoPathActor::c_disabled)) {
 				actor->Animate(time);
 			}
@@ -388,6 +393,7 @@ void LegoPathController::AnimateActors()
 }
 
 // FUNCTION: LEGO1 0x10046b30
+// FUNCTION: BETA10 0x100b74fe
 MxResult LegoPathController::GetBoundaries(LegoPathBoundary*& p_boundaries, MxS32& p_numL)
 {
 	p_boundaries = m_boundaries;
@@ -467,6 +473,8 @@ MxResult LegoPathController::Reset()
 // FUNCTION: BETA10 0x100b781f
 MxResult LegoPathController::Read(LegoStorage* p_storage)
 {
+	assert(m_pfsE.size() == 0);
+
 	if (p_storage->Read(&m_numT, sizeof(MxU16)) != SUCCESS) {
 		return FAILURE;
 	}
@@ -746,6 +754,7 @@ MxResult LegoPathController::ReadBoundaries(LegoStorage* p_storage)
 MxResult LegoPathController::ReadVector(LegoStorage* p_storage, Mx3DPointFloat& p_vec)
 {
 	if (p_storage->Read(p_vec.GetData(), sizeof(float) * 3) != SUCCESS) {
+		assert(0);
 		return FAILURE;
 	}
 
@@ -786,6 +795,7 @@ MxResult LegoPathController::FindPath(
 		return SUCCESS;
 	}
 
+	LegoOrientedEdge* e;
 	list<LegoBEWithMidpoint> boundaryList;
 	list<LegoBEWithMidpoint>::iterator boundaryListIt;
 
@@ -796,6 +806,7 @@ MxResult LegoPathController::FindPath(
 	LegoPathCtrlEdgeSet pathCtrlEdgeSet(m_pfsE);
 
 	MxFloat minDistance = 999999.0f;
+	float dist;
 
 	p_grec->SetPath(FALSE);
 
@@ -807,8 +818,7 @@ MxResult LegoPathController::FindPath(
 
 			if (otherFace != NULL && edge->BETA_1004a830(*otherFace, p_mask)) {
 				if (p_newBoundary == otherFace) {
-					float dist;
-					if ((dist = edge->DistanceToMidpoint(p_oldPosition) + edge->DistanceToMidpoint(p_newPosition)) <
+					if ((dist = edge->DistanceToMidpoint(p_newPosition) + edge->DistanceToMidpoint(p_oldPosition)) <
 						minDistance) {
 						minDistance = dist;
 						p_grec->erase(p_grec->begin(), p_grec->end());
@@ -829,9 +839,11 @@ MxResult LegoPathController::FindPath(
 	}
 
 	if (!p_grec->HasPath()) {
+		MxFloat minDist;
+
 		while (pathCtrlEdgeSet.size() > 0) {
 			LegoBEWithMidpoint edgeWithMidpoint;
-			MxFloat minDist = 999999.0f;
+			minDist = 999999.0f;
 
 			boundarySetItA = boundarySetItB = boundarySet.begin();
 
@@ -839,14 +851,18 @@ MxResult LegoPathController::FindPath(
 				boundarySetItB++;
 			}
 
-			while (boundarySetItA != boundarySet.end()) {
-				MxU32 shouldRemove = TRUE;
+			MxU32 shouldRemove;
+			LegoPathBoundary* b;
+			LegoPathBoundary* bOther;
 
-				LegoOrientedEdge* e = (*boundarySetItA)->m_edge;
-				LegoPathBoundary* b = (*boundarySetItA)->m_boundary;
+			while (boundarySetItA != boundarySet.end()) {
+				shouldRemove = TRUE;
+
+				e = (*boundarySetItA)->m_edge;
+				b = (*boundarySetItA)->m_boundary;
 				assert(e && b);
 
-				LegoPathBoundary* bOther = (LegoPathBoundary*) e->OtherFace(b);
+				bOther = (LegoPathBoundary*) e->OtherFace(b);
 				assert(bOther);
 
 				if (!e->BETA_1004a830(*bOther, p_mask)) {
@@ -862,11 +878,10 @@ MxResult LegoPathController::FindPath(
 						float dist;
 						if ((dist = pfs->m_edge->DistanceToMidpoint(p_newPosition) + pfs->m_distanceToMidpoint) <
 							minDist) {
-							edgeWithMidpoint.m_edge = NULL;
 							minDist = dist;
+							edgeWithMidpoint.m_edge = NULL;
 
-							// TODO: Match
-							if (dist < minDistance) {
+							if (minDistance > dist) {
 								minDistance = dist;
 								p_grec->erase(p_grec->begin(), p_grec->end());
 								p_grec->SetPath(TRUE);
@@ -883,14 +898,16 @@ MxResult LegoPathController::FindPath(
 							LegoPathCtrlEdge* edge = (LegoPathCtrlEdge*) bOther->GetEdges()[i];
 
 							if (edge->GetMask0x03()) {
-								if (pathCtrlEdgeSet.find(edge) != pathCtrlEdgeSet.end()) {
+								LegoPathCtrlEdgeSet::iterator it = pathCtrlEdgeSet.find(edge);
+
+								if (it != pathCtrlEdgeSet.end()) {
 									shouldRemove = FALSE;
 
 									float dist;
 									if ((dist = edge->DistanceBetweenMidpoints(*e) +
 												(*boundarySetItA)->m_distanceToMidpoint) < minDist) {
 										minDist = dist;
-										edgeWithMidpoint = LegoBEWithMidpoint(edge, bOther, *boundarySetItA, dist);
+										edgeWithMidpoint = LegoBEWithMidpoint(edge, bOther, *boundarySetItA, minDist);
 									}
 								}
 							}
@@ -1015,7 +1032,7 @@ MxResult LegoPathController::FindIntersectionBoundary(
 
 		float coeffBDotUp = p_coefficients[1].Dot(p_coefficients[1], *up);
 		float coeffCDotUp = p_coefficients[2].Dot(p_coefficients[2], *up) + up->index_operator(3);
-		float quadraticDiscriminant = coeffBDotUp * coeffBDotUp - coeffCDotUp * coeffADotUp * 4.0f;
+		float quadraticDiscriminant = coeffBDotUp * coeffBDotUp + (coeffCDotUp * coeffADotUp) * -4.0f;
 
 		if (quadraticDiscriminant < -0.001) {
 			continue;
