@@ -75,7 +75,7 @@ public:
 	);
 	static MxResult UpdateLocation(MxU32 p_location);
 	static MxResult UpdateLocation(const char* p_location);
-	static MxS32 GetNumLocations();
+	static MxS32 GetNumCameras();
 	static LegoLocation* GetLocation(MxU32 p_location);
 
 	// FUNCTION: BETA10 0x100b0f40

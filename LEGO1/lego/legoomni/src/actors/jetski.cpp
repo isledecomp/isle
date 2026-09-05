@@ -18,6 +18,14 @@
 
 DECOMP_SIZE_ASSERT(Jetski, 0x164)
 
+// GLOBAL: LEGO1 0x100f7ab0
+// STRING: LEGO1 0x100f09c0
+const char* g_varJETSPEED = "jetSPEED";
+
+// GLOBAL: LEGO1 0x100f7ab4
+// STRING: LEGO1 0x100f7aa8
+const char* g_varJETFUEL = "jetFUEL";
+
 // These two have been changed between BETA10 and LEGO1
 // GLOBAL: LEGO1 0x100f7ab8
 // STRING: LEGO1 0x100f3ce0

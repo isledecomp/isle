@@ -483,26 +483,28 @@ MxLong LegoEntity::Notify(MxParam& p_param)
 		InvokeAction(m_actionType, MxAtomId(m_siFile, e_lowerCase2), m_targetEntityId, this);
 	}
 	else {
-		switch (GameState()->GetActorId()) {
-		case LegoActor::c_pepper:
+		MxU8 actorId = GameState()->GetActorId();
+
+		switch (actorId) {
+		case LegoActor::e_pepper:
 			if (GameState()->GetCurrentAct() != LegoGameState::e_act2 &&
 				GameState()->GetCurrentAct() != LegoGameState::e_act3) {
 				SwitchVariant();
 			}
 			break;
-		case LegoActor::c_mama:
+		case LegoActor::e_mama:
 			SwitchSound();
 			break;
-		case LegoActor::c_papa:
+		case LegoActor::e_papa:
 			SwitchMove();
 			break;
-		case LegoActor::c_nick:
+		case LegoActor::e_nick:
 			SwitchColor(param.GetROI());
 			break;
-		case LegoActor::c_laura:
+		case LegoActor::e_laura:
 			SwitchMood();
 			break;
-		case LegoActor::c_brickster:
+		case LegoActor::e_brickster:
 			switch (m_type) {
 			case e_actor:
 			case e_unk1:

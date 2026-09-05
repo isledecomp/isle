@@ -298,16 +298,12 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/race/legoracers.cpp
     LEGO1/lego/legoomni/src/race/legoraceactor.cpp
     LEGO1/lego/legoomni/src/common/legostate.cpp
-    LEGO1/lego/legoomni/src/actors/buildingentity.cpp
     LEGO1/lego/legoomni/src/actors/buildings.cpp
     LEGO1/lego/legoomni/src/common/misc.cpp
     LEGO1/lego/legoomni/src/race/legorace.cpp
-    LEGO1/lego/legoomni/src/race/jetskirace.cpp
-    LEGO1/lego/legoomni/src/race/carrace.cpp
     LEGO1/lego/legoomni/src/actors/pizzeria.cpp
     LEGO1/lego/legoomni/src/worlds/elevatorbottom.cpp
     LEGO1/lego/legoomni/src/audio/legoloadcachesoundpresenter.cpp
-    LEGO1/lego/legoomni/src/actors/act2genactor.cpp
     LEGO1/lego/legoomni/src/actors/act2actor.cpp
     LEGO1/lego/legoomni/src/actors/islepathactor.cpp
     LEGO1/lego/legoomni/src/paths/legopathstruct.cpp
@@ -390,9 +386,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
     # We need to get rid of / refactor the below units into existing/other ones
-    LEGO1/lego/legoomni/src/entity/legolocations.cpp
-    LEGO1/lego/legoomni/src/common/legoactors.cpp
-    LEGO1/lego/legoomni/src/common/legoplants.cpp
   )
   list(APPEND list_targets ${NAME})
 
@@ -514,7 +507,6 @@ if (ISLE_BUILD_CONFIG)
     LEGO1/mxdirectx/legodxinfo.cpp
     CONFIG/config.cpp
     CONFIG/ConfigCommandLineInfo.cpp
-    CONFIG/AboutDlg.cpp
     CONFIG/MainDlg.cpp
     CONFIG/detectdx5.cpp
     CONFIG/StdAfx.cpp

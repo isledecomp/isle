@@ -192,7 +192,7 @@ public:
 	LegoGameState();
 	~LegoGameState();
 
-	void SetActor(MxU8 p_actorId);
+	void SetActor(MxU8 p_id);
 	void RemoveActor();
 	void ResetROI();
 
@@ -228,7 +228,7 @@ public:
 	Act GetLoadedAct() { return m_loadedAct; }
 
 	void SetActorId(MxU8 p_actorId) { m_actorId = p_actorId; }
-	LegoBackgroundColor* GetBackgroundColor() { return m_backgroundColor; }
+	LegoBackgroundColor* GetBackgroundColor() { return m_bgColorVar; }
 
 	void SetCurrentAct(Act p_currentAct);
 	void FindLoadedAct();
@@ -241,15 +241,15 @@ private:
 	void SetColors();
 	void SetROIColorOverride();
 
-	char* m_savePath;                           // 0x00
-	MxS16 m_stateCount;                         // 0x04
-	LegoState** m_stateArray;                   // 0x08
-	MxU8 m_actorId;                             // 0x0c
-	Act m_currentAct;                           // 0x10
-	Act m_loadedAct;                            // 0x14
-	LegoBackgroundColor* m_backgroundColor;     // 0x18
-	LegoBackgroundColor* m_tempBackgroundColor; // 0x1c
-	LegoFullScreenMovie* m_fullScreenMovie;     // 0x20
+	char* m_savePath;                    // 0x00
+	MxS16 m_stateCount;                  // 0x04
+	LegoState** m_states;                // 0x08
+	MxU8 m_actorId;                      // 0x0c
+	Act m_currentAct;                    // 0x10
+	Act m_loadedAct;                     // 0x14
+	LegoBackgroundColor* m_bgColorVar;   // 0x18
+	LegoBackgroundColor* m_tempColorVar; // 0x1c
+	LegoFullScreenMovie* m_fsMovieVar;   // 0x20
 
 public:
 	MxS16 m_currentPlayerId;              // 0x24
