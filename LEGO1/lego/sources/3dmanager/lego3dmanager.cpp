@@ -1,6 +1,7 @@
 // Lego3DManager.cpp : implementation file
 //
 #include "lego3dmanager.h"
+#include "realtime/matrix4d.inl.h"
 
 #include "decomp.h"
 #include "viewmanager/viewlodlist.h"

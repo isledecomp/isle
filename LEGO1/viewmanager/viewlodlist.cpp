@@ -1,5 +1,11 @@
 #include "viewlodlist.h"
 
+#include "tgl/tglvector.h"
+
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
+#include "mxgeometry/mxmatrix.h"
+
 #include "decomp.h"
 #include "viewlod.h"
 
