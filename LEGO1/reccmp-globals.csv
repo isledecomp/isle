@@ -1,0 +1,5 @@
+address,name,type
+0x100db8f0,Pi,global
+0x100dd1d0,IID_IDirect3DRMWinDevice,global
+0x100dd200,IID_IDirect3DRMDevice2,global
+0x10101040,g_setBufferCount,global

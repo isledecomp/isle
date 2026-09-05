@@ -1,6 +1,9 @@
 ; LegoOmni.def : Declares the module paarameters for the LEGO1.DLL.
 
-DESCRIPTION  "Lego OMNI Windows Dynamic Link Library"
+; Retail's export directory spells the module in mixed case.
+LIBRARY      Lego1.dll
+
+DESCRIPTION  'Lego OMNI Windows Dynamic Link Library'
 
 EXPORTS
 
