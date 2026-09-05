@@ -12,11 +12,13 @@
 #include "mxnotificationmanager.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoPathStructBase, 0x0c)
 DECOMP_SIZE_ASSERT(LegoPathStruct, 0x14)
 
-// Flags used in isle.cpp
-extern MxU32 g_isleFlags;
+// GLOBAL: LEGO1 0x100f1198
+MxU32 g_isleFlags = 0x7f;
 
 // GLOBAL: LEGO1 0x100f119c
 MxBool g_triggerHandlingIgnoreDirection = FALSE;
@@ -48,18 +50,19 @@ MxBool LegoPathStruct::HandleTrigger(LegoPathActor* p_actor, MxBool p_direction,
 				PlayCamAnim(p_actor, actualDirection, p_data, TRUE);
 			}
 			break;
-		case c_waypoint: {
+		case c_waypoint:
 			p_actor->SetLastPathStruct(p_data);
 
-			LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
-			p_actor->Notify(param);
+			{
+				LegoPathStructNotificationParam param(c_notificationPathStruct, p_actor, m_name[2], p_data);
+				p_actor->Notify(param);
 
-			LegoWorld* world = CurrentWorld();
-			if (world != NULL) {
-				NotificationManager()->Send(world, param);
+				LegoWorld* world = CurrentWorld();
+				if (world != NULL) {
+					NotificationManager()->Send(world, param);
+				}
 			}
 			break;
-		}
 		case c_deleteAction:
 			HandleAction(m_name, p_data, !(p_invertDirection == FALSE));
 			break;
@@ -155,6 +158,8 @@ void LegoPathStruct::PlayMusic(MxBool p_direction, MxU32 p_data)
 	MxDSAction action;
 	action.SetAtomId(*g_jukeboxScript);
 	action.SetUnknown24(-1);
+
+	assert(p_data <= sizeOfArray(triggersReff));
 
 	if (p_data <= sizeOfArray(triggersReff)) {
 		action.SetObjectId(music[triggersReff[p_data - 1][p_direction == FALSE] - 1]);

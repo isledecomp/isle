@@ -22,6 +22,8 @@
 #include "radio.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(GasStation, 0x128)
 DECOMP_SIZE_ASSERT(GasStationState, 0x24)
 
@@ -34,7 +36,7 @@ MxBool g_trackLedEnabled = FALSE;
 // FUNCTION: LEGO1 0x100046a0
 GasStation::GasStation()
 {
-	m_currentActorId = LegoActor::c_none;
+	m_currentActorId = LegoActor::e_none;
 	m_state = NULL;
 	m_destLocation = LegoGameState::e_undefined;
 	m_trackLedBitmap = NULL;
@@ -136,7 +138,7 @@ void GasStation::ReadyWorld()
 	m_currentActorId = UserActor()->GetActorId();
 
 	switch (m_currentActorId) {
-	case LegoActor::c_pepper:
+	case LegoActor::e_pepper:
 		switch (m_state->m_pepperAction) {
 		case 0:
 			m_state->m_state = GasStationState::e_introduction;
@@ -165,7 +167,7 @@ void GasStation::ReadyWorld()
 			m_state->m_pepperAction++;
 		}
 		break;
-	case LegoActor::c_mama:
+	case LegoActor::e_mama:
 		switch (m_state->m_mamaAction) {
 		case 0:
 			m_state->m_state = GasStationState::e_introduction;
@@ -189,7 +191,7 @@ void GasStation::ReadyWorld()
 			m_state->m_mamaAction++;
 		}
 		break;
-	case LegoActor::c_nick:
+	case LegoActor::e_nick:
 		switch (m_state->m_nickAction) {
 		case 0:
 			m_state->m_state = GasStationState::e_introduction;
@@ -213,7 +215,7 @@ void GasStation::ReadyWorld()
 			m_state->m_nickAction++;
 		}
 		break;
-	case LegoActor::c_papa:
+	case LegoActor::e_papa:
 		switch (m_state->m_papaAction) {
 		case 0:
 			m_state->m_state = GasStationState::e_introduction;
@@ -237,7 +239,7 @@ void GasStation::ReadyWorld()
 			m_state->m_papaAction++;
 		}
 		break;
-	case LegoActor::c_laura:
+	case LegoActor::e_laura:
 		switch (m_state->m_lauraAction) {
 		case 0:
 			m_state->m_state = GasStationState::e_introduction;
@@ -328,6 +330,7 @@ MxLong GasStation::HandleEndAction(MxEndActionNotificationParam& p_param)
 				break;
 			case GasStationState::e_afterAcceptingQuest:
 				m_state->m_state = GasStationState::e_beforeExitingForQuest;
+				assert(GameState()->GetState("Act1State"));
 				((Act1State*) GameState()->GetState("Act1State"))->m_state = Act1State::e_transitionToTowtrack;
 				m_destLocation = LegoGameState::e_garageExited;
 				m_radio.Stop();

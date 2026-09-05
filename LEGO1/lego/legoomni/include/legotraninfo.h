@@ -1,13 +1,16 @@
 #ifndef LEGOTRANINFO_H
 #define LEGOTRANINFO_H
 
+#include "roi/legoroi.h"
+
 #include "decomp.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "mxgeometry/mxmatrix.h"
 #include "mxtypes.h"
 
 struct AnimInfo;
 class LegoAnimMMPresenter;
-class LegoROI;
 class MxPresenter;
 
 // SIZE 0x78

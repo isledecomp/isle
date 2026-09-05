@@ -32,9 +32,6 @@
 DECOMP_SIZE_ASSERT(LegoAct2, 0x1154)
 DECOMP_SIZE_ASSERT(LegoAct2State, 0x10)
 
-// GLOBAL: LEGO1 0x100f4474
-Act2mainScript::Script g_bricksterSpeech = (Act2mainScript::Script) 0;
-
 // GLOBAL: LEGO1 0x100f43f0
 // GLOBAL: BETA10 0x101e14a8
 MxS32 g_animationsBricksterIsLoose[] = {
@@ -69,6 +66,9 @@ MxS32 g_animationsAfterChase[] = {
 
 // GLOBAL: LEGO1 0x100f4458
 const LegoChar* g_charactersAfterChase[] = {"papa", "nick", "laura", "cl", "pg", "rd", "sy"};
+
+// GLOBAL: LEGO1 0x100f4474
+Act2mainScript::Script g_bricksterSpeech = (Act2mainScript::Script) 0;
 
 // FUNCTION: LEGO1 0x1004fce0
 // FUNCTION: BETA10 0x1003a5a0
@@ -217,10 +217,12 @@ MxResult LegoAct2::Tickle()
 		m_timeSinceLastStage += 50;
 
 		if (m_timeSinceLastStage == 20000) {
-			const MxFloat* pepperPosition = FindROI("pepper")->GetWorldPosition();
 			MxFloat otherPoint[] = {-52.0f, 5.25f, -16.5f};
+			const MxFloat* pepperPosition = FindROI("pepper")->GetWorldPosition();
 
-			distance = DISTSQRD3(pepperPosition, otherPoint);
+			distance = (pepperPosition[2] - otherPoint[2]) * (pepperPosition[2] - otherPoint[2]);
+			distance += (pepperPosition[1] - otherPoint[1]) * (pepperPosition[1] - otherPoint[1]);
+			distance += (pepperPosition[0] - otherPoint[0]) * (pepperPosition[0] - otherPoint[0]);
 
 			if (m_infomanDirecting == (Act2mainScript::Script) 0 && distance > 50.0f && pepperPosition[0] > -57.0f) {
 				StartAction(Act2mainScript::c_Avo906In_PlayWav, FALSE, FALSE, NULL, NULL, NULL);
@@ -277,23 +279,6 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 		case c_notificationEndAction:
 			result = HandleEndAction((MxEndActionNotificationParam&) p_param);
 			break;
-		case c_notificationPathStruct: {
-			MxTrace("trigger %d\n", ((LegoPathStructNotificationParam&) p_param).GetData());
-
-			LegoPathStructNotificationParam& param = (LegoPathStructNotificationParam&) p_param;
-			LegoEntity* entity = (LegoEntity*) param.GetSender();
-
-			if (m_ambulance == NULL) {
-				m_ambulance = FindROI("ambul");
-			}
-
-			if (entity->GetROI() == m_pepper) {
-				HandlePathStruct(param);
-			}
-
-			result = 1;
-			break;
-		}
 		case c_notificationAct2Brick:
 			SoundManager()->GetCacheSoundManager()->Play("28bng", NULL, FALSE);
 
@@ -303,7 +288,7 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 
 				LegoEntity* entity = (LegoEntity*) param.GetSender();
 
-				Mx3DPointFloat pepperToBrick(entity->GetROI()->GetWorldPosition());
+				Mx3DPointFloat pepperToBrick((float*) entity->GetROI()->GetWorldPosition());
 				Mx3DPointFloat pepperPosition(m_pepper->GetWorldPosition());
 				Mx3DPointFloat position(pepperPosition);
 
@@ -333,6 +318,23 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 				((LegoPathActor*) m_pepper->GetEntity())->SetActorState(LegoPathActor::c_disabled);
 			}
 			break;
+		case c_notificationPathStruct: {
+			MxTrace("trigger %d\n", ((LegoPathStructNotificationParam&) p_param).GetData());
+
+			LegoPathStructNotificationParam& param = (LegoPathStructNotificationParam&) p_param;
+			LegoEntity* entity = (LegoEntity*) param.GetSender();
+
+			if (m_ambulance == NULL) {
+				m_ambulance = FindROI("ambul");
+			}
+
+			if (entity->GetROI() == m_pepper) {
+				HandlePathStruct(param);
+			}
+
+			result = 1;
+			break;
+		}
 		case c_notificationTransitioned:
 			result = HandleTransitionEnd();
 			break;
@@ -346,7 +348,8 @@ MxLong LegoAct2::Notify(MxParam& p_param)
 MxLong LegoAct2::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	if (m_gameState->m_enabled && p_param.GetAction() != NULL) {
-		MxU32 objectId = p_param.GetAction()->GetObjectId();
+		MxDSAction* action = p_param.GetAction();
+		MxU32 objectId = action->GetObjectId();
 
 		if (m_state == LegoAct2::e_goingToResidentialArea && m_infomanDirecting == objectId) {
 			m_infomanDirecting = (Act2mainScript::Script) 0;
@@ -484,7 +487,7 @@ void LegoAct2::ReadyWorld()
 	m_ready = TRUE;
 	m_siFile = VariableTable()->GetVariable("ACT2_ANIMS_FILE");
 
-	GameState()->SetActor(LegoActor::c_pepper);
+	GameState()->SetActor(LegoActor::e_pepper);
 	m_pepper = FindROI("pepper");
 	IslePathActor* pepper = (IslePathActor*) m_pepper->GetEntity();
 	pepper->SpawnPlayer(
@@ -497,8 +500,7 @@ void LegoAct2::ReadyWorld()
 	BoundingSphere sphere = roi->GetBoundingSphere();
 	sphere.Radius() *= 1.5;
 	roi->SetBoundingSphere(sphere);
-	LegoPathActor* actor = (LegoPathActor*) roi->GetEntity();
-	PlaceActor(actor, "EDG01_04", 1, 0.5f, 3, 0.5f);
+	PlaceActor((LegoPathActor*) roi->GetEntity(), "EDG01_04", 1, 0.5f, 3, 0.5f);
 
 	MxMatrix local2world = roi->GetLocal2World();
 	local2world[3][0] -= 1.5;
@@ -509,8 +511,7 @@ void LegoAct2::ReadyWorld()
 	sphere = roi->GetBoundingSphere();
 	sphere.Radius() *= 1.5;
 	roi->SetBoundingSphere(sphere);
-	actor = (LegoPathActor*) roi->GetEntity();
-	PlaceActor(actor, "EDG00_149", 0, 0.5f, 2, 0.5f);
+	PlaceActor((LegoPathActor*) roi->GetEntity(), "EDG00_149", 0, 0.5f, 2, 0.5f);
 
 	PlayMusic(JukeboxScript::c_Jail_Music);
 	DisableAnimations();
@@ -531,10 +532,11 @@ void LegoAct2::Enable(MxBool p_enable)
 	if (p_enable) {
 		m_gameState->m_enabled = TRUE;
 
-		GameState()->SetActor(LegoActor::c_pepper);
+		GameState()->SetActor(LegoActor::e_pepper);
 		m_pepper = FindROI("pepper");
 
-		((IslePathActor*) m_pepper->GetEntity())->UpdateWorld(m_transformOnDisable, m_boundaryOnDisable, TRUE);
+		IslePathActor* actor = (IslePathActor*) m_pepper->GetEntity();
+		actor->UpdateWorld(m_transformOnDisable, m_boundaryOnDisable, TRUE);
 
 		if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 			GameState()->StopArea(LegoGameState::e_infomain);
@@ -1171,7 +1173,7 @@ MxResult LegoAct2::StartAction(
 					TRUE,
 					TRUE,
 					TRUE,
-					TRUE
+					FALSE
 				);
 			}
 			else {
@@ -1184,7 +1186,7 @@ MxResult LegoAct2::StartAction(
 					TRUE,
 					TRUE,
 					TRUE,
-					FALSE
+					TRUE
 				);
 			}
 
