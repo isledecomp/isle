@@ -63,20 +63,20 @@ private:
 	void CopyData(MxU8* p_data, MxU32 p_dataSize);
 	MxString GetBaseFilename(MxString& p_path);
 
-	LPDIRECTSOUNDBUFFER m_dsBuffer; // 0x08
-	undefined m_unk0x0c[4];         // 0x0c
-	Lego3DSound m_sound;            // 0x10
-	MxU8* m_data;                   // 0x40
-	MxU32 m_dataSize;               // 0x44
-	MxString m_unk0x48;             // 0x48
-	MxBool m_unk0x58;               // 0x58
-	PCMWAVEFORMAT m_wfx;            // 0x59
-	MxBool m_looping;               // 0x69
-	MxBool m_unk0x6a;               // 0x6a
-	MxS32 m_volume;                 // 0x6c
-	MxBool m_unk0x70;               // 0x70
-	MxString m_unk0x74;             // 0x74
-	MxBool m_muted;                 // 0x84
+	LPDIRECTSOUNDBUFFER m_directSoundBuffer; // 0x08
+	undefined m_unk0x0c[4];                  // 0x0c
+	Lego3DSound m_sound;                     // 0x10
+	MxU8* m_data;                            // 0x40
+	MxU32 m_dataSize;                        // 0x44
+	MxString m_unk0x48;                      // 0x48
+	MxBool m_unk0x58;                        // 0x58
+	PCMWAVEFORMAT m_wfx;                     // 0x59
+	MxBool m_looping;                        // 0x69
+	MxBool m_unk0x6a;                        // 0x6a
+	MxS32 m_volume;                          // 0x6c
+	MxBool m_unk0x70;                        // 0x70
+	MxString m_unk0x74;                      // 0x74
+	MxBool m_muted;                          // 0x84
 };
 
 #endif // LEGOCACHSOUND_H
