@@ -1,7 +1,7 @@
 #include "legopathactor.h"
 
 #include "define.h"
-#include "geom/legoorientededge.h"
+#include "geom/legowegedge.h"
 #include "legocachesoundmanager.h"
 #include "legocameracontroller.h"
 #include "legonamedplane.h"

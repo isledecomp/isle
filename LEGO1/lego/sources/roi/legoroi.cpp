@@ -1,3 +1,4 @@
+#include "realtime/vectorlength.inl.h"
 #include "legoroi.h"
 
 #include "anim/legoanim.h"
@@ -9,6 +10,7 @@
 #include "shape/legobox.h"
 #include "shape/legosphere.h"
 
+#include <assert.h>
 #include <crtdbg.h>
 #include <string.h>
 #include <vec.h>
@@ -69,6 +71,7 @@ void LegoROI::ReportError(const LegoChar* p_error, ...)
 }
 
 // FUNCTION: LEGO1 0x100a81c0
+// FUNCTION: BETA10 0x101898d0
 void LegoROI::configureLegoROI(int p_roiConfig)
 {
 	g_roiConfig = p_roiConfig;
@@ -123,8 +126,8 @@ LegoResult LegoROI::Read(
 	LegoStorage* p_storage
 )
 {
+	LegoU32 offset;
 	LegoResult result = FAILURE;
-	LegoU32 i, j;
 	LegoU32 numLODs, surplusLODs;
 	LegoROI* roi;
 	LegoLOD* lod;
@@ -133,6 +136,7 @@ LegoResult LegoROI::Read(
 	LegoTextureInfo* textureInfo;
 	ViewLODList* lodList;
 	LegoU32 numROIs;
+	LegoU32 i, j;
 	LegoSphere sphere;
 	LegoBox box;
 
@@ -198,6 +202,7 @@ LegoResult LegoROI::Read(
 		delete[] roiName;
 
 		if (lodList == NULL) {
+			assert(0);
 			goto done;
 		}
 	}
@@ -211,7 +216,6 @@ LegoResult LegoROI::Read(
 		}
 		else {
 			const LegoChar* roiName = m_name;
-			LegoU32 offset;
 
 			if (p_storage->Read(&offset, sizeof(LegoU32)) != SUCCESS) {
 				goto done;
@@ -298,6 +302,7 @@ LegoResult LegoROI::Read(
 	SetLODList(lodList);
 
 	if (lodList != NULL) {
+		assert((lodList->AddRef(), lodList->Release()) >= 2);
 		lodList->Release();
 	}
 
@@ -359,6 +364,10 @@ LegoResult LegoROI::CreateLocalTransform(LegoAnimNodeData* p_data, LegoTime p_ti
 // FUNCTION: BETA10 0x1018a815
 LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 {
+	assert(p_name);
+	assert(p_roi);
+
+	LegoROI* roi;
 	CompoundObject::iterator it;
 	const LegoChar* name = p_roi->GetName();
 
@@ -369,7 +378,7 @@ LegoROI* LegoROI::FindChildROI(const LegoChar* p_name, LegoROI* p_roi)
 	CompoundObject* comp = p_roi->comp;
 	if (comp != NULL) {
 		for (it = comp->begin(); it != comp->end(); it++) {
-			LegoROI* roi = (LegoROI*) *it;
+			roi = (LegoROI*) *it;
 			name = roi->GetName();
 
 			if (name != NULL && *name != '\0' && !strcmpi(name, p_name)) {
@@ -614,6 +623,7 @@ LegoResult LegoROI::SetColorByName(const LegoChar* p_name)
 
 // FUNCTION: LEGO1 0x100a9410
 // FUNCTION: BETA10 0x1018b324
+#pragma optimize("y", off)
 LegoU32 LegoROI::Intersect(
 	Vector3& p_rayOrigin,
 	Vector3& p_rayDirection,
@@ -660,6 +670,7 @@ LegoU32 LegoROI::Intersect(
 
 		p_intersectionPoint = m_local2world[3];
 
+		float intersectionDistance;
 		LegoS32 i;
 		for (i = 0; i < 6; i++) {
 			boxFacePlanes[i] = m_local2world[i % 3];
@@ -677,13 +688,13 @@ LegoU32 LegoROI::Intersect(
 		}
 
 		for (i = 0; i < 6; i++) {
-			float intersectionDistance = p_rayDirection.Dot(p_rayDirection, boxFacePlanes[i]);
+			intersectionDistance = p_rayDirection.Dot(p_rayDirection, boxFacePlanes[i]);
 
 			if (intersectionDistance >= 0.01 || intersectionDistance < -0.01) {
 				intersectionDistance =
 					-((boxFacePlanes[i][3] + rayOrigin.Dot(rayOrigin, boxFacePlanes[i])) / intersectionDistance);
 
-				if (intersectionDistance >= 0.0f && intersectionDistance <= p_rayLength) {
+				if (intersectionDistance >= 0.0f && p_rayLength >= intersectionDistance) {
 					Mx3DPointFloat intersectionPoint(p_rayDirection);
 					intersectionPoint *= intersectionDistance;
 					intersectionPoint += rayOrigin;
@@ -704,56 +715,64 @@ LegoU32 LegoROI::Intersect(
 				}
 			}
 		}
+
+		return 0;
+	}
+
+	Mx3DPointFloat v1(p_rayOrigin);
+	v1 -= GetWorldBoundingSphere().Center();
+
+	float radius = GetWorldBoundingSphere().Radius();
+	// Quadratic equation to solve for ray-sphere intersection: at^2 + bt + c = 0
+	float a = p_rayDirection.Dot(p_rayDirection, p_rayDirection);
+	float b = p_rayDirection.Dot(p_rayDirection, v1) * 2.0f;
+	float c = v1.Dot(v1, v1) - (radius * radius);
+	float distance;
+
+	if (a < 0.001 && a > -0.001) {
+		return 0;
+	}
+
+	distance = -1.0f;
+	float discriminant = (b * b) + (c * a * -4.0f);
+
+	if (discriminant < -0.001) {
+		return 0;
+	}
+
+	a *= 2.0f;
+	b = -b;
+
+	if (discriminant > 0.0f) {
+		discriminant = sqrt(discriminant);
+		float root1 = (b + discriminant) / a;
+		float root2 = (b - discriminant) / a;
+
+		if (root1 > 0.0f && root2 > root1) {
+			distance = root1;
+		}
+		else if (root2 > 0.0f) {
+			distance = root2;
+		}
+		else {
+			return 0;
+		}
 	}
 	else {
-		Mx3DPointFloat v1(p_rayOrigin);
-		v1 -= GetWorldBoundingSphere().Center();
+		distance = b / a;
+	}
 
-		float radius = GetWorldBoundingSphere().Radius();
-		// Quadratic equation to solve for ray-sphere intersection: at^2 + bt + c = 0
-		float a = p_rayDirection.Dot(p_rayDirection, p_rayDirection);
-		float b = p_rayDirection.Dot(p_rayDirection, v1) * 2.0f;
-		float c = v1.Dot(v1, v1) - (radius * radius);
-
-		if (a >= 0.001 || a <= -0.001) {
-			float distance = -1.0f;
-			float discriminant = (b * b) - (c * a * 4.0f);
-
-			if (discriminant >= -0.001) {
-				a *= 2.0f;
-				b = -b;
-
-				if (discriminant > 0.0f) {
-					discriminant = sqrt(discriminant);
-					float root1 = (b + discriminant) / a;
-					float root2 = (b - discriminant) / a;
-
-					if (root1 > 0.0f && root2 > root1) {
-						distance = root1;
-					}
-					else if (root2 > 0.0f) {
-						distance = root2;
-					}
-					else {
-						return 0;
-					}
-				}
-				else {
-					distance = b / a;
-				}
-
-				if (distance >= 0.0f && p_rayLength >= distance) {
-					p_intersectionPoint = p_rayDirection;
-					p_intersectionPoint *= distance;
-					p_intersectionPoint += p_rayOrigin;
-					return 1;
-				}
-			}
-		}
+	if (distance >= 0.0f && distance <= p_rayLength) {
+		p_intersectionPoint = p_rayDirection;
+		p_intersectionPoint *= distance;
+		p_intersectionPoint += p_rayOrigin;
+		return 1;
 	}
 
 	return 0;
 }
+
+#pragma optimize("", on)
 
 // FUNCTION: LEGO1 0x100a9a50
 // FUNCTION: BETA10 0x1018bb6b
@@ -875,6 +894,69 @@ void LegoROI::SetDisplayBB(int p_displayBB)
 	// Intentionally empty function
 }
 
+// FUNCTION: LEGO1 0x100a9eb0
+float ViewROI::IntrinsicImportance() const
+{
+	return .5;
+} // for now
+
+// FUNCTION: LEGO1 0x100a9ec0
+// FUNCTION: BETA10 0x1018c740
+Tgl::Group* ViewROI::GetGeometry()
+{
+	return geometry;
+}
+
+// FUNCTION: LEGO1 0x100a9ed0
+// FUNCTION: BETA10 0x1018c760
+const Tgl::Group* ViewROI::GetGeometry() const
+{
+	return geometry;
+}
+
+// FUNCTION: LEGO1 0x100a9ee0
+// FUNCTION: BETA10 0x1018c780
+void ViewROI::UpdateWorldDataWithTransformAndChildren(const Matrix4& parent2world)
+{
+	OrientableROI::UpdateWorldDataWithTransformAndChildren(parent2world);
+	SetGeometryTransformation();
+}
+
+// FUNCTION: BETA10 0x1018c7b0
+inline void ViewROI::SetGeometryTransformation()
+{
+	if (geometry) {
+		Tgl::FloatMatrix4 matrix;
+		Matrix4 in(matrix);
+		SETMAT4(in, m_local2world);
+		geometry->SetTransformation(matrix);
+	}
+}
+
+// FUNCTION: LEGO1 0x100a9fc0
+// FUNCTION: BETA10 0x1018cad0
+void ViewROI::UpdateWorldDataWithTransform(const Matrix4& p_transform)
+{
+	OrientableROI::UpdateWorldDataWithTransform(p_transform);
+	SetGeometryTransformation();
+}
+
+// FUNCTION: LEGO1 0x100aa0a0
+// FUNCTION: BETA10 0x1018cb00
+void ViewROI::SetLocal2WorldWithWorldDataUpdate(const Matrix4& p_transform)
+{
+	OrientableROI::SetLocal2WorldWithWorldDataUpdate(p_transform);
+	SetGeometryTransformation();
+}
+
+// FUNCTION: LEGO1 0x100aa180
+// FUNCTION: BETA10 0x1018cb30
+void ViewROI::UpdateWorldData()
+{
+	OrientableROI::UpdateWorldData();
+	SetGeometryTransformation();
+}
+
 // FUNCTION: LEGO1 0x100aa340
 // FUNCTION: BETA10 0x1018cca0
 float LegoROI::IntrinsicImportance() const
@@ -888,3 +970,5 @@ void LegoROI::UpdateWorldBoundingVolumes()
 {
 	CalcWorldBoundingVolumes(m_sphere, m_local2world, m_world_bounding_box, m_world_bounding_sphere);
 }
+
+#include "realtime/matrix4d.inl.h"

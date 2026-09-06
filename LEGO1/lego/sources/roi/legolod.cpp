@@ -1,12 +1,15 @@
 
 #include "legolod.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "legoroi.h"
 #include "misc/legocontainer.h"
 #include "misc/legostorage.h"
 #include "shape/legomesh.h"
-#include "tgl/d3drm/impl.h"
+#include "tgl/d3drm/tglimpl.h"
 
+using namespace Tgl;
 DECOMP_SIZE_ASSERT(LODObject, 0x04)
 DECOMP_SIZE_ASSERT(ViewLOD, 0x0c)
 DECOMP_SIZE_ASSERT(LegoLOD, 0x20)
@@ -16,16 +19,24 @@ DECOMP_SIZE_ASSERT(LegoLOD::Mesh, 0x08)
 // GLOBAL: BETA10 0x10207230
 LPDIRECT3DRMMATERIAL g_lodMaterial = NULL;
 
+// GLOBAL: LEGO1 0x101013d8
+// GLOBAL: BETA10 0x10207234
+unsigned char g_lightSupport = FALSE;
+
 // GLOBAL: LEGO1 0x101013dc
 // GLOBAL: BETA10 0x10207238
 const char* g_InhPrefix = "inh";
+
+// GLOBAL: LEGO1 0x101013e0
+// GLOBAL: BETA10 0x1020723c
+const char* g_IndPrefix = "ind";
 
 #ifdef BETA10
 inline BOOL GetD3DRM_legolod(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
 #else
 inline IDirect3DRM2* GetD3DRM_legolod(Tgl::Renderer* pRenderer);
 #endif
-inline BOOL GetMeshData(IDirect3DRMMesh** mesh, D3DRMGROUPINDEX* index, Tgl::Mesh* pMesh);
+inline BOOL GetMeshData(IDirect3DRMMesh** mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* pMesh);
 
 // FUNCTION: LEGO1 0x100aa380
 // FUNCTION: BETA10 0x1018ce90
@@ -99,6 +110,15 @@ public:
 };
 #endif
 
+// FUNCTION: LEGO1 0x100aa500
+// FUNCTION: BETA10 0x1018d137
+unsigned char ViewROI::SetLightSupport(unsigned char p_lightSupport)
+{
+	unsigned char oldFlag = g_lightSupport;
+	g_lightSupport = p_lightSupport;
+	return oldFlag;
+}
+
 // FUNCTION: LEGO1 0x100aa510
 // FUNCTION: BETA10 0x1018d15d
 LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_textureContainer, LegoStorage* p_storage)
@@ -115,12 +135,14 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	LegoU32(*polyIndices)[3] = NULL;
 	LegoU32(*textureIndices)[3] = NULL;
 	LegoTextureInfo* textureInfo = NULL;
-	LegoU8 local4c = 0; // BETA10 only, only written, never read
-	LegoU32 numPolys, numVertices, numTextureIndices, meshIndex;
+	LegoU8 local4c = 0; // only written, never read
+	LegoU16 numVertices;
+	LegoU32 numTextureIndices, meshIndex;
 	LegoU32 i, indexBackwards, indexForwards, tempNumVertsAndNormals;
 	LegoFloat red, green, blue, alpha;
 	IDirect3DRMMesh* d3dmesh;
 	D3DRMGROUPINDEX index;
+	Tgl::Result tglResult;
 
 	unsigned char paletteEntries[256];
 
@@ -164,7 +186,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	indexForwards = 0;
 
 	if (p_storage->Read(&tempNumVertsAndNormals, sizeof(LegoU32)) != SUCCESS) {
-		assertIfBeta10(0);
+		assert(0);
 		goto done;
 	}
 
@@ -173,7 +195,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	numNormals = (*((LegoU16*) &tempNumVertsAndNormals + 1) >> 1) & MAXSHORT;
 
 	if (p_storage->Read(&numTextureVertices, sizeof(LegoS32)) != SUCCESS) {
-		assertIfBeta10(0);
+		assert(0);
 		goto done;
 	}
 
@@ -181,7 +203,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		vertices = new float[numVerts][sizeOfArray(*vertices)];
 		if (p_storage->Read(vertices, numVerts * 3 * sizeof(float)) != SUCCESS) {
 			// LINE: BETA10 0x1018d443
-			assertIfBeta10(0);
+			assert(0);
 			goto done;
 		}
 	}
@@ -189,7 +211,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 	if (numNormals > 0) {
 		normals = new float[numNormals][sizeOfArray(*normals)];
 		if (p_storage->Read(normals, numNormals * 3 * sizeof(float)) != SUCCESS) {
-			assertIfBeta10(0);
+			assert(0);
 			goto done;
 		}
 	}
@@ -198,43 +220,44 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		textureVertices = new float[numTextureVertices][sizeOfArray(*textureVertices)];
 		if (p_storage->Read(textureVertices, numTextureVertices * 2 * sizeof(float)) != SUCCESS) {
 			// LINE: BETA10 0x1018d513
-			assertIfBeta10(0);
+			assert(0);
 			goto done;
 		}
 	}
 
 	for (i = 0; i < m_numMeshes; i++) {
 		local4c = 0;
+		LegoU16 numPolys;
 		const LegoChar *textureName, *materialName;
 		Tgl::ShadingModel shadingModel;
 
-		if (p_storage->Read(&numPolys, 2) != SUCCESS) {
-			assertIfBeta10(0);
+		if (p_storage->Read(&numPolys, sizeof(LegoU16)) != SUCCESS) {
+			assert(0);
 			goto done;
 		}
 
-		m_numPolys += numPolys & USHRT_MAX;
+		m_numPolys += numPolys;
 
-		if (p_storage->Read(&numVertices, 2) != SUCCESS) {
-			assertIfBeta10(0);
+		if (p_storage->Read(&numVertices, sizeof(LegoU16)) != SUCCESS) {
+			assert(0);
 			goto done;
 		}
 
-		polyIndices = new LegoU32[numPolys & USHRT_MAX][sizeOfArray(*polyIndices)];
-		if (p_storage->Read(polyIndices, (numPolys & USHRT_MAX) * 3 * sizeof(LegoU32)) != SUCCESS) {
-			assertIfBeta10(0);
+		polyIndices = new LegoU32[numPolys][sizeOfArray(*polyIndices)];
+		if (p_storage->Read(polyIndices, numPolys * 3 * sizeof(LegoU32)) != SUCCESS) {
+			assert(0);
 			goto done;
 		}
 
 		if (p_storage->Read(&numTextureIndices, sizeof(numTextureIndices)) != SUCCESS) {
-			assertIfBeta10(0);
+			assert(0);
 			goto done;
 		}
 
 		if (numTextureIndices > 0) {
-			textureIndices = new LegoU32[numPolys & USHRT_MAX][sizeOfArray(*textureIndices)];
-			if (p_storage->Read(textureIndices, (numPolys & USHRT_MAX) * 3 * sizeof(LegoU32)) != SUCCESS) {
-				assertIfBeta10(0);
+			textureIndices = new LegoU32[numPolys][sizeOfArray(*textureIndices)];
+			if (p_storage->Read(textureIndices, numPolys * 3 * sizeof(LegoU32)) != SUCCESS) {
+				assert(0);
 				goto done;
 			}
 		}
@@ -245,7 +268,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		legoMesh = new LegoMesh();
 
 		if (legoMesh->Read(p_storage) != SUCCESS) {
-			assertIfBeta10(0);
+			assert(0);
 			goto done;
 		}
 
@@ -260,7 +283,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			shadingModel = Tgl::Gouraud;
 		}
 
-		m_numVertices += numVertices & USHRT_MAX;
+		m_numVertices += numVertices;
 
 		textureName = legoMesh->GetTextureName();
 		materialName = legoMesh->GetMaterialName();
@@ -279,8 +302,8 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		assert(locMesh);
 
 		m_melems[meshIndex].m_tglMesh = locMesh->CreateMesh(
-			numPolys & USHRT_MAX,
-			numVertices & USHRT_MAX,
+			numPolys,
+			numVertices,
 			vertices,
 			normals,
 			textureVertices,
@@ -291,11 +314,11 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		);
 
 		if (m_melems[meshIndex].m_tglMesh == NULL) {
-			assertIfBeta10(0);
+			assert(0);
 			goto done;
 		}
 
-		Tgl::Result tglResult = m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
+		tglResult = m_melems[meshIndex].m_tglMesh->SetShadingModel(shadingModel);
 
 		// clang-format off
 		assert(Succeeded( tglResult ));
@@ -312,7 +335,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			textureInfo = p_textureContainer->Get(legoMesh->GetTextureName());
 
 			if (textureInfo == NULL) {
-				assertIfBeta10(0);
+				assert(0);
 				goto done;
 			}
 
@@ -358,7 +381,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		}
 
 		if (legoMesh->GetUnknown0x0d() > 0) {
-			GetMeshData(&d3dmesh, &index, m_melems[meshIndex].m_tglMesh);
+			GetMeshData(&d3dmesh, index, m_melems[meshIndex].m_tglMesh);
 			d3dmesh->SetGroupMaterial(index, g_lodMaterial);
 		}
 
@@ -440,6 +463,7 @@ LegoLOD* LegoLOD::Clone(Tgl::Renderer* p_renderer)
 }
 
 // FUNCTION: LEGO1 0x100aacb0
+// FUNCTION: BETA10 0x1018e1c1
 LegoResult LegoLOD::SetColor(LegoFloat p_red, LegoFloat p_green, LegoFloat p_blue, LegoFloat p_alpha)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
@@ -500,6 +524,7 @@ LegoResult LegoLOD::UpdateTextureInfo(LegoTextureInfo* p_textureInfo)
 }
 
 // FUNCTION: LEGO1 0x100aadc0
+// FUNCTION: BETA10 0x1018e3d8
 LegoResult LegoLOD::GetTextureInfo(LegoTextureInfo*& p_textureInfo)
 {
 	for (LegoU32 i = m_meshOffset; i < m_numMeshes; i++) {
@@ -533,13 +558,13 @@ void LegoLOD::ClearMeshOffset()
 }
 
 // FUNCTION: BETA10 0x1018dfc4
-inline BOOL GetMeshData(IDirect3DRMMesh** mesh, D3DRMGROUPINDEX* index, Tgl::Mesh* p_tglElem)
+inline BOOL GetMeshData(IDirect3DRMMesh** mesh, D3DRMGROUPINDEX& index, Tgl::Mesh* p_tglElem)
 {
 	assert(p_tglElem);
 	TglImpl::MeshImpl* meshImpl = (TglImpl::MeshImpl*) p_tglElem;
 	// Note: Diff in BETA10 (thunked in recompile but not in orig)
 	*mesh = meshImpl->ImplementationData()->groupMesh;
-	*index = meshImpl->ImplementationData()->groupIndex;
+	index = meshImpl->ImplementationData()->groupIndex;
 	return FALSE;
 }
 
@@ -560,3 +585,7 @@ inline IDirect3DRM2* GetD3DRM_legolod(Tgl::Renderer* pRenderer)
 	return ((TglImpl::RendererImpl*) pRenderer)->ImplementationData();
 }
 #endif
+
+#include "viewmanager/viewlod.inl.h"
+
+#include "legolod.inl.h"
