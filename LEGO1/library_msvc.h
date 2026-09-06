@@ -1057,10 +1057,12 @@
 // LIBRARY: BETA10 0x10100fe0
 // CrtMessageWindow
 
-// Cannot be handled right now due to anonymous pointer in struct.
-// We can annotate it on the original side, but we have no symbol on the recomp side.
-// We would need a way of annotating "the pointer at c_dfDIKeyboard+0x14 has orig address 0x10097f80".
-// // GLOBAL: LEGO1 0x10098f80
+// The rgodf member points at each image's own copy of the keyboard object
+// data, so datacmp cannot compare the variable and skips it through
+// report/ignore-variables in reccmp-project.yml.
+// https://github.com/isledecomp/reccmp/issues/226
+
+// GLOBAL: LEGO1 0x10098f80
 // c_dfDIKeyboard
 
 /// Globals from libraries without symbols
