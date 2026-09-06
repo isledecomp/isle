@@ -11,6 +11,8 @@
 #include "mxstring.h"
 #include "mxthread.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxDiskStreamProviderThread, 0x1c)
 DECOMP_SIZE_ASSERT(MxDiskStreamProvider, 0x60);
 
@@ -178,6 +180,7 @@ MxResult MxDiskStreamProvider::WaitForWorkToComplete()
 MxResult MxDiskStreamProvider::FUN_100d1780(MxDSStreamingAction* p_action)
 {
 	if (!m_remainingWork) {
+		assert("Queueing request after provider stop. Try to ignore..." == NULL);
 		return FAILURE;
 	}
 
