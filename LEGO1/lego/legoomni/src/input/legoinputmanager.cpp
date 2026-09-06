@@ -16,12 +16,6 @@ DECOMP_SIZE_ASSERT(LegoNotifyList, 0x18)
 DECOMP_SIZE_ASSERT(LegoNotifyListCursor, 0x10)
 DECOMP_SIZE_ASSERT(LegoEventQueue, 0x18)
 
-// GLOBAL: LEGO1 0x100f31b0
-MxS32 g_clickedObjectId = -1;
-
-// GLOBAL: LEGO1 0x100f31b4
-const char* g_clickedAtom = NULL;
-
 // GLOBAL: LEGO1 0x100f67b8
 MxBool g_unk0x100f67b8 = TRUE;
 
@@ -54,6 +48,7 @@ LegoInputManager::LegoInputManager()
 }
 
 // FUNCTION: LEGO1 0x1005b8f0
+// FUNCTION: BETA10 0x10088c10
 LegoInputManager::~LegoInputManager()
 {
 	Destroy();
@@ -66,7 +61,6 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 	MxResult result = SUCCESS;
 
 	m_controlManager = new LegoControlManager;
-	assert(m_controlManager);
 
 	if (!m_keyboardNotifyList) {
 		m_keyboardNotifyList = new LegoNotifyList;
@@ -88,6 +82,7 @@ MxResult LegoInputManager::Create(HWND p_hwnd)
 }
 
 // FUNCTION: LEGO1 0x1005bfe0
+// FUNCTION: BETA10 0x10088e8f
 void LegoInputManager::Destroy()
 {
 	ReleaseDX();
@@ -126,6 +121,7 @@ void LegoInputManager::CreateAndAcquireKeyboard(HWND p_hwnd)
 }
 
 // FUNCTION: LEGO1 0x1005c0a0
+// FUNCTION: BETA10 0x1008904e
 void LegoInputManager::ReleaseDX()
 {
 	if (m_directInputDevice != NULL) {
@@ -141,6 +137,7 @@ void LegoInputManager::ReleaseDX()
 }
 
 // FUNCTION: LEGO1 0x1005c0f0
+// FUNCTION: BETA10 0x100890e6
 void LegoInputManager::GetKeyboardState()
 {
 	m_kbStateSuccess = FALSE;
@@ -161,6 +158,7 @@ void LegoInputManager::GetKeyboardState()
 }
 
 // FUNCTION: LEGO1 0x1005c160
+// FUNCTION: BETA10 0x100891b6
 MxResult LegoInputManager::GetNavigationKeyStates(MxU32& p_keyFlags)
 {
 	GetKeyboardState();
@@ -207,6 +205,7 @@ MxResult LegoInputManager::GetNavigationKeyStates(MxU32& p_keyFlags)
 }
 
 // FUNCTION: LEGO1 0x1005c240
+// FUNCTION: BETA10 0x10089298
 MxResult LegoInputManager::GetJoystickId()
 {
 	JOYINFOEX joyinfoex;
@@ -239,6 +238,7 @@ MxResult LegoInputManager::GetJoystickId()
 }
 
 // FUNCTION: LEGO1 0x1005c320
+// FUNCTION: BETA10 0x100893ae
 MxResult LegoInputManager::GetJoystickState(
 	MxU32* p_joystickX,
 	MxU32* p_joystickY,
@@ -294,6 +294,7 @@ MxResult LegoInputManager::GetJoystickState(
 }
 
 // FUNCTION: LEGO1 0x1005c470
+// FUNCTION: BETA10 0x10089529
 void LegoInputManager::Register(MxCore* p_notify)
 {
 	AUTOLOCK(m_criticalSection);
@@ -305,6 +306,7 @@ void LegoInputManager::Register(MxCore* p_notify)
 }
 
 // FUNCTION: LEGO1 0x1005c5c0
+// FUNCTION: BETA10 0x100895b2
 void LegoInputManager::UnRegister(MxCore* p_notify)
 {
 	AUTOLOCK(m_criticalSection);
@@ -316,12 +318,14 @@ void LegoInputManager::UnRegister(MxCore* p_notify)
 }
 
 // FUNCTION: LEGO1 0x1005c700
+// FUNCTION: BETA10 0x10089671
 void LegoInputManager::SetCamera(LegoCameraController* p_camera)
 {
 	m_camera = p_camera;
 }
 
 // FUNCTION: LEGO1 0x1005c710
+// FUNCTION: BETA10 0x10089695
 void LegoInputManager::ClearCamera()
 {
 	m_camera = NULL;
@@ -342,6 +346,7 @@ void LegoInputManager::ClearWorld()
 }
 
 // FUNCTION: LEGO1 0x1005c740
+// FUNCTION: BETA10 0x100896ff
 void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p_x, MxLong p_y, MxU8 p_key)
 {
 	LegoEventNotificationParam param = LegoEventNotificationParam(p_id, NULL, p_modifier, p_x, p_y, p_key);
@@ -353,6 +358,7 @@ void LegoInputManager::QueueEvent(NotificationId p_id, MxU8 p_modifier, MxLong p
 }
 
 // FUNCTION: LEGO1 0x1005c820
+// FUNCTION: BETA10 0x100897bf
 void LegoInputManager::ProcessEvents()
 {
 	AUTOLOCK(m_criticalSection);
@@ -366,6 +372,7 @@ void LegoInputManager::ProcessEvents()
 }
 
 // FUNCTION: LEGO1 0x1005c9c0
+// FUNCTION: BETA10 0x10089892
 MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 {
 	MxBool processRoi;
@@ -426,6 +433,7 @@ MxBool LegoInputManager::ProcessOneEvent(LegoEventNotificationParam& p_param)
 			}
 
 			if (p_param.GetNotification() == c_notificationButtonDown) {
+				assert(VideoManager());
 				MxPresenter* presenter = VideoManager()->GetPresenterAt(p_param.GetX(), p_param.GetY());
 
 				if (presenter) {

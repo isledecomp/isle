@@ -51,6 +51,7 @@ HistoryBook::~HistoryBook()
 }
 
 // FUNCTION: LEGO1 0x10082610
+// FUNCTION: BETA10 0x1002b80f
 MxResult HistoryBook::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = LegoWorld::Create(p_dsAction);
@@ -133,8 +134,9 @@ void HistoryBook::ReadyWorld()
 		}
 
 		for (MxS32 scoreState = 0, scoreboxX = 1; scoreState < 5; scoreState++, scoreboxX += 5) {
+			MxU8 color;
 			for (MxS32 scoreBoxColumn = 0, scoreboxY = 1; scoreBoxColumn < 5; scoreBoxColumn++, scoreboxY += 5) {
-				MxU8 color = score->m_scores[scoreState][scoreBoxColumn];
+				color = score->m_scores[scoreState][scoreBoxColumn];
 
 				if (color > 0) {
 					for (MxS32 lax = 0; lax < 4; lax++) {
