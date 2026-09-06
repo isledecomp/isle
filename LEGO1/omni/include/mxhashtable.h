@@ -149,9 +149,11 @@ MxHashTable<T>::~MxHashTable()
 template <class T>
 void MxHashTable<T>::DeleteAll()
 {
+	MxHashTableNode<T>* t;
+	MxHashTableNode<T>* next;
+
 	for (MxS32 i = 0; i < m_numSlots; i++) {
-		MxHashTableNode<T>* next;
-		for (MxHashTableNode<T>* t = m_slots[i]; t != NULL; t = next) {
+		for (t = m_slots[i]; t != NULL; t = next) {
 			next = t->m_next;
 			this->m_customDestructor(t->m_obj);
 			delete t;
@@ -169,6 +171,8 @@ inline void MxHashTable<T>::Resize()
 	// so we can walk nodes and re-insert
 	MxU32 oldSize = m_numSlots;
 	MxHashTableNode<T>** oldTable = m_slots;
+	MxHashTableNode<T>* t;
+	MxHashTableNode<T>* next;
 
 	switch (m_resizeOption) {
 	case e_expandAll:
@@ -185,8 +189,7 @@ inline void MxHashTable<T>::Resize()
 	this->m_count = 0;
 
 	for (MxS32 i = 0; i < oldSize; i++) {
-		MxHashTableNode<T>* next;
-		for (MxHashTableNode<T>* t = oldTable[i]; t != NULL; t = next) {
+		for (t = oldTable[i]; t != NULL; t = next) {
 			next = t->m_next;
 			NodeInsert(t);
 		}

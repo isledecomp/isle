@@ -145,7 +145,7 @@ public:
 	void operator&=(const MxRect& p_r)
 	{
 		m_left = Max(p_r.m_left, m_left);
-		m_top = Max(p_r.m_top, m_top);
+		m_top = Max(m_top, p_r.m_top);
 		m_right = Min(p_r.m_right, m_right);
 		m_bottom = Min(p_r.m_bottom, m_bottom);
 	}

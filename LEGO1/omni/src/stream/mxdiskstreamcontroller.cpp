@@ -38,8 +38,6 @@ MxDiskStreamController::~MxDiskStreamController()
 #endif
 	}
 
-	assert(m_subscribers.size() == 0);
-
 	MxDSObject* object;
 	while (m_unk0x3c.PopFront(object)) {
 		delete object;
@@ -100,6 +98,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100c7880
+// FUNCTION: BETA10 0x10154045
 MxResult MxDiskStreamController::VTable0x18(undefined4, undefined4)
 {
 	return SUCCESS;
@@ -120,12 +119,14 @@ MxResult MxDiskStreamController::FUN_100c7890(MxDSStreamingAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c7960
+// FUNCTION: BETA10 0x1015447a
 MxResult MxDiskStreamController::VTable0x34(undefined4)
 {
 	return FAILURE;
 }
 
 // FUNCTION: LEGO1 0x100c7970
+// FUNCTION: BETA10 0x101545ff
 void MxDiskStreamController::FUN_100c7970()
 {
 	// Empty
@@ -136,13 +137,15 @@ void MxDiskStreamController::FUN_100c7970()
 void MxDiskStreamController::FUN_100c7980()
 {
 	MxDSBuffer* buffer;
-	MxDSStreamingAction* action = NULL;
+	MxDSStreamingAction* request = NULL;
 
 	{
 		AUTOLOCK(m_criticalSection);
+		assert(m_provider);
 
 		if (m_unk0x3c.size() && m_unk0x8c < m_provider->GetStreamBuffersNum()) {
 			buffer = new MxDSBuffer();
+			assert(buffer);
 
 			if (buffer->AllocateBuffer(m_provider->GetFileSize(), MxDSBuffer::e_chunk) != SUCCESS) {
 				if (buffer) {
@@ -151,21 +154,23 @@ void MxDiskStreamController::FUN_100c7980()
 				return;
 			}
 
-			action = VTable0x28();
-			if (!action) {
+			request = VTable0x28();
+			assert(request);
+
+			if (!request) {
 				if (buffer) {
 					delete buffer;
 				}
 				return;
 			}
 
-			action->SetUnknowna0(buffer);
+			request->SetUnknowna0(buffer);
 			m_unk0x8c++;
 		}
 	}
 
-	if (action) {
-		((MxDiskStreamProvider*) m_provider)->FUN_100d1780(action);
+	if (request) {
+		((MxDiskStreamProvider*) m_provider)->FUN_100d1780(request);
 	}
 }
 
@@ -420,6 +425,7 @@ MxResult MxDiskStreamController::FUN_100c8360(MxDSStreamingAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100c84a0
+// FUNCTION: BETA10 0x10155a05
 void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
 {
 	AUTOLOCK(m_criticalSection);
@@ -427,7 +433,7 @@ void MxDiskStreamController::InsertToList74(MxDSBuffer* p_buffer)
 }
 
 // FUNCTION: LEGO1 0x100c8540
-// FUNCTION: BETA10 0x10155a05
+// FUNCTION: BETA10 0x10155a8c
 void MxDiskStreamController::FUN_100c8540()
 {
 	AUTOLOCK(m_criticalSection);
