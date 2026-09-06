@@ -31,3 +31,7 @@ ISLE.EXE
 LEGO1.DLL
 
 .DS_Store
+
+# Local ReproBit run state and transactional staging are never source inputs.
+/.reprobit-state/
+/.reprobit-transactions/
