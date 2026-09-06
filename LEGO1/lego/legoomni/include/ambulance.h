@@ -71,19 +71,19 @@ public:
 	MxS16 GetHighScore(MxU8 p_actorId)
 	{
 		switch (p_actorId) {
-		case LegoActor::c_pepper:
+		case LegoActor::e_pepper:
 			return m_peHighScore;
 			break;
-		case LegoActor::c_mama:
+		case LegoActor::e_mama:
 			return m_maHighScore;
 			break;
-		case LegoActor::c_papa:
+		case LegoActor::e_papa:
 			return m_paHighScore;
 			break;
-		case LegoActor::c_nick:
+		case LegoActor::e_nick:
 			return m_niHighScore;
 			break;
-		case LegoActor::c_laura:
+		case LegoActor::e_laura:
 			return m_laHighScore;
 			break;
 		}
@@ -95,31 +95,31 @@ public:
 	void UpdateScore(ScoreColor p_score, MxS16 p_actorId)
 	{
 		switch (p_actorId) {
-		case LegoActor::c_pepper:
+		case LegoActor::e_pepper:
 			m_peScore = p_score;
 			if (m_peHighScore < p_score) {
 				m_peHighScore = p_score;
 			}
 			break;
-		case LegoActor::c_mama:
+		case LegoActor::e_mama:
 			m_maScore = p_score;
 			if (m_maHighScore < p_score) {
 				m_maHighScore = p_score;
 			}
 			break;
-		case LegoActor::c_papa:
+		case LegoActor::e_papa:
 			m_paScore = p_score;
 			if (m_paHighScore < p_score) {
 				m_paHighScore = p_score;
 			}
 			break;
-		case LegoActor::c_nick:
+		case LegoActor::e_nick:
 			m_niScore = p_score;
 			if (m_niHighScore < p_score) {
 				m_niHighScore = p_score;
 			}
 			break;
-		case LegoActor::c_laura:
+		case LegoActor::e_laura:
 			m_laScore = p_score;
 			if (m_laHighScore < p_score) {
 				m_laHighScore = p_score;

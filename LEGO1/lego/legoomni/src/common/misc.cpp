@@ -1,6 +1,7 @@
 #include "misc.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "realtime/matrix4d.inl.h"
 #include "legoinputmanager.h"
 #include "legomain.h"
 #include "legovideomanager.h"
@@ -8,17 +9,17 @@
 #include "mxmisc.h"
 #include "roi/legoroi.h"
 #include "scripts.h"
-
-// GLOBAL: LEGO1 0x100f4c58
-MxBool g_isWorldActive = TRUE;
+// g_isWorldActive is defined in legonavcontroller.cpp
 
 // FUNCTION: LEGO1 0x10015700
+// FUNCTION: BETA10 0x100e4780
 LegoOmni* Lego()
 {
 	return LegoOmni::GetInstance();
 }
 
 // FUNCTION: LEGO1 0x10015710
+// FUNCTION: BETA10 0x100e47c0
 LegoSoundManager* SoundManager()
 {
 	return LegoOmni::GetInstance()->GetSoundManager();
@@ -105,6 +106,7 @@ LegoCharacterManager* CharacterManager()
 }
 
 // FUNCTION: LEGO1 0x100157c0
+// FUNCTION: BETA10 0x100e4ad4
 ViewManager* GetViewManager()
 {
 	return VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
@@ -135,6 +137,7 @@ LegoTextureContainer* TextureContainer()
 }
 
 // FUNCTION: LEGO1 0x10015810
+// FUNCTION: BETA10 0x100e4bfe
 ViewLODListManager* GetViewLODListManager()
 {
 	return LegoOmni::GetInstance()->GetViewLODListManager();
@@ -167,6 +170,7 @@ void SetROIVisible(const char* p_name, MxBool p_visible)
 }
 
 // FUNCTION: LEGO1 0x10015880
+// FUNCTION: BETA10 0x100e4d32
 void SetUserActor(LegoPathActor* p_userActor)
 {
 	LegoOmni::GetInstance()->SetUserActor(p_userActor);
@@ -180,6 +184,7 @@ MxResult StartActionIfInitialized(MxDSAction& p_dsAction)
 }
 
 // FUNCTION: LEGO1 0x100158b0
+// FUNCTION: BETA10 0x100e4dce
 void DeleteAction()
 {
 	LegoOmni::GetInstance()->DeleteAction();
@@ -194,12 +199,14 @@ LegoWorld* FindWorld(const MxAtomId& p_atom, MxS32 p_entityid)
 }
 
 // FUNCTION: LEGO1 0x100158e0
+// FUNCTION: BETA10 0x100e4e6a
 MxDSAction& GetCurrentAction()
 {
 	return LegoOmni::GetInstance()->GetCurrentAction();
 }
 
 // FUNCTION: LEGO1 0x100158f0
+// FUNCTION: BETA10 0x100e4eb4
 void SetCurrentWorld(LegoWorld* p_world)
 {
 	LegoOmni::GetInstance()->SetCurrentWorld(p_world);

@@ -4,8 +4,8 @@
 #include "decomp.h"
 #include "extra.h"
 #include "mxentity.h"
+#include "roi/legoroi.h"
 
-class LegoROI;
 class MxDSAction;
 class Vector3;
 

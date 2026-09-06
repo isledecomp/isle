@@ -193,9 +193,12 @@ public:
 		return !strcmp(p_name, Pizza::ClassName()) || IsleActor::IsA(p_name);
 	}
 
-	MxResult Create(MxDSAction& p_dsAction) override;                           // vtable+0x18
-	MxLong HandleClick() override;                                              // vtable+0x68
-	MxLong HandleEndAction(MxEndActionNotificationParam& p_param) override;     // vtable+0x74
+	MxResult Create(MxDSAction& p_dsAction) override;                       // vtable+0x18
+	MxLong HandleClick() override;                                          // vtable+0x68
+	MxLong HandleEndAction(MxEndActionNotificationParam& p_param) override; // vtable+0x74
+#ifdef BETA10
+	MxLong HandleButtonDown(LegoControlManagerNotificationParam& p_param) override; // vtable+0x78
+#endif
 	MxLong HandlePathStruct(LegoPathStructNotificationParam& p_param) override; // vtable+0x80
 
 	void CreateState();

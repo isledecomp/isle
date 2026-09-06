@@ -102,13 +102,16 @@ Act3Actor::Act3Actor()
 // FUNCTION: BETA10 0x100180ab
 MxU32 Act3Actor::StepState(float p_time, Matrix4& p_transform)
 {
+	// GLOBAL: LEGO1 0x100d75e4
+	static const float g_hitAnimationDelay = 2000.0f;
+
 	// Note: Code duplication with LegoExtraActor::StepState
 	switch (m_actorState & c_maxState) {
 	case c_initial:
 	case c_ready:
 		return TRUE;
 	case c_hit:
-		m_unk0x1c = p_time + 2000.0f;
+		m_unk0x1c = g_hitAnimationDelay + p_time;
 		m_actorState = c_hitAnimation;
 		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
 		m_transformTime = p_time;
@@ -156,9 +159,9 @@ MxResult Act3Actor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			return FAILURE;
 		}
 
+		MxMatrix local2world;
 		LegoROI* roi = p_actor->GetROI();
 
-		MxMatrix local2world;
 		local2world = roi->GetLocal2World();
 
 		Vector3(local2world[3]) += g_unk0x10104ef0;
@@ -335,6 +338,7 @@ MxResult Act3Cop::FUN_10040360()
 	Vector3 local20(local74[2]);
 
 	Mx3DPointFloat local7c;
+	float local18;
 	local7c = a3->m_brickster->GetROI()->GetLocal2World()[3];
 	local7c -= local2c;
 
@@ -364,8 +368,6 @@ MxResult Act3Cop::FUN_10040360()
 	}
 
 	if (grec == NULL) {
-		float local18;
-
 		for (MxS32 i = 0; i < MAX_DONUTS; i++) {
 			Act3Ammo* donut = &a3->m_donuts[i];
 			assert(donut);
@@ -373,7 +375,6 @@ MxResult Act3Cop::FUN_10040360()
 			if (donut->IsValid() && donut->GetActorState() == c_initial) {
 				LegoROI* proi = donut->GetROI();
 				assert(proi);
-
 				MxMatrix locald0 = proi->GetLocal2World();
 				Vector3 local88(locald0[3]);
 				Mx3DPointFloat localec(local88);
@@ -412,34 +413,34 @@ MxResult Act3Cop::FUN_10040360()
 				}
 			}
 		}
+	}
 
-		if (grec == NULL) {
-			MxS32 random = rand() % (MxS32) sizeOfArray(g_copDest);
-			Vector3 localf8(g_copDest[random].m_unk0x08);
-			Vector3 local108(g_copDest[random].m_unk0x14);
+	if (grec == NULL) {
+		MxS32 random = rand() % (MxS32) sizeOfArray(g_copDest);
+		Vector3 localf8(g_copDest[random].m_unk0x08);
+		MxFloat local100;
+		Vector3 local108(g_copDest[random].m_unk0x14);
 
-			grec = new LegoPathEdgeContainer();
-			LegoPathBoundary* boundary = g_copDest[random].m_boundary;
+		grec = new LegoPathEdgeContainer();
+		LegoPathBoundary* boundary = g_copDest[random].m_boundary;
 
-			if (boundary != NULL) {
-				MxFloat local100;
-				LegoPathEdgeContainer *local150, *local14c; // unused
+		if (boundary != NULL) {
+			LegoPathEdgeContainer *local150, *local14c; // unused
 
-				if (m_pathController->FindPath(
-						grec,
-						local2c,
-						local20,
-						m_boundary,
-						localf8,
-						local108,
-						boundary,
-						LegoOrientedEdge::c_bit1,
-						&local100
-					) != SUCCESS) {
-					local14c = local150 = grec;
-					delete grec;
-					grec = NULL;
-				}
+			if (m_pathController->FindPath(
+					grec,
+					local2c,
+					local20,
+					m_boundary,
+					localf8,
+					local108,
+					boundary,
+					LegoOrientedEdge::c_bit1,
+					&local100
+				) != SUCCESS) {
+				local14c = local150 = grec;
+				delete grec;
+				grec = NULL;
 			}
 		}
 	}
@@ -533,11 +534,11 @@ Act3Brickster::Act3Brickster()
 	m_shootAnim = NULL;
 	m_unk0x38 = 0;
 	m_unk0x20 = 0.0f;
-	m_unk0x24 = 0.0f;
 	m_unk0x54 = 0.0f;
 
 	SetActorState(c_disabled);
 	m_unk0x58 = 0;
+	m_unk0x24 = 0.0f;
 
 	m_unk0x3c.Clear();
 }
@@ -673,7 +674,7 @@ void Act3Brickster::Animate(float p_time)
 			Vector3 local94(locale4[3]);
 
 			local80 = local94;
-			assert(m_bInfo->m_entity && m_bInfo->m_entity->GetROI());
+			assert(m_bInfo->entity && m_bInfo->entity->GetROI());
 
 			local80 -= m_unk0x3c;
 			local80.Unitize();
@@ -712,8 +713,8 @@ void Act3Brickster::Animate(float p_time)
 			m_unk0x50 = p_time + m_shootAnim->GetDuration();
 			assert(SoundManager()->GetCacheSoundManager());
 			SoundManager()->GetCacheSoundManager()->Play("xarrow", NULL, FALSE);
-			BuildingManager()->ScheduleAnimation(m_bInfo->m_entity, 0, FALSE, TRUE);
-			m_unk0x3c = m_bInfo->m_entity->GetROI()->GetLocal2World()[3];
+			BuildingManager()->ScheduleAnimation(m_bInfo->entity, 0, FALSE, TRUE);
+			m_unk0x3c = m_bInfo->entity->GetROI()->GetLocal2World()[3];
 		}
 		else {
 			FUN_10042300();
@@ -792,6 +793,7 @@ MxResult Act3Brickster::FUN_100417c0()
 	m_pInfo = NULL;
 	m_bInfo = NULL;
 	m_unk0x38 = 0;
+	MxS32 i;
 	LegoPathEdgeContainer* grec = NULL;
 	Act3* a3 = (Act3*) m_world;
 
@@ -802,7 +804,7 @@ MxResult Act3Brickster::FUN_100417c0()
 	if (m_unk0x58 < 8 && m_unk0x24 + 5000.0f < m_transformTime) {
 		float local18;
 
-		for (MxS32 i = 0; i < MAX_PIZZAS; i++) {
+		for (i = 0; i < MAX_PIZZAS; i++) {
 			Act3Ammo* pizza = &a3->m_pizzas[i];
 			assert(pizza);
 
@@ -867,7 +869,7 @@ MxResult Act3Brickster::FUN_100417c0()
 		float local124;
 
 		for (MxS32 i = 0; i < length; i++) {
-			if (bInfo[i].m_counter < 0 && bInfo[i].m_boundary != NULL && bInfo[i].m_entity != NULL && i != 0 &&
+			if (bInfo[i].m_counter < 0 && bInfo[i].m_boundary != NULL && bInfo[i].entity != NULL && i != 0 &&
 				(local120 == -1 || i != 15)) {
 				Mx3DPointFloat local188(bInfo[i].m_x, bInfo[i].m_y, bInfo[i].m_z);
 
@@ -939,9 +941,9 @@ MxResult Act3Brickster::FUN_100417c0()
 	if (grec != NULL) {
 		Mx3DPointFloat local150;
 
-		LegoPathEdgeContainer *local1c4, *local1c8; // unused
+		LegoPathEdgeContainer* local1c8; // unused
 		if (m_grec != NULL) {
-			local1c4 = local1c8 = m_grec;
+			local1c8 = m_grec;
 			delete m_grec;
 		}
 
