@@ -46,9 +46,19 @@ DECOMP_SIZE_ASSERT(LegoCarBuild::LookupTableActions, 0x1c);
 
 // These four structs can be matched to the vehicle types using BETA10 0x10070520
 
+// GLOBAL: LEGO1 0x100d65a4
+const MxFloat LegoCarBuild::g_selectedPartRotationAngleStepYAxis = -0.1f;
+
+// GLOBAL: LEGO1 0x100d65a8
+const MxFloat LegoCarBuild::g_rotationAngleStepYAxis = 0.07;
+
+// GLOBAL: LEGO1 0x100d65ac
+// GLOBAL: BETA10 0x101bb7bc
+static const MxFloat g_unk0x100d65ac = 0.0f;
+
 // GLOBAL: LEGO1 0x100d65b0
 // GLOBAL: BETA10 0x101bb7c0
-LegoCarBuild::LookupTableActions LegoCarBuild::g_actorScripts[] = {
+const LegoCarBuild::LookupTableActions LegoCarBuild::g_actorScripts[] = {
 	{DunecarScript::c_igs001d3_RunAnim,
 	 DunecarScript::c_igs002d3_RunAnim,
 	 DunecarScript::c_igs003d3_RunAnim,
@@ -79,12 +89,6 @@ LegoCarBuild::LookupTableActions LegoCarBuild::g_actorScripts[] = {
 	 RacecarScript::c_irtxx4d1_RunAnim}
 };
 
-// GLOBAL: LEGO1 0x100d65a4
-MxFloat LegoCarBuild::g_selectedPartRotationAngleStepYAxis = -0.1f;
-
-// GLOBAL: LEGO1 0x100d65a8
-MxFloat LegoCarBuild::g_rotationAngleStepYAxis = 0.07;
-
 // GLOBAL: LEGO1 0x100f11cc
 MxS16 LegoCarBuild::g_lastTickleState = -1;
 
@@ -92,8 +96,8 @@ MxS16 LegoCarBuild::g_lastTickleState = -1;
 // FUNCTION: BETA10 0x1006ac10
 LegoCarBuild::LegoCarBuild()
 {
-	m_clickState = e_idle;
 	m_selectedPart = 0;
+	m_clickState = e_idle;
 	m_resetPlacedSelectedPart = c_disabled;
 	m_displayedPartIsPlaced = FALSE;
 	m_animPresenter = NULL;
@@ -160,62 +164,62 @@ MxResult LegoCarBuild::Create(MxDSAction& p_dsAction)
 {
 	MxResult result = LegoWorld::Create(p_dsAction);
 
-	if (!result) {
-		// TickleManager()->RegisterClient(this, 100);
-		InputManager()->SetWorld(this);
-		ControlManager()->Register(this);
-
-		SetIsWorldActive(FALSE);
-
-		InputManager()->Register(this);
-
-		// variable name verified by BETA10 0x1006b1a6
-		const char* buildStateClassName = NULL;
-
-		if (m_atomId == *g_copterScript) {
-			buildStateClassName = "LegoCopterBuildState";
-			GameState()->m_currentArea = LegoGameState::e_copterbuild;
-			m_carId = Helicopter_Actor;
-		}
-		else if (m_atomId == *g_dunecarScript) {
-			buildStateClassName = "LegoDuneCarBuildState";
-			GameState()->m_currentArea = LegoGameState::e_dunecarbuild;
-			m_carId = DuneBugy_Actor;
-		}
-		else if (m_atomId == *g_jetskiScript) {
-			buildStateClassName = "LegoJetskiBuildState";
-			GameState()->m_currentArea = LegoGameState::e_jetskibuild;
-			m_carId = Jetski_Actor;
-		}
-		else if (m_atomId == *g_racecarScript) {
-			buildStateClassName = "LegoRaceCarBuildState";
-			GameState()->m_currentArea = LegoGameState::e_racecarbuild;
-			m_carId = RaceCar_Actor;
-		}
-
-		LegoGameState* gameState = GameState();
-
-		LegoVehicleBuildState* buildState = (LegoVehicleBuildState*) gameState->GetState(buildStateClassName);
-
-		if (!buildState) {
-			buildState = (LegoVehicleBuildState*) gameState->CreateState(buildStateClassName);
-		}
-
-		m_buildState = buildState;
-		m_alreadyFinished = m_buildState->m_finishedBuild;
-
-		GameState()->StopArea(LegoGameState::e_previousArea);
-
-		m_buildState->m_animationState = LegoVehicleBuildState::e_entering;
-		m_clickState = e_idle;
-
-		BackgroundAudioManager()->Stop();
-		EnableAnimations(FALSE);
-
-		result = SUCCESS;
+	if (result != SUCCESS) {
+		return result;
 	}
 
-	return result;
+	// TickleManager()->RegisterClient(this, 100);
+	InputManager()->SetWorld(this);
+	ControlManager()->Register(this);
+
+	SetIsWorldActive(FALSE);
+
+	InputManager()->Register(this);
+
+	// variable name verified by BETA10 0x1006b1a6
+	const char* buildStateClassName = NULL;
+
+	if (m_atomId == *g_copterScript) {
+		buildStateClassName = "LegoCopterBuildState";
+		GameState()->m_currentArea = LegoGameState::e_copterbuild;
+		m_carId = Helicopter_Actor;
+	}
+	else if (m_atomId == *g_dunecarScript) {
+		buildStateClassName = "LegoDuneCarBuildState";
+		GameState()->m_currentArea = LegoGameState::e_dunecarbuild;
+		m_carId = DuneBugy_Actor;
+	}
+	else if (m_atomId == *g_jetskiScript) {
+		buildStateClassName = "LegoJetskiBuildState";
+		GameState()->m_currentArea = LegoGameState::e_jetskibuild;
+		m_carId = Jetski_Actor;
+	}
+	else if (m_atomId == *g_racecarScript) {
+		buildStateClassName = "LegoRaceCarBuildState";
+		GameState()->m_currentArea = LegoGameState::e_racecarbuild;
+		m_carId = RaceCar_Actor;
+	}
+
+	LegoGameState* gameState = GameState();
+
+	LegoVehicleBuildState* buildState = (LegoVehicleBuildState*) gameState->GetState(buildStateClassName);
+
+	if (!buildState) {
+		buildState = (LegoVehicleBuildState*) gameState->CreateState(buildStateClassName);
+	}
+
+	m_buildState = buildState;
+	m_alreadyFinished = m_buildState->m_finishedBuild;
+
+	GameState()->StopArea(LegoGameState::e_previousArea);
+
+	m_buildState->m_animationState = LegoVehicleBuildState::e_entering;
+	m_clickState = e_idle;
+
+	BackgroundAudioManager()->Stop();
+	EnableAnimations(FALSE);
+
+	return SUCCESS;
 }
 
 // FUNCTION: LEGO1 0x10022cd0
@@ -286,6 +290,7 @@ void LegoCarBuild::InitPresenters()
 }
 
 // FUNCTION: LEGO1 0x10022f00
+// FUNCTION: BETA10 0x1006b7e7
 void LegoCarBuild::DisplaySelectedPart()
 {
 	if (m_selectedPart) {
@@ -352,7 +357,7 @@ void LegoCarBuild::CalculateStartAndTargetScreenPositions()
 	m_selectedPartTargetScreenPosition[1] = screenPos[1] / screenPos[3];
 
 	m_normalizedDistance =
-		sqrt((MxDouble) DISTSQRD2(m_selectedPartStartScreenPosition, m_selectedPartTargetScreenPosition));
+		sqrt((MxDouble) DISTSQRD2(m_selectedPartTargetScreenPosition, m_selectedPartStartScreenPosition));
 
 	m_draggingQuarternionTransformer.SetStartEnd(m_selectedPartStartTransform, m_selectedPartTargetTransform);
 }
@@ -372,45 +377,47 @@ void LegoCarBuild::CalculateSelectedPartMatrix(MxLong p_x, MxLong p_y)
 		screenCoordinatesForRay[0] = p_x;
 		screenCoordinatesForRay[1] = p_y;
 
-		if (CalculateRayOriginDirection(screenCoordinatesForRay, local30, local84)) {
-			MxFloat positionOffset[3];
-			MxFloat screenPosition[2];
-
-			screenPosition[0] = p_x;
-			screenPosition[1] = p_y;
-
-			positionOffset[0] = 0;
-			positionOffset[1] = 0;
-			positionOffset[2] = 0;
-
-			MxMatrix transform;
-
-			if (p_y < m_selectedPartStartScreenPosition[1]) {
-				CalculateDragPositionAbove(screenPosition, positionOffset);
-			}
-			else if (p_y > m_selectedPartTargetScreenPosition[1]) {
-				CalculateDragPositionOnGround(screenPosition, positionOffset);
-			}
-			else if (p_y >= m_selectedPartStartScreenPosition[1]) {
-				CalculateDragPositionBetween(screenPosition, positionOffset);
-			}
-
-			MxS32 currentDistance[2];
-
-			currentDistance[0] = p_x - m_selectedPartStartScreenPosition[0];
-			currentDistance[1] = p_y - m_selectedPartStartScreenPosition[1];
-
-			MxFloat distanceRatio = sqrt((double) (NORMSQRD2(currentDistance))) / m_normalizedDistance;
-
-			m_draggingQuarternionTransformer.InterpolateToMatrix(transform, distanceRatio);
-
-			transform[3][0] = m_selectedPartStartTransform[3][0] + positionOffset[0];
-			transform[3][1] = m_selectedPartStartTransform[3][1] + positionOffset[1];
-			transform[3][2] = m_selectedPartStartTransform[3][2] + positionOffset[2];
-			transform[3][3] = 1.0;
-
-			m_selectedPart->WrappedSetLocal2WorldWithWorldDataUpdate(transform);
+		if (!CalculateRayOriginDirection(screenCoordinatesForRay, local30, local84)) {
+			return;
 		}
+
+		MxFloat positionOffset[3];
+		MxFloat screenPosition[2];
+
+		screenPosition[0] = p_x;
+		screenPosition[1] = p_y;
+
+		positionOffset[0] = 0;
+		positionOffset[1] = 0;
+		positionOffset[2] = 0;
+
+		MxMatrix transform;
+
+		if (p_y < m_selectedPartStartScreenPosition[1]) {
+			CalculateDragPositionAbove(screenPosition, positionOffset);
+		}
+		else if (p_y > m_selectedPartTargetScreenPosition[1]) {
+			CalculateDragPositionOnGround(screenPosition, positionOffset);
+		}
+		else if (p_y >= m_selectedPartStartScreenPosition[1]) {
+			CalculateDragPositionBetween(screenPosition, positionOffset);
+		}
+
+		MxS32 currentDistance[2];
+
+		currentDistance[0] = p_x - m_selectedPartStartScreenPosition[0];
+		currentDistance[1] = p_y - m_selectedPartStartScreenPosition[1];
+
+		MxFloat distanceRatio = sqrt((double) (NORMSQRD2(currentDistance))) / m_normalizedDistance;
+
+		m_draggingQuarternionTransformer.InterpolateToMatrix(transform, distanceRatio);
+
+		transform[3][0] = m_selectedPartStartTransform[3][0] + positionOffset[0];
+		transform[3][1] = m_selectedPartStartTransform[3][1] + positionOffset[1];
+		transform[3][2] = m_selectedPartStartTransform[3][2] + positionOffset[2];
+		transform[3][3] = 1.0;
+
+		m_selectedPart->WrappedSetLocal2WorldWithWorldDataUpdate(transform);
 	}
 }
 
@@ -425,8 +432,8 @@ void LegoCarBuild::CalculateDragPositionAbove(MxFloat p_coordinates[2], MxFloat 
 	CalculateRayOriginDirection(p_coordinates, direction, origin);
 
 	planeFactor = (m_selectedPartStartPosition[2] - origin[2]) / direction[2];
-	p_position[0] = (planeFactor * direction[0] + origin[0]) - m_selectedPartStartPosition[0];
-	p_position[1] = (planeFactor * direction[1] + origin[1]) - m_selectedPartStartPosition[1];
+	p_position[0] = planeFactor * direction[0] - m_selectedPartStartPosition[0] + origin[0];
+	p_position[1] = planeFactor * direction[1] - m_selectedPartStartPosition[1] + origin[1];
 	p_position[2] = 0.0;
 }
 
@@ -468,7 +475,7 @@ void LegoCarBuild::CalculateDragPositionOnGround(MxFloat p_coordinates[2], MxFlo
 // FUNCTION: BETA10 0x100701f0
 void LegoCarBuild::VTable0x80(MxFloat p_param1[2], MxFloat p_param2[2], MxFloat p_param3, MxFloat p_param4[2])
 {
-	if (p_param1[1] == 0.0f) {
+	if (p_param1[1] == 0.0) {
 		return;
 	}
 	p_param4[0] = ((p_param3 - p_param2[1]) / p_param1[1]) * p_param1[0] + p_param2[0];
@@ -1355,7 +1362,7 @@ void LegoCarBuild::EnableDecalForSelectedPart(MxBool p_enabled)
 
 // FUNCTION: LEGO1 0x10025350
 // FUNCTION: BETA10 0x1006e3c0
-void LegoCarBuild::SetPartColor(MxS32 p_objectId)
+void LegoCarBuild::SetPartColor(MxU32 p_objectId)
 {
 	const LegoChar* color;
 	LegoChar buffer[256];

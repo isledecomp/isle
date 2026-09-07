@@ -13,11 +13,11 @@ class MxMatrix;
 class Vector3;
 
 struct LegoAnimStructComparator {
-	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+	MxBool operator()(const char* p_a, const char* p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
 struct LegoAnimSubstComparator {
-	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+	MxBool operator()(const char* p_a, const char* p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
 // SIZE 0x08
@@ -106,6 +106,7 @@ public:
 	// FUNCTION: BETA10 0x1005ab00
 	void SetRoiTransform(Matrix4* p_roiTransform) { m_roiTransform = p_roiTransform; }
 
+	// FUNCTION: BETA10 0x10028490
 	LegoAnim* GetAnimation() { return m_anim; }
 
 protected:
@@ -266,7 +267,7 @@ private:
 class LegoPathBoundary;
 
 struct LegoHideAnimStructComparator {
-	MxBool operator()(const char* const& p_a, const char* const& p_b) const { return strcmp(p_a, p_b) < 0; }
+	MxBool operator()(const char* p_a, const char* p_b) const { return strcmp(p_a, p_b) < 0; }
 };
 
 // SIZE 0x08
@@ -340,89 +341,89 @@ private:
 
 // clang-format off
 
-// TEMPLATE: LEGO1 0x100689c0
-// map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::~map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >
+// TEMPLATE: LEGO1 0x100689c0 SYMBOL
+// ??1?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10068a10
-// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::~_Tree<char const *,pair<char const * const,char const *>,map
+// TEMPLATE: LEGO1 0x10068a10 SYMBOL
+// ??1?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10068ae0
-// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x10068ae0 SYMBOL
+// ?_Inc@iterator@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x10068b20
-// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::erase
+// TEMPLATE: LEGO1 0x10068b20 SYMBOL
+// ?erase@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x10068f70
-// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Erase
+// TEMPLATE: LEGO1 0x10068f70 SYMBOL
+// ?_Erase@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x10069d80
-// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::~_Tree<char const *,pair<char const * const,LegoAni
+// TEMPLATE: LEGO1 0x10069d80 SYMBOL
+// ??1?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10069e50
-// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x10069e50 SYMBOL
+// ?_Inc@iterator@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x10069e90
-// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::erase
+// TEMPLATE: LEGO1 0x10069e90 SYMBOL
+// ?erase@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x1006a2e0
-// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Erase
+// TEMPLATE: LEGO1 0x1006a2e0 SYMBOL
+// ?_Erase@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@IAEXPAU_Node@1@@Z
 
 // TEMPLATE: LEGO1 0x1006a320
 // Map<char const *,LegoAnimStruct,LegoAnimStructComparator>::~Map<char const *,LegoAnimStruct,LegoAnimStructComparator>
 
-// TEMPLATE: LEGO1 0x1006a370
-// map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::~map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >
+// TEMPLATE: LEGO1 0x1006a370 SYMBOL
+// ??1?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1006a750
-// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x1006a750 SYMBOL
+// ?_Dec@iterator@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x1006a7a0
-// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Insert
+// TEMPLATE: LEGO1 0x1006a7a0 SYMBOL
+// ?_Insert@?$_Tree@PBDU?$pair@QBDULegoAnimStruct@@@@U_Kfn@?$map@PBDULegoAnimStruct@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@ULegoAnimStructComparator@@V?$allocator@ULegoAnimStruct@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDULegoAnim
 
-// TEMPLATE: LEGO1 0x1006c1b0
-// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x1006c1b0 SYMBOL
+// ?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x1006c200
-// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Insert
+// TEMPLATE: LEGO1 0x1006c200 SYMBOL
+// ?_Insert@?$_Tree@PBDU?$pair@QBDPBD@@U_Kfn@?$map@PBDPBDULegoAnimSubstComparator@@V?$allocator@PBD@@@@ULegoAnimSubstComparator@@V?$allocator@PBD@@@@IAE?AViterator@1@PAU_Node@1@0ABU?$pair@QBDPBD@@@Z
 
-// TEMPLATE: LEGO1 0x1006c4b0
-// list<char *,allocator<char *> >::~list<char *,allocator<char *> >
+// TEMPLATE: LEGO1 0x1006c4b0 SYMBOL
+// ??1?$list@PADV?$allocator@PAD@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1006c520
 // List<char *>::~List<char *>
 
 // GLOBAL: LEGO1 0x100f7680
-// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *> >::_Kfn,LegoAnimSubstComparator,allocator<char const *> >::_Nil
+// _Tree<char const *,pair<char const * const,char const *>,map<char const *,char const *,LegoAnimSubstComparator,allocator<char const *>>::_Kfn,LegoAnimSubstComparator,allocator<char const *>>::_Nil
 
 // GLOBAL: LEGO1 0x100f7688
-// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct> >::_Nil
+// _Tree<char const *,pair<char const * const,LegoAnimStruct>,map<char const *,LegoAnimStruct,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Kfn,LegoAnimStructComparator,allocator<LegoAnimStruct>>::_Nil
 
-// TEMPLATE: LEGO1 0x1006ddb0
-// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::~_Tree<char const *,pair<ch
+// TEMPLATE: LEGO1 0x1006ddb0 SYMBOL
+// ??1?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1006de80
-// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x1006de80 SYMBOL
+// ?_Inc@iterator@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x1006dec0
-// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::erase
+// TEMPLATE: LEGO1 0x1006dec0 SYMBOL
+// ?erase@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x1006e310
-// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Erase
+// TEMPLATE: LEGO1 0x1006e310 SYMBOL
+// ?_Erase@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@IAEXPAU_Node@1@@Z
 
 // TEMPLATE: LEGO1 0x1006e350
 // Map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator>::~Map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator>
 
-// TEMPLATE: LEGO1 0x1006e3a0
-// map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::~map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >
+// TEMPLATE: LEGO1 0x1006e3a0 SYMBOL
+// ??1?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1006e6d0
-// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x1006e6d0 SYMBOL
+// ?_Dec@iterator@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x1006e720
-// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Insert
+// TEMPLATE: LEGO1 0x1006e720 SYMBOL
+// ?_Insert@?$_Tree@PBDU?$pair@QBDULegoHideAnimStruct@@@@U_Kfn@?$map@PBDULegoHideAnimStruct@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@ULegoHideAnimStructComparator@@V?$allocator@ULegoHideAnimStruct@@@@@@IAE?AViterator@1@PAU_Node@1
 
 // GLOBAL: LEGO1 0x100f768c
-// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct> >::_Nil
+// _Tree<char const *,pair<char const * const,LegoHideAnimStruct>,map<char const *,LegoHideAnimStruct,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Kfn,LegoHideAnimStructComparator,allocator<LegoHideAnimStruct>>::_Nil
 // clang-format on
 
 #endif // LEGOANIMPRESENTER_H
