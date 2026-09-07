@@ -3,6 +3,8 @@
 
 #include "decomp.h"
 #include "legoentity.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "mxgeometry/mxmatrix.h"
 
 class LegoCacheSound;
