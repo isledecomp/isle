@@ -1,20 +1,25 @@
 #include "viewmanager.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
+
 #include "mxdirectx/mxstopwatch.h"
 #include "tgl/d3drm/tglimpl.h"
 #include "viewlod.h"
+#include "viewlod.inl.h"
 
 #include <vec.h>
 
+using namespace Tgl;
 DECOMP_SIZE_ASSERT(ViewManager, 0x1bc)
 
 // GLOBAL: LEGO1 0x100dbc78
 // GLOBAL: BETA10 0x101c3398
-int g_boundingBoxCornerMap[8][3] =
+const int g_boundingBoxCornerMap[8][3] =
 	{{0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {1, 1, 1}};
 
 // GLOBAL: LEGO1 0x100dbcd8
-int g_planePointIndexMap[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
+const int g_planePointIndexMap[18] = {0, 1, 5, 6, 2, 3, 3, 0, 4, 1, 2, 6, 0, 3, 2, 4, 5, 6};
 
 // GLOBAL: LEGO1 0x10101050
 // GLOBAL: BETA10 0x10205914
@@ -34,9 +39,35 @@ float g_viewDistance = 0.000125F;
 // GLOBAL: LEGO1 0x10101060
 float g_elapsedSeconds = 0;
 
-inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data);
-inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* pRenderer);
-inline undefined4 GetFrame(IDirect3DRMFrame2** frame, Tgl::Group* scene);
+// FUNCTION: BETA10 0x10171f30
+inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
+{
+	assert(p_tglRenderer);
+	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
+	// Note: Diff in BETA10 (thunked in recompile but not in orig)
+	d3drm = renderer->ImplementationData();
+	return 0;
+}
+
+// FUNCTION: BETA10 0x10171f82
+inline undefined4 GetFrame(IDirect3DRMFrame2** p_f, Tgl::Group* p_group)
+{
+	assert(p_f && p_group);
+	TglImpl::GroupImpl* cast = (TglImpl::GroupImpl*) p_group;
+	assert(cast);
+	*p_f = cast->ImplementationData();
+	assert(p_f);
+	return 0;
+}
+
+inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data)
+{
+	IDirect3DRMFrame2* frame = NULL;
+
+	if (GetFrame(&frame, p_roi->GetGeometry()) == 0) {
+		frame->SetAppData(data);
+	}
+}
 
 // STUB: BETA10 0x1017202e
 int userVisualCallback(
@@ -130,14 +161,141 @@ unsigned int ViewManager::IsBoundingBoxInFrustum(const BoundingBox& p_bounding_b
 	return TRUE;
 }
 
+// FUNCTION: LEGO1 0x100a6200
+int ViewManager::FlushBuffers()
+{
+	LPDIRECT3DRMDEVICEARRAY deviceArray = NULL;
+
+	if (d3drm != NULL && d3drm->GetDevices(&deviceArray) == D3DRM_OK) {
+		if (deviceArray->GetSize() != 0) {
+			LPDIRECT3DRMDEVICE device = NULL;
+
+			if (deviceArray->GetElement(0, &device) == D3DRM_OK && device != NULL) {
+				LPDIRECT3DRMDEVICE2 device2 = NULL;
+
+				if (device->QueryInterface(IID_IDirect3DRMDevice2, (LPVOID*) &device2) == D3DRM_OK && device2 != NULL) {
+					LPDIRECT3DRMVIEWPORTARRAY viewportArray = NULL;
+
+					if (device->GetViewports(&viewportArray) == D3DRM_OK && viewportArray != NULL) {
+						if (viewportArray->GetSize() != 0) {
+							LPDIRECT3DRMVIEWPORT viewport = NULL;
+
+							if (viewportArray->GetElement(0, &viewport) == D3DRM_OK && viewport != NULL) {
+								LPDIRECT3DRMVISUALARRAY visuals = NULL;
+
+								if (frame->GetVisuals(&visuals) == D3DRM_OK && visuals != NULL) {
+									int i;
+									int numVisuals = visuals->GetSize();
+
+									for (i = 0; i < numVisuals; i++) {
+										LPDIRECT3DRMVISUAL visual = NULL;
+
+										if (visuals->GetElement(i, &visual) == D3DRM_OK && visual != NULL) {
+											frame->DeleteVisual(visual);
+										}
+									}
+
+									for (i = 0; i < 10; i++) {
+										viewport->Render(frame);
+										device->Update();
+									}
+
+									for (i = 0; i < numVisuals; i++) {
+										LPDIRECT3DRMVISUAL visual = NULL;
+
+										if (visuals->GetElement(i, &visual) == D3DRM_OK && visual != NULL) {
+											frame->AddVisual(visual);
+											visual->Release();
+										}
+									}
+
+									visuals->Release();
+								}
+
+								viewport->Release();
+							}
+						}
+
+						viewportArray->Release();
+					}
+
+					device2->Release();
+				}
+
+				device->Release();
+			}
+		}
+	}
+
+	return 0;
+}
+
+// Unreferenced in the shipped game; present in Beta 9.0 at 0x100a1880.
+int FlushFrameBuffers(IDirect3DRMFrame2* p_frame)
+{
+	LPDIRECT3DRMVISUALARRAY visuals = NULL;
+
+	if (p_frame->GetVisuals(&visuals) == D3DRM_OK && visuals != NULL) {
+		int numVisuals = visuals->GetSize();
+
+		for (int i = 0; i < numVisuals; i++) {
+			LPDIRECT3DRMVISUAL visual = NULL;
+
+			if (visuals->GetElement(i, &visual) == D3DRM_OK && visual != NULL) {
+				LPDIRECT3DRMMESH mesh = NULL;
+
+				if (visual->QueryInterface(IID_IDirect3DRMMesh, (LPVOID*) &mesh) == D3DRM_OK && mesh != NULL) {
+					unsigned int numGroups = mesh->GetGroupCount();
+
+					for (unsigned int j = 0; j < numGroups; j++) {
+						LPDIRECT3DRMTEXTURE texture = NULL;
+
+						if (mesh->GetGroupTexture(j, &texture) == D3DRM_OK && texture != NULL) {
+							LPDIRECT3DRMTEXTURE2 texture2 = NULL;
+
+							if (texture->QueryInterface(IID_IDirect3DRMTexture2, (LPVOID*) &texture2) == D3DRM_OK &&
+								texture2 != NULL) {
+								mesh->SetGroupTexture(j, NULL);
+								texture2->Changed(TRUE, TRUE);
+								mesh->SetGroupTexture(j, texture);
+								texture2->Release();
+							}
+
+							texture->Release();
+						}
+					}
+
+					mesh->Release();
+				}
+				else {
+					LPDIRECT3DRMFRAME2 childFrame = NULL;
+
+					if (visual->QueryInterface(IID_IDirect3DRMFrame2, (LPVOID*) &childFrame) == D3DRM_OK &&
+						childFrame != NULL) {
+						FlushFrameBuffers(childFrame);
+						childFrame->Release();
+					}
+				}
+
+				visual->Release();
+			}
+		}
+
+		visuals->Release();
+	}
+
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x100a6410
+// FUNCTION: BETA10 0x101722cd
 void ViewManager::Remove(ViewROI* p_roi)
 {
 	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
 		if (*it == p_roi) {
 			rois.erase(it);
 
-			if (p_roi->GetLodLevel() >= 0) {
+			if (p_roi->GetToken() >= 0) {
 				RemoveROIDetailFromScene(p_roi);
 			}
 
@@ -145,7 +303,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 
 			if (comp != NULL) {
 				for (CompoundObject::const_iterator it = comp->begin(); !(it == comp->end()); it++) {
-					if (((ViewROI*) *it)->GetLodLevel() >= 0) {
+					if (((ViewROI*) *it)->GetToken() >= 0) {
 						RemoveROIDetailFromScene((ViewROI*) *it);
 					}
 				}
@@ -157,6 +315,7 @@ void ViewManager::Remove(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a64d0
+// FUNCTION: BETA10 0x101723f5
 void ViewManager::RemoveAll(ViewROI* p_roi)
 {
 	if (p_roi == NULL) {
@@ -167,11 +326,11 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 		rois.erase(rois.begin(), rois.end());
 	}
 	else {
-		if (p_roi->GetLodLevel() >= 0) {
+		if (p_roi->GetToken() >= 0) {
 			RemoveROIDetailFromScene(p_roi);
 		}
 
-		p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
+		p_roi->SetToken(ViewROI::c_tokenUnset);
 		const CompoundObject* comp = p_roi->GetComp();
 
 		if (comp != NULL) {
@@ -185,13 +344,14 @@ void ViewManager::RemoveAll(ViewROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100a65b0
+// FUNCTION: BETA10 0x1017254b
 void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 {
 	if (p_roi->GetLODCount() <= p_lodLevel) {
 		p_lodLevel = p_roi->GetLODCount() - 1;
 	}
 
-	int lodLevel = p_roi->GetLodLevel();
+	int lodLevel = p_roi->GetToken();
 
 	if (lodLevel == p_lodLevel) {
 		return;
@@ -199,84 +359,95 @@ void ViewManager::UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel)
 
 	Tgl::Group* group = p_roi->GetGeometry();
 	Tgl::MeshBuilder* meshBuilder;
-	ViewLOD* lod;
+	ViewLOD* new_lod;
+	Tgl::Result result;
 
 	if (lodLevel < 0) {
-		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		new_lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		assert(new_lod);
 
-		if (lod->GetFlags() & ViewLOD::c_hasMesh) {
-			scene->Add((Tgl::MeshBuilder*) group);
+		if (new_lod->GetFlags() & ViewLOD::c_hasMesh) {
+			result = scene->Add(group);
+			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
 		}
 	}
 	else {
-		lod = (ViewLOD*) p_roi->GetLOD(lodLevel);
+		new_lod = (ViewLOD*) p_roi->GetLOD(lodLevel);
 
-		if (lod != NULL) {
-			meshBuilder = lod->GetMeshBuilder();
+		if (new_lod != NULL) {
+			meshBuilder = new_lod->GetMeshBuilder();
 
 			if (meshBuilder != NULL) {
-				group->Remove(meshBuilder);
+				result = group->Remove(meshBuilder);
+				assert(Succeeded(result));
 			}
 		}
 
-		lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		new_lod = (ViewLOD*) p_roi->GetLOD(p_lodLevel);
+		assert(new_lod);
 	}
 
-	if (lod->GetFlags() & ViewLOD::c_hasMesh) {
-		meshBuilder = lod->GetMeshBuilder();
+	if (new_lod->GetFlags() & ViewLOD::c_hasMesh) {
+		meshBuilder = new_lod->GetMeshBuilder();
 
 		if (meshBuilder != NULL) {
-			group->Add(meshBuilder);
+			result = group->Add(meshBuilder);
+			assert(Succeeded(result));
 			SetAppData(p_roi, reinterpret_cast<LPD3DRM_APPDATA>(p_roi));
-			p_roi->SetLodLevel(p_lodLevel);
+			p_roi->SetToken(p_lodLevel);
 			return;
 		}
 	}
 
-	p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
+	p_roi->SetToken(ViewROI::c_tokenUnset);
 }
 
 // FUNCTION: LEGO1 0x100a66a0
-void ViewManager::RemoveROIDetailFromScene(ViewROI* p_roi)
+// FUNCTION: BETA10 0x101727c7
+void ViewManager::RemoveROIDetailFromScene(ViewROI* p_from)
 {
-	const ViewLOD* lod = (const ViewLOD*) p_roi->GetLOD(p_roi->GetLodLevel());
+	const ViewLOD* lod = (const ViewLOD*) p_from->GetLOD(p_from->GetToken());
 
 	if (lod != NULL) {
 		const Tgl::MeshBuilder* meshBuilder = NULL;
-		Tgl::Group* roiGeometry = p_roi->GetGeometry();
+		Tgl::Group* roiGeometry = p_from->GetGeometry();
+		Tgl::Result result;
 
 		meshBuilder = lod->GetMeshBuilder();
 
 		if (meshBuilder != NULL) {
-			roiGeometry->Remove(meshBuilder);
+			result = roiGeometry->Remove(meshBuilder);
+			assert(Succeeded(result));
 		}
 
-		scene->Remove(roiGeometry);
+		result = scene->Remove(roiGeometry);
+		assert(Succeeded(result));
 	}
 
-	p_roi->SetLodLevel(ViewROI::c_lodLevelUnset);
+	p_from->SetToken(ViewROI::c_tokenUnset);
 }
 
 // FUNCTION: LEGO1 0x100a66f0
 // FUNCTION: BETA10 0x1017297f
-inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel)
+void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel)
 {
+	float projectedSize;
 	assert(p_from);
 
-	if (!p_from->GetVisibility() && p_lodLevel != ViewROI::c_lodLevelInvisible) {
-		ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_lodLevelInvisible);
+	if (!p_from->GetVisibility() && p_lodLevel != ViewROI::c_tokenInvisible) {
+		ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_tokenInvisible);
 	}
 	else {
 		const CompoundObject* comp = p_from->GetComp();
 
-		if (p_lodLevel == ViewROI::c_lodLevelUnset) {
+		if (p_lodLevel == ViewROI::c_tokenUnset) {
 			if (p_from->GetWorldBoundingSphere().Radius() > 0.001F) {
-				float projectedSize = ProjectedSize(p_from->GetWorldBoundingSphere());
+				projectedSize = ProjectedSize(p_from->GetWorldBoundingSphere());
 
 				if (projectedSize < seconds_allowed * g_viewDistance) {
-					if (p_from->GetLodLevel() != ViewROI::c_lodLevelInvisible) {
-						ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_lodLevelInvisible);
+					if (p_from->GetToken() != ViewROI::c_tokenInvisible) {
+						ManageVisibilityAndDetailRecursively(p_from, ViewROI::c_tokenInvisible);
 					}
 
 					return;
@@ -288,10 +459,10 @@ inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, i
 			}
 		}
 
-		if (p_lodLevel == ViewROI::c_lodLevelInvisible) {
-			if (p_from->GetLodLevel() >= 0) {
+		if (p_lodLevel == ViewROI::c_tokenInvisible) {
+			if (p_from->GetToken() >= 0) {
 				RemoveROIDetailFromScene(p_from);
-				p_from->SetLodLevel(ViewROI::c_lodLevelInvisible);
+				p_from->SetToken(ViewROI::c_tokenInvisible);
 			}
 
 			if (comp != NULL) {
@@ -306,7 +477,7 @@ inline void ViewManager::ManageVisibilityAndDetailRecursively(ViewROI* p_from, i
 			}
 		}
 		else {
-			p_from->SetLodLevel(ViewROI::c_lodLevelUnset);
+			p_from->SetToken(ViewROI::c_tokenUnset);
 
 			for (CompoundObject::const_iterator it = comp->begin(); it != comp->end(); it++) {
 				// LINE: BETA10 0x10172bbd
@@ -332,8 +503,8 @@ void ViewManager::Update(float p_previousRenderTime, float)
 		UpdateViewTransformations();
 	}
 
-	for (CompoundObject::iterator it = rois.begin(); it != rois.end(); it++) {
-		ManageVisibilityAndDetailRecursively((ViewROI*) *it, ViewROI::c_lodLevelUnset);
+	for (CompoundObject::iterator it = rois.begin(); !(it == rois.end()); it++) {
+		ManageVisibilityAndDetailRecursively((ViewROI*) *it, ViewROI::c_tokenUnset);
 	}
 
 	stopWatch.Stop();
@@ -418,7 +589,7 @@ inline int ViewManager::CalculateLODLevel(float p_maximumScale, float p_initialS
 			break;
 		}
 
-		i *= g_LODScaleFactor;
+		i = g_LODScaleFactor * i;
 	}
 
 	return lodLevel;
@@ -476,12 +647,13 @@ void ViewManager::UpdateViewTransformations()
 	}
 
 	for (i = 0; i < 6; i++) {
-		Vector3 a(transformed_points[g_planePointIndexMap[i * 3]]);
-		Vector3 b(transformed_points[g_planePointIndexMap[i * 3 + 1]]);
+		Vector3 a((const float*) transformed_points[g_planePointIndexMap[i * 3]]);
+		Vector3 b((const float*) transformed_points[g_planePointIndexMap[i * 3 + 1]]);
 		Vector3 c(transformed_points[g_planePointIndexMap[i * 3 + 2]]);
 		Mx3DPointFloat x;
 		Mx3DPointFloat y;
-		Vector3 normal(frustum_planes[i]);
+		float* plane = frustum_planes[i];
+		Vector3 normal(plane);
 
 		x = c;
 		x -= b;
@@ -492,7 +664,7 @@ void ViewManager::UpdateViewTransformations()
 		normal.EqualsCross(x, y);
 		normal.Unitize();
 
-		frustum_planes[i][3] = -normal.Dot(normal, a);
+		plane[3] = -normal.Dot(normal, a);
 	}
 
 	flags |= c_bit4;
@@ -591,32 +763,10 @@ ViewROI* ViewManager::Pick(Tgl::View* p_view, unsigned long x, unsigned long y)
 	return result;
 }
 
-inline void SetAppData(ViewROI* p_roi, LPD3DRM_APPDATA data)
+ViewLOD::~ViewLOD()
 {
-	IDirect3DRMFrame2* frame = NULL;
-
-	if (GetFrame(&frame, p_roi->GetGeometry()) == 0) {
-		frame->SetAppData(data);
+	if (m_meshBuilder) {
+		delete m_meshBuilder;
 	}
-}
-
-// FUNCTION: BETA10 0x10171f30
-inline undefined4 GetD3DRM_viewmanager(IDirect3DRM2*& d3drm, Tgl::Renderer* p_tglRenderer)
-{
-	assert(p_tglRenderer);
-	TglImpl::RendererImpl* renderer = (TglImpl::RendererImpl*) p_tglRenderer;
-	// Note: Diff in BETA10 (thunked in recompile but not in orig)
-	d3drm = renderer->ImplementationData();
-	return 0;
-}
-
-// FUNCTION: BETA10 0x10171f82
-inline undefined4 GetFrame(IDirect3DRMFrame2** p_f, Tgl::Group* p_group)
-{
-	assert(p_f && p_group);
-	TglImpl::GroupImpl* cast = (TglImpl::GroupImpl*) p_group;
-	assert(cast);
-	*p_f = cast->ImplementationData();
-	assert(p_f);
-	return 0;
+	// something else happens on BETA10 here
 }
