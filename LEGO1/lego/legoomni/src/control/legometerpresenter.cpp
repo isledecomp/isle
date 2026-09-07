@@ -8,6 +8,10 @@
 #include "mxutilities.h"
 #include "mxvariabletable.h"
 
+#include "roi/legoroi.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
+
 #include <assert.h>
 
 DECOMP_SIZE_ASSERT(LegoMeterPresenter, 0x94)
@@ -110,9 +114,13 @@ void LegoMeterPresenter::RepeatingTickle()
 // FUNCTION: BETA10 0x10097a40
 void LegoMeterPresenter::DrawMeter()
 {
-	const char* strval = VariableTable()->GetVariable(m_variable.GetData());
-	MxFloat percent = atof(strval);
-	MxS16 row, leftRightCol, bottomTopCol, leftRightEnd, bottomTopEnd;
+	MxFloat percent;
+	const char* strval;
+	MxU8* line;
+	MxS16 leftRightEnd, leftRightRow, leftRightCol, bottomTopEnd, bottomTopRow, bottomTopCol;
+
+	strval = VariableTable()->GetVariable(m_variable.GetData());
+	percent = atof(strval);
 
 	if (strval != NULL && m_curPercent != percent) {
 		m_curPercent = percent;
@@ -132,8 +140,8 @@ void LegoMeterPresenter::DrawMeter()
 		case e_leftToRight:
 			leftRightEnd = m_meterRect.GetWidth() * m_curPercent;
 
-			for (row = m_meterRect.GetTop(); row < m_meterRect.GetBottom(); row++) {
-				MxU8* line = m_frameBitmap->GetStart(m_meterRect.GetLeft(), row);
+			for (leftRightRow = m_meterRect.GetTop(); leftRightRow < m_meterRect.GetBottom(); leftRightRow++) {
+				line = m_frameBitmap->GetStart(m_meterRect.GetLeft(), leftRightRow);
 
 				for (leftRightCol = 0; leftRightCol < leftRightEnd; leftRightCol++, line++) {
 					if (*line) {
@@ -145,8 +153,8 @@ void LegoMeterPresenter::DrawMeter()
 		case e_bottomToTop:
 			bottomTopEnd = m_meterRect.GetBottom() - (MxS16) (m_meterRect.GetHeight() * m_curPercent);
 
-			for (row = m_meterRect.GetBottom(); row > bottomTopEnd; row--) {
-				MxU8* line = m_frameBitmap->GetStart(m_meterRect.GetLeft(), row);
+			for (bottomTopRow = m_meterRect.GetBottom(); bottomTopRow > bottomTopEnd; bottomTopRow--) {
+				line = m_frameBitmap->GetStart(m_meterRect.GetLeft(), bottomTopRow);
 
 				for (bottomTopCol = 0; bottomTopCol < m_meterRect.GetWidth(); bottomTopCol++, line++) {
 					if (*line) {

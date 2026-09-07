@@ -4,7 +4,7 @@
 #include "misc.h"
 
 DECOMP_SIZE_ASSERT(LegoCacheSoundEntry, 0x08)
-DECOMP_SIZE_ASSERT(LegoCacheSoundManager, 0x20)
+DECOMP_SIZE_ASSERT(LegoCacheSoundManager, 0x20);
 
 // FUNCTION: LEGO1 0x1003cf20
 // STUB: BETA10 0x100d0700
@@ -13,8 +13,9 @@ LegoCacheSoundManager::~LegoCacheSoundManager()
 	LegoCacheSound* sound;
 
 	while (!m_set.empty()) {
-		sound = (*m_set.begin()).GetSound();
-		m_set.erase(m_set.begin());
+		Set100d6b4c::iterator it = m_set.begin();
+		sound = (*it).GetSound();
+		m_set.erase(it);
 		sound->Stop();
 		delete sound;
 	}
@@ -44,9 +45,11 @@ MxResult LegoCacheSoundManager::Tickle()
 		}
 	}
 
+	LegoCacheSound* sound;
 	List100d6b4c::iterator listIter = m_list.begin();
+
 	while (listIter != m_list.end()) {
-		LegoCacheSound* sound = (*listIter).GetSound();
+		sound = (*listIter).GetSound();
 
 		if (sound->GetUnknown0x58()) {
 			sound->FUN_10006be0();
@@ -80,6 +83,7 @@ LegoCacheSound* LegoCacheSoundManager::FindSoundByKey(const char* p_key)
 }
 
 // FUNCTION: LEGO1 0x1003d290
+// FUNCTION: BETA10 0x100654db
 LegoCacheSound* LegoCacheSoundManager::ManageSoundEntry(LegoCacheSound* p_sound)
 {
 	Set100d6b4c::iterator it = m_set.find(LegoCacheSoundEntry(p_sound));

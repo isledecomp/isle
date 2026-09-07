@@ -92,7 +92,7 @@ private:
 	PALETTEENTRY m_paletteEntries[256];   // 0xe7
 	LegoPhonemeList* m_phonemeRefList;    // 0x4e8
 	MxBool m_isFullscreenMovie;           // 0x4ec
-	MxPalette* m_palette;                 // 0x4f0
+	MxPalette* m_savedPalette;            // 0x4f0
 	MxStopWatch* m_stopWatch;             // 0x4f4
 	double m_elapsedSeconds;              // 0x4f8
 	MxBool m_fullScreenMovie;             // 0x500

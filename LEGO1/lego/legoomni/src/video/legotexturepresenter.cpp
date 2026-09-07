@@ -1,6 +1,8 @@
 #include "legotexturepresenter.h"
 
 #include "legovideomanager.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "misc.h"
 #include "misc/legocontainer.h"
 #include "misc/legoimage.h"
@@ -57,7 +59,7 @@ MxResult LegoTexturePresenter::Read(MxDSChunk& p_chunk)
 		}
 
 		textureName[textureNameLength] = '\0';
-		strlwr(textureName);
+		_strlwr(textureName);
 
 		texture = new LegoTexture();
 		if (texture->Read(&storage, hardwareMode) != SUCCESS) {

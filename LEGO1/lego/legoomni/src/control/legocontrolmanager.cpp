@@ -2,6 +2,8 @@
 
 #include "legoeventnotificationparam.h"
 #include "legovideomanager.h"
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "misc.h"
 #include "mxcontrolpresenter.h"
 #include "mxdsaction.h"
@@ -12,6 +14,12 @@
 DECOMP_SIZE_ASSERT(LegoControlManager, 0x60)
 DECOMP_SIZE_ASSERT(LegoControlManagerNotificationParam, 0x2c)
 DECOMP_SIZE_ASSERT(LegoEventNotificationParam, 0x20)
+
+// GLOBAL: LEGO1 0x100f31b0
+MxS32 g_clickedObjectId = -1;
+
+// GLOBAL: LEGO1 0x100f31b4
+const char* g_clickedAtom = NULL;
 
 // FUNCTION: LEGO1 0x10028520
 // STUB: BETA10 0x1008ae50
@@ -57,6 +65,7 @@ void LegoControlManager::Unregister(MxCore* p_listener)
 }
 
 // FUNCTION: LEGO1 0x10029210
+// FUNCTION: BETA10 0x1007c406
 MxBool LegoControlManager::HandleButtonDown(LegoEventNotificationParam& p_param, MxPresenter* p_presenter)
 {
 	if (m_presenterList != NULL && m_presenterList->GetNumElements() != 0) {
@@ -109,6 +118,7 @@ MxBool LegoControlManager::HandleButtonDown(LegoEventNotificationParam& p_param,
 }
 
 // FUNCTION: LEGO1 0x100292e0
+// FUNCTION: BETA10 0x1007c772
 void LegoControlManager::Notify()
 {
 	LegoNotifyListCursor cursor(&m_notifyList);
@@ -122,8 +132,10 @@ void LegoControlManager::Notify()
 }
 
 // FUNCTION: LEGO1 0x100293c0
+// FUNCTION: BETA10 0x1007c81b
 void LegoControlManager::UpdateEnabledChild(MxU32 p_objectId, const char* p_atom, MxS16 p_enabledChild)
 {
+	const char* const& atom = p_atom;
 	if (m_presenterList) {
 		MxPresenterListCursor cursor(m_presenterList);
 		MxPresenter* control;
@@ -131,7 +143,7 @@ void LegoControlManager::UpdateEnabledChild(MxU32 p_objectId, const char* p_atom
 		while (cursor.Next(control)) {
 			MxDSAction* action = control->GetAction();
 
-			if (action->GetObjectId() == p_objectId && action->GetAtomId().GetInternal() == p_atom) {
+			if (action->GetObjectId() == p_objectId && action->GetAtomId().GetInternal() == atom) {
 				((MxControlPresenter*) control)->UpdateEnabledChild(p_enabledChild);
 
 				if (((MxControlPresenter*) control)->GetEnabledChild() == 0) {

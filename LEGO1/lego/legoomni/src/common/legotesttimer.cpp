@@ -2,9 +2,12 @@
 
 #include "legoeventnotificationparam.h"
 #include "legoinputmanager.h"
+#include "legovideomanager.h"
+#include "realtime/matrix4d.inl.h"
 #include "misc.h"
 #include "mxnotificationparam.h"
 
+#include <conio.h>
 #include <stdio.h>
 
 // FUNCTION: BETA10 0x100d1030
@@ -153,4 +156,21 @@ MxLong LegoTestTimer::Notify(MxParam& p_param)
 	}
 
 	return 0;
+}
+
+void LegoTestTimerConsoleControl(LegoTestTimer* p_timer)
+{
+	while (!_kbhit()) {
+	}
+
+	switch (_getch()) {
+	case 's':
+	case 'S':
+		p_timer->ResetAtNextTick();
+		break;
+	case 'p':
+	case 'P':
+		p_timer->Print();
+		break;
+	}
 }
