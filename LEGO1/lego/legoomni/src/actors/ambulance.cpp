@@ -325,22 +325,22 @@ MxLong Ambulance::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 		Leave();
 
-		if (m_actorId < LegoActor::c_pepper || m_actorId > LegoActor::c_laura) {
-			m_actorId = LegoActor::c_laura;
+		if (m_actorId < LegoActor::e_pepper || m_actorId > LegoActor::e_laura) {
+			m_actorId = LegoActor::e_laura;
 		}
 
 		switch (m_actorId) {
-		case c_pepper:
+		case e_pepper:
 			PlayAnimation(IsleScript::c_hpz049bd_RunAnim);
 			break;
-		case c_mama:
+		case e_mama:
 			PlayAnimation(IsleScript::c_hpz047pe_RunAnim);
 			break;
-		case c_papa:
+		case e_papa:
 			PlayAnimation(IsleScript::c_hpz050bd_RunAnim);
 			break;
-		case c_nick:
-		case c_laura:
+		case e_nick:
+		case e_laura:
 			PlayAnimation(IsleScript::c_hpz048pe_RunAnim);
 			break;
 		}

@@ -227,11 +227,11 @@ void PoliceState::StartAnimation()
 	}
 
 	switch (UserActor()->GetActorId()) {
-	case LegoActor::c_nick:
+	case LegoActor::e_nick:
 		policeScript = PoliceScript::c_nps002la_RunAnim;
 		m_policeScript = policeScript;
 		break;
-	case LegoActor::c_laura:
+	case LegoActor::e_laura:
 		policeScript = PoliceScript::c_nps001ni_RunAnim;
 		m_policeScript = policeScript;
 		break;
