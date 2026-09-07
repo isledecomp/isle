@@ -1,3 +1,4 @@
+
 #include "legocharactermanager.h"
 
 #include "3dmanager/lego3dmanager.h"
@@ -23,6 +24,1246 @@
 DECOMP_SIZE_ASSERT(LegoCharacter, 0x08)
 DECOMP_SIZE_ASSERT(LegoCharacterManager, 0x08)
 DECOMP_SIZE_ASSERT(CustomizeAnimFileVariable, 0x24)
+DECOMP_SIZE_ASSERT(BoundingBox, 0x28)
+DECOMP_SIZE_ASSERT(BoundingSphere, 0x18)
+DECOMP_SIZE_ASSERT(ROI, 0x10)
+DECOMP_SIZE_ASSERT(MxVariableTable, 0x28)
+DECOMP_SIZE_ASSERT(LegoActorInfo, 0x108)
+DECOMP_SIZE_ASSERT(LegoActorInfo::Part, 0x18)
+DECOMP_SIZE_ASSERT(LegoActorLOD, 0x58)
+
+enum {
+	c_maxMood = 3,
+	c_numParts = 10,
+	c_indexEnd = 0xff
+};
+
+// Unclear whether g_actorLODs[0] (top) is its own global, see: LegoCharacterManager::CreateActorROI
+
+// GLOBAL: LEGO1 0x100da3b0
+const LegoActorLOD g_actorLODs[] = {
+	{"top",    "top",     0,    0.000267f, 0.780808f, -0.01906f, 0.951612f, -0.461166f, -0.002794f, -0.299442f, 0.4617f,
+	 1.56441f, 0.261321f, 0.0f, 0.0f,      0.0f,      0.0f,      0.0f,      1.0f,       0.0f,       1.0f,       0.0f},
+	{"body",      "body",     LegoActorLOD::c_useTexture,
+	 0.00158332f, 0.401828f,  -0.00048697f,
+	 0.408071f,   -0.287507f, 0.150419f,
+	 -0.147452f,  0.289219f,  0.649774f,
+	 0.14258f,    -0.00089f,  0.436353f,
+	 0.007277f,   0.0f,       0.0f,
+	 1.0f,        0.0f,       1.0f,
+	 0.0f},
+	{"infohat",  "infohat",  LegoActorLOD::c_useColor,
+	 0.0f,       -0.00938f,  -0.01955f,
+	 0.35f,      -0.231822f, -0.140237f,
+	 -0.320954f, 0.234149f,  0.076968f,
+	 0.249083f,  0.000191f,  1.519793f,
+	 0.001767f,  0.0f,       0.0f,
+	 1.0f,       0.0f,       1.0f,
+	 0.0f},
+	{"infogron", "infogron", LegoActorLOD::c_useColor,
+	 0.0f,       0.11477f,   0.00042f,
+	 0.26f,      -0.285558f, -0.134391f,
+	 -0.142231f, 0.285507f,  0.152986f,
+	 0.143071f,  -0.00089f,  0.436353f,
+	 0.007277f,  0.0f,       0.0f,
+	 1.0f,       0.0f,       1.0f,
+	 0.0f},
+	{"head",     "head",     LegoActorLOD::c_useTexture,
+	 0.0f,       -0.03006f,  0.0f,
+	 0.3f,       -0.189506f, -0.209665f,
+	 -0.189824f, 0.189532f,  0.228822f,
+	 0.194945f,  -0.00105f,  1.293115f,
+	 0.001781f,  0.0f,       0.0f,
+	 1.0f,       0.0f,       1.0f,
+	 0.0f},
+	{"arm-lft",  "arm-lft",   LegoActorLOD::c_useColor,
+	 -0.06815f,  -0.0973747f, 0.0154655f,
+	 0.237f,     -0.137931f,  -0.282775f,
+	 -0.105316f, 0.000989f,   0.100221f,
+	 0.140759f,  -0.225678f,  0.963312f,
+	 0.023286f,  -0.003031f,  -0.017187f,
+	 0.999848f,  0.173622f,   0.984658f,
+	 0.017453f},
+	{"arm-rt",   "arm-rt",   LegoActorLOD::c_useColor,
+	 0.0680946f, -0.097152f, 0.0152722f,
+	 0.237f,     0.00141f,   -0.289604f,
+	 -0.100831f, 0.138786f,  0.09291f,
+	 0.145437f,  0.223494f,  0.963583f,
+	 0.018302f,  0.0f,       0.0f,
+	 1.0f,       -0.173648f, 0.984808f,
+	 0.0f},
+	{"claw-lft",   "claw-lft", LegoActorLOD::c_useColor,
+	 0.000773381f, -0.101422f, -0.0237761f,
+	 0.15f,        -0.089838f, -0.246208f,
+	 -0.117735f,   0.091275f,  0.000263f,
+	 0.07215f,     -0.341869f, 0.700355f,
+	 0.092779f,    0.000001f,  0.000003f,
+	 1.0f,         0.190812f,  0.981627f,
+	 -0.000003f},
+	{"claw-rt",    "claw-lft", LegoActorLOD::c_useColor,
+	 0.000773381f, -0.101422f, -0.0237761f,
+	 0.15f,        -0.095016f, -0.245349f,
+	 -0.117979f,   0.086528f,  0.00067f,
+	 0.069743f,    0.343317f,  0.69924f,
+	 0.096123f,    0.00606f,   -0.034369f,
+	 0.999391f,    -0.190704f, 0.981027f,
+	 0.034894f},
+	{"leg-lft",   "leg",      LegoActorLOD::c_useColor,
+	 0.00433584f, -0.177404f, -0.0313928f,
+	 0.33f,       -0.129782f, -0.440428f,
+	 -0.184207f,  0.13817f,   0.118415f,
+	 0.122607f,   -0.156339f, 0.436087f,
+	 0.006822f,   0.0f,       0.0f,
+	 1.0f,        0.0f,       1.0f,
+	 0.0f},
+	{"leg-rt",    "leg",      LegoActorLOD::c_useColor,
+	 0.00433584f, -0.177404f, -0.0313928f,
+	 0.33f,       -0.132864f, -0.437138f,
+	 -0.183944f,  0.134614f,  0.12043f,
+	 0.121888f,   0.151154f,  0.436296f,
+	 0.007373f,   0.0f,       0.0f,
+	 1.0f,        0.0f,       1.0f,
+	 0.0f}
+};
+
+// GLOBAL: LEGO1 0x100da778
+const MxU8 g_hatPartIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0xff};
+
+// GLOBAL: LEGO1 0x100da790
+const MxU8 g_pepperHatPartIndices[] = {21, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0xff};
+
+// GLOBAL: LEGO1 0x100da7a8
+const MxU8 g_infomanHatPartIndices[] = {22, 0xff};
+
+// GLOBAL: LEGO1 0x100da7ac
+const MxU8 g_ghostHatPartIndices[] = {20, 0xff};
+
+// GLOBAL: LEGO1 0x100da7b0
+const MxU8 g_bodyPartIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+
+// GLOBAL: LEGO1 0x100da7c0
+const MxU8 g_hatColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+
+// GLOBAL: LEGO1 0x100da7d0
+const MxU8 g_faceTextureIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0xff};
+
+// GLOBAL: LEGO1 0x100da7e0
+const MxU8 g_chestTextureIndices[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13,
+									  14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 0xff};
+
+// GLOBAL: LEGO1 0x100da800
+const MxU8 g_armColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+
+// GLOBAL: LEGO1 0x100da810
+const MxU8 g_clawRightColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+
+// GLOBAL: LEGO1 0x100da820
+const MxU8 g_clawLeftColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+
+// GLOBAL: LEGO1 0x100da830
+const MxU8 g_gronColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+
+// GLOBAL: LEGO1 0x100da840
+const MxU8 g_legColorIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 0xff};
+
+// GLOBAL: LEGO1 0x100f7f78
+const char* g_hatPartName[] = {"baseball", "chef",   "cap",     "cophat", "helmet", "ponytail", "pageboy", "shrthair",
+							   "bald",     "flower", "cboyhat", "cuphat", "cathat", "backbcap", "pizhat",  "caprc",
+							   "capch",    "capdb",  "capjs",   "capmd",  "sheet",  "phat",     "icap",    NULL};
+
+// GLOBAL: LEGO1 0x100f7fd8
+const char* g_bodyPartName[] =
+	{"body", "bodyred", "bodyblck", "bodywhte", "bodyyllw", "bodyblue", "bodygren", "bodybrwn"};
+
+// GLOBAL: LEGO1 0x100f7ff8
+const char* g_chestTexture[] = {"peprchst.gif", "mamachst.gif", "papachst.gif", "nickchst.gif", "norachst.gif",
+								"infochst.gif", "shftchst.gif", "rac1chst.gif", "rac2chst.gif", "bth1chst.gif",
+								"bth2chst.gif", "mech.gif",     "polkadot.gif", "bowtie.gif",   "postchst.gif",
+								"vest.gif",     "doctor.gif",   "copchest.gif", "l.gif",        "e.gif",
+								"g.gif",        "o.gif",        "fruit.gif",    "flowers.gif",  "construct.gif",
+								"paint.gif",    "l6.gif",       "unkchst.gif"};
+
+// GLOBAL: LEGO1 0x100f8068
+const char* g_faceTexture[] = {
+	"peprface.gif",
+	"mamaface.gif",
+	"papaface.gif",
+	"nickface.gif",
+	"noraface.gif",
+	"infoface.gif",
+	"shftface.gif",
+	"dogface.gif",
+	"womanshd.gif",
+	"smileshd.gif",
+	"woman.gif",
+	"smile.gif",
+	"mustache.gif",
+	"black.gif"
+};
+
+// GLOBAL: LEGO1 0x100f80a0
+const char* g_colorAlias[] =
+	{"lego white", "lego black", "lego yellow", "lego red", "lego blue", "lego brown", "lego lt grey", "lego green"};
+
+// GLOBAL: LEGO1 0x100f80c0
+LegoActorInfo g_actorInfoInit[] = {
+	{"pepper",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 0},
+	  {g_pepperHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"mama",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 1},
+	  {g_hatPartIndices, g_hatPartName, 1, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 1},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"papa",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 2, g_chestTextureIndices, g_chestTexture, 2},
+	  {g_hatPartIndices, g_hatPartName, 1, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"nick",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 2, g_chestTextureIndices, g_chestTexture, 3},
+	  {g_hatPartIndices, g_hatPartName, 3, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"laura",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 2, g_chestTextureIndices, g_chestTexture, 4},
+	  {g_hatPartIndices, g_hatPartName, 3, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 4},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"infoman",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 5},
+	  {g_infomanHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 5},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"brickstr",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 6},
+	  {g_hatPartIndices, g_hatPartName, 13, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 6},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"studs",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 7},
+	  {g_hatPartIndices, g_hatPartName, 4, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 7},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"rhoda",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 8},
+	  {g_hatPartIndices, g_hatPartName, 4, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"valerie",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 9},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2}}},
+	{"snap",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 10},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2}}},
+	{"pt",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 11},
+	  {g_hatPartIndices, g_hatPartName, 6, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"mg",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 12},
+	  {g_hatPartIndices, g_hatPartName, 6, g_hatColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 10},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"bu",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 13},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 5}}},
+	{"ml",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 14},
+	  {g_hatPartIndices, g_hatPartName, 2, g_hatColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 12},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"nu",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 11},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 7},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"na",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 15},
+	  {g_hatPartIndices, g_hatPartName, 10, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3}}},
+	{"cl",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 16},
+	  {g_hatPartIndices, g_hatPartName, 19, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 12},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"en",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 16},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"re",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 16},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"ro",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 2, g_chestTextureIndices, g_chestTexture, 17},
+	  {g_hatPartIndices, g_hatPartName, 3, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"d1",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 11},
+	  {g_hatPartIndices, g_hatPartName, 15, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"d2",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 11},
+	  {g_hatPartIndices, g_hatPartName, 16, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"d3",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 11},
+	  {g_hatPartIndices, g_hatPartName, 17, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"d4",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 11},
+	  {g_hatPartIndices, g_hatPartName, 18, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"l1",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 18},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"l2",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 19},
+	  {g_hatPartIndices, g_hatPartName, 6, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 12},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"l3",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 20},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"l4",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 21},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"l5",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 26},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 12},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"l6",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 26},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"b1",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 1},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 12},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"b2",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 1},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 10},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"b3",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 4},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"b4",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 1},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"cm",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 4, g_chestTextureIndices, g_chestTexture, 22},
+	  {g_hatPartIndices, g_hatPartName, 9, g_hatColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3}}},
+	{"gd",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 1},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 6}}},
+	{"rd",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 3},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 7},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 7},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 7}}},
+	{"pg",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 3},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3}}},
+	{"bd",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 6},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 12},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"sy",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 4},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 10},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"gn",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 6, g_chestTextureIndices, g_chestTexture, 13},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 5}}},
+	{"df",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 5, g_chestTextureIndices, g_chestTexture, 23},
+	  {g_hatPartIndices, g_hatPartName, 6, g_hatColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 6}}},
+	{"bs",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 10},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 7},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2}}},
+	{"lt",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 10},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2}}},
+	{"st",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 9},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 10},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2}}},
+	{"bm",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 24},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 7},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"jk",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 24},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"ghost",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 0},
+	  {g_ghostHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 13},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"ghost01",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 0},
+	  {g_ghostHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 13},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"ghost02",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 0},
+	  {g_ghostHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 13},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"ghost03",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 0},
+	  {g_ghostHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 13},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"ghost04",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 0},
+	  {g_ghostHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 13},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"ghost05",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 0},
+	  {g_ghostHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 13},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 0}}},
+	{"hg",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 3},
+	  {g_hatPartIndices, g_hatPartName, 8, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3}}},
+	{"pntgy",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 3},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 7},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3}}},
+	{"pep",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 0},
+	  {g_pepperHatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"cop01",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 2, g_chestTextureIndices, g_chestTexture, 17},
+	  {g_hatPartIndices, g_hatPartName, 3, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"actor_01",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 4},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 10},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"actor_02",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 6},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 12},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 1}}},
+	{"actor_03",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 1},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 1},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 6},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 6}}},
+	{"actor_04",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 1, g_chestTextureIndices, g_chestTexture, 12},
+	  {g_hatPartIndices, g_hatPartName, 6, g_hatColorIndices, g_colorAlias, 5},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 10},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 4}}},
+	{"actor_05",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 4, g_chestTextureIndices, g_chestTexture, 22},
+	  {g_hatPartIndices, g_hatPartName, 9, g_hatColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 8},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3}}},
+	{"btmncycl",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 3},
+	  {g_hatPartIndices, g_hatPartName, 5, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 0},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 3}}},
+	{"cboycycl",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 3, g_chestTextureIndices, g_chestTexture, 10},
+	  {g_hatPartIndices, g_hatPartName, 7, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 7},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 11},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 2}}},
+	{"boatman",
+	 NULL,
+	 NULL,
+	 0,
+	 0,
+	 0,
+	 {{g_bodyPartIndices, g_bodyPartName, 0, g_legColorIndices, g_colorAlias, 3},
+	  {g_hatPartIndices, g_hatPartName, 0, g_hatColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_gronColorIndices, g_colorAlias, 7},
+	  {NULL, NULL, 0, g_faceTextureIndices, g_faceTexture, 9},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_armColorIndices, g_colorAlias, 3},
+	  {NULL, NULL, 0, g_clawLeftColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_clawRightColorIndices, g_colorAlias, 2},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 7},
+	  {NULL, NULL, 0, g_legColorIndices, g_colorAlias, 7}}}
+};
 
 // GLOBAL: LEGO1 0x100fc4d0
 MxU32 LegoCharacterManager::g_maxMove = 4;
@@ -30,17 +1271,17 @@ MxU32 LegoCharacterManager::g_maxMove = 4;
 // GLOBAL: LEGO1 0x100fc4d4
 MxU32 LegoCharacterManager::g_maxSound = 9;
 
-// GLOBAL: LEGO1 0x100fc4e0
-MxU32 g_characterAnimationId = 10;
-
-// GLOBAL: LEGO1 0x100fc4e4
-char* LegoCharacterManager::g_customizeAnimFile = NULL;
-
 // GLOBAL: LEGO1 0x100fc4d8
 MxU32 g_characterSoundIdOffset = 50;
 
 // GLOBAL: LEGO1 0x100fc4dc
 MxU32 g_characterSoundIdMoodOffset = 66;
+
+// GLOBAL: LEGO1 0x100fc4e0
+MxU32 g_characterAnimationId = 10;
+
+// GLOBAL: LEGO1 0x100fc4e4
+char* LegoCharacterManager::g_customizeAnimFile = NULL;
 
 // GLOBAL: LEGO1 0x100fc4e8
 MxU32 g_headTextureCounter = 0;
@@ -307,12 +1548,14 @@ MxBool LegoCharacterManager::Exists(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10083bc0
+// FUNCTION: BETA10 0x1007466a
 MxU32 LegoCharacterManager::GetRefCount(LegoROI* p_roi)
 {
+	LegoCharacter* character = NULL;
 	LegoCharacterMap::iterator it;
 
 	for (it = m_characters->begin(); it != m_characters->end(); it++) {
-		LegoCharacter* character = (*it).second;
+		character = (*it).second;
 		LegoROI* roi = character->m_roi;
 
 		if (roi == p_roi) {
@@ -413,11 +1656,10 @@ void LegoCharacterManager::ReleaseActor(LegoROI* p_roi)
 // FUNCTION: LEGO1 0x10083f10
 void LegoCharacterManager::ReleaseAutoROI(LegoROI* p_roi)
 {
-	LegoCharacter* character = NULL;
 	LegoCharacterMap::iterator it;
 
 	for (it = m_characters->begin(); it != m_characters->end(); it++) {
-		character = (*it).second;
+		LegoCharacter* character = (*it).second;
 
 		if (character->m_roi == p_roi) {
 			if (character->RemoveRef() == 0) {
@@ -518,9 +1760,11 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		}
 
 		ViewLODList* lodList = lodManager->Lookup(parentName);
+		assert(lodList);
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_key, i);
 		ViewLODList* dupLodList = lodManager->Create(lodName, lodSize);
+		assert(dupLodList);
 
 		for (MxS32 j = 0; j < lodSize; j++) {
 			LegoLOD* lod = (LegoLOD*) (*lodList)[j];
@@ -531,18 +1775,19 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		lodList->Release();
 		lodList = dupLodList;
 
-		LegoROI* childROI = new LegoROI(renderer, lodList);
+		LegoROI* childRoi = new LegoROI(renderer, lodList);
+		assert(childRoi);
 		lodList->Release();
 
-		childROI->SetName(g_actorLODs[i + 1].m_name);
-		childROI->SetParentROI(roi);
+		childRoi->SetName(g_actorLODs[i + 1].m_name);
+		childRoi->SetParentROI(roi);
 
 		BoundingSphere childBoundingSphere;
 		childBoundingSphere.Center()[0] = g_actorLODs[i + 1].m_boundingSphere[0];
 		childBoundingSphere.Center()[1] = g_actorLODs[i + 1].m_boundingSphere[1];
 		childBoundingSphere.Center()[2] = g_actorLODs[i + 1].m_boundingSphere[2];
 		childBoundingSphere.Radius() = g_actorLODs[i + 1].m_boundingSphere[3];
-		childROI->SetBoundingSphere(childBoundingSphere);
+		childRoi->SetBoundingSphere(childBoundingSphere);
 
 		BoundingBox childBoundingBox;
 		childBoundingBox.Min()[0] = g_actorLODs[i + 1].m_boundingBox[0];
@@ -551,7 +1796,7 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 		childBoundingBox.Max()[0] = g_actorLODs[i + 1].m_boundingBox[3];
 		childBoundingBox.Max()[1] = g_actorLODs[i + 1].m_boundingBox[4];
 		childBoundingBox.Max()[2] = g_actorLODs[i + 1].m_boundingBox[5];
-		childROI->SetBoundingBox(childBoundingBox);
+		childRoi->SetBoundingBox(childBoundingBox);
 
 		CalcLocalTransform(
 			Mx3DPointFloat(g_actorLODs[i + 1].m_position),
@@ -559,25 +1804,26 @@ LegoROI* LegoCharacterManager::CreateActorROI(const char* p_key)
 			Mx3DPointFloat(g_actorLODs[i + 1].m_up),
 			mat
 		);
-		childROI->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
+		childRoi->WrappedSetLocal2WorldWithWorldDataUpdate(mat);
 
 		if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_useTexture &&
 			(i != 0 || part.m_partNameIndices[part.m_partNameIndex] != 0)) {
 
-			LegoTextureInfo* textureInfo = textureContainer->Get(part.m_names[part.m_nameIndices[part.m_nameIndex]]);
+			LegoTextureInfo* texture = textureContainer->Get(part.m_names[part.m_nameIndices[part.m_nameIndex]]);
+			assert(texture);
 
-			if (textureInfo != NULL) {
-				childROI->SetTextureInfo(textureInfo);
-				childROI->SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
+			if (texture != NULL) {
+				childRoi->SetTextureInfo(texture);
+				childRoi->SetLodColor(1.0F, 1.0F, 1.0F, 0.0F);
 			}
 		}
 		else if (g_actorLODs[i + 1].m_flags & LegoActorLOD::c_useColor || (i == 0 && part.m_partNameIndices[part.m_partNameIndex] == 0)) {
 			LegoFloat red, green, blue, alpha;
-			childROI->GetRGBAColor(part.m_names[part.m_nameIndices[part.m_nameIndex]], red, green, blue, alpha);
-			childROI->SetLodColor(red, green, blue, alpha);
+			childRoi->GetRGBAColor(part.m_names[part.m_nameIndices[part.m_nameIndex]], red, green, blue, alpha);
+			childRoi->SetLodColor(red, green, blue, alpha);
 		}
 
-		comp->push_back(childROI);
+		comp->push_back(childRoi);
 	}
 
 	CalcLocalTransform(
@@ -655,10 +1901,13 @@ MxBool LegoCharacterManager::SetHeadTexture(LegoROI* p_roi, LegoTextureInfo* p_t
 }
 
 // FUNCTION: LEGO1 0x10084c00
+// FUNCTION: BETA10 0x10075e40
 MxBool LegoCharacterManager::IsActor(const char* p_name)
 {
 	for (MxU32 i = 0; i < sizeOfArray(g_actorInfo); i++) {
-		if (!strcmpi(g_actorInfo[i].m_name, p_name)) {
+		const char* name = g_actorInfo[i].m_name;
+
+		if (!strcmpi(name, p_name)) {
 			return TRUE;
 		}
 	}
@@ -667,6 +1916,7 @@ MxBool LegoCharacterManager::IsActor(const char* p_name)
 }
 
 // FUNCTION: LEGO1 0x10084c40
+// FUNCTION: BETA10 0x10075ea0
 LegoExtraActor* LegoCharacterManager::GetExtraActor(const char* p_name)
 {
 	LegoActorInfo* info = GetActorInfo(p_name);
@@ -685,7 +1935,9 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(const char* p_name)
 	MxU32 i;
 
 	for (i = 0; i < sizeOfArray(g_actorInfo); i++) {
-		if (!strcmpi(g_actorInfo[i].m_name, p_name)) {
+		const char* name = g_actorInfo[i].m_name;
+
+		if (!strcmpi(name, p_name)) {
 			break;
 		}
 	}
@@ -705,7 +1957,9 @@ LegoActorInfo* LegoCharacterManager::GetActorInfo(LegoROI* p_roi)
 	MxU32 i;
 
 	for (i = 0; i < sizeOfArray(g_actorInfo); i++) {
-		if (g_actorInfo[i].m_roi == p_roi) {
+		LegoROI* roi = g_actorInfo[i].m_roi;
+
+		if (roi == p_roi) {
 			break;
 		}
 	}
@@ -745,7 +1999,7 @@ LegoROI* LegoCharacterManager::FindChildROI(LegoROI* p_roi, const char* p_name)
 // FUNCTION: BETA10 0x10076223
 MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 {
-	MxS32 numParts = 10;
+	MxS32 numParts = c_numParts;
 	const char* targetName = p_targetROI->GetName();
 
 	MxS32 partIndex;
@@ -791,7 +2045,7 @@ MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 	LegoActorInfo::Part& part = info->m_parts[partIndex];
 
 	part.m_nameIndex++;
-	if (part.m_nameIndices[part.m_nameIndex] == 0xff) {
+	if (part.m_nameIndices[part.m_nameIndex] == c_indexEnd) {
 		part.m_nameIndex = 0;
 	}
 
@@ -802,6 +2056,7 @@ MxBool LegoCharacterManager::SwitchColor(LegoROI* p_roi, LegoROI* p_targetROI)
 }
 
 // FUNCTION: LEGO1 0x10084ec0
+// FUNCTION: BETA10 0x10076436
 MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 {
 	LegoActorInfo* info = GetActorInfo(p_roi->GetName());
@@ -815,7 +2070,7 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 	part.m_partNameIndex++;
 	MxU8 partNameIndex = part.m_partNameIndices[part.m_partNameIndex];
 
-	if (partNameIndex == 0xff) {
+	if (partNameIndex == c_indexEnd) {
 		part.m_partNameIndex = 0;
 		partNameIndex = part.m_partNameIndices[part.m_partNameIndex];
 	}
@@ -826,9 +2081,11 @@ MxBool LegoCharacterManager::SwitchVariant(LegoROI* p_roi)
 		char lodName[256];
 
 		ViewLODList* lodList = GetViewLODListManager()->Lookup(part.m_partName[partNameIndex]);
+		assert(lodList);
 		MxS32 lodSize = lodList->Size();
 		sprintf(lodName, "%s%d", p_roi->GetName(), g_infohatVariantCounter++);
 		ViewLODList* dupLodList = GetViewLODListManager()->Create(lodName, lodSize);
+		assert(dupLodList);
 
 		Tgl::Renderer* renderer = VideoManager()->GetRenderer();
 		LegoFloat red, green, blue, alpha;
@@ -905,7 +2162,7 @@ MxBool LegoCharacterManager::SwitchMood(LegoROI* p_roi)
 	if (info != NULL) {
 		info->m_mood++;
 
-		if (info->m_mood > 3) {
+		if (info->m_mood > c_maxMood) {
 			info->m_mood = 0;
 		}
 
@@ -962,6 +2219,7 @@ MxU8 LegoCharacterManager::GetMood(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x100851a0
+// FUNCTION: BETA10 0x10076908
 void LegoCharacterManager::SetCustomizeAnimFile(const char* p_value)
 {
 	if (g_customizeAnimFile != NULL) {
@@ -1042,6 +2300,7 @@ LegoROI* LegoCharacterManager::CreateAutoROI(const char* p_name, const char* p_l
 }
 
 // FUNCTION: LEGO1 0x10085870
+// FUNCTION: BETA10 0x10076d64
 MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 {
 	MxResult result = FAILURE;
@@ -1049,22 +2308,23 @@ MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 	BoundingSphere boundingSphere;
 	BoundingBox boundingBox;
 
-	const Tgl::MeshBuilder* meshBuilder = ((ViewLOD*) p_roi->GetLOD(0))->GetMeshBuilder();
+	ViewLOD* lod = (ViewLOD*) p_roi->GetLOD(0);
+	const Tgl::MeshBuilder* meshBuilder = lod->GetMeshBuilder();
 
 	if (meshBuilder != NULL) {
+		float radius[3];
+		float center[3];
 		float min[3], max[3];
 
-		FILLVEC3(min, 88888.0);
-		FILLVEC3(max, -88888.0);
+		min[0] = min[1] = min[2] = 88888.0;
+		max[0] = max[1] = max[2] = -88888.0;
 		meshBuilder->GetBoundingBox(min, max);
 
-		float center[3];
 		center[0] = (min[0] + max[0]) / 2.0f;
 		center[1] = (min[1] + max[1]) / 2.0f;
 		center[2] = (min[2] + max[2]) / 2.0f;
 		SET3(boundingSphere.Center(), center);
 
-		float radius[3];
 		VMV3(radius, max, min);
 		boundingSphere.Radius() = sqrt(NORMSQRD3(radius)) / 2.0;
 
@@ -1084,6 +2344,7 @@ MxResult LegoCharacterManager::UpdateBoundingSphereAndBox(LegoROI* p_roi)
 }
 
 // FUNCTION: LEGO1 0x10085a80
+// FUNCTION: BETA10 0x10077011
 LegoROI* LegoCharacterManager::FUN_10085a80(const char* p_name, const char* p_lodName, MxBool p_createEntity)
 {
 	return CreateAutoROI(p_name, p_lodName, p_createEntity);
