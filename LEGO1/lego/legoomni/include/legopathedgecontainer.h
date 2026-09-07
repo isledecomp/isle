@@ -1,6 +1,7 @@
 #ifndef LEGOPATHEDGECONTAINER_H
 #define LEGOPATHEDGECONTAINER_H
 
+#include "realtime/vector3d.inl.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxstl/stlcompat.h"
 #include "mxtypes.h"

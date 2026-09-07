@@ -1,6 +1,7 @@
 #include "legoactorpresenter.h"
 
 #include "legoentity.h"
+#include "realtime/matrix4d.inl.h"
 #include "misc.h"
 
 DECOMP_SIZE_ASSERT(LegoActorPresenter, 0x50)

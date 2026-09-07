@@ -3,7 +3,6 @@
 #include "mxdsaction.h"
 #include "mxdsanim.h"
 #include "mxdsevent.h"
-#include "mxdsfile.h"
 #include "mxdsmediaaction.h"
 #include "mxdsmultiaction.h"
 #include "mxdsobjectaction.h"
@@ -261,6 +260,8 @@ MxDSObject* DeserializeDSObjectDispatch(MxU8*& p_source, MxS16 p_flags)
 
 	return obj;
 }
+
+#include "mxdsfile.h"
 
 // FUNCTION: LEGO1 0x100c0280
 MxDSObject* CreateStreamObject(MxDSFile* p_file, MxS16 p_ofs)

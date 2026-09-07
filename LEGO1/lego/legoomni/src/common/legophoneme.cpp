@@ -1,4 +1,5 @@
 #include "legophoneme.h"
+#include "realtime/matrix4d.inl.h"
 
 DECOMP_SIZE_ASSERT(LegoPhoneme, 0x20)
 
