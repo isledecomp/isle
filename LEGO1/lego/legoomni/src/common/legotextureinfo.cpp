@@ -5,7 +5,7 @@
 #include "misc/legoimage.h"
 #include "misc/legotexture.h"
 #include "mxdirectx/mxdirect3d.h"
-#include "tgl/d3drm/impl.h"
+#include "tgl/d3drm/tglimpl.h"
 
 DECOMP_SIZE_ASSERT(LegoTextureInfo, 0x10)
 

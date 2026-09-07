@@ -101,15 +101,7 @@ function(add_lego_libraries NAME)
   set(SUFFIX "${ARG_SUFFIX}")
 
   add_library(tglrl${ARG_SUFFIX} STATIC
-    LEGO1/tgl/d3drm/renderer.cpp
-    LEGO1/tgl/d3drm/texture.cpp
-    LEGO1/tgl/d3drm/view.cpp
-    LEGO1/tgl/d3drm/device.cpp
-    LEGO1/tgl/d3drm/group.cpp
-    LEGO1/tgl/d3drm/camera.cpp
-    LEGO1/tgl/d3drm/light.cpp
-    LEGO1/tgl/d3drm/meshbuilder.cpp
-    LEGO1/tgl/d3drm/mesh.cpp
+    LEGO1/tgl/d3drm/tglrl40.cpp
   )
   list(APPEND list_targets tglrl${ARG_SUFFIX})
   set_property(TARGET tglrl${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "tglrl40$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")

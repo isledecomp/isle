@@ -1,7 +1,7 @@
 #include "viewmanager.h"
 
 #include "mxdirectx/mxstopwatch.h"
-#include "tgl/d3drm/impl.h"
+#include "tgl/d3drm/tglimpl.h"
 #include "viewlod.h"
 
 #include <vec.h>
