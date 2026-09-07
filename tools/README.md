@@ -5,7 +5,6 @@ Most shared comparison tooling lives in [reccmp](https://github.com/isledecomp/r
 - [`patch_smartheap_331.py`](/tools/patch_smartheap_331.py) recreates the exact SmartHeap 3.31 library used by the original game.
 - [`gen_smacker_lib.py`](/tools/gen_smacker_lib.py) recreates the exact Win32 Smacker library used by the original game.
 - [`ncc/`](/tools/ncc/) checks source naming and style in CI.
-- [`patch_c2.py`](/tools/patch_c2.py) patches `C2.EXE` (part of MSVC 4.20) to get rid of a bugged warning.
 
 For reccmp setup and source annotations, see the [reccmp getting-started guide](https://github.com/isledecomp/reccmp?tab=readme-ov-file#getting-started), [annotation reference](https://github.com/isledecomp/reccmp/blob/master/docs/annotations.md), and [recommendations](https://github.com/isledecomp/reccmp/blob/master/docs/recommendations.md).
 
