@@ -2,7 +2,7 @@
 #define VIEWLOD_H
 
 #include "decomp.h"
-#include "realtime/roi.h"
+#include "realtime/realtime.h"
 #include "tgl/tgl.h"
 
 //////////////////////////////////////////////////////////////////////////////

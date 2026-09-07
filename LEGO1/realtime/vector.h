@@ -56,6 +56,7 @@ public:
 	// SYNTHETIC: BETA10 0x100121e0
 	// Vector3::operator=
 
+	// SYNTHETIC: LEGO1 0x100a9a30
 	// SYNTHETIC: BETA10 0x1004af40
 	// Vector4::operator=
 
