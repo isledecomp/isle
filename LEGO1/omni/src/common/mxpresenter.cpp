@@ -25,6 +25,7 @@
 #include "mxutilities.h"
 #include "mxwavepresenter.h"
 
+#include <assert.h>
 #include <string.h>
 
 DECOMP_SIZE_ASSERT(MxPresenter, 0x40);
@@ -56,6 +57,7 @@ MxResult MxPresenter::StartAction(MxStreamController*, MxDSAction* p_action)
 }
 
 // FUNCTION: LEGO1 0x100b4e40
+// FUNCTION: BETA10 0x1012e21b
 void MxPresenter::EndAction()
 {
 	if (m_action == NULL) {
@@ -71,12 +73,12 @@ void MxPresenter::EndAction()
 	}
 
 	m_action = NULL;
-	MxS32 previousTickleState = 1 << m_currentTickleState;
-	m_previousTickleStates |= previousTickleState;
+	m_previousTickleStates |= 1 << m_currentTickleState;
 	m_currentTickleState = e_idle;
 }
 
 // FUNCTION: LEGO1 0x100b4fc0
+// FUNCTION: BETA10 0x1012e3c2
 void MxPresenter::ParseExtra()
 {
 	AUTOLOCK(m_criticalSection);
@@ -123,6 +125,7 @@ void MxPresenter::SendToCompositePresenter(MxOmni* p_omni)
 }
 
 // FUNCTION: LEGO1 0x100b5200
+// FUNCTION: BETA10 0x1012e6d5
 MxResult MxPresenter::Tickle()
 {
 	AUTOLOCK(m_criticalSection);
@@ -168,6 +171,7 @@ MxResult MxPresenter::Tickle()
 }
 
 // FUNCTION: LEGO1 0x100b52d0
+// FUNCTION: BETA10 0x1012e848
 void MxPresenter::Enable(MxBool p_enable)
 {
 	if (m_action && IsEnabled() != p_enable) {
@@ -238,13 +242,16 @@ const char* PresenterNameDispatch(const MxDSAction& p_action)
 }
 
 // FUNCTION: LEGO1 0x100b5410
-MxEntity* MxPresenter::CreateEntity(const char* p_defaultName)
+// FUNCTION: BETA10 0x1012eaad
+MxEntity* MxPresenter::CreateEntity(const char* p_defaultObjectName)
 {
 	// create an object from LegoObjectFactory based on OBJECT: value in extra data.
-	// If that is missing, p_defaultName is used
+	// If that is missing, p_defaultObjectName is used
+
+	assert(p_defaultObjectName);
 
 	char objectName[512];
-	strcpy(objectName, p_defaultName);
+	strcpy(objectName, p_defaultObjectName);
 
 	MxU16 extraLength;
 	char* extraData;

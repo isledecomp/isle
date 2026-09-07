@@ -130,8 +130,9 @@ public:
 template <class T>
 inline void MxList<T>::DeleteAll()
 {
+	MxListEntry<T>* t;
 	MxListEntry<T>* next;
-	for (MxListEntry<T>* t = m_first; t; t = next) {
+	for (t = m_first; t; t = next) {
 		next = t->GetNext();
 		this->m_customDestructor(t->GetValue());
 		delete t;
