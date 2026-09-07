@@ -172,7 +172,7 @@ public:
 	LegoU16 GetNumRotationKeys() { return m_numRotationKeys; }
 
 	// FUNCTION: BETA10 0x100737e0
-	void SetNumRotationKeys(LegoU16 p_numRotationKeys) { m_numRotationKeys = p_numRotationKeys; }
+	void SetNumRotationKeys(LegoU16 p_numKeys) { m_numRotationKeys = p_numKeys; }
 
 	// FUNCTION: BETA10 0x10073810
 	void SetRotationKeys(LegoRotationKey* p_keys)
@@ -227,15 +227,15 @@ public:
 	// FUNCTION: BETA10 0x1005d580
 	LegoBool GetVisibility(LegoTime p_time) { return GetVisibility((LegoFloat) p_time); }
 
-	inline static void GetTranslation(
+	static void GetTranslation(
 		LegoU16 p_numTranslationKeys,
 		LegoTranslationKey* p_translationKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,
 		LegoU32& p_old_index
 	);
-	/*inline*/ static void GetRotation(
-		LegoU16 p_numRotationKeys,
+	inline static void GetRotation(
+		LegoU16 p_numKeys,
 		LegoRotationKey* p_rotationKeys,
 		LegoFloat p_time,
 		Matrix4& p_matrix,
