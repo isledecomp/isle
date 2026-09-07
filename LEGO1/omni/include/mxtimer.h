@@ -21,7 +21,7 @@ public:
 	// FUNCTION: BETA10 0x10017810
 	MxLong GetTime()
 	{
-		// Note that the BETA10 implementation differs - it only consists of the second branch of this `if` call
+		// Note that the BETA10 implementation differs - it only consists of the second branch of this `if` call.
 		if (m_isRunning) {
 			return g_lastTimeTimerStarted;
 		}

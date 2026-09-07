@@ -102,6 +102,7 @@ MxLong Radio::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x1002ca70
+// FUNCTION: BETA10 0x100f1a76
 void Radio::Play()
 {
 	if (!m_state->IsActive()) {
@@ -123,6 +124,7 @@ void Radio::Play()
 }
 
 // FUNCTION: LEGO1 0x1002cb70
+// FUNCTION: BETA10 0x100f1c02
 void Radio::Stop()
 {
 	if (m_state->IsActive()) {
