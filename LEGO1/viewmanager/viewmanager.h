@@ -22,17 +22,19 @@ public:
 	ViewManager(Tgl::Renderer* pRenderer, Tgl::Group* scene, const OrientableROI* point_of_view);
 	virtual ~ViewManager();
 
+	virtual int FlushBuffers(); // vtable+0x04
+
 	void Remove(ViewROI* p_roi);
 	void RemoveAll(ViewROI* p_roi);
 	unsigned int IsBoundingBoxInFrustum(const BoundingBox& p_bounding_box);
 	void UpdateROIDetailBasedOnLOD(ViewROI* p_roi, int p_lodLevel);
-	void RemoveROIDetailFromScene(ViewROI* p_roi);
+	void RemoveROIDetailFromScene(ViewROI* p_from);
 	void SetPOVSource(const OrientableROI* point_of_view);
 	float ProjectedSize(const BoundingSphere& p_bounding_sphere);
 	ViewROI* Pick(Tgl::View* p_view, unsigned long x, unsigned long y);
 	void SetResolution(int width, int height);
 	void SetFrustrum(float fov, float front, float back);
-	inline void ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel);
+	void ManageVisibilityAndDetailRecursively(ViewROI* p_from, int p_lodLevel);
 	void Update(float p_previousRenderTime, float);
 	inline int CalculateFrustumTransformations();
 	void UpdateViewTransformations();
@@ -72,8 +74,8 @@ private:
 	float seconds_allowed;          // 0x1b8
 };
 
-// TEMPLATE: LEGO1 0x10022030
-// list<ROI *,allocator<ROI *> >::insert
+// TEMPLATE: LEGO1 0x10022030 SYMBOL
+// ?insert@?$list@PAVROI@@V?$allocator@PAVROI@@@@@@QAE?AViterator@1@V21@ABQAVROI@@@Z
 
 // TEMPLATE: BETA10 0x1007b0b0
 // List<ROI *>::List<ROI *>
@@ -88,7 +90,7 @@ private:
 // TEMPLATE: BETA10 0x10174510
 // Vector<ROI const *>::~Vector<ROI const *>
 
-// TEMPLATE: LEGO1 0x100a6f80
-// vector<ROI const *,allocator<ROI const *> >::~vector<ROI const *,allocator<ROI const *> >
+// TEMPLATE: LEGO1 0x100a6f80 SYMBOL
+// ??1?$vector@PBVROI@@V?$allocator@PBVROI@@@@@@QAE@XZ
 
 #endif // VIEWMANAGER_H
