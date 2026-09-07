@@ -1,0 +1,87 @@
+name: Score with reccmp
+description: Detect the binaries, write the per-target accuracy reports, diff them against master, and run the export, vtable, and data checks
+
+inputs:
+  source-root:
+    description: Directory with reccmp-project.yml and the compared sources
+    required: true
+  recompiled:
+    description: Directory with the recompiled binaries and PDBs
+    required: true
+  original:
+    description: Directory with the retail binaries
+    default: legobin
+  suffix:
+    description: Report name suffix, for example -dev
+    default: ""
+  baseline-url:
+    description: Where master publishes the reports the diff compares against
+    default: https://github.com/isledecomp/isle/releases/download/continuous
+
+runs:
+  using: composite
+  steps:
+    - name: Install reccmp
+      shell: bash
+      run: >-
+        python -m pip install
+        "reccmp @ git+https://github.com/isledecomp/reccmp"
+        "clang==16.0.6"
+        "pyyaml==6.0.3"
+        "colorama==0.4.6"
+
+    - name: Detect the binaries
+      shell: bash
+      working-directory: ${{ inputs.source-root }}
+      env:
+        ORIGINAL: ${{ inputs.original }}
+        RECOMPILED: ${{ inputs.recompiled }}
+      run: |
+        reccmp-project detect --what original --search-path "$GITHUB_WORKSPACE/$ORIGINAL"
+        reccmp-project detect --what recompiled --search-path "$GITHUB_WORKSPACE/$RECOMPILED"
+
+    - name: Write the accuracy reports
+      shell: bash
+      working-directory: ${{ inputs.source-root }}
+      env:
+        SUFFIX: ${{ inputs.suffix }}
+      run: |
+        set -euo pipefail
+        for target in CONFIG ISLE LEGO1; do
+          report="$GITHUB_WORKSPACE/${target}PROGRESS$SUFFIX"
+          reccmp-reccmp --target "$target" --json "$report.json" --html "$report.HTML" \
+            --svg "$report.SVG" --svg-icon "assets/${target,,}.png"
+          test -s "$report.json" && test -s "$report.SVG" && test -s "$report.HTML"
+        done
+
+    - name: Compare with the last master publication
+      shell: bash
+      working-directory: ${{ inputs.source-root }}
+      env:
+        SUFFIX: ${{ inputs.suffix }}
+        BASELINE_URL: ${{ inputs.baseline-url }}
+      run: |
+        set -euo pipefail
+        for target in CONFIG ISLE LEGO1; do
+          name="${target}PROGRESS$SUFFIX"
+          baseline="$GITHUB_WORKSPACE/$name-old.json"
+          if curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 \
+               -fLSs -o "$baseline" "$BASELINE_URL/$name.json"; then
+            reccmp-reccmp --target "$target" --diff "$baseline"
+          else
+            rm -f "$baseline"
+            echo "::notice::master has not published $name.json yet"
+          fi
+        done
+
+    - name: Check exports, vtables, and variables
+      shell: bash
+      working-directory: ${{ inputs.source-root }}
+      run: |
+        reccmp-verexp --target LEGO1
+        reccmp-vtable --target CONFIG
+        reccmp-vtable --target ISLE
+        reccmp-vtable --target LEGO1
+        reccmp-datacmp --target CONFIG
+        reccmp-datacmp --target ISLE
+        reccmp-datacmp --target LEGO1

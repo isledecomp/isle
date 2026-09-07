@@ -79,8 +79,6 @@ option(ISLE_DECOMP_ASSERT "Assert struct size" ${MSVC_FOR_DECOMP})
 cmake_dependent_option(ISLE_USE_DX5_LIBS "Build with internal DirectX 5 SDK Libraries" ON ISLE_USE_DX5 OFF)
 option(ISLE_BUILD_LEGO1 "Build LEGO1.DLL library" ON)
 option(ISLE_BUILD_BETA10 "Build BETA10.DLL library" OFF)
-option(ISLE_INCLUDE_ENTROPY "Build with entropy.h" OFF)
-option(ISLE_ENTROPY_FILENAME "Entropy header filename" "entropy.h")
 
 if(NOT (ISLE_BUILD_LEGO1 OR ISLE_BUILD_BETA10))
   message(FATAL_ERROR "ISLE_BUILD_LEGO1 AND ISLE_BUILD_BETA10 cannot be both disabled")
@@ -288,6 +286,7 @@ function(add_lego_libraries NAME)
   list(APPEND list_targets omni${ARG_SUFFIX})
   set_property(TARGET omni${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "omni$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
   target_include_directories(omni${ARG_SUFFIX} PRIVATE "${PROJECT_SOURCE_DIR}/LEGO1/omni/include" "${PROJECT_SOURCE_DIR}/LEGO1" "${PROJECT_SOURCE_DIR}/util")
+
   add_library(streamprovider${ARG_SUFFIX} STATIC
     LEGO1/omni/src/stream/mxramstreamprovider.cpp
     LEGO1/omni/src/stream/mxdiskstreamprovider.cpp
@@ -398,7 +397,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/worlds/historybook.cpp
     LEGO1/lego/legoomni/src/common/legocharactermanager.cpp
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
-    # We need to get rid of / refactor the below units into existing/other ones
   )
   list(APPEND list_targets ${NAME})
 
@@ -427,15 +425,14 @@ function(add_lego_libraries NAME)
     geom${ARG_SUFFIX}
     mxdirectx${ARG_SUFFIX}
     anim${ARG_SUFFIX}
+    shape${ARG_SUFFIX}
     tglrl${ARG_SUFFIX}
     realtime${ARG_SUFFIX}
     viewmanager${ARG_SUFFIX}
     roi${ARG_SUFFIX}
     3dmanager${ARG_SUFFIX}
     omni${ARG_SUFFIX}
-    shape${ARG_SUFFIX}
     Vec::Vec
-    dxguid
   )
 
   foreach(tgt IN LISTS list_targets)
@@ -454,8 +451,12 @@ endfunction()
 
 set(lego1_link_libraries )
 if (ISLE_USE_SMARTHEAP)
-  list(APPEND lego1_link_libraries SmartHeap::SmartHeap libcmt)
+  list(APPEND lego1_link_libraries SmartHeap::SmartHeap libcmt oldnames)
 endif()
+
+list(APPEND lego1_link_libraries winmm dinput dsound ddraw kernel32 user32 gdi32 d3drm)
+
+list(APPEND lego1_link_libraries dxguid)
 
 if(ISLE_BUILD_LEGO1)
   add_lego_libraries(lego1
@@ -477,6 +478,8 @@ if(ISLE_BUILD_BETA10)
     OUT_TARGETS beta10_targets
   )
   reccmp_add_target(beta10 ID BETA10)
+
+  target_link_libraries(beta10 PRIVATE dxguid)
 
   # Enable `#ifdef BETA10` conditions
   target_compile_definitions(beta10 PRIVATE BETA10)
@@ -501,13 +504,15 @@ if (ISLE_BUILD_APP)
     target_link_libraries(isle PRIVATE SmartHeap::SmartHeap)
   endif()
 
-  # Link DSOUND, WINMM, and LEGO1
-  target_link_libraries(isle PRIVATE dsound winmm)
+  # Link DSOUND, WINMM, and LEGO1.
+  target_link_libraries(isle PRIVATE winmm advapi32 gdi32 user32 dsound)
   if(ISLE_BUILD_LEGO1)
     target_link_libraries(isle PRIVATE lego1)
   else()
     target_link_libraries(isle PRIVATE beta10)
   endif()
+  string(REPLACE "kernel32.lib" "" CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES}")
+  string(REPLACE "kernel32.lib" "" CMAKE_C_STANDARD_LIBRARIES "${CMAKE_C_STANDARD_LIBRARIES}")
 
   # Make sure filenames are ALL CAPS
   set_property(TARGET isle PROPERTY OUTPUT_NAME ISLE)
@@ -587,20 +592,7 @@ if (MSVC_FOR_DECOMP)
 
   if (ISLE_BUILD_CONFIG)
     target_link_options(config PRIVATE "/OPT:REF")
-    target_link_libraries(config PRIVATE mfc42)
-  endif()
-
-  if (ISLE_INCLUDE_ENTROPY)
-    message(STATUS "Using entropy file: ${ISLE_ENTROPY_FILENAME}")
-    foreach(tgt IN LISTS lego1_targets beta10_targets)
-      target_compile_options(${tgt} PRIVATE /FI${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME})
-    endforeach()
-    if (TARGET isle)
-      target_compile_options(isle PRIVATE /FI${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME})
-    endif()
-    if (TARGET config)
-      target_compile_options(config PRIVATE /FI${PROJECT_SOURCE_DIR}/${ISLE_ENTROPY_FILENAME})
-    endif()
+    target_link_libraries(config PRIVATE mfc42 msvcrt kernel32)
   endif()
 
   # Setting the MSVC_RUNTIME_LIBRARY for all libraries as well as `lego1` produces the results
@@ -632,6 +624,16 @@ if (MSVC_FOR_DECOMP)
   set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "/incremental:no /debug")
   set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "/incremental:no")
 
+  if(REPROBIT_TERMINAL)
+    foreach(_cfg "" _DEBUG _RELEASE _RELWITHDEBINFO _MINSIZEREL)
+      foreach(_kind EXE SHARED STATIC)
+        string(REPLACE "/debug" "" CMAKE_${_kind}_LINKER_FLAGS${_cfg}
+               "${CMAKE_${_kind}_LINKER_FLAGS${_cfg}}")
+      endforeach()
+    endforeach()
+    message(STATUS "REPROBIT_TERMINAL: linking without /debug (no DEBUG data directory); /Zi retained so codegen is unchanged")
+  endif()
+
   # Older MSVC versions don't support building in parallel.
   # Force non-parallel builds of isle and lego1 by putting them in a pool with 1 available job.
   if (CMAKE_CXX_COMPILER_ID VERSION_LESS 12 AND NOT ISLE_PER_OBJECT_PDB)
@@ -651,6 +653,18 @@ if (MSVC_FOR_DECOMP)
       set_property(TARGET config PROPERTY JOB_POOL_LINK "msvc_config")
     endif()
   endif()
+endif()
+
+if(DEFINED REPROBIT_PROJECT_PLAN AND NOT REPROBIT_PROJECT_PLAN STREQUAL "")
+  if(NOT DEFINED REPROBIT_CMAKE_MODULE OR REPROBIT_CMAKE_MODULE STREQUAL "")
+    message(FATAL_ERROR "REPROBIT_CMAKE_MODULE is required with REPROBIT_PROJECT_PLAN")
+  endif()
+  if(NOT EXISTS "${REPROBIT_CMAKE_MODULE}" OR
+     NOT EXISTS "${REPROBIT_PROJECT_PLAN}")
+    message(FATAL_ERROR "ReproBit CMake module or generated project plan is absent")
+  endif()
+  include("${REPROBIT_CMAKE_MODULE}")
+  include("${REPROBIT_PROJECT_PLAN}")
 endif()
 
 find_program(CLANGFORMAT_BIN NAMES clang-format)

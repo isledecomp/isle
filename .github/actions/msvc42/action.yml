@@ -1,0 +1,16 @@
+name: Provision MSVC 4.2
+description: Install the pinned ReproBit release and provision the authenticated MSVC 4.2 toolchain for the following steps
+
+runs:
+  using: composite
+  steps:
+    - shell: pwsh
+      run: |
+        $PSNativeCommandUseErrorActionPreference = $true
+        $revision = (Get-Content .github/reprobit-revision -Raw).Trim()
+        python -m pip install "git+https://github.com/isledecomp/reprobit.git@$revision"
+        $root = "$env:RUNNER_TEMP\msvc42"
+        rbit toolchain provision --destination $root --no-save
+        "$root\bin" >> $env:GITHUB_PATH
+        "INCLUDE=$root\include;$root\mfc\include" >> $env:GITHUB_ENV
+        "LIB=$root\lib;$root\mfc\lib" >> $env:GITHUB_ENV
