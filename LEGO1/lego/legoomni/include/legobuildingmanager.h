@@ -21,7 +21,7 @@ struct LegoBuildingInfo {
 		c_hasMoods = 0x08
 	};
 
-	LegoEntity* m_entity;         // 0x00
+	LegoEntity* entity;           // 0x00
 	const char* m_variant;        // 0x04
 	MxU32 m_sound;                // 0x08
 	MxU32 m_move;                 // 0x0c

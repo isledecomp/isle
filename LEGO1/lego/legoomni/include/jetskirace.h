@@ -37,9 +37,6 @@ public:
 	MxLong HandleEndAction(MxEndActionNotificationParam&) override;      // vtable+0x74
 
 	void SetProgressPosition(MxS32 p_actorId, MxS16 p_progress);
-
-private:
-	static MxS32 g_lapsCount;
 };
 
 // VTABLE: LEGO1 0x100d4fa8
