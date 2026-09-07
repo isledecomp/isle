@@ -2,6 +2,10 @@
 
 #include "tglsurface.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
+#include "mxgeometry/mxmatrix.h"
+
 #include "decomp.h"
 
 DECOMP_SIZE_ASSERT(TglSurface, 0x70);

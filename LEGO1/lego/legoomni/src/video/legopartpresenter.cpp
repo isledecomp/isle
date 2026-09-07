@@ -1,5 +1,7 @@
 #include "legopartpresenter.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
 #include "legovideomanager.h"
 #include "misc.h"
 #include "misc/legocontainer.h"
