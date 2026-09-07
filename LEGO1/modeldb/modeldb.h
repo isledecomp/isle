@@ -10,6 +10,8 @@
 
 // SIZE 0x18
 struct ModelDbPart {
+	void Dump(FILE* p_file);
+	MxResult Write(FILE* p_file);
 	MxResult Read(FILE* p_file);
 
 	MxString m_roiName;          // 0x00
@@ -92,6 +94,8 @@ public:
 // SIZE 0x38
 struct ModelDbModel {
 	void Free();
+	void Dump(FILE* p_file);
+	MxResult Write(FILE* p_file);
 	MxResult Read(FILE* p_file);
 
 	char* m_modelName;       // 0x00
@@ -107,13 +111,13 @@ struct ModelDbModel {
 // SIZE 0x18
 struct ModelDbWorld {
 	char* m_worldName;           // 0x00
-	ModelDbPartList* m_partList; // 0x04
-	ModelDbModel* m_models;      // 0x08
+	ModelDbPartList* m_partlist; // 0x04
+	ModelDbModel* m_modarr;      // 0x08
 	MxS32 m_numModels;           // 0x0c
 	undefined m_unk0x10[0x08];   // 0x10
 };
 
-MxResult ReadModelDbWorlds(FILE* p_file, ModelDbWorld*& p_worlds, MxS32& p_numWorlds);
+MxResult ReadModelDbWorlds(FILE* dbf, ModelDbWorld*& newworld, MxS32& p_numWorlds);
 void FreeModelDbWorlds(ModelDbWorld*& p_worlds, MxS32 p_numWorlds);
 
 #endif // MODELDB_H

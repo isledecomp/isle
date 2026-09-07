@@ -9,6 +9,8 @@
 #include "mxmisc.h"
 #include "mxtimer.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoExtraActor, 0x1dc)
 
 // GLOBAL: LEGO1 0x100f31d0
@@ -41,6 +43,7 @@ LegoExtraActor::LegoExtraActor()
 }
 
 // FUNCTION: LEGO1 0x1002a6b0
+// FUNCTION: BETA10 0x10080a7e
 LegoExtraActor::~LegoExtraActor()
 {
 	delete m_assAnim;
@@ -48,14 +51,18 @@ LegoExtraActor::~LegoExtraActor()
 }
 
 // FUNCTION: LEGO1 0x1002a720
+// FUNCTION: BETA10 0x10080b4c
 MxU32 LegoExtraActor::StepState(float p_time, Matrix4& p_transform)
 {
+	// GLOBAL: LEGO1 0x100d6b64
+	static const float g_hitAnimationDelay = 2000.0f;
+
 	switch (m_actorState & c_maxState) {
 	case c_initial:
 	case c_ready:
 		return TRUE;
 	case c_hit:
-		m_scheduledTime = p_time + 2000.0f;
+		m_scheduledTime = g_hitAnimationDelay + p_time;
 		m_actorState = c_hitAnimation;
 		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
 		m_transformTime = p_time;
@@ -109,6 +116,7 @@ MxU32 LegoExtraActor::StepState(float p_time, Matrix4& p_transform)
 }
 
 // FUNCTION: LEGO1 0x1002aa90
+// FUNCTION: BETA10 0x10080ea9
 void LegoExtraActor::GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& p_selectedEdgeIndex)
 {
 	switch (m_pathWalkingMode) {
@@ -128,6 +136,7 @@ void LegoExtraActor::GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& 
 }
 
 // FUNCTION: LEGO1 0x1002aae0
+// FUNCTION: BETA10 0x10080f35
 MxResult LegoExtraActor::SwitchDirection()
 {
 	LegoPathBoundary* oldEdge = m_boundary;
@@ -138,6 +147,7 @@ MxResult LegoExtraActor::SwitchDirection()
 
 	dirRef *= -1.0f;
 	rightRef.EqualsCross(upRef, dirRef);
+	assert(m_destEdge && m_boundary);
 
 	if (m_boundary == m_destEdge->m_faceA) {
 		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceB;
@@ -145,6 +155,8 @@ MxResult LegoExtraActor::SwitchDirection()
 	else {
 		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceA;
 	}
+
+	assert(m_destEdge && m_boundary);
 
 	if (!m_boundary) {
 		m_boundary = oldEdge;
@@ -213,7 +225,7 @@ MxResult LegoExtraActor::HitActor(LegoPathActor* p_actor, MxBool p_bool)
 			MxMatrix local(m_roi->GetLocal2World());
 
 			m_localBeforeHit = local;
-			Vector3 positionRef(local[3]);
+			Vector3 positionRef((const float*) local[3]);
 			Mx3DPointFloat otherActorDir(otherActorLocal[2]);
 
 			otherActorDir *= 2.0f;
@@ -369,11 +381,12 @@ void LegoExtraActor::Animate(float p_time)
 		}
 
 		MxMatrix matrix(m_roi->GetLocal2World());
-		LegoTreeNode* root = laas->m_AnimTreePtr->GetRoot();
-		MxS32 count = root->GetNumChildren();
+		LegoTreeNode* n = laas->m_AnimTreePtr->GetRoot();
+		assert(n);
+		MxS32 count = n->GetNumChildren();
 
 		for (MxS32 i = 0; i < count; i++) {
-			LegoROI::ApplyAnimationTransformation(root->GetChild(i), matrix, duration2, laas->m_roiMap);
+			LegoROI::ApplyAnimationTransformation(n->GetChild(i), matrix, duration2, laas->m_roiMap);
 		}
 	}
 }
@@ -443,7 +456,7 @@ inline MxU32 LegoExtraActor::CheckPresenterAndActorIntersections(
 	LegoPathActorSet lpas(plpas);
 
 	for (LegoPathActorSet::iterator itpa = lpas.begin(); itpa != lpas.end(); itpa++) {
-		if (plpas.find(*itpa) != plpas.end()) {
+		if (plpas.end() != plpas.find(*itpa)) {
 			LegoPathActor* actor = *itpa;
 
 			if (this != actor && !(actor->GetActorState() & LegoPathActor::c_noCollide)) {
