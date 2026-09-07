@@ -1,6 +1,7 @@
 #include "act2actor.h"
 
 #include "3dmanager/lego3dmanager.h"
+#include "act2genactor.h"
 #include "act2main_actions.h"
 #include "anim/legoanim.h"
 #include "legoact2.h"
@@ -15,6 +16,8 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxdebug.h"
+#include "mxmisc.h"
+#include "mxtimer.h"
 #include "roi/legoroi.h"
 #include "viewmanager/viewmanager.h"
 
@@ -40,6 +43,9 @@ Act2Actor::Location g_brickstrLocations[] = {
 	{{-44.6, 0.1, 45.3}, {0.95, 0.0, -0.3}, "edg00_154", FALSE},
 #endif
 };
+
+// GLOBAL: LEGO1 0x100f0f18
+MxLong Act2GenActor::g_lastHitActorTime = 0;
 
 // GLOBAL: LEGO1 0x100f0f1c
 MxFloat g_lastAnimationTime = 0.0f;
@@ -97,15 +103,34 @@ MxS32 g_location8Plants[] = {1, 27, 37, 44, 47, 54, 61, 64, -1};
 
 // GLOBAL: LEGO1 0x10102b1c
 // GLOBAL: BETA10 0x10209f60
-MxU32 g_nextHeadWavIndex = 0;
+MxU32 g_nextHeadWavIndex;
 
 // GLOBAL: LEGO1 0x10102b20
 // GLOBAL: BETA10 0x10209f64
-MxU32 g_nextBehindWavIndex = 0;
+MxU32 g_nextBehindWavIndex;
 
 // GLOBAL: LEGO1 0x10102b24
 // GLOBAL: BETA10 0x10209f68
-MxU32 g_nextInterruptWavIndex = 0;
+MxU32 g_nextInterruptWavIndex;
+
+// FUNCTION: LEGO1 0x10018740
+// FUNCTION: BETA10 0x1000c7a0
+MxResult Act2GenActor::HitActor(LegoPathActor* p_actor, MxBool)
+{
+	MxLong time = Timer()->GetTime();
+	MxLong diff = time - g_lastHitActorTime;
+
+	if (strcmp(p_actor->GetROI()->GetName(), "pepper")) {
+		return SUCCESS;
+	}
+
+	g_lastHitActorTime = time;
+	if (diff > 1000) {
+		SoundManager()->GetCacheSoundManager()->Play("hitactor", NULL, FALSE);
+	}
+
+	return SUCCESS;
+}
 
 // FUNCTION: LEGO1 0x100187e0
 // FUNCTION: BETA10 0x1000c7fb
@@ -152,6 +177,7 @@ void Act2Actor::InitializeNextShot()
 	}
 
 	assert(m_shootAnim);
+	assert(SoundManager()->GetCacheSoundManager());
 
 	m_cachedShootSound = SoundManager()->GetCacheSoundManager()->FindSoundByKey("xarrow");
 #ifdef BETA10
@@ -302,74 +328,79 @@ void Act2Actor::Animate(float p_time)
 			m_state = e_roaming;
 			SetWorldSpeed(m_baseWorldSpeed + 4, p_time + 15000.0f);
 		}
+
+		return;
 	}
-	else {
-		LegoROI* roiPepper = FindROI("pepper");
 
-		if (roiPepper) {
-			ViewManager* vm = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
-			assert(vm);
+	LegoROI* roiPepper = FindROI("pepper");
 
-			MxU32 inFrustum = vm->IsBoundingBoxInFrustum(m_roi->GetWorldBoundingBox());
+	if (!roiPepper) {
+		return;
+	}
 
-			if (inFrustum) {
-				Mx3DPointFloat local18(roiPepper->GetWorldDirection());
-				Mx3DPointFloat local30(m_roi->GetWorldPosition());
-				Mx3DPointFloat local60(roiPepper->GetWorldPosition());
-				local30 -= local60;
-				local30.Unitize();
+	ViewManager* vm = VideoManager()->Get3DManager()->GetLego3DView()->GetViewManager();
+	assert(vm);
 
-				MxFloat dotproduct = local18.Dot(local30, local18);
+	MxU32 inFrustum = vm->IsBoundingBoxInFrustum(m_roi->GetWorldBoundingBox());
 
-				if (dotproduct >= 0.0) {
-					const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
-					const MxFloat* worldPosition = m_roi->GetWorldPosition();
+	if (!inFrustum) {
+		return;
+	}
 
-					MxFloat distanceToAmbulance = DISTSQRD3(pepperWorldPosition, worldPosition);
+	Mx3DPointFloat local18(roiPepper->GetWorldDirection());
+	Mx3DPointFloat local30(m_roi->GetWorldPosition());
+	Mx3DPointFloat local60(roiPepper->GetWorldPosition());
+	local30 -= local60;
+	local30.Unitize();
 
-					if (distanceToAmbulance < 75.0f) {
-						if (!m_skipAnimation) {
-							m_skipAnimation = TRUE;
+	MxFloat dotproduct = local18.Dot(local30, local18);
 
-							if (!m_state) {
-								PlayNextVoiceOver(VoiceOver::e_interrupt);
-								m_state = e_endShot;
-							}
-							else {
-								LegoROI* childROI = m_roi->FindChildROI("windsd", m_roi);
-								const MxFloat* childPosition = childROI->GetWorldPosition();
-								MxFloat distanceToWindshield = DISTSQRD3(pepperWorldPosition, childPosition);
+	if (dotproduct >= 0.0) {
+		const MxFloat* pepperWorldPosition = roiPepper->GetWorldPosition();
+		const MxFloat* worldPosition = m_roi->GetWorldPosition();
 
-								childROI = m_roi->FindChildROI("reardr", m_roi);
-								childPosition = childROI->GetWorldPosition();
-								MxFloat distanceToRearDoor = DISTSQRD3(pepperWorldPosition, childPosition);
+		MxFloat distanceToAmbulance = DISTSQRD3(pepperWorldPosition, worldPosition);
 
-								if (distanceToRearDoor > distanceToWindshield) {
-									PlayNextVoiceOver(VoiceOver::e_head);
-								}
-								else
-#ifndef BETA10
-									if (p_time - m_createBrickTime > 3000.0f) {
-#endif
-									SetWorldSpeed(m_baseWorldSpeed - 1);
-									m_state = e_createdBrick;
-									m_createBrickTime = p_time;
+		if (distanceToAmbulance < 75.0f) {
+			if (!m_skipAnimation) {
+				m_skipAnimation = TRUE;
 
-									if (((LegoAct2*) CurrentWorld())->CreateDroppingBrick() == SUCCESS) {
-										PlayNextVoiceOver(VoiceOver::e_behind);
-									}
-#ifndef BETA10
-								}
-#endif
-							}
-						}
-					}
-					else {
-						if (m_skipAnimation) {
-							m_skipAnimation = FALSE;
-						}
-					}
+				if (!m_state) {
+					PlayNextVoiceOver(VoiceOver::e_interrupt);
+					m_state = e_endShot;
 				}
+				else {
+					LegoROI* childROI = m_roi->FindChildROI("windsd", m_roi);
+					const MxFloat* childPosition = childROI->GetWorldPosition();
+					MxFloat distanceToWindshield = DISTSQRD3(pepperWorldPosition, childPosition);
+
+					childROI = m_roi->FindChildROI("reardr", m_roi);
+					childPosition = childROI->GetWorldPosition();
+					MxFloat distanceToRearDoor = DISTSQRD3(pepperWorldPosition, childPosition);
+
+					if (distanceToRearDoor > distanceToWindshield) {
+						PlayNextVoiceOver(VoiceOver::e_head);
+					}
+					else
+#ifndef BETA10
+						if (p_time - m_createBrickTime > 3000.0f) {
+#endif
+						SetWorldSpeed(m_baseWorldSpeed - 1);
+						m_state = e_createdBrick;
+						m_createBrickTime = p_time;
+
+						if (((LegoAct2*) CurrentWorld())->CreateDroppingBrick() == SUCCESS) {
+							PlayNextVoiceOver(VoiceOver::e_behind);
+						}
+#ifndef BETA10
+					}
+#endif
+				}
+			}
+		}
+		else {
+			if (m_skipAnimation) {
+				m_skipAnimation = FALSE;
 			}
 		}
 	}
@@ -721,11 +752,11 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 	switch (m_targetLocation) {
 	case 0:
 		if (buildingInfo[12].m_counter) {
-			result = buildingInfo[12].m_entity;
+			result = buildingInfo[12].entity;
 			*p_isBuilding = TRUE;
 		}
 		else if (buildingInfo[14].m_counter) {
-			result = buildingInfo[14].m_entity;
+			result = buildingInfo[14].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -739,7 +770,7 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 		break;
 	case 1:
 		if (buildingInfo[13].m_counter) {
-			result = buildingInfo[13].m_entity;
+			result = buildingInfo[13].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -753,11 +784,11 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 		break;
 	case 2:
 		if (buildingInfo[9].m_counter) {
-			result = buildingInfo[9].m_entity;
+			result = buildingInfo[9].entity;
 			*p_isBuilding = TRUE;
 		}
 		else if (buildingInfo[11].m_counter) {
-			result = buildingInfo[11].m_entity;
+			result = buildingInfo[11].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -771,15 +802,15 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 		break;
 	case 3:
 		if (buildingInfo[7].m_counter) {
-			result = buildingInfo[7].m_entity;
+			result = buildingInfo[7].entity;
 			*p_isBuilding = TRUE;
 		}
 		else if (buildingInfo[8].m_counter) {
-			result = buildingInfo[8].m_entity;
+			result = buildingInfo[8].entity;
 			*p_isBuilding = TRUE;
 		}
 		else if (buildingInfo[3].m_counter) {
-			result = buildingInfo[3].m_entity;
+			result = buildingInfo[3].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -793,11 +824,11 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 		break;
 	case 4:
 		if (buildingInfo[5].m_counter) {
-			result = buildingInfo[5].m_entity;
+			result = buildingInfo[5].entity;
 			*p_isBuilding = TRUE;
 		}
 		else if (buildingInfo[10].m_counter) {
-			result = buildingInfo[10].m_entity;
+			result = buildingInfo[10].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -811,7 +842,7 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 		break;
 	case 5:
 		if (buildingInfo[4].m_counter) {
-			result = buildingInfo[4].m_entity;
+			result = buildingInfo[4].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -825,7 +856,7 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 		break;
 	case 6:
 		if (buildingInfo[2].m_counter) {
-			result = buildingInfo[2].m_entity;
+			result = buildingInfo[2].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -839,7 +870,7 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 		break;
 	case 7:
 		if (buildingInfo[6].m_counter) {
-			result = buildingInfo[6].m_entity;
+			result = buildingInfo[6].entity;
 			*p_isBuilding = TRUE;
 		}
 		else {
@@ -859,14 +890,13 @@ LegoEntity* Act2Actor::GetNextEntity(MxBool* p_isBuilding)
 			}
 		}
 
-		if (result) {
-			return result;
+		if (!result) {
+			if (buildingInfo[15].m_counter) {
+				result = buildingInfo[15].entity;
+				*p_isBuilding = TRUE;
+			}
 		}
 
-		if (buildingInfo[15].m_counter) {
-			result = buildingInfo[15].m_entity;
-			*p_isBuilding = TRUE;
-		}
 		break;
 	}
 

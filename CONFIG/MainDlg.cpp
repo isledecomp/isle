@@ -1,6 +1,5 @@
 #include "MainDlg.h"
 
-#include "AboutDlg.h"
 #include "config.h"
 #include "res/resource.h"
 
@@ -9,6 +8,61 @@
 
 DECOMP_SIZE_ASSERT(CDialog, 0x60)
 DECOMP_SIZE_ASSERT(CMainDialog, 0x70)
+
+/////////////////////////////////////////////////////////////////////////////
+// CAboutDialog dialog used for App About
+
+// VTABLE: CONFIG 0x00406308
+// VTABLE: CONFIGD 0x0040c3f8
+// SIZE 0x60
+class CAboutDialog : public CDialog {
+public:
+	CAboutDialog();
+	enum {
+		IDD = IDD_ABOUT
+	};
+
+protected:
+	void DoDataExchange(CDataExchange* pDX) override;
+
+protected:
+	DECLARE_MESSAGE_MAP()
+};
+
+// GLOBAL: CONFIG 0x00406100
+// GLOBAL: CONFIGD 0x0040c188
+// CAboutDialog::messageMap
+
+// GLOBAL: CONFIG 0x00406108
+// GLOBAL: CONFIGD 0x0040c190
+// CAboutDialog::_messageEntries
+
+DECOMP_SIZE_ASSERT(CAboutDialog, 0x60)
+
+// FUNCTION: CONFIG 0x00403c20
+// FUNCTION: CONFIGD 0x00408630
+CAboutDialog::CAboutDialog() : CDialog(IDD)
+{
+}
+
+// FUNCTION: CONFIG 0x00403d20
+// FUNCTION: CONFIGD 0x004086a3
+void CAboutDialog::DoDataExchange(CDataExchange* pDX)
+{
+	CWnd::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CAboutDialog, CDialog)
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CMainDialog dialog
+
+enum {
+	c_aboutSysCommandId = 16,
+	c_deviceNameBufferSize = 256,
+	c_16BitDisplayDepth = 16
+};
 
 // FUNCTION: CONFIG 0x00403d50
 // FUNCTION: CONFIGD 0x004086f7
@@ -57,7 +111,7 @@ BOOL CMainDialog::OnInitDialog()
 	about_text.LoadString(IDS_ABOUT);
 	if (!about_text.IsEmpty()) {
 		system_menu->AppendMenu(MF_SEPARATOR, 0, (LPCTSTR) NULL);
-		system_menu->AppendMenu(MF_STRING, 16, (LPCTSTR) about_text);
+		system_menu->AppendMenu(MF_STRING, c_aboutSysCommandId, (LPCTSTR) about_text);
 	}
 
 	CWnd::SetIcon(m_icon, TRUE);
@@ -69,8 +123,8 @@ BOOL CMainDialog::OnInitDialog()
 	info->FUN_1009d210();
 	m_modified = currentConfigApp->ReadRegisterSettings();
 	CListBox* list_3d_devices = (CListBox*) GetDlgItem(IDC_LIST_3DDEVICES);
-	int driver_i = 0;
 	int device_i = 0;
+	int driver_i = 0;
 	int selected = 0;
 
 	for (list<MxDriver>::iterator it_driver = info->m_ddInfo.begin(); it_driver != info->m_ddInfo.end();
@@ -85,7 +139,7 @@ BOOL CMainDialog::OnInitDialog()
 				selected = device_i;
 			}
 
-			char device_name[256];
+			char device_name[c_deviceNameBufferSize];
 			if (driver_i == 0) {
 				sprintf(device_name, "%s ( Primary Device )", (*it_device).m_deviceName);
 			}
@@ -107,7 +161,7 @@ BOOL CMainDialog::OnInitDialog()
 // FUNCTION: CONFIGD 0x00408ab7
 void CMainDialog::OnSysCommand(UINT nID, LPARAM lParam)
 {
-	if ((nID & 0xfff0) == 0x10) {
+	if ((nID & 0xfff0) == c_aboutSysCommandId) {
 		CAboutDialog about_dialog;
 		about_dialog.DoModal();
 	}
@@ -299,7 +353,7 @@ void CMainDialog::OnCheckbox3DVideoMemory()
 // FUNCTION: CONFIGD 0x00409224
 void CMainDialog::OnRadiobuttonPalette16bit()
 {
-	currentConfigApp->m_display_bit_depth = 16;
+	currentConfigApp->m_display_bit_depth = c_16BitDisplayDepth;
 	m_modified = TRUE;
 	UpdateInterface();
 }

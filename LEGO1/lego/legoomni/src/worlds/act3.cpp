@@ -602,7 +602,7 @@ MxLong Act3::Notify(MxParam& p_param)
 
 					while (--length >= 0) {
 						if (info[length].m_counter < 0 && info[length].m_boundary != NULL &&
-							info[length].m_entity != NULL) {
+							info[length].entity != NULL) {
 							m_helicopterDotCount++;
 						}
 					}

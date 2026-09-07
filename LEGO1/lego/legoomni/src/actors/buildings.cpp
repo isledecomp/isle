@@ -3,6 +3,7 @@
 #include "act2main_actions.h"
 #include "act3.h"
 #include "act3_actions.h"
+#include "buildingentity.h"
 #include "isle.h"
 #include "isle_actions.h"
 #include "islepathactor.h"
@@ -14,10 +15,16 @@
 #include "legoworld.h"
 #include "misc.h"
 #include "mxbackgroundaudiomanager.h"
+#include "mxmisc.h"
+#include "mxnotificationmanager.h"
+#include "mxnotificationparam.h"
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(BeachHouseEntity, 0x68)
+DECOMP_SIZE_ASSERT(BuildingEntity, 0x68)
 DECOMP_SIZE_ASSERT(GasStationEntity, 0x68)
 DECOMP_SIZE_ASSERT(HospitalEntity, 0x68)
 DECOMP_SIZE_ASSERT(InfoCenterEntity, 0x68)
@@ -39,7 +46,33 @@ IsleScript::Script g_nextChestAction = IsleScript::c_nca001ca_RunAnim;
 // GLOBAL: LEGO1 0x100f0c38
 IsleScript::Script g_nextCavedoorAction = IsleScript::c_Avo900Ps_PlayWav;
 
+// FUNCTION: LEGO1 0x10014e20
+BuildingEntity::BuildingEntity()
+{
+	NotificationManager()->Register(this);
+}
+
+// FUNCTION: LEGO1 0x10015030
+BuildingEntity::~BuildingEntity()
+{
+	NotificationManager()->Unregister(this);
+}
+
+// FUNCTION: LEGO1 0x100150a0
+// FUNCTION: BETA10 0x10024e37
+MxLong BuildingEntity::Notify(MxParam& p_param)
+{
+	MxNotificationParam& param = (MxNotificationParam&) p_param;
+
+	if (param.GetNotification() == c_notificationClick) {
+		return HandleClick((LegoEventNotificationParam&) p_param);
+	}
+
+	return 0;
+}
+
 // FUNCTION: LEGO1 0x100150c0
+// FUNCTION: BETA10 0x10024e9a
 MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	switch (GameState()->GetCurrentAct()) {
@@ -78,19 +111,21 @@ MxLong InfoCenterEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100151d0
+// FUNCTION: BETA10 0x10024f5e
 MxLong GasStationEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
 
-		if (state->GetState() != Act1State::e_towtrack) {
-			state->SetState(Act1State::e_none);
+		if (act1State->GetState() != Act1State::e_towtrack) {
+			act1State->SetState(Act1State::e_none);
 
 			if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 				((IslePathActor*) UserActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+			assert(isle);
 			isle->SetDestLocation(LegoGameState::Area::e_garage);
 
 			AnimationManager()->FUN_10061010(FALSE);
@@ -102,10 +137,12 @@ MxLong GasStationEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015270
+// FUNCTION: BETA10 0x100250e1
 MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
 		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
 
 		if (act1State->GetState() != Act1State::e_ambulance) {
 			act1State->SetState(Act1State::e_none);
@@ -115,6 +152,7 @@ MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+			assert(isle);
 			isle->SetDestLocation(LegoGameState::Area::e_hospital);
 
 			AnimationManager()->FUN_10061010(FALSE);
@@ -126,19 +164,22 @@ MxLong HospitalEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015310
+// FUNCTION: BETA10 0x10025267
 MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
 
-		if (state->GetState() != Act1State::e_ambulance) {
-			state->SetState(Act1State::e_none);
+		if (act1State->GetState() != Act1State::e_ambulance) {
+			act1State->SetState(Act1State::e_none);
 
 			if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 				((IslePathActor*) UserActor())->Exit();
 			}
 
 			Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+			assert(isle);
 			isle->SetDestLocation(LegoGameState::Area::e_police);
 
 			AnimationManager()->FUN_10061010(FALSE);
@@ -150,17 +191,20 @@ MxLong PoliceEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x100153b0
+// FUNCTION: BETA10 0x100253f0
 MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
-		state->SetState(Act1State::e_none);
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
+		act1State->SetState(Act1State::e_none);
 
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			((IslePathActor*) UserActor())->Exit();
 		}
 
 		Isle* isle = (Isle*) FindWorld(*g_isleScript, IsleScript::c__Isle);
+		assert(isle);
 		isle->SetDestLocation(LegoGameState::Area::e_jetskibuild);
 
 		AnimationManager()->FUN_10061010(FALSE);
@@ -171,11 +215,12 @@ MxLong BeachHouseEntity::HandleClick(LegoEventNotificationParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10015450
+// FUNCTION: BETA10 0x1002556c
 MxLong RaceStandsEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	if (CanExit()) {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
-		state->SetState(Act1State::e_none);
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		act1State->SetState(Act1State::e_none);
 
 		if (UserActor()->GetActorId() != GameState()->GetActorId()) {
 			((IslePathActor*) UserActor())->Exit();
@@ -207,6 +252,7 @@ MxLong JailEntity::HandleClick(LegoEventNotificationParam& p_param)
 MxLong CaveEntity::HandleClick(LegoEventNotificationParam& p_param)
 {
 	LegoROI* roi = p_param.GetROI();
+	assert(roi);
 
 	if (!strncmp(roi->GetName(), g_chest, strlen(g_chest))) {
 		DeleteObjects(g_isleScript, IsleScript::c_nca001ca_RunAnim, IsleScript::c_nca003gh_RunAnim);
