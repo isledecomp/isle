@@ -1015,15 +1015,15 @@ MxLong LegoNavController::Notify(MxParam& p_param)
 				case VK_MULTIPLY: {
 					MxU8 newActor = GameState()->GetActorId() + 1;
 
-					if (newActor > LegoActor::c_laura) {
-						newActor = LegoActor::c_pepper;
+					if (newActor > LegoActor::e_laura) {
+						newActor = LegoActor::e_pepper;
 					}
 
 					GameState()->SetActorId(newActor);
 					break;
 				}
 				case VK_DIVIDE:
-					GameState()->SetActorId(LegoActor::c_brickster);
+					GameState()->SetActorId(LegoActor::e_brickster);
 					break;
 				case VK_F11:
 					if (GameState()->m_isDirty) {

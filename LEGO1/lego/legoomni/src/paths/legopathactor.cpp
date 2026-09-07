@@ -823,24 +823,24 @@ MxResult LegoPathActor::CalculateSpline()
 void LegoPathActor::GetWalkingBehavior(MxBool& p_countCounterclockWise, MxS32& p_selectedEdgeIndex)
 {
 	switch (GetActorId()) {
-	case c_pepper:
+	case e_pepper:
 		p_countCounterclockWise = TRUE;
 		p_selectedEdgeIndex = 2;
 		break;
-	case c_mama:
+	case e_mama:
 		p_countCounterclockWise = FALSE;
 		p_selectedEdgeIndex = 1;
 		break;
-	case c_papa:
+	case e_papa:
 		p_countCounterclockWise = TRUE;
 		p_selectedEdgeIndex = 1;
 		break;
-	case c_nick:
-	case c_brickster:
+	case e_nick:
+	case e_brickster:
 		p_countCounterclockWise = TRUE;
 		p_selectedEdgeIndex = rand() % p_selectedEdgeIndex + 1;
 		break;
-	case c_laura:
+	case e_laura:
 		p_countCounterclockWise = FALSE;
 		p_selectedEdgeIndex = 2;
 		break;
