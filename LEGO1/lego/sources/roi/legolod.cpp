@@ -180,7 +180,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 #endif
 
 	m_melems = new Mesh[m_numMeshes];
-	memset(m_melems, 0, sizeof(*m_melems) * m_numMeshes);
+	memset(m_melems, 0, sizeof(Mesh) * m_numMeshes);
 
 	indexBackwards = m_numMeshes - 1;
 	indexForwards = 0;
