@@ -46,15 +46,13 @@ public:
 	// RegistrationBook::`scalar deleting destructor'
 
 private:
-	MxS32 m_registerDialogueTimer;    // 0xf8
-	undefined m_unk0xfc;              // 0xfc
-	undefined m_unk0xfd[3];           // 0xfd
-	MxStillPresenter* m_alphabet[26]; // 0x100
-	MxStillPresenter* m_name[10][7];  // 0x168
-	struct {
-		MxS16 m_letters[7];                // 0x00
-		MxS16 m_cursorPos;                 // 0x0e
-	} m_newName;                           // 0x280
+	MxS32 m_registerDialogueTimer;         // 0xf8
+	undefined m_unk0xfc;                   // 0xfc
+	undefined m_unk0xfd[3];                // 0xfd
+	MxStillPresenter* m_alphabet[26];      // 0x100
+	MxStillPresenter* m_name[10][7];       // 0x168
+	MxS16 m_letters[7];                    // 0x280
+	MxS16 m_cursorPos;                     // 0x28e
 	MxControlPresenter* m_checkmark[10];   // 0x290
 	undefined2 m_vehiclesToPosition;       // 0x2b8
 	InfocenterState* m_infocenterState;    // 0x2bc

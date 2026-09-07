@@ -39,11 +39,10 @@
 #include "viewmanager/viewmanager.h"
 
 DECOMP_SIZE_ASSERT(Act1State, 0x26c)
-DECOMP_SIZE_ASSERT(LegoNamedPlane, 0x4c)
 DECOMP_SIZE_ASSERT(Isle, 0x140)
 
-// GLOBAL: LEGO1 0x100f1198
-MxU32 g_isleFlags = 0x7f;
+// Defined in legopathstruct.cpp
+extern MxU32 g_isleFlags;
 
 // GLOBAL: LEGO1 0x100f37f0
 IsleScript::Script g_cptClickDialogue[] =
@@ -144,9 +143,11 @@ MxLong Isle::Notify(MxParam& p_param)
 		case c_notificationButtonDown:
 			switch (m_act1state->m_state) {
 			case Act1State::e_pizza:
+				assert(m_pizza);
 				result = m_pizza->Notify(p_param);
 				break;
 			case Act1State::e_ambulance:
+				assert(m_ambulance);
 				result = m_ambulance->Notify(p_param);
 				break;
 			}
@@ -156,13 +157,18 @@ MxLong Isle::Notify(MxParam& p_param)
 			break;
 		case c_notificationEndAnim:
 			switch (m_act1state->m_state) {
-			case Act1State::e_helicopter:
-				result = UserActor()->Notify(p_param);
+			case Act1State::e_helicopter: {
+				Helicopter* helicopter = (Helicopter*) UserActor();
+				assert(helicopter);
+				result = helicopter->Notify(p_param);
 				break;
+			}
 			case Act1State::e_towtrack:
+				assert(m_towtrack);
 				result = m_towtrack->Notify(p_param);
 				break;
 			case Act1State::e_ambulance:
+				assert(m_ambulance);
 				result = m_ambulance->Notify(p_param);
 				break;
 			}
@@ -183,6 +189,7 @@ MxLong Isle::Notify(MxParam& p_param)
 }
 
 // FUNCTION: LEGO1 0x10030d90
+// FUNCTION: BETA10 0x10032ea7
 MxLong Isle::HandleEndAction(MxEndActionNotificationParam& p_param)
 {
 	MxLong result;
@@ -193,12 +200,15 @@ MxLong Isle::HandleEndAction(MxEndActionNotificationParam& p_param)
 		result = 1;
 		break;
 	case Act1State::e_pizza:
+		assert(m_pizza);
 		result = m_pizza->Notify(p_param);
 		break;
 	case Act1State::e_towtrack:
+		assert(m_towtrack);
 		result = m_towtrack->Notify(p_param);
 		break;
 	case Act1State::e_ambulance:
+		assert(m_ambulance);
 		result = m_ambulance->Notify(p_param);
 		break;
 	default:
@@ -209,6 +219,7 @@ MxLong Isle::HandleEndAction(MxEndActionNotificationParam& p_param)
 				MxS32 script = p_param.GetAction()->GetObjectId();
 
 				if (script >= JukeboxScript::c_JBMusic1 && script <= JukeboxScript::c_JBMusic6) {
+					assert(m_jukebox);
 					m_jukebox->StopAction((JukeboxScript::Script) script);
 					result = 1;
 				}
@@ -455,10 +466,11 @@ void Isle::UpdateGlobe()
 	MxS32 lightPosition = atoi(VariableTable()->GetVariable("lightposition"));
 
 	for (MxS32 i = 0; i < 6; i++) {
-		MxStillPresenter* presenter = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
+		MxStillPresenter* bmap = (MxStillPresenter*) Find(*g_isleScript, IsleScript::c_Observe_Globe1_Bitmap + i);
+		assert(bmap);
 
-		if (presenter != NULL) {
-			presenter->Enable(i == lightPosition);
+		if (bmap != NULL) {
+			bmap->Enable(i == lightPosition);
 		}
 	}
 }
@@ -480,12 +492,15 @@ MxLong Isle::HandlePathStruct(LegoPathStructNotificationParam& p_param)
 
 	switch (m_act1state->m_state) {
 	case Act1State::e_pizza:
+		assert(m_pizza);
 		result = m_pizza->Notify(p_param);
 		break;
 	case Act1State::e_towtrack:
+		assert(m_towtrack);
 		result = m_towtrack->Notify(p_param);
 		break;
 	case Act1State::e_ambulance:
+		assert(m_ambulance);
 		result = m_ambulance->Notify(p_param);
 		break;
 	}
@@ -735,12 +750,13 @@ void Isle::Enable(MxBool p_enable)
 					FALSE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);
-			JetskiRaceState* raceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
+			JetskiRaceState* jetRaceState = (JetskiRaceState*) GameState()->GetState("JetskiRaceState");
+			assert(jetRaceState);
 
-			if (raceState->m_state == RaceState::e_finished) {
+			if (jetRaceState->m_state == RaceState::e_finished) {
 				IsleScript::Script script = IsleScript::c_noneIsle;
 
-				switch (raceState->GetState(GameState()->GetActorId())->GetLastScore()) {
+				switch (jetRaceState->GetState(GameState()->GetActorId())->GetLastScore()) {
 				case 1:
 					script = IsleScript::c_sjs014in_RunAnim;
 					break;
@@ -769,12 +785,13 @@ void Isle::Enable(MxBool p_enable)
 					FALSE,
 					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
 				);
-			CarRaceState* raceState = (CarRaceState*) GameState()->GetState("CarRaceState");
+			CarRaceState* carRaceState = (CarRaceState*) GameState()->GetState("CarRaceState");
+			assert(carRaceState);
 
-			if (raceState->m_state == RaceState::e_finished) {
+			if (carRaceState->m_state == RaceState::e_finished) {
 				IsleScript::Script script = IsleScript::c_noneIsle;
 
-				switch (raceState->GetState(GameState()->GetActorId())->GetLastScore()) {
+				switch (carRaceState->GetState(GameState()->GetActorId())->GetLastScore()) {
 				case 1:
 					script = IsleScript::c_srt003in_RunAnim;
 					break;
@@ -797,33 +814,40 @@ void Isle::Enable(MxBool p_enable)
 		case Act1State::e_transitionToTowtrack:
 			m_act1state->m_state = Act1State::e_towtrack;
 
+			assert(AnimationManager());
 			AnimationManager()->FUN_1005f6d0(FALSE);
 			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_isleFlags &= ~c_playMusic;
+			assert(m_towtrack);
 			m_towtrack->Init();
 			break;
 		case Act1State::e_transitionToAmbulance:
 			m_act1state->m_state = Act1State::e_ambulance;
 
+			assert(AnimationManager());
 			AnimationManager()->FUN_1005f6d0(FALSE);
 			AnimationManager()->EnableCamAnims(FALSE);
 
 			g_isleFlags &= ~c_playMusic;
+			assert(m_ambulance);
 			m_ambulance->Init();
 			break;
-		case 11:
+		case 11: {
 			m_act1state->m_state = Act1State::e_none;
-			((IslePathActor*) UserActor())
-				->SpawnPlayer(
-					LegoGameState::e_jukeboxExterior,
-					TRUE,
-					IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-				);
+			IslePathActor* user = (IslePathActor*) UserActor();
+			assert(user);
+			user->SpawnPlayer(
+				LegoGameState::e_jukeboxExterior,
+				TRUE,
+				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+			);
 			GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 			EnableAnimations(TRUE);
+			assert(m_jukebox);
 			m_jukebox->StartAction();
 			break;
+		}
 		}
 
 		SetAppCursor(e_cursorArrow);
@@ -879,15 +903,17 @@ void Isle::CheckAreaExiting()
 	case LegoGameState::e_garageExterior:
 	case LegoGameState::e_hospitalExterior:
 	case LegoGameState::e_hospitalExited:
-	case LegoGameState::e_policeExterior:
-		((IslePathActor*) UserActor())
-			->SpawnPlayer(
-				GameState()->m_currentArea,
-				TRUE,
-				IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
-			);
+	case LegoGameState::e_policeExterior: {
+		IslePathActor* user = (IslePathActor*) UserActor();
+		assert(user);
+		user->SpawnPlayer(
+			GameState()->m_currentArea,
+			TRUE,
+			IslePathActor::c_spawnBit1 | IslePathActor::c_playMusic | IslePathActor::c_spawnBit3
+		);
 		GameState()->m_currentArea = LegoGameState::e_vehicleExited;
 		break;
+	}
 	}
 }
 
@@ -901,12 +927,17 @@ MxLong Isle::HandleTransitionEnd()
 		m_act1state->m_state = Act1State::e_none;
 	}
 
+	assert(m_destLocation != LegoGameState::e_undefined);
+
 	switch (m_destLocation) {
-	case LegoGameState::e_infomain:
-		((LegoEntity*) Find(*g_isleScript, IsleScript::c_InfoCenter_Entity))->GetROI()->SetVisibility(TRUE);
+	case LegoGameState::e_infomain: {
+		LegoEntity* entity = (LegoEntity*) Find(*g_isleScript, IsleScript::c_InfoCenter_Entity);
+		assert(entity);
+		entity->GetROI()->SetVisibility(TRUE);
 		GameState()->SwitchArea(m_destLocation);
 		m_destLocation = LegoGameState::e_undefined;
 		break;
+	}
 	case LegoGameState::e_elevride:
 		m_act1state->m_switchedToArea = TRUE;
 		VariableTable()->SetVariable("VISIBILITY", "Hide infocen");
@@ -916,6 +947,21 @@ MxLong Isle::HandleTransitionEnd()
 			"LCAMZI1,90",
 			FALSE
 		);
+		break;
+	case LegoGameState::e_polidoor:
+		m_act1state->m_switchedToArea = TRUE;
+		VariableTable()->SetVariable("VISIBILITY", "Hide Policsta");
+		TransitionToOverlay(
+			IsleScript::c_PoliDoor_Background_Bitmap,
+			JukeboxScript::c_PoliceStation_Music,
+			"LCAMZP1,90",
+			FALSE
+		);
+		break;
+	case LegoGameState::e_garadoor:
+		m_act1state->m_switchedToArea = TRUE;
+		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
+		TransitionToOverlay(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
 		break;
 	case LegoGameState::e_elevride2:
 		TransitionToOverlay(
@@ -961,11 +1007,6 @@ MxLong Isle::HandleTransitionEnd()
 			FALSE
 		);
 		break;
-	case LegoGameState::e_garadoor:
-		m_act1state->m_switchedToArea = TRUE;
-		VariableTable()->SetVariable("VISIBILITY", "Hide Gas");
-		TransitionToOverlay(IsleScript::c_GaraDoor_Background_Bitmap, JukeboxScript::c_JBMusic2, "LCAMZG1,90", FALSE);
-		break;
 	case LegoGameState::e_garageExited:
 		GameState()->SwitchArea(m_destLocation);
 		GameState()->StopArea(LegoGameState::e_previousArea);
@@ -985,16 +1026,6 @@ MxLong Isle::HandleTransitionEnd()
 		Disable(FALSE, LegoOmni::c_disableInput | LegoOmni::c_disable3d | LegoOmni::c_clearScreen);
 		SetAppCursor(e_cursorArrow);
 		SetIsWorldActive(TRUE);
-		break;
-	case LegoGameState::e_polidoor:
-		m_act1state->m_switchedToArea = TRUE;
-		VariableTable()->SetVariable("VISIBILITY", "Hide Policsta");
-		TransitionToOverlay(
-			IsleScript::c_PoliDoor_Background_Bitmap,
-			JukeboxScript::c_PoliceStation_Music,
-			"LCAMZP1,90",
-			FALSE
-		);
 		break;
 	case LegoGameState::e_bike:
 		m_act1state->m_switchedToArea = TRUE;
@@ -1311,17 +1342,17 @@ Act1State::Act1State()
 	m_elevFloor = Act1State::c_floor1;
 	m_state = Act1State::e_initial;
 	m_playingFloor2Animation = FALSE;
+	m_planeActive = FALSE;
 	m_cptClickDialogue = Playlist((MxU32*) g_cptClickDialogue, sizeOfArray(g_cptClickDialogue), Playlist::e_loop);
 	m_switchedToArea = FALSE;
-	m_planeActive = FALSE;
 	m_currentCptClickDialogue = IsleScript::c_noneIsle;
 	m_playedExitExplanation = FALSE;
+	m_spawnInInfocenter = 1;
 	m_helicopterWindshield = NULL;
 	m_helicopterJetLeft = NULL;
 	m_helicopterJetRight = NULL;
 	m_helicopter = NULL;
 	m_jetskiFront = NULL;
-	m_spawnInInfocenter = 1;
 	m_jetskiWindshield = NULL;
 	m_jetski = NULL;
 	m_dunebuggyFront = NULL;

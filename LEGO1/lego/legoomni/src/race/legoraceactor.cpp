@@ -11,6 +11,13 @@
 
 DECOMP_SIZE_ASSERT(LegoRaceActor, 0x180)
 
+// GLOBAL: LEGO1 0x100f0c14
+// STRING: LEGO1 0x100f0c04
+const char* g_strHIT_ACTOR_SOUND = "HIT_ACTOR_SOUND";
+
+// GLOBAL: LEGO1 0x100d5b2c
+const float g_hitAnimationTimeout = 2000.0f;
+
 // Initialized at LEGO1 0x100145a0
 // GLOBAL: LEGO1 0x10102b08
 // GLOBAL: BETA10 0x102114a8
@@ -54,7 +61,7 @@ MxU32 LegoRaceActor::StepState(float p_time, Matrix4& p_transform)
 	case c_ready:
 		return TRUE;
 	case c_hit:
-		m_unk0x08 = p_time + 2000.0f;
+		m_unk0x08 = p_time + g_hitAnimationTimeout;
 		m_actorState = c_hitAnimation;
 		m_actorTime += (p_time - m_transformTime) * m_worldSpeed;
 		m_transformTime = p_time;
