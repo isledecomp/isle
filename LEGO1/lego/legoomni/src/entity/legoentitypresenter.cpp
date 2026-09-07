@@ -89,6 +89,58 @@ void LegoEntityPresenter::SetEntityLocation(const Vector3& p_location, const Vec
 	}
 }
 
+// FUNCTION: BETA10 0x1008034e
+Mx3DPointFloat LegoEntityPresenter::GetWorldPosition()
+{
+	if (m_entity) {
+		return m_entity->GetWorldPosition();
+	}
+	else {
+		return Mx3DPointFloat(0, 0, 0);
+	}
+}
+
+// FUNCTION: BETA10 0x100803a6
+Mx3DPointFloat LegoEntityPresenter::GetWorldDirection()
+{
+	if (m_entity) {
+		return m_entity->GetWorldDirection();
+	}
+	else {
+		return Mx3DPointFloat(1, 0, 0);
+	}
+}
+
+// FUNCTION: BETA10 0x10080401
+Mx3DPointFloat LegoEntityPresenter::GetWorldUp()
+{
+	if (m_entity) {
+		return m_entity->GetWorldUp();
+	}
+	else {
+		return Mx3DPointFloat(0, 1, 0);
+	}
+}
+
+// FUNCTION: BETA10 0x100804b4
+void LegoEntityPresenter::SetWorldSpeed(MxFloat p_worldSpeed)
+{
+	if (m_entity) {
+		m_entity->SetWorldSpeed(p_worldSpeed);
+	}
+}
+
+// FUNCTION: BETA10 0x100804f7
+MxFloat LegoEntityPresenter::GetWorldSpeed()
+{
+	if (m_entity) {
+		return m_entity->GetWorldSpeed();
+	}
+	else {
+		return 0.0f;
+	}
+}
+
 // FUNCTION: LEGO1 0x10053750
 void LegoEntityPresenter::ParseExtra()
 {

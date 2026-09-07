@@ -8,8 +8,19 @@
 #include "misc.h"
 #include "mxutilities.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(LegoAnimActor, 0x174)
 DECOMP_SIZE_ASSERT(LegoAnimActorStruct, 0x20)
+
+// SIZE 0x0c
+class LegoDistanceKey : public LegoAnimKey {
+public:
+	float GetDistance() { return m_distance; }
+
+protected:
+	float m_distance; // 0x08
+};
 
 // FUNCTION: LEGO1 0x1001bf80
 // FUNCTION: BETA10 0x1003dc10
@@ -27,11 +38,45 @@ LegoAnimActorStruct::LegoAnimActorStruct(
 }
 
 // FUNCTION: LEGO1 0x1001c0a0
+// FUNCTION: BETA10 0x1003dca1
 LegoAnimActorStruct::~LegoAnimActorStruct()
 {
 	for (MxU16 i = 0; i < m_unk0x10.size(); i++) {
 		delete m_unk0x10[i];
 	}
+}
+
+// FUNCTION: BETA10 0x1003dd5e
+float LegoAnimActorStruct::GetDistance(float p_time)
+{
+	unsigned int i;
+	float f;
+
+	if (m_unk0x10.size() == 0) {
+		return 0.0f;
+	}
+
+	if (((LegoDistanceKey*) m_unk0x10.back())->GetTime() <= p_time) {
+		return ((LegoDistanceKey*) m_unk0x10.back())->GetDistance();
+	}
+
+	if (((LegoDistanceKey*) m_unk0x10.front())->GetTime() >= p_time) {
+		return 0.0f;
+	}
+
+	for (i = 1; i < m_unk0x10.size(); i++) {
+		if (((LegoDistanceKey*) m_unk0x10[i])->GetTime() >= p_time) {
+			f = (p_time - ((LegoDistanceKey*) m_unk0x10[i - 1])->GetTime()) /
+				(((LegoDistanceKey*) m_unk0x10[i])->GetTime() - ((LegoDistanceKey*) m_unk0x10[i - 1])->GetTime());
+			return ((LegoDistanceKey*) m_unk0x10[i - 1])->GetDistance() +
+				   (((LegoDistanceKey*) m_unk0x10[i])->GetDistance() -
+					((LegoDistanceKey*) m_unk0x10[i - 1])->GetDistance()) *
+					   f;
+		}
+	}
+
+	assert(0);
+	return -1.0f;
 }
 
 // FUNCTION: LEGO1 0x1001c130
@@ -40,6 +85,16 @@ float LegoAnimActorStruct::GetDuration()
 {
 	assert(m_AnimTreePtr);
 	return m_AnimTreePtr->GetDuration();
+}
+
+// FUNCTION: BETA10 0x1003df8c
+float LegoAnimActorStruct::GetTotalDistance()
+{
+	if (m_unk0x10.size() == 0) {
+		return 0.0f;
+	}
+
+	return ((LegoDistanceKey*) m_unk0x10.back())->GetDistance();
 }
 
 // FUNCTION: LEGO1 0x1001c140
@@ -63,6 +118,7 @@ MxResult LegoAnimActor::GetTimeInCycle(float& p_timeInCycle)
 }
 
 // FUNCTION: LEGO1 0x1001c240
+// FUNCTION: BETA10 0x1003e0db
 void LegoAnimActor::ApplyTransform(Matrix4& p_transform)
 {
 	float timeInCycle;
@@ -109,7 +165,31 @@ MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 		LegoROI** roiMap = m_animMaps[m_curAnim]->m_roiMap;
 		MxU32 numROIs = m_animMaps[m_curAnim]->m_numROIs;
 
-		if (!m_boundary->GetVisibility()) {
+		if (m_boundary->GetVisibility()) {
+			// name verified by BETA10 0x1003e407
+			LegoTreeNode* n = m_animMaps[m_curAnim]->m_AnimTreePtr->GetRoot();
+
+			assert(roiMap && n && m_roi && m_boundary);
+
+			m_roi->SetVisibility(TRUE);
+
+			for (MxS32 i = 0; i < numROIs; i++) {
+				LegoROI* roi = roiMap[i];
+
+				if (roi != NULL && m_roi != roi) {
+					roi->SetVisibility(TRUE);
+				}
+			}
+
+			for (i = 0; i < n->GetNumChildren(); i++) {
+				LegoROI::ApplyAnimationTransformation(n->GetChild(i), p_transform, p_time, roiMap);
+			}
+
+			if (m_cameraFlag) {
+				TransformPointOfView();
+			}
+		}
+		else {
 			MxU32 i;
 			m_roi->SetVisibility(FALSE);
 
@@ -119,30 +199,6 @@ MxResult LegoAnimActor::AnimateWithTransform(float p_time, Matrix4& p_transform)
 				if (roi != NULL && m_roi != roi) {
 					roi->SetVisibility(FALSE);
 				}
-			}
-		}
-		else {
-			// name verified by BETA10 0x1003e407
-			LegoTreeNode* n = m_animMaps[m_curAnim]->m_AnimTreePtr->GetRoot();
-
-			assert(roiMap && n && m_roi && m_boundary);
-
-			m_roi->SetVisibility(TRUE);
-
-			for (MxU32 i = 0; i < numROIs; i++) {
-				LegoROI* roi = roiMap[i];
-
-				if (roi != NULL && m_roi != roi) {
-					roi->SetVisibility(TRUE);
-				}
-			}
-
-			for (MxS32 j = 0; j < n->GetNumChildren(); j++) {
-				LegoROI::ApplyAnimationTransformation(n->GetChild(j), p_transform, p_time, roiMap);
-			}
-
-			if (m_cameraFlag) {
-				TransformPointOfView();
 			}
 		}
 
@@ -242,6 +298,7 @@ void LegoAnimActor::ParseAction(char* p_extra)
 
 				if (p != NULL) {
 					token = strtok(NULL, g_parseExtraTokens);
+					assert(token);
 
 					if (token) {
 						p->CreateROIAndBuildMap(this, atof(token));
