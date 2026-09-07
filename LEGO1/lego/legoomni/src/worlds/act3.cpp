@@ -31,7 +31,7 @@ DECOMP_SIZE_ASSERT(Act3ListElement, 0x0c)
 DECOMP_SIZE_ASSERT(Act3List, 0x10)
 
 // GLOBAL: LEGO1 0x100d94f8
-Act3Script::Script g_pizzaHitSounds[] = {
+const Act3Script::Script g_pizzaHitSounds[] = {
 	Act3Script::c_sns02xni_PlayWav,
 	Act3Script::c_sns03xni_PlayWav,
 	Act3Script::c_sns04xni_PlayWav,
@@ -51,7 +51,7 @@ Act3Script::Script g_pizzaHitSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9538
-Act3Script::Script g_pizzaMissSounds[] = {
+const Act3Script::Script g_pizzaMissSounds[] = {
 	Act3Script::c_sns19xni_PlayWav,
 	Act3Script::c_sns20xni_PlayWav,
 	Act3Script::c_sns22xni_PlayWav,
@@ -61,7 +61,7 @@ Act3Script::Script g_pizzaMissSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9550
-Act3Script::Script g_copDonutSounds[] = {
+const Act3Script::Script g_copDonutSounds[] = {
 	Act3Script::c_sns25xni_PlayWav,
 	Act3Script::c_sns26xni_PlayWav,
 	Act3Script::c_sns27xni_PlayWav,
@@ -73,7 +73,7 @@ Act3Script::Script g_copDonutSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9570
-Act3Script::Script g_donutMissSounds[] = {
+const Act3Script::Script g_donutMissSounds[] = {
 	Act3Script::c_sns30xni_PlayWav,
 	Act3Script::c_sns31xni_PlayWav,
 	Act3Script::c_sns32xni_PlayWav,
@@ -83,7 +83,7 @@ Act3Script::Script g_donutMissSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d9588
-Act3Script::Script g_islanderSounds[] = {
+const Act3Script::Script g_islanderSounds[] = {
 	Act3Script::c_sns43xma_PlayWav, Act3Script::c_sns46xin_PlayWav, Act3Script::c_sns60xna_PlayWav,
 	Act3Script::c_sns52xro_PlayWav, Act3Script::c_sns58xna_PlayWav, Act3Script::c_sns68xbu_PlayWav,
 	Act3Script::c_sns59xna_PlayWav, Act3Script::c_sns51xin_PlayWav, Act3Script::c_sns61xva_PlayWav,
@@ -94,7 +94,7 @@ Act3Script::Script g_islanderSounds[] = {
 };
 
 // GLOBAL: LEGO1 0x100d95d8
-Act3Script::Script g_bricksterDonutSounds[] = {
+const Act3Script::Script g_bricksterDonutSounds[] = {
 	Act3Script::c_tns080br_PlayWav,
 	Act3Script::c_tnsx07br_PlayWav,
 	Act3Script::c_snsxx2br_PlayWav,
@@ -105,7 +105,7 @@ Act3Script::Script g_bricksterDonutSounds[] = {
 MxU8 g_copSelector = 0;
 
 // GLOBAL: LEGO1 0x100d95e8
-Act3Script::Script g_explanationAnimations[] =
+const Act3Script::Script g_explanationAnimations[] =
 	{Act3Script::c_tlp053in_RunAnim, Act3Script::c_tlp064la_RunAnim, Act3Script::c_tlp068in_RunAnim};
 
 // FUNCTION: LEGO1 0x10071d40
@@ -176,15 +176,18 @@ void Act3List::Clear()
 // FUNCTION: LEGO1 0x100720d0
 void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 {
+	MxU32 removed;
+
 	if (m_cleared) {
 		return;
 	}
+	removed = FALSE;
 
-	MxU32 removed = FALSE;
 	Act3List::iterator it;
 	// This iterator appears to be unnecessary - maybe left in by accident, or it was used for assertions.
 	// Removing it decreases the match percentage.
 	Act3List::iterator unusedIterator;
+	Act3List::iterator first;
 
 	if (empty()) {
 		return;
@@ -208,9 +211,10 @@ void Act3List::RemoveByObjectIdOrFirst(MxU32 p_objectId)
 	}
 
 	if (removed && size() > 0) {
-		it = begin();
-		unusedIterator = it;
-		Act3ListElement& firstItem = front();
+		first = begin();
+		it = first;
+		unusedIterator = first;
+		Act3ListElement& firstItem = *first;
 		it++;
 
 		while (it != end()) {
@@ -420,7 +424,7 @@ MxResult Act3::ShootDonut(LegoPathController* p_controller, Vector3& p_location,
 void Act3::TriggerHitSound(undefined4 p_param1)
 {
 	float time = Timer()->GetTime();
-	Act3Script::Script objectId;
+	MxS32 objectId;
 
 	switch (p_param1) {
 	case 1: {
@@ -633,6 +637,7 @@ MxLong Act3::Notify(MxParam& p_param)
 		}
 		case c_notificationKeyPress:
 			if (m_state->m_state == Act3State::e_ready && ((LegoEventNotificationParam&) p_param).GetKey() == ' ') {
+				assert(AnimationManager());
 				AnimationManager()->FUN_10061010(FALSE);
 				return 1;
 			}
@@ -897,6 +902,8 @@ void Act3::DisableHelicopterDot()
 // FUNCTION: LEGO1 0x10073a90
 void Act3::Enable(MxBool p_enable)
 {
+	MxS32 i;
+
 	if ((MxBool) m_disabledObjects.empty() == p_enable) {
 		return;
 	}
@@ -904,6 +911,8 @@ void Act3::Enable(MxBool p_enable)
 	LegoWorld::Enable(p_enable);
 
 	if (p_enable) {
+		MxS32 j;
+
 		if (GameState()->m_previousArea == LegoGameState::e_infomain) {
 			GameState()->StopArea(LegoGameState::e_infomain);
 		}
@@ -940,7 +949,6 @@ void Act3::Enable(MxBool p_enable)
 			m_shark->SetActorTime(m_shark->GetActorTime() + delta);
 			m_shark->SetUnknown0x2c(m_shark->GetUnknown0x2c() + delta);
 
-			MxS32 i;
 			for (i = 0; i < (MxS32) sizeOfArray(m_pizzas); i++) {
 				if (m_pizzas[i].IsValid()) {
 					m_pizzas[i].SetTransformTime(m_pizzas[i].GetTransformTime() + delta);
@@ -949,11 +957,11 @@ void Act3::Enable(MxBool p_enable)
 				}
 			}
 
-			for (i = 0; i < (MxS32) sizeOfArray(m_donuts); i++) {
-				if (m_donuts[i].IsValid()) {
-					m_donuts[i].SetTransformTime(m_donuts[i].GetTransformTime() + delta);
-					m_donuts[i].SetActorTime(m_donuts[i].GetActorTime() + delta);
-					m_donuts[i].SetRotateTimeout(m_donuts[i].GetRotateTimeout() + delta);
+			for (j = 0; j < MAX_DONUTS; j++) {
+				if (m_donuts[j].IsValid()) {
+					m_donuts[j].SetTransformTime(m_donuts[j].GetTransformTime() + delta);
+					m_donuts[j].SetActorTime(m_donuts[j].GetActorTime() + delta);
+					m_donuts[j].SetRotateTimeout(m_donuts[j].GetRotateTimeout() + delta);
 				}
 			}
 

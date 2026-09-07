@@ -17,6 +17,10 @@ const char* g_strATTACH_CAMERA = "ATTACH_CAMERA";
 // STRING: LEGO1 0x10102018
 const char* g_strAUTO_CREATE = "AUTO_CREATE";
 
+// GLOBAL: LEGO1 0x10102058
+// STRING: LEGO1 0x10102010
+const char* g_strBANK = "BANK";
+
 // GLOBAL: LEGO1 0x1010205c
 // STRING: LEGO1 0x10102000
 const char* g_strBOTTOM_TO_TOP = "BOTTOM_TO_TOP";
@@ -36,6 +40,10 @@ const char* g_strGRID = "GRID";
 // GLOBAL: LEGO1 0x1010206c
 // STRING: LEGO1 0x10101fe0
 const char* g_strMAP = "MAP";
+
+// GLOBAL: LEGO1 0x10102070
+// STRING: LEGO1 0x10101fd8
+const char* g_strPUSH = "PUSH";
 
 // GLOBAL: LEGO1 0x10102074
 // STRING: LEGO1 0x10101fd0
@@ -60,6 +68,14 @@ const char* g_strHIDE_ON_STOP = "HIDE_ON_STOP";
 // GLOBAL: LEGO1 0x10102088
 // STRING: LEGO1 0x10101f94
 const char* g_strLEFT_TO_RIGHT = "LEFT_TO_RIGHT";
+
+// GLOBAL: LEGO1 0x1010208c
+// STRING: LEGO1 0x10101f88
+const char* g_mapLocator = "MAP_LOCATOR";
+
+// GLOBAL: LEGO1 0x10102090
+// STRING: LEGO1 0x10101f78
+const char* g_mapGeometry = "MAP_GEOMETRY";
 
 // GLOBAL: LEGO1 0x10102094
 // STRING: LEGO1 0x10101f70
@@ -133,6 +149,10 @@ const char* g_strANIMMAN_ID = "ANIMMAN_ID";
 // STRING: LEGO1 0x10101ec8
 const char* g_strCOMP = "COMP";
 
+// GLOBAL: LEGO1 0x101020dc
+// STRING: LEGO1 0x10101ebc
+const char* g_strBMP_INVIDEO = "BMP_INVIDEO";
+
 // GLOBAL: LEGO1 0x101020e0
 // STRING: LEGO1 0x10101eb0
 const char* g_strBMP_ISMAP = "BMP_ISMAP";
@@ -141,7 +161,3 @@ const char* g_strBMP_ISMAP = "BMP_ISMAP";
 // STRING: LEGO1 0x10101eac
 // GLOBAL: BETA10 0x10202948
 const char* g_parseExtraTokens = ":;";
-
-// GLOBAL: LEGO1 0x100f0c14
-// STRING: LEGO1 0x100f0c04
-const char* g_strHIT_ACTOR_SOUND = "HIT_ACTOR_SOUND";

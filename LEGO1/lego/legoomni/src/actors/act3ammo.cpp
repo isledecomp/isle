@@ -15,6 +15,9 @@
 
 DECOMP_SIZE_ASSERT(Act3Ammo, 0x1a0)
 
+// GLOBAL: LEGO1 0x100d841c
+static const float g_hitAnimationDelay = 2000.0f;
+
 // Initialized at LEGO1 0x100537c0
 // GLOBAL: LEGO1 0x10104f08
 Mx3DPointFloat Act3Ammo::g_hitTranslation = Mx3DPointFloat(0.0, 5.0, 0.0);
@@ -125,24 +128,24 @@ MxResult Act3Ammo::CalculateArc(const Vector3& p_srcLoc, const Vector3& p_srcDir
 	negNormalUp[0] = negNormalUp[2] = 0.0f;
 	negNormalUp[1] = -1.0f;
 
-	m_coefficients[1] = p_srcUp;
-	m_coefficients[2] = p_srcLoc;
+	m_eq[1] = p_srcUp;
+	m_eq[2] = p_srcLoc;
 
 	Mx3DPointFloat upRelative(negNormalUp);
-	upRelative -= m_coefficients[1];
+	upRelative -= m_eq[1];
 
 	for (MxS32 i = 0; i < 3; i++) {
 		if (groundPoint[0] == p_srcLoc[0]) {
 			return FAILURE;
 		}
 
-		m_coefficients[0][i] = (upRelative[i] * upRelative[i] + upRelative[i] * m_coefficients[1][i] * 2.0f) /
-							   ((groundPoint[i] - p_srcLoc[i]) * 4.0f);
+		m_eq[0][i] = (upRelative[i] * upRelative[i] + upRelative[i] * m_eq[1][i] * 2.0f) /
+					 ((groundPoint[i] - p_srcLoc[i]) * 4.0f);
 	}
 
-	assert(m_coefficients[0][0] > 0.000001 || m_coefficients[0][0] < -0.000001);
+	assert(m_eq[0][0] > 0.000001 || m_eq[0][0] < -0.000001);
 
-	m_apexParameter = upRelative[0] / (m_coefficients[0][0] * 2.0f);
+	m_apexParameter = upRelative[0] / (m_eq[0][0] * 2.0f);
 	return SUCCESS;
 }
 
@@ -211,16 +214,16 @@ MxResult Act3Ammo::CalculateTransformOnCurve(float p_curveParameter, Matrix4& p_
 	Vector3 pos(p_transform[3]);
 	Mx3DPointFloat sndCoeff;
 
-	sndCoeff = m_coefficients[1];
+	sndCoeff = m_eq[1];
 	sndCoeff *= p_curveParameter;
-	pos = m_coefficients[0];
+	pos = m_eq[0];
 	pos *= curveParameterSquare;
 	pos += sndCoeff;
-	pos += m_coefficients[2];
-	dir = m_coefficients[0];
+	pos += m_eq[2];
+	dir = m_eq[0];
 	dir *= 2.0f;
 	dir *= p_curveParameter;
-	dir += m_coefficients[1];
+	dir += m_eq[1];
 	dir *= -1.0f;
 
 	if (dir.Unitize() != 0) {
@@ -258,7 +261,7 @@ void Act3Ammo::Animate(float p_time)
 	case c_ready:
 		break;
 	case c_hit:
-		m_rotateTimeout = p_time + 2000.0f;
+		m_rotateTimeout = g_hitAnimationDelay + p_time;
 		m_actorState = c_hitAnimation;
 		return;
 	case c_hitAnimation:
@@ -298,6 +301,7 @@ void Act3Ammo::Animate(float p_time)
 		m_traveledDistance = 0.0f;
 	}
 
+	float radius;
 	MxMatrix transform;
 	MxMatrix additionalTransform;
 
@@ -309,8 +313,10 @@ void Act3Ammo::Animate(float p_time)
 	MxU32 reachedTarget = FALSE;
 
 	if (f >= p_time) {
-		m_actorTime = (p_time - m_transformTime) * m_worldSpeed + m_actorTime;
-		m_traveledDistance = (p_time - m_transformTime) * m_worldSpeed + m_traveledDistance;
+		float delta = p_time - m_transformTime;
+
+		m_actorTime = delta * m_worldSpeed + m_actorTime;
+		m_traveledDistance = delta * m_worldSpeed + m_traveledDistance;
 		m_transformTime = p_time;
 	}
 	else {
@@ -423,7 +429,7 @@ void Act3Ammo::Animate(float p_time)
 
 				distance -= otherPosition;
 
-				float radius = r->GetWorldBoundingSphere().Radius();
+				radius = r->GetWorldBoundingSphere().Radius();
 				if (distance.LenSquared() <= radius * radius) {
 					MxS32 index = -1;
 					if (sscanf(r->GetName(), "pammo%d", &index) != 1) {

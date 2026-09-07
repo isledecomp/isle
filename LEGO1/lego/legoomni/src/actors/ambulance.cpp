@@ -23,11 +23,21 @@
 #include "mxvariabletable.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(Ambulance, 0x184)
 DECOMP_SIZE_ASSERT(AmbulanceMissionState, 0x24)
 
 // Flags used in isle.cpp
 extern MxU32 g_isleFlags;
+
+// GLOBAL: LEGO1 0x100f39b8
+// STRING: LEGO1 0x100f39ac
+const char* g_varAMBULSPEED = "ambulSPEED";
+
+// GLOBAL: LEGO1 0x100f39bc
+// STRING: LEGO1 0x100f39a0
+const char* g_varAMBULFUEL = "ambulFUEL";
 
 // FUNCTION: LEGO1 0x10035ee0
 // FUNCTION: BETA10 0x10022820
@@ -367,6 +377,8 @@ MxLong Ambulance::HandleClick()
 	if (((Act1State*) GameState()->GetState("Act1State"))->m_state != Act1State::e_ambulance) {
 		return 1;
 	}
+
+	assert(m_state);
 
 	if (m_state->m_state == AmbulanceMissionState::e_prepareAmbulance) {
 		return 1;
