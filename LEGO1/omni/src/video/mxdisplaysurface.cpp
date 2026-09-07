@@ -227,10 +227,13 @@ MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 		ddsd.dwFlags = DDSD_HEIGHT | DDSD_WIDTH | DDSD_CAPS;
 		ddsd.dwWidth = m_videoParam.GetRect().GetWidth();
 		ddsd.dwHeight = m_videoParam.GetRect().GetHeight();
-		ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
+		ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
-		if (!m_videoParam.Flags().GetBackBuffers()) {
-			ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+		if (m_videoParam.Flags().GetBackBuffers()) {
+			ddsd.ddsCaps.dwCaps |= DDSCAPS_VIDEOMEMORY;
+		}
+		else {
+			ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 		}
 
 		if (lpDirectDraw->CreateSurface(&ddsd, &m_ddSurface2, NULL)) {
