@@ -2,6 +2,7 @@
 //
 
 #include "lego3dview.h"
+#include "realtime/matrix4d.inl.h"
 
 #include "viewmanager/viewmanager.h"
 
