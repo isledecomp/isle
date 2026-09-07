@@ -2,13 +2,13 @@
 #define LEGOPOINTOFVIEWCONTROLLER_H
 
 #include "decomp.h"
+#include "legoentity.h"
 #include "mxcore.h"
 #include "mxgeometry.h"
 
 #include <windows.h>
 
 class Lego3DView;
-class LegoEntity;
 class LegoNavController;
 
 //////////////////////////////////////////////////////////////////////////////

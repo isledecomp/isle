@@ -4,6 +4,7 @@
 #include "mxcompositepresenter.h"
 
 class LegoEntity;
+class Mx3DPointFloat;
 class Vector3;
 
 // VTABLE: LEGO1 0x100d8398
@@ -42,6 +43,11 @@ public:
 	virtual undefined4 SetEntity(LegoEntity* p_entity);                                    // vtable+0x6c
 
 	void SetEntityLocation(const Vector3& p_location, const Vector3& p_direction, const Vector3& p_up);
+	Mx3DPointFloat GetWorldPosition();
+	Mx3DPointFloat GetWorldDirection();
+	Mx3DPointFloat GetWorldUp();
+	void SetWorldSpeed(MxFloat p_worldSpeed);
+	MxFloat GetWorldSpeed();
 
 	LegoEntity* GetInternalEntity() { return m_entity; }
 	void SetInternalEntity(LegoEntity* p_entity) { m_entity = p_entity; }
