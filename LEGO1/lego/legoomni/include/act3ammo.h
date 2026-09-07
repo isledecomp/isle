@@ -28,7 +28,7 @@ public:
 	MxU32 IsValid() { return m_ammoFlag & c_valid; }
 
 	// FUNCTION: BETA10 0x100177b0
-	Mx3DPointFloat* GetCoefficients() { return m_coefficients; }
+	Mx3DPointFloat* GetCoefficients() { return m_eq; }
 
 	// FUNCTION: BETA10 0x100177e0
 	MxFloat* GetApexParameter() { return &m_apexParameter; }
@@ -94,11 +94,11 @@ private:
 
 	static Mx3DPointFloat g_hitTranslation;
 
-	MxU16 m_ammoFlag;                 // 0x154
-	MxFloat m_rotateTimeout;          // 0x158
-	Act3* m_world;                    // 0x15c
-	Mx3DPointFloat m_coefficients[3]; // 0x160
-	MxFloat m_apexParameter;          // 0x19c
+	MxU16 m_ammoFlag;        // 0x154
+	MxFloat m_rotateTimeout; // 0x158
+	Act3* m_world;           // 0x15c
+	Mx3DPointFloat m_eq[3];  // 0x160
+	MxFloat m_apexParameter; // 0x19c
 };
 
 #endif // ACT3AMMO_H

@@ -28,14 +28,6 @@ LegoRaceMap::~LegoRaceMap()
 	ControlManager()->Unregister(this);
 }
 
-// GLOBAL: LEGO1 0x1010208c
-// STRING: LEGO1 0x10101f88
-const char* g_mapLocator = "MAP_LOCATOR";
-
-// GLOBAL: LEGO1 0x10102090
-// STRING: LEGO1 0x10101f78
-const char* g_mapGeometry = "MAP_GEOMETRY";
-
 // FUNCTION: LEGO1 0x1005d310
 // FUNCTION: BETA10 0x100ca543
 void LegoRaceMap::ParseAction(char* p_extra)

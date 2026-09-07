@@ -415,8 +415,8 @@ void Helicopter::Animate(float p_time)
 
 			MxMatrix mat;
 			Vector3 v1(m_unk0x160[3]);
-			Vector3 v2(mat[3]);
 			Vector3 v3(m_unk0x1a8[3]);
+			Vector3 v2(mat[3]);
 
 			mat.SetIdentity();
 			m_unk0x1f4.InterpolateToMatrix(mat, f2);

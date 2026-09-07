@@ -18,6 +18,14 @@
 
 DECOMP_SIZE_ASSERT(Motocycle, 0x16c)
 
+// GLOBAL: LEGO1 0x100f3994
+// STRING: LEGO1 0x100f3988
+const char* g_varMOTOSPEED = "motoSPEED";
+
+// GLOBAL: LEGO1 0x100f3998
+// STRING: LEGO1 0x100f397c
+const char* g_varMOTOFUEL = "motoFUEL";
+
 // FUNCTION: LEGO1 0x100357b0
 Motocycle::Motocycle()
 {

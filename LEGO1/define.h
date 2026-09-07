@@ -22,6 +22,8 @@ extern const char* g_strTRIGGERS_SOURCE;
 extern const char* g_strPTATCAM;
 extern const char* g_strTOGGLE;
 extern const char* g_strMAP;
+extern const char* g_mapLocator;
+extern const char* g_mapGeometry;
 extern const char* g_strGRID;
 extern const char* g_strSTYLE;
 extern const char* g_strTYPE;
