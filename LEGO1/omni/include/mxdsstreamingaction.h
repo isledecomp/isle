@@ -19,7 +19,7 @@ public:
 	MxBool HasId(MxU32 p_objectId) override; // vtable+0x34
 
 	void Init();
-	void SetInternalAction(MxDSAction* p_dsAction);
+	void SetAction(MxDSAction* p_dsAction);
 	void FUN_100cd2d0();
 
 	// FUNCTION: BETA10 0x10156530
@@ -37,7 +37,7 @@ public:
 	// FUNCTION: BETA10 0x10159190
 	MxLong GetUnknowna8() { return m_unk0xa8; }
 
-	MxDSAction* GetInternalAction() { return m_internalAction; }
+	MxDSAction* GetAction() { return m_internalAction; }
 
 	// FUNCTION: BETA10 0x10156580
 	MxU32 GetBufferOffset() { return m_bufferOffset; }

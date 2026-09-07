@@ -334,9 +334,10 @@ void MxBitmap::BitBltTransparent(
 	MxU8* dstStart = GetStart(p_dstLeft, p_dstTop);
 	MxLong srcStride = -p_width + GetAdjustedStride(p_src);
 	MxLong dstStride = -p_width + GetAdjustedStride(this);
+	MxS32 w, h;
 
-	for (MxS32 h = 0; h < p_height; h++) {
-		for (MxS32 w = 0; w < p_width; w++) {
+	for (h = 0; h < p_height; h++) {
+		for (w = 0; w < p_width; w++) {
 			if (*srcStart) {
 				*dstStart = *srcStart;
 			}
@@ -407,6 +408,7 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 {
 	MxResult ret = FAILURE;
 	MxPalette* pal = NULL;
+	MxU16* buf;
 
 	if (m_isHighColor == p_isHighColor) {
 		// no change: do nothing.
@@ -428,7 +430,7 @@ MxResult MxBitmap::SetBitDepth(MxBool p_isHighColor)
 		m_palette = pal;
 
 		// TODO: what is this? zeroing out top half of palette?
-		MxU16* buf = (MxU16*) m_paletteData;
+		buf = (MxU16*) m_paletteData;
 		for (MxU16 i = 0; i < 256; i++) {
 			buf[i] = i;
 		}

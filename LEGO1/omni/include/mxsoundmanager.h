@@ -23,7 +23,7 @@ public:
 
 	LPDIRECTSOUND GetDirectSound() { return m_directSound; }
 
-	MxS32 GetAttenuation(MxU32 p_volume);
+	MxS32 GetAttenuation(MxU32 p_percent);
 
 	MxPresenter* FindPresenter(const MxAtomId& p_atomId, MxU32 p_objectId);
 

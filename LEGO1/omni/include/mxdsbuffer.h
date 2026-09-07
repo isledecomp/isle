@@ -89,24 +89,24 @@ public:
 	// FUNCTION: BETA10 0x10164260
 	void SetMode(Type p_mode) { m_mode = p_mode; }
 
-	void SetUnk30(MxDSStreamingAction* p_unk0x30) { m_unk0x30 = p_unk0x30; }
+	void SetParentRequest(MxDSStreamingAction* p_parentRequest) { m_parentRequest = p_parentRequest; }
 
 	// SYNTHETIC: LEGO1 0x100c6510
 	// SYNTHETIC: BETA10 0x10158530
 	// MxDSBuffer::`scalar deleting destructor'
 
 private:
-	MxU8* m_pBuffer;                // 0x08
-	MxU8* m_pIntoBuffer;            // 0x0c
-	MxU8* m_pIntoBuffer2;           // 0x10
-	undefined4 m_unk0x14;           // 0x14
-	undefined4 m_unk0x18;           // 0x18
-	undefined4 m_unk0x1c;           // 0x1c
-	MxU16 m_referenceCount;         // 0x20
-	Type m_mode;                    // 0x24
-	MxU32 m_writeOffset;            // 0x28
-	MxU32 m_bytesRemaining;         // 0x2c
-	MxDSStreamingAction* m_unk0x30; // 0x30
+	MxU8* m_pBuffer;                      // 0x08
+	MxU8* m_pIntoBuffer;                  // 0x0c
+	MxU8* m_pIntoBuffer2;                 // 0x10
+	undefined4 m_unk0x14;                 // 0x14
+	undefined4 m_unk0x18;                 // 0x18
+	undefined4 m_unk0x1c;                 // 0x1c
+	MxU16 m_referenceCount;               // 0x20
+	Type m_mode;                          // 0x24
+	MxU32 m_writeOffset;                  // 0x28
+	MxU32 m_bytesRemaining;               // 0x2c
+	MxDSStreamingAction* m_parentRequest; // 0x30
 };
 
 #endif // MXDSBUFFER_H

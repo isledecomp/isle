@@ -38,8 +38,7 @@ void MxStillPresenter::LoadHeader(MxStreamChunk* p_chunk)
 		delete[] ((MxU8*) m_bitmapInfo);
 	}
 
-	MxU8* data = new MxU8[p_chunk->GetLength()];
-	m_bitmapInfo = (MxBITMAPINFO*) data;
+	m_bitmapInfo = (MxBITMAPINFO*) new MxU8[p_chunk->GetLength()];
 	memcpy(m_bitmapInfo, p_chunk->GetData(), p_chunk->GetLength());
 }
 
@@ -234,11 +233,17 @@ MxStillPresenter* MxStillPresenter::Clone()
 			MxDSAction* action = GetAction()->Clone();
 
 			if (action && presenter->StartAction(NULL, action) == SUCCESS) {
-				presenter->SetLoadedFirstFrame(LoadedFirstFrame());
-				presenter->SetUseSurface(UseSurface());
-				presenter->SetUseVideoMemory(UseVideoMemory());
-				presenter->SetDoNotWriteToSurface(DoNotWriteToSurface());
-				presenter->SetBitmapIsMap(BitmapIsMap());
+				BOOL v;
+				v = LoadedFirstFrame();
+				presenter->m_flags.m_bit0 = v;
+				v = UseSurface();
+				presenter->m_flags.m_bit1 = v;
+				v = UseVideoMemory();
+				presenter->m_flags.m_bit2 = v;
+				v = DoNotWriteToSurface();
+				presenter->m_flags.m_bit3 = v;
+				v = BitmapIsMap();
+				presenter->m_flags.m_bit4 = v;
 
 				if (m_frameBitmap) {
 					presenter->m_frameBitmap = new MxBitmap;

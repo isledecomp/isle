@@ -12,6 +12,13 @@ MxSemaphore::MxSemaphore()
 	m_hSemaphore = NULL;
 }
 
+// FUNCTION: LEGO1 0x100c87e0
+// FUNCTION: BETA10 0x101592a9
+MxSemaphore::~MxSemaphore()
+{
+	CloseHandle(m_hSemaphore);
+}
+
 // FUNCTION: LEGO1 0x100c8800
 // FUNCTION: BETA10 0x101592d5
 MxResult MxSemaphore::Init(MxU32 p_initialCount, MxU32 p_maxCount)

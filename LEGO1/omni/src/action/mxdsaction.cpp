@@ -10,10 +10,6 @@
 
 DECOMP_SIZE_ASSERT(MxDSAction, 0x94)
 
-// GLOBAL: LEGO1 0x10101410
-// GLOBAL: BETA10 0x10201f5c
-MxU16 g_sep = TWOCC(',', ' ');
-
 // FUNCTION: LEGO1 0x100ad810
 // FUNCTION: BETA10 0x1012afd0
 MxDSAction::MxDSAction()
@@ -230,13 +226,13 @@ void MxDSAction::AppendExtra(MxU16 p_extraLength, const char* p_extraData)
 
 	if (p_extraData) {
 		if (m_extraLength) {
-			char* newExtra = new char[p_extraLength + m_extraLength + sizeof(g_sep)];
+			char* newExtra = new char[p_extraLength + m_extraLength + 2];
 			assert(newExtra);
 			memcpy(newExtra, m_extraData, m_extraLength);
-			memcpy(&newExtra[m_extraLength], &g_sep, sizeof(g_sep));
-			memcpy(&newExtra[m_extraLength + sizeof(g_sep)], p_extraData, p_extraLength);
+			memcpy(&newExtra[m_extraLength], ", ", 2);
+			memcpy(&newExtra[m_extraLength + 2], p_extraData, p_extraLength);
 
-			m_extraLength += p_extraLength + sizeof(g_sep);
+			m_extraLength += p_extraLength + 2;
 			delete[] m_extraData;
 			m_extraData = newExtra;
 		}
