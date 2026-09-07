@@ -2008,8 +2008,8 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 											break;
 										case 1: {
 											actor->SetPathWalkingMode(pathWalkingMode);
-											MxS32 src = boundary->m_src;
-											boundary->m_src = boundary->m_dest;
+											MxS32 src = boundary->src;
+											boundary->src = boundary->m_dest;
 											boundary->m_dest = src;
 											break;
 										}
@@ -2021,7 +2021,7 @@ void LegoAnimationManager::AddExtra(MxS32 p_location, MxBool p_und)
 										if (world->PlaceActor(
 												actor,
 												boundary->m_name,
-												boundary->m_src,
+												boundary->src,
 												boundary->m_srcScale,
 												boundary->m_dest,
 												boundary->m_destScale
@@ -2498,7 +2498,7 @@ MxBool LegoAnimationManager::FUN_10063fb0(LegoLocation::Boundary* p_boundary, Le
 	if (p_boundary->m_name != NULL) {
 		Mx3DPointFloat vec;
 		LegoPathBoundary* boundary = p_world->FindPathBoundary(p_boundary->m_name);
-		LegoOrientedEdge* pSrcE = (LegoOrientedEdge*) boundary->GetEdges()[p_boundary->m_src];
+		LegoOrientedEdge* pSrcE = (LegoOrientedEdge*) boundary->GetEdges()[p_boundary->src];
 		return FUN_10064010(boundary, pSrcE, p_boundary->m_srcScale);
 	}
 
@@ -2599,7 +2599,7 @@ MxBool LegoAnimationManager::FUN_10064120(LegoLocation::Boundary* p_boundary, Mx
 					LegoOrientedEdge* e = (LegoOrientedEdge*) boundary->GetEdges()[i];
 
 					if (local34 == e) {
-						p_boundary->m_src = i;
+						p_boundary->src = i;
 					}
 					else if (local8 == e) {
 						p_boundary->m_dest = i;
@@ -2955,7 +2955,7 @@ void AnimState::InitFromAnims(MxU32 p_animsLength, AnimInfo* p_anims, MxU32 p_ex
 	if (m_unk0x10 == NULL) {
 		m_unk0x0c = p_animsLength;
 		m_unk0x10 = new MxU16[p_animsLength];
-		MxS32 numLocations = LegoNavController::GetNumLocations();
+		MxS32 numLocations = LegoNavController::GetNumCameras();
 		m_locationsFlagsLength = numLocations;
 		m_locationsFlags = new MxBool[numLocations];
 	}
