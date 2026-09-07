@@ -484,7 +484,7 @@ void LegoAct2::ReadyWorld()
 	m_ready = TRUE;
 	m_siFile = VariableTable()->GetVariable("ACT2_ANIMS_FILE");
 
-	GameState()->SetActor(LegoActor::c_pepper);
+	GameState()->SetActor(LegoActor::e_pepper);
 	m_pepper = FindROI("pepper");
 	IslePathActor* pepper = (IslePathActor*) m_pepper->GetEntity();
 	pepper->SpawnPlayer(
@@ -531,7 +531,7 @@ void LegoAct2::Enable(MxBool p_enable)
 	if (p_enable) {
 		m_gameState->m_enabled = TRUE;
 
-		GameState()->SetActor(LegoActor::c_pepper);
+		GameState()->SetActor(LegoActor::e_pepper);
 		m_pepper = FindROI("pepper");
 
 		((IslePathActor*) m_pepper->GetEntity())->UpdateWorld(m_transformOnDisable, m_boundaryOnDisable, TRUE);
