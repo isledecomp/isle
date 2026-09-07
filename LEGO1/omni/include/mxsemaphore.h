@@ -12,9 +12,7 @@ class MxSemaphore {
 public:
 	MxSemaphore();
 
-	// FUNCTION: LEGO1 0x100c87e0
-	// FUNCTION: BETA10 0x101592a9
-	~MxSemaphore() { CloseHandle(m_hSemaphore); }
+	~MxSemaphore();
 
 	virtual MxResult Init(MxU32 p_initialCount, MxU32 p_maxCount);
 

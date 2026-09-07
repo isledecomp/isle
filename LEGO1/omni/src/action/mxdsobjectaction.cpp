@@ -31,7 +31,7 @@ MxDSObjectAction::MxDSObjectAction(MxDSObjectAction& p_dsObjectAction) : MxDSMed
 // FUNCTION: BETA10 0x1015c529
 MxDSObjectAction& MxDSObjectAction::operator=(MxDSObjectAction& p_dsObjectAction)
 {
-	if (this == &p_dsObjectAction) {
+	if (&p_dsObjectAction == this) {
 		return *this;
 	}
 

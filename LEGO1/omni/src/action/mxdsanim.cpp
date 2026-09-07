@@ -31,7 +31,7 @@ MxDSAnim::MxDSAnim(MxDSAnim& p_dsAnim) : MxDSMediaAction(p_dsAnim)
 // FUNCTION: BETA10 0x1015ceea
 MxDSAnim& MxDSAnim::operator=(MxDSAnim& p_dsAnim)
 {
-	if (this == &p_dsAnim) {
+	if (&p_dsAnim == this) {
 		return *this;
 	}
 

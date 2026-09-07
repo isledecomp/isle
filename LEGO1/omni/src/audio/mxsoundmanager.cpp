@@ -9,6 +9,8 @@
 #include "mxticklethread.h"
 #include "mxwavepresenter.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxSoundManager, 0x3c);
 
 // GLOBAL: LEGO1 0x10101420
@@ -203,15 +205,17 @@ MxPresenter* MxSoundManager::FindPresenter(const MxAtomId& p_atomId, MxU32 p_obj
 }
 
 // FUNCTION: LEGO1 0x100aecf0
-MxS32 MxSoundManager::GetAttenuation(MxU32 p_volume)
+MxS32 MxSoundManager::GetAttenuation(MxU32 p_percent)
 {
-	// The unit for p_volume is percent, rounded to integer.
+	assert((p_percent >= 0) && (p_percent <= 100));
+
+	// The unit for p_percent is percent, rounded to integer.
 	// Convert to DSOUND attenuation units: -10000 (silent) to 0 (loudest).
-	if (p_volume == 0) {
+	if (p_percent == 0) {
 		return DSBVOLUME_MIN;
 	}
 
-	return g_volumeAttenuation[p_volume - 1];
+	return g_volumeAttenuation[p_percent - 1];
 }
 
 // FUNCTION: LEGO1 0x100aed10

@@ -12,6 +12,8 @@
 #include "mxtimer.h"
 #include "mxutilities.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(MxStreamController, 0x64)
 DECOMP_SIZE_ASSERT(MxNextActionDataStart, 0x14)
 DECOMP_SIZE_ASSERT(MxNextActionDataStartList, 0x0c)
@@ -60,12 +62,15 @@ MxStreamController::~MxStreamController()
 		m_unk0x2c = NULL;
 	}
 
-	while (m_unk0x54.PopFront(action)) {
-		delete action;
+	while (!m_unk0x54.empty()) {
+		MxDSObject* object = m_unk0x54.front();
+		m_unk0x54.pop_front();
+		delete object;
 	}
 }
 
 // FUNCTION: LEGO1 0x100c1520
+// FUNCTION: BETA10 0x1014e652
 MxResult MxStreamController::Open(const char* p_filename)
 {
 	char sourceName[256];
@@ -91,6 +96,7 @@ void MxStreamController::RemoveSubscriber(MxDSSubscriber* p_subscriber)
 }
 
 // FUNCTION: LEGO1 0x100c1690
+// FUNCTION: BETA10 0x1014e838
 MxResult MxStreamController::VTable0x20(MxDSAction* p_action)
 {
 	AUTOLOCK(m_criticalSection);
@@ -153,9 +159,10 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 {
 	if (p_action->GetUnknown24() == -1) {
 		MxS16 newUnknown24 = -1;
+		MxDSObjectList::iterator it;
 
 		// These loops might be a template function in the list classes
-		for (MxDSObjectList::iterator it = m_unk0x54.begin(); it != m_unk0x54.end(); it++) {
+		for (it = m_unk0x54.begin(); it != m_unk0x54.end(); it++) {
 			MxDSObject* action = *it;
 
 			if (action->GetObjectId() == p_action->GetObjectId()) {
@@ -164,8 +171,10 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		}
 
 		if (newUnknown24 == -1) {
-			for (MxDSObjectList::iterator it = m_unk0x3c.begin(); it != m_unk0x3c.end(); it++) {
-				MxDSObject* action = *it;
+			MxDSObject* action;
+
+			for (it = m_unk0x3c.begin(); it != m_unk0x3c.end(); it++) {
+				action = *it;
 
 				if (action->GetObjectId() == p_action->GetObjectId()) {
 					newUnknown24 = Max(newUnknown24, action->GetUnknown24());
@@ -197,6 +206,7 @@ MxResult MxStreamController::FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset)
 		return FAILURE;
 	}
 
+	assert(m_provider);
 	MxU32 fileSize = m_provider->GetFileSize();
 	streamingAction->SetBufferOffset(fileSize * (p_offset / fileSize));
 	streamingAction->SetObjectId(p_action->GetObjectId());
@@ -218,6 +228,7 @@ MxResult MxStreamController::VTable0x2c(MxDSAction* p_action, MxU32 p_bufferval)
 		return FAILURE;
 	}
 
+	assert(m_provider);
 	return FUN_100c1800(p_action, (p_bufferval / m_provider->GetFileSize()) * m_provider->GetFileSize());
 }
 

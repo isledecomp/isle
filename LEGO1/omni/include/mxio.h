@@ -4,17 +4,15 @@
 #include "mxtypes.h"
 
 // mmsystem.h requires inclusion of windows.h before
-// clang-format off
 #include <windows.h>
 #include <mmsystem.h>
-// clang-format on
 
 #if defined(_M_IX86) || defined(__i386__)
 #define MXIO_MINFO_MFILE
 #endif
 
 // SIZE 0x48
-class MXIOINFO {
+class MXIOINFO : public MMIOINFO {
 public:
 	MXIOINFO();
 	~MXIOINFO();
@@ -33,7 +31,6 @@ public:
 
 	// NOTE: In MXIOINFO, the `hmmio` member of MMIOINFO is used like
 	// an HFILE (int) instead of an HMMIO (WORD).
-	MMIOINFO m_info;
 #ifndef MXIO_MINFO_MFILE
 	HFILE m_file;
 #endif

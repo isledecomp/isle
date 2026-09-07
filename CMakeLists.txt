@@ -29,6 +29,10 @@ if (MSVC)
   # Visual C++ 4.2 -> cl version 10.2.0
   if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "11.0")
     set(MSVC_FOR_DECOMP TRUE)
+  else()
+    # The decompiled source preserves 1997 semantics where a for-loop
+    # variable leaks into the enclosing scope.
+    add_compile_options("/Zc:forScope-")
   endif()
 endif()
 

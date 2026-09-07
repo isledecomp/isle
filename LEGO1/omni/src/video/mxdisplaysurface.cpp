@@ -113,6 +113,7 @@ MxU8 MxDisplaySurface::CountContiguousBitsSetTo1(MxU32 p_param)
 }
 
 // FUNCTION: LEGO1 0x100ba790
+// FUNCTION: BETA10 0x1013f759
 MxResult MxDisplaySurface::Init(
 	MxVideoParam& p_videoParam,
 	LPDIRECTDRAWSURFACE p_ddSurface1,
@@ -139,10 +140,11 @@ MxResult MxDisplaySurface::Init(
 }
 
 // FUNCTION: LEGO1 0x100ba7f0
+// FUNCTION: BETA10 0x1013f7f1
 MxResult MxDisplaySurface::Create(MxVideoParam& p_videoParam)
 {
-	DDSURFACEDESC ddsd;
 	MxResult result = FAILURE;
+	DDSURFACEDESC ddsd;
 	LPDIRECTDRAW lpDirectDraw = MVideoManager()->GetDirectDraw();
 	HWND hWnd = MxOmni::GetInstance()->GetWindowHandle();
 
@@ -251,6 +253,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x100baa90
+// FUNCTION: BETA10 0x1013fd5c
 void MxDisplaySurface::Destroy()
 {
 	if (m_initialized) {
@@ -367,11 +370,13 @@ void MxDisplaySurface::VTable0x28(
 		hr = m_ddSurface2->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL);
 	}
 
+	MxU8* data;
+
 	if (hr != DD_OK) {
 		return;
 	}
 
-	MxU8* data = p_bitmap->GetStart(p_left, p_top);
+	data = p_bitmap->GetStart(p_left, p_top);
 
 	if (m_videoParam.Flags().GetDoubleScaling()) {
 		p_bottom *= 2;
@@ -474,8 +479,9 @@ void MxDisplaySurface::VTable0x28(
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
 
 			MxLong length = -2 * p_width + ddsd.lPitch;
+			MxS32 j;
 			for (MxS32 i = 0; i < p_height; i++) {
-				for (MxS32 j = 0; j < p_width; j++) {
+				for (j = 0; j < p_width; j++) {
 					*(MxU16*) surface = m_16bitPal[*data++];
 					surface += 2;
 				}
@@ -573,8 +579,9 @@ void MxDisplaySurface::VTable0x30(
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
 
 			MxLong length = -2 * p_width + ddsd.lPitch;
+			MxS32 j;
 			for (MxS32 i = 0; i < p_height; i++) {
-				for (MxS32 j = 0; j < p_width; j++) {
+				for (j = 0; j < p_width; j++) {
 					if (*data != 0) {
 						*(MxU16*) surface = m_16bitPal[*data];
 					}
@@ -624,6 +631,7 @@ void MxDisplaySurface::DrawTransparentRLE(
 	MxU32 skipCount;
 	MxU32 drawCount;
 	MxU32 t;
+	MxU32 rowRemainder;
 
 	if (p_bpp == 16) {
 		// DECOMP: why goto?
@@ -637,7 +645,7 @@ void MxDisplaySurface::DrawTransparentRLE(
 		t = *p_bitmapData++;
 		skipCount += t << 16;
 
-		MxS32 rowRemainder = p_width - count % p_width;
+		rowRemainder = p_width - count % p_width;
 		count += skipCount;
 
 		if (skipCount >= rowRemainder) {
@@ -695,7 +703,7 @@ sixteen_bit:
 		t = *p_bitmapData++;
 		skipCount += t << 16;
 
-		MxS32 rowRemainder = p_width - count % p_width;
+		MxU32 rowRemainder = p_width - count % p_width;
 		count += skipCount;
 
 		if (skipCount >= rowRemainder) {
@@ -729,7 +737,7 @@ sixteen_bit:
 			drawCount -= rowRemainder;
 
 			p_surfaceData += p_pitch - 2 * p_width;
-			MxS32 rows = drawCount / p_width;
+			MxU32 rows = drawCount / p_width;
 
 			for (MxU32 i = 0; i < rows; i++) {
 				// memcpy
@@ -823,6 +831,7 @@ void MxDisplaySurface::VTable0x34(MxU8* p_pixels, MxS32 p_bpp, MxS32 p_width, Mx
 }
 
 // FUNCTION: LEGO1 0x100bba50
+// FUNCTION: BETA10 0x10141498
 void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p_top2, MxS32 p_width, MxS32 p_height)
 {
 	if (m_videoParam.Flags().GetEnabled()) {
@@ -857,10 +866,10 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 			p_left2 += m_videoParam.GetRect().GetLeft() + point.GetX();
 			p_top2 += m_videoParam.GetRect().GetTop() + point.GetY();
 
+			DDBLTFX data;
 			MxRect32 a(MxPoint32(p_left, p_top), MxSize32(p_width + 1, p_height + 1));
 			MxRect32 b(MxPoint32(p_left2, p_top2), MxSize32(p_width + 1, p_height + 1));
 
-			DDBLTFX data;
 			memset(&data, 0, sizeof(data));
 			data.dwSize = sizeof(data);
 			data.dwDDFX = DDBLTFX_NOTEARING;
@@ -874,6 +883,7 @@ void MxDisplaySurface::Display(MxS32 p_left, MxS32 p_top, MxS32 p_left2, MxS32 p
 }
 
 // FUNCTION: LEGO1 0x100bbc10
+// FUNCTION: BETA10 0x101416a6
 void MxDisplaySurface::GetDC(HDC* p_hdc)
 {
 	if (m_ddSurface2 && !m_ddSurface2->GetDC(p_hdc)) {
@@ -884,6 +894,7 @@ void MxDisplaySurface::GetDC(HDC* p_hdc)
 }
 
 // FUNCTION: LEGO1 0x100bbc40
+// FUNCTION: BETA10 0x10141700
 void MxDisplaySurface::ReleaseDC(HDC p_hdc)
 {
 	if (m_ddSurface2 && p_hdc) {
@@ -1100,13 +1111,16 @@ LPDIRECTDRAWSURFACE MxDisplaySurface::CreateCursorSurface()
 		goto done;
 	}
 	else {
+		MxU16* surface2;
 		MxU16* surface = (MxU16*) ddsd.lpSurface;
 		MxLong pitch = ddsd.lPitch;
+		MxS32 x;
+		MxS32 y;
 
 		// draw a simple cursor to the surface
-		for (MxS32 x = 0; x < 16; x++) {
-			MxU16* surface2 = surface;
-			for (MxS32 y = 0; y < 16; y++) {
+		for (x = 0; x < 16; x++) {
+			surface2 = surface;
+			for (y = 0; y < 16; y++) {
 				if ((y > 10 || x) && (x > 10 || y) && x + y != 10) {
 					if (x + y > 10) {
 						*surface2 = RGB555_CREATE(0x1f, 0, 0x1f);
@@ -1181,10 +1195,11 @@ void MxDisplaySurface::VTable0x24(
 			MxLong stride = -p_width + GetAdjustedStride(p_bitmap);
 
 			MxLong length = -2 * p_width + p_desc->lPitch;
+			MxS32 i;
 			while (p_height--) {
 				MxU8* surfaceBefore = surface;
 
-				for (MxS32 i = 0; p_width > i; i++) {
+				for (i = 0; p_width > i; i++) {
 					*surface++ = *data;
 					*surface++ = *data++;
 				}
@@ -1204,16 +1219,16 @@ void MxDisplaySurface::VTable0x24(
 			MxS32 length = -4 * p_width + p_desc->lPitch;
 			MxS32 height = p_height;
 			MxS32 width = p_width;
-			MxS32 copyWidth = width * 4;
 			MxU16* p16bitPal = m_16bitPal;
 
+			MxU16 element;
 			MxS32 i;
 			if (!stride && !length) {
 				while (height--) {
 					MxU8* surfaceBefore = surface;
 
 					for (i = 0; i < width; i++) {
-						MxU16 element = p16bitPal[*data];
+						element = p16bitPal[*data];
 						*(MxU16*) surface = element;
 						surface += 2;
 						*(MxU16*) surface = element;
@@ -1222,7 +1237,7 @@ void MxDisplaySurface::VTable0x24(
 						surface += 2;
 					}
 
-					memcpy(surface, surfaceBefore, copyWidth);
+					memcpy(surface, surfaceBefore, width * 4);
 					surface += p_desc->lPitch;
 				}
 			}
@@ -1231,7 +1246,7 @@ void MxDisplaySurface::VTable0x24(
 					MxU8* surfaceBefore = surface;
 
 					for (i = 0; i < width; i++) {
-						MxU16 element = p16bitPal[*data];
+						element = p16bitPal[*data];
 						*(MxU16*) surface = element;
 						surface += 2;
 						*(MxU16*) surface = element;
@@ -1333,8 +1348,9 @@ void MxDisplaySurface::VTable0x2c(
 			MxLong srcSkip = GetAdjustedStride(p_bitmap) - p_width;
 			MxLong destSkip = destStride - p_width;
 
+			MxS32 j;
 			for (MxS32 i = 0; i < p_height; i++, src += srcSkip, dest += destSkip) {
-				for (MxS32 j = 0; j < p_width; j++, src++, dest++) {
+				for (j = 0; j < p_width; j++, src++, dest++) {
 					if (*src) {
 						*dest = *src;
 					}
@@ -1351,12 +1367,13 @@ void MxDisplaySurface::VTable0x2c(
 			DrawTransparentRLE(src, dest, p_bitmap->GetBmiHeader()->biSizeImage, p_width, p_height, p_desc->lPitch, 16);
 		}
 		else {
+			MxS32 j;
 			MxLong srcStride = GetAdjustedStride(p_bitmap);
 			MxLong srcSkip = srcStride - p_width;
 			MxLong destSkip = destStride - 2 * p_width;
 
 			for (MxS32 i = 0; i < p_height; i++, src += srcSkip, dest += destSkip) {
-				for (MxS32 j = 0; j < p_width; j++, src++, dest += 2) {
+				for (j = 0; j < p_width; j++, src++, dest += 2) {
 					if (*src != 0) {
 						*(MxU16*) dest = m_16bitPal[*src];
 					}

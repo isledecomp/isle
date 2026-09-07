@@ -52,7 +52,13 @@ int LegoDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 
 	static_assert(sizeof(GUID4) == sizeof(GUID), "Equal size");
 
+#ifdef MXDIRECTX_FOR_CONFIG
 	GUID4 deviceGuid;
+	GUID4 compareGuid;
+#else
+	GUID4 compareGuid;
+	GUID4 deviceGuid;
+#endif
 	memcpy(&deviceGuid, &p_guid, sizeof(GUID4));
 
 	for (list<MxDriver>::iterator it = m_ddInfo.begin(); it != m_ddInfo.end(); it++, i++) {
@@ -60,7 +66,6 @@ int LegoDeviceEnumerate::ProcessDeviceBytes(int p_deviceNum, GUID& p_guid)
 			return -1;
 		}
 
-		GUID4 compareGuid;
 		MxDriver& driver = *it;
 		for (list<Direct3DDeviceInfo>::iterator it2 = driver.m_devices.begin(); it2 != driver.m_devices.end(); it2++) {
 			Direct3DDeviceInfo& md3d = *it2;
