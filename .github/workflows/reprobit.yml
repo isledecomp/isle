@@ -1,0 +1,305 @@
+name: ReproBit
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: reprobit-${{ github.event.pull_request.number || github.ref }}
+  # A master run replaces the continuous release; let it finish.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  exact:
+    name: Reproduce exact Win32 binaries
+    runs-on: windows-2022
+    timeout-minutes: 90
+    env:
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Configure a byte-stable checkout
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v7
+
+      - name: Read the reviewed ReproBit revision
+        id: reprobit-revision
+        shell: pwsh
+        run: |
+          $revision = (Get-Content .github/reprobit-revision -Raw).Trim()
+          "revision=$revision" >> $env:GITHUB_OUTPUT
+
+      - name: Check out ReproBit at that revision
+        uses: actions/checkout@v7
+        with:
+          repository: isledecomp/reprobit
+          ref: ${{ steps.reprobit-revision.outputs.revision }}
+          path: .reprobit-action
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Download the retail binaries
+        uses: ./.github/actions/retail-binaries
+
+      - name: Verify SmartHeap and Smacker generators
+        shell: pwsh
+        run: |
+          git fetch --no-tags --depth=1 origin 2ffe227d82916ae37b4916cbd8a714f4ef627f78
+          python -m pip install capstone==5.0.9 pefile==2024.8.26
+          python tools/patch_smartheap_331.py --check
+          python tools/gen_smacker_lib.py --check
+
+      - name: Install ReproBit
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "$env:GITHUB_WORKSPACE\.reprobit-action"
+
+      - name: Provision MSVC 4.2
+        shell: pwsh
+        run: rbit toolchain provision --destination "$env:RUNNER_TEMP\msvc42" --no-save
+
+      - name: Build cold and verify exact bytes
+        id: reprobit
+        uses: ./.reprobit-action
+        with:
+          project-directory: .
+          toolchain-root: ${{ runner.temp }}\msvc42
+          jobs: "8"
+          report-directory: build/reprobit-report
+
+      - name: Check the exact and comparison publications
+        shell: pwsh
+        env:
+          ACCEPTED: ${{ steps.reprobit.outputs.accepted }}
+          BYTE_EXACT: ${{ steps.reprobit.outputs.byte-exact }}
+          LOGIC_CERTIFIED: ${{ steps.reprobit.outputs.logic-certified }}
+          REPORT_PRODUCED: ${{ steps.reprobit.outputs.report-produced }}
+          CLEAN: ${{ steps.reprobit.outputs.clean }}
+          TOOLCHAIN_ORIGIN: ${{ steps.reprobit.outputs.toolchain-origin }}
+          QUARANTINED: ${{ steps.reprobit.outputs.quarantined }}
+          QUARANTINE_COUNT: ${{ steps.reprobit.outputs.quarantine-count }}
+          QUARANTINE_BYTES: ${{ steps.reprobit.outputs.quarantine-bytes }}
+          QUARANTINE_RANGES: ${{ steps.reprobit.outputs.quarantine-ranges }}
+          QUARANTINE_DIGEST: ${{ steps.reprobit.outputs.quarantine-digest }}
+          # Every byte is compiler output: the empty exception boundary.
+          EXPECTED_QUARANTINE_COUNT: "0"
+          EXPECTED_QUARANTINE_BYTES: "0"
+          EXPECTED_QUARANTINE_RANGES: "0"
+          EXPECTED_QUARANTINE_DIGEST: "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+        run: .github/scripts/check-reprobit-publications.ps1
+
+      - name: Export the matching effective source view
+        run: rbit source export . --destination build/reprobit-debug/source
+
+      - name: Upload matched comparison files
+        uses: actions/upload-artifact@v7
+        with:
+          name: ReproBit-Win32-Comparison
+          path: build/reprobit-debug/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload verification report
+        uses: actions/upload-artifact@v7
+        with:
+          name: ReproBit-Verification-Report
+          path: build/reprobit-report/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload exact binaries
+        uses: actions/upload-artifact@v7
+        with:
+          name: ReproBit-Win32
+          path: |
+            build/CONFIG.EXE
+            build/ISLE.EXE
+            build/LEGO1.DLL
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload failed verification diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ReproBit-Failure-Diagnostics
+          path: |
+            build/reprobit-report/
+            .reprobit-state/runs/verify-*/classic/logs/**/*.log
+            .reprobit-state/runs/verify-*/classic/logical-drive/**/.reprobit-analysis/**
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+
+  compare:
+    name: Compare the ReproBit build
+    needs: exact
+    runs-on: windows-2022
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Download matched comparison files
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Win32-Comparison
+          path: build/reprobit-debug
+
+      - name: Download the verification report
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Verification-Report
+          path: build/reprobit-report
+
+      - name: Download the retail binaries
+        uses: ./.github/actions/retail-binaries
+
+      - name: Score the matched build with reccmp
+        uses: ./.github/actions/reccmp
+        with:
+          source-root: build/reprobit-debug/source
+          recompiled: build/reprobit-debug
+
+      - name: Summarize the reccmp match
+        shell: bash
+        run: python .github/scripts/summarize-match.py CONFIG ISLE LEGO1
+
+      - name: Compare the ReproBit cost with master
+        shell: bash
+        env:
+          BASELINE_URL: https://github.com/isledecomp/isle/releases/download/continuous/report.json
+        run: |
+          set -euo pipefail
+          curl --retry 5 --retry-delay 5 --retry-all-errors --connect-timeout 20 \
+            -fLSs -o report-old.json "$BASELINE_URL" || rm -f report-old.json
+          python .github/scripts/compare-reprobit-cost.py build/reprobit-report/report.json report-old.json
+
+      - name: Upload accuracy reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ReproBit-Accuracy-Report
+          path: |
+            *PROGRESS.json
+            *PROGRESS.SVG
+            *PROGRESS.HTML
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Publish continuous release
+    needs: compare
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Check out the publish scripts
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/scripts
+
+      - name: Download exact binaries
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Win32
+          path: build
+
+      - name: Download accuracy reports
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Accuracy-Report
+
+      - name: Download the verification report
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Verification-Report
+          path: reprobit-report
+
+      - name: Download matched comparison files
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Win32-Comparison
+          path: reprobit-debug
+
+      - name: Bundle the debug companion
+        run: (cd reprobit-debug && zip -rq ../ReproBit-Debug-Companion.zip .)
+
+      - name: Fetch the developer-build accuracy reports
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: .github/scripts/fetch-developer-accuracy.sh developer-accuracy
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          files=(
+            build/CONFIG.EXE build/ISLE.EXE build/LEGO1.DLL
+            ./*PROGRESS.json ./*PROGRESS.SVG
+            reprobit-report/report.html reprobit-report/report.json
+            ReproBit-Debug-Companion.zip
+          )
+          if compgen -G "developer-accuracy/*" > /dev/null; then
+            files+=(developer-accuracy/*)
+          fi
+          .github/scripts/publish-continuous-release.sh "${files[@]}"
+
+  pages:
+    name: Publish progress pages
+    needs: compare
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'isledecomp/isle'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Download accuracy reports
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Accuracy-Report
+
+      - name: Download the verification report
+        uses: actions/download-artifact@v8
+        with:
+          name: ReproBit-Verification-Report
+          path: reprobit-report
+
+      - name: Prepare the progress pages
+        run: |
+          mkdir progress
+          cp ./*PROGRESS.SVG ./*PROGRESS.HTML reprobit-report/report.html reprobit-report/report.json progress/
+
+      - name: Upload the pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: progress/
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,44 @@
+schema_version = 3
+project_id = "isle"
+state_dir = ".reprobit-state"
+
+[build]
+kind = "producer-graph"
+
+[toolchain]
+adapter = "classic-msvc"
+profile = "msvc_4_2"
+lock_file = "reprobit/toolchain.lock.json"
+
+[paths]
+id = "isle-paths-v1"
+source = "Z:\\Users\\foxtacles\\Projects\\isle-build-lean\\src"
+build = "Z:\\Users\\foxtacles\\Projects\\isle-build-lean\\build"
+toolchain = "Z:\\Users\\foxtacles\\Projects\\MSVC420"
+
+[verifier]
+kind = "literal"
+
+[authenticity]
+policy = "clean"
+
+[layout]
+build_plan = "reprobit/build-plan.json"
+interventions = "reprobit/interventions"
+proofs = "reprobit/proofs"
+oracles = "reprobit/oracles"
+
+[[targets]]
+id = "config"
+artifact = "build/CONFIG.EXE"
+oracle = "legobin/CONFIG.EXE"
+
+[[targets]]
+id = "isle"
+artifact = "build/ISLE.EXE"
+oracle = "legobin/ISLE.EXE"
+
+[[targets]]
+id = "lego1"
+artifact = "build/LEGO1.DLL"
+oracle = "legobin/LEGO1.DLL"
