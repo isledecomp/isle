@@ -13,10 +13,7 @@
 #pragma warning(disable : 4237)
 
 struct LegoContainerInfoComparator {
-	LegoBool operator()(const char* const& p_key0, const char* const& p_key1) const
-	{
-		return strcmp(p_key0, p_key1) > 0;
-	}
+	LegoBool operator()(const char* p_key0, const char* p_key1) const { return strcmp(p_key0, p_key1) > 0; }
 };
 
 // SIZE 0x10
@@ -49,10 +46,12 @@ public:
 
 	void Clear()
 	{
+		LegoContainerInfo<T>& map = m_map;
+
 #ifdef COMPAT_MODE
-		for (typename LegoContainerInfo<T>::iterator it = m_map.begin(); it != m_map.end(); it++)
+		for (typename LegoContainerInfo<T>::iterator it = map.begin(); !(it == map.end()); it++)
 #else
-		for (LegoContainerInfo<T>::iterator it = m_map.begin(); it != m_map.end(); it++)
+		for (LegoContainerInfo<T>::iterator it = map.begin(); !(it == map.end()); it++)
 #endif
 		{
 			delete (*it).second;
@@ -134,50 +133,50 @@ protected:
 // allocator<LegoTextureInfo *>::_Charalloc
 
 // clang-format off
-// TEMPLATE: LEGO1 0x10001cc0
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Lbound
+// TEMPLATE: LEGO1 0x10001cc0 SYMBOL
+// ?_Lbound@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@IBEPAU_Node@1@ABQBD@Z
 
-// TEMPLATE: LEGO1 0x1004f740
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::find
+// TEMPLATE: LEGO1 0x1004f740 SYMBOL
+// ?find@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AViterator@1@ABQBD@Z
 
-// TEMPLATE: LEGO1 0x1004f800
-// map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::insert
+// TEMPLATE: LEGO1 0x1004f800 SYMBOL
+// ?insert@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AU?$pair@Viterator@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLeg
 
-// TEMPLATE: LEGO1 0x1004f960
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::iterator::_Dec
+// TEMPLATE: LEGO1 0x1004f960 SYMBOL
+// ?_Dec@iterator@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x1004f9b0
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Insert
+// TEMPLATE: LEGO1 0x1004f9b0 SYMBOL
+// ?_Insert@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@IAE?AViterator@1@PAU_Node@1@0ABU?
 
-// TEMPLATE: LEGO1 0x10059c70
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Color
+// TEMPLATE: LEGO1 0x10059c70 SYMBOL
+// ?_Color@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@KAAAW4_Redbl@1@PAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x10059c80
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Left
+// TEMPLATE: LEGO1 0x10059c80 SYMBOL
+// ?_Left@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@KAAAPAU_Node@1@PAU21@@Z
 
-// TEMPLATE: LEGO1 0x10059c90
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Parent
+// TEMPLATE: LEGO1 0x10059c90 SYMBOL
+// ?_Parent@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@KAAAPAU_Node@1@PAU21@@Z
 
-// TEMPLATE: LEGO1 0x10059ca0
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Right
+// TEMPLATE: LEGO1 0x10059ca0 SYMBOL
+// ?_Right@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@KAAAPAU_Node@1@PAU21@@Z
 
-// TEMPLATE: LEGO1 0x10059cb0
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::~_Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >
+// TEMPLATE: LEGO1 0x10059cb0 SYMBOL
+// ??1?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x10059d80
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::iterator::_Inc
+// TEMPLATE: LEGO1 0x10059d80 SYMBOL
+// ?_Inc@iterator@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAEXXZ
 
-// TEMPLATE: LEGO1 0x10059dc0
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::erase
+// TEMPLATE: LEGO1 0x10059dc0 SYMBOL
+// ?erase@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE?AViterator@1@V21@@Z
 
-// TEMPLATE: LEGO1 0x1005a210
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Erase
+// TEMPLATE: LEGO1 0x1005a210 SYMBOL
+// ?_Erase@?$_Tree@PBDU?$pair@QBDPAVLegoTextureInfo@@@@U_Kfn@?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@IAEXPAU_Node@1@@Z
 
-// TEMPLATE: LEGO1 0x1005a250
-// list<pair<LegoTextureInfo *,int>,allocator<pair<LegoTextureInfo *,int> > >::~list<pair<LegoTextureInfo *,int>,allocator<pair<LegoTextureInfo *,int> > >
+// TEMPLATE: LEGO1 0x1005a250 SYMBOL
+// ??1?$list@U?$pair@PAVLegoTextureInfo@@H@@V?$allocator@U?$pair@PAVLegoTextureInfo@@H@@@@@@QAE@XZ
 
-// TEMPLATE: LEGO1 0x1005a2c0
-// map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::~map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >
+// TEMPLATE: LEGO1 0x1005a2c0 SYMBOL
+// ??1?$map@PBDPAVLegoTextureInfo@@ULegoContainerInfoComparator@@V?$allocator@PAVLegoTextureInfo@@@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1005a310
 // LegoContainer<LegoTextureInfo>::`scalar deleting destructor'
@@ -191,14 +190,14 @@ protected:
 // SYNTHETIC: LEGO1 0x1005a580
 // LegoTextureContainer::`scalar deleting destructor'
 
-// TEMPLATE: LEGO1 0x1005a5a0
-// List<pair<LegoTextureInfo *,int> >::~List<pair<LegoTextureInfo *,int> >
+// TEMPLATE: LEGO1 0x1005a5a0 SYMBOL
+// ??1?$List@U?$pair@PAVLegoTextureInfo@@H@@@@QAE@XZ
 
 // TEMPLATE: LEGO1 0x1005b660
 // LegoContainer<LegoTextureInfo>::~LegoContainer<LegoTextureInfo>
 
 // GLOBAL: LEGO1 0x100f0100
-// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *> >::_Nil
+// _Tree<char const *,pair<char const * const,LegoTextureInfo *>,map<char const *,LegoTextureInfo *,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Kfn,LegoContainerInfoComparator,allocator<LegoTextureInfo *>>::_Nil
 // clang-format on
 
 // TEMPLATE: BETA10 0x1007bc00

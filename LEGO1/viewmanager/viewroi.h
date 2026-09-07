@@ -2,8 +2,8 @@
 #define VIEWROI_H
 
 #include "decomp.h"
-#include "realtime/orientableroi.h"
 #include "tgl/tgl.h"
+#include "realtime/orientableroi.h"
 #include "viewlodlist.h"
 
 /*
@@ -18,8 +18,8 @@
 class ViewROI : public OrientableROI {
 public:
 	enum {
-		c_lodLevelUnset = -1,
-		c_lodLevelInvisible = -2,
+		c_tokenUnset = -1,
+		c_tokenInvisible = -2,
 	};
 
 	// FUNCTION: BETA10 0x1018c5e0
@@ -27,7 +27,7 @@ public:
 	{
 		SetLODList(lodList);
 		geometry = pRenderer->CreateGroup();
-		m_lodLevel = c_lodLevelUnset;
+		m_token = c_tokenUnset;
 	}
 
 	// FUNCTION: LEGO1 0x100a9e20
@@ -65,8 +65,8 @@ public:
 	virtual Tgl::Group* GetGeometry();                                           // vtable+0x30
 	virtual const Tgl::Group* GetGeometry() const;                               // vtable+0x34
 
-	int GetLodLevel() { return m_lodLevel; }
-	void SetLodLevel(int p_lodLevel) { m_lodLevel = p_lodLevel; }
+	int GetToken() { return m_token; }
+	void SetToken(int p_lodLevel) { m_token = p_lodLevel; }
 
 	static unsigned char SetLightSupport(unsigned char p_lightSupport);
 
@@ -76,7 +76,7 @@ protected:
 	void SetGeometryTransformation();
 
 	Tgl::Group* geometry; // 0xdc
-	int m_lodLevel;       // 0xe0
+	int m_token;          // 0xe0
 };
 
 // SYNTHETIC: LEGO1 0x100aa250
