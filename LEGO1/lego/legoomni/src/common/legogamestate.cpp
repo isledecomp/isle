@@ -82,6 +82,10 @@ const char* g_playersGSI = "Players.gsi";
 // STRING: LEGO1 0x100f3e24
 const char* g_historyGSI = "History.gsi";
 
+// GLOBAL: LEGO1 0x100f3e4c
+// STRING: LEGO1 0x100f3e14
+const char* g_texturesGST = "Textures.gst";
+
 // This is a pointer to the end of the global variable name table, which has
 // the text "END_OF_VARIABLES" in it.
 // TODO: make g_endOfVariables reference the actual end of the variable array.
@@ -121,6 +125,9 @@ ColorStringStruct g_colorSaveData[43] = {
 // in that table is a special entry, the string "END_OF_VARIABLES"
 extern const char* g_endOfVariables;
 
+// STRING: LEGO1 0x100f3bf4
+const char* const g_disable = "disable";
+
 // GLOBAL: LEGO1 0x100f3fb0
 // STRING: LEGO1 0x100f3a18
 const char* g_delimiter = " \t";
@@ -138,7 +145,6 @@ const char* g_reset = "reset";
 const char* g_strEnable = "enable";
 
 // GLOBAL: LEGO1 0x100f3fc0
-// STRING: LEGO1 0x100f3bf4
 const char* g_strDisable = "disable";
 
 // FUNCTION: LEGO1 0x10039550
@@ -150,7 +156,7 @@ LegoGameState::LegoGameState()
 	m_stateCount = 0;
 	m_actorId = 0;
 	m_savePath = NULL;
-	m_stateArray = NULL;
+	m_states = NULL;
 	m_jukeboxMusic = JukeboxScript::c_noneJukebox;
 	m_currentArea = e_undefined;
 	m_previousArea = e_undefined;
@@ -160,14 +166,17 @@ LegoGameState::LegoGameState()
 	m_loadedAct = e_actNotFound;
 	SetCurrentAct(e_act1);
 
-	m_backgroundColor = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
-	VariableTable()->SetVariable(m_backgroundColor);
+	m_bgColorVar = new LegoBackgroundColor("backgroundcolor", "set 56 54 68");
+	assert(m_bgColorVar);
+	VariableTable()->SetVariable(m_bgColorVar);
 
-	m_tempBackgroundColor = new LegoBackgroundColor("tempBackgroundColor", "set 56 54 68");
-	VariableTable()->SetVariable(m_tempBackgroundColor);
+	m_tempColorVar = new LegoBackgroundColor("tempBackgroundColor", "set 56 54 68");
+	assert(m_tempColorVar);
+	VariableTable()->SetVariable(m_tempColorVar);
 
-	m_fullScreenMovie = new LegoFullScreenMovie("fsmovie", "disable");
-	VariableTable()->SetVariable(m_fullScreenMovie);
+	m_fsMovieVar = new LegoFullScreenMovie("fsmovie", "disable");
+	assert(m_fsMovieVar);
+	VariableTable()->SetVariable(m_fsMovieVar);
 
 	VariableTable()->SetVariable("lightposition", "2");
 	SerializeScoreHistory(LegoFile::c_read);
@@ -180,13 +189,13 @@ LegoGameState::~LegoGameState()
 
 	if (m_stateCount) {
 		for (MxS16 i = 0; i < m_stateCount; i++) {
-			LegoState* state = m_stateArray[i];
+			LegoState* state = m_states[i];
 			if (state) {
 				delete state;
 			}
 		}
 
-		delete[] m_stateArray;
+		delete[] m_states;
 	}
 
 	delete[] m_savePath;
@@ -194,34 +203,39 @@ LegoGameState::~LegoGameState()
 
 // FUNCTION: LEGO1 0x10039780
 // FUNCTION: BETA10 0x10083d43
-void LegoGameState::SetActor(MxU8 p_actorId)
+void LegoGameState::SetActor(MxU8 p_id)
 {
-	if (p_actorId) {
-		m_actorId = p_actorId;
+	assert(p_id != LegoActor::e_none);
+
+	if (p_id) {
+		m_actorId = p_id;
 	}
 
 	LegoPathActor* oldActor = UserActor();
 	SetUserActor(NULL);
 
-	IslePathActor* newActor = new IslePathActor();
-	const char* actorName = LegoActor::GetActorName(m_actorId);
-	LegoROI* roi = CharacterManager()->GetActorROI(actorName, FALSE);
+	IslePathActor* userCharacter = new IslePathActor();
+	assert(userCharacter);
+	const char* name = LegoActor::GetActorName(m_actorId);
+	assert(name);
+	LegoROI* roi = CharacterManager()->GetActorROI(name, FALSE);
+	assert(roi);
 	MxDSAction action;
 
 	action.SetAtomId(*g_isleScript);
 	action.SetObjectId(100000);
-	newActor->Create(action);
-	newActor->SetActorId(p_actorId);
-	newActor->SetROI(roi, FALSE, FALSE);
+	userCharacter->Create(action);
+	userCharacter->SetActorId(p_id);
+	userCharacter->SetROI(roi, FALSE, FALSE);
 
 	if (oldActor) {
-		newActor->GetROI()->SetLocal2World(oldActor->GetROI()->GetLocal2World());
-		newActor->SetBoundary(oldActor->GetBoundary());
+		userCharacter->GetROI()->SetLocal2World(oldActor->GetROI()->GetLocal2World());
+		userCharacter->SetBoundary(oldActor->GetBoundary());
 		delete oldActor;
 	}
 
-	newActor->ClearFlag(LegoEntity::c_managerOwned);
-	SetUserActor(newActor);
+	userCharacter->ClearFlag(LegoEntity::c_managerOwned);
+	SetUserActor(userCharacter);
 }
 
 // FUNCTION: LEGO1 0x10039910
@@ -262,11 +276,11 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	}
 
 	MxResult result = FAILURE;
+	MxS32 j;
 	LegoFile storage;
 	MxVariableTable* variableTable = VariableTable();
 	MxS16 count = 0;
 	MxU32 i;
-	MxS32 j;
 	MxU16 area;
 
 	MxString savePath;
@@ -300,7 +314,7 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	result = BuildingManager()->Write(&storage);
 
 	for (j = 0; j < m_stateCount; j++) {
-		if (m_stateArray[j]->IsSerializable()) {
+		if (m_states[j]->IsSerializable()) {
 			count++;
 		}
 	}
@@ -308,8 +322,8 @@ MxResult LegoGameState::Save(MxULong p_slot)
 	storage.WriteS16(count);
 
 	for (j = 0; j < m_stateCount; j++) {
-		if (m_stateArray[j]->IsSerializable()) {
-			m_stateArray[j]->Serialize(&storage);
+		if (m_states[j]->IsSerializable()) {
+			m_states[j]->Serialize(&storage);
 		}
 	}
 
@@ -326,10 +340,10 @@ done:
 MxResult LegoGameState::DeleteState()
 {
 	MxS16 stateCount = m_stateCount;
-	LegoState** stateArray = m_stateArray;
+	LegoState** stateArray = m_states;
 
 	m_stateCount = 0;
-	m_stateArray = NULL;
+	m_states = NULL;
 
 	for (MxS32 count = 0; count < stateCount; count++) {
 		if (!stateArray[count]->Reset() && stateArray[count]->IsSerializable()) {
@@ -362,7 +376,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 
 	MxS32 version;
 	MxU32 status;
-	MxS16 count, actArea;
+	MxS16 i, count, actArea;
 	const char* lightPosition;
 
 	storage.ReadS32(version);
@@ -388,7 +402,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 		}
 	} while (status != 2);
 
-	m_backgroundColor->SetLightColor();
+	m_bgColorVar->SetLightColor();
 	lightPosition = VariableTable()->GetVariable("lightposition");
 
 	if (lightPosition) {
@@ -412,7 +426,7 @@ MxResult LegoGameState::Load(MxULong p_slot)
 	storage.ReadS16(count);
 
 	if (count) {
-		for (MxS16 i = 0; i < count; i++) {
+		for (i = 0; i < count; i++) {
 			storage.ReadString(stateName);
 
 			LegoState* state = GetState(stateName);
@@ -449,6 +463,7 @@ done:
 }
 
 // FUNCTION: LEGO1 0x10039f00
+// FUNCTION: BETA10 0x100847b8
 void LegoGameState::SetSavePath(char* p_savePath)
 {
 	if (m_savePath != NULL) {
@@ -573,6 +588,7 @@ void LegoGameState::GetFileSavePath(MxString* p_outPath, MxS16 p_slotn)
 }
 
 // FUNCTION: LEGO1 0x1003a2e0
+// FUNCTION: BETA10 0x10084c68
 void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 {
 	LegoFile storage;
@@ -596,6 +612,7 @@ void LegoGameState::SerializePlayersInfo(MxS16 p_flags)
 }
 
 // FUNCTION: LEGO1 0x1003a3f0
+// FUNCTION: BETA10 0x10084db7
 MxResult LegoGameState::AddPlayer(Username& p_player)
 {
 	MxString from, to;
@@ -655,6 +672,7 @@ void LegoGameState::SwitchPlayer(MxS16 p_playerId)
 }
 
 // FUNCTION: LEGO1 0x1003a6e0
+// FUNCTION: BETA10 0x1008519b
 MxS16 LegoGameState::FindPlayer(Username& p_player)
 {
 	for (MxS16 i = 0; i < m_playerCount; i++) {
@@ -949,10 +967,11 @@ void LegoGameState::SwitchArea(Area p_area)
 		InvokeAction(Extra::ActionType::e_start, *g_isleScript, IsleScript::c_GaraDoor, NULL);
 		break;
 	case e_garageExited: {
-		Act1State* state = (Act1State*) GameState()->GetState("Act1State");
+		Act1State* act1State = (Act1State*) GameState()->GetState("Act1State");
+		assert(act1State);
 		LoadIsle();
 
-		if (state->GetState() == Act1State::e_transitionToTowtrack) {
+		if (act1State->GetState() == Act1State::e_transitionToTowtrack) {
 			VideoManager()->Get3DManager()->SetFrustrum(90, 0.1f, 250.0f);
 		}
 		else {
@@ -1045,6 +1064,7 @@ void LegoGameState::SwitchArea(Area p_area)
 		InvokeAction(Extra::ActionType::e_opendisk, *g_histbookScript, HistbookScript::c__StartUp, NULL);
 		break;
 	default:
+		assert("Wrong destination location" == NULL);
 		break;
 	}
 }
@@ -1091,8 +1111,8 @@ MxBool ROIColorOverride(const char* p_input, char* p_output, MxU32 p_copyLen)
 LegoState* LegoGameState::GetState(const char* p_stateName)
 {
 	for (MxS32 i = 0; i < m_stateCount; ++i) {
-		if (m_stateArray[i]->IsA(p_stateName)) {
-			return m_stateArray[i];
+		if (m_states[i]->IsA(p_stateName)) {
+			return m_states[i];
 		}
 	}
 	return NULL;
@@ -1115,36 +1135,39 @@ LegoState* LegoGameState::CreateState(const char* p_stateName)
 // FUNCTION: BETA10 0x1008636e
 void LegoGameState::RegisterState(LegoState* p_state)
 {
+	assert(p_state);
+
 	MxS32 targetIndex;
 	for (targetIndex = 0; targetIndex < m_stateCount; ++targetIndex) {
-		if (m_stateArray[targetIndex]->IsA(p_state->ClassName())) {
+		if (m_states[targetIndex]->IsA(p_state->ClassName())) {
 			break;
 		}
 	}
 
 	if (targetIndex == m_stateCount) {
-		LegoState** newBuffer = new LegoState*[m_stateCount + 1];
+		LegoState** states = new LegoState*[m_stateCount + 1];
+		assert(states);
 
 		if (m_stateCount != 0) {
-			memcpy(newBuffer, m_stateArray, m_stateCount * sizeof(LegoState*));
-			delete[] m_stateArray;
+			memcpy(states, m_states, m_stateCount * sizeof(LegoState*));
+			delete[] m_states;
 		}
 
-		newBuffer[m_stateCount++] = p_state;
-		m_stateArray = newBuffer;
+		states[m_stateCount++] = p_state;
+		m_states = states;
 	}
 	else {
-		delete m_stateArray[targetIndex];
-		m_stateArray[targetIndex] = p_state;
+		delete m_states[targetIndex];
+		m_states[targetIndex] = p_state;
 	}
 }
 
 // FUNCTION: LEGO1 0x1003bd00
 void LegoGameState::Init()
 {
-	m_backgroundColor->SetValue("set 56 54 68");
-	m_backgroundColor->SetLightColor();
-	m_tempBackgroundColor->SetValue("set 56 54 68");
+	m_bgColorVar->SetValue("set 56 54 68");
+	m_bgColorVar->SetLightColor();
+	m_tempColorVar->SetValue("set 56 54 68");
 	VariableTable()->SetVariable("lightposition", "2");
 	SetLightPosition(2);
 	PlantManager()->Init();
