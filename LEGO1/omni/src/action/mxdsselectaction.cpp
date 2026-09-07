@@ -124,7 +124,7 @@ void MxDSSelectAction::Deserialize(MxU8*& p_source, MxS16 p_flags)
 		MxS32 index = -1;
 		m_unk0xac->DeleteAll();
 
-		MxU32 i;
+		MxS32 i;
 		for (i = 0; i < count; i++) {
 			if (!strcmp(string.GetData(), (char*) p_source)) {
 				index = i;

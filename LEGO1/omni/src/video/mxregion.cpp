@@ -46,22 +46,23 @@ void MxRegion::AddRect(MxRect32& p_rect)
 			rect.SetTop(rect.GetBottom());
 		}
 		else if (rect.GetTop() < span->GetMax()) {
+			MxSpan* newSpan;
 			if (rect.GetTop() < span->GetMin()) {
 				newRect = rect;
 				newRect.SetBottom(span->GetMin());
-				MxSpan* newSpan = new MxSpan(newRect);
+				newSpan = new MxSpan(newRect);
 				cursor.Prepend(newSpan);
 				rect.SetTop(span->GetMin());
 			}
 			else if (span->GetMin() < rect.GetTop()) {
-				MxSpan* newSpan = span->Clone();
+				newSpan = span->Clone();
 				newSpan->SetMax(rect.GetTop());
 				span->SetMin(rect.GetTop());
 				cursor.Prepend(newSpan);
 			}
 
 			if (rect.GetBottom() < span->GetMax()) {
-				MxSpan* newSpan = span->Clone();
+				newSpan = span->Clone();
 				newSpan->SetMax(rect.GetBottom());
 				span->SetMin(rect.GetBottom());
 				newSpan->AddSegment(rect.GetLeft(), rect.GetRight());
@@ -118,6 +119,7 @@ MxRegionCursor::MxRegionCursor(MxRegion* p_region)
 }
 
 // FUNCTION: LEGO1 0x100c40b0
+// FUNCTION: BETA10 0x10149747
 MxRegionCursor::~MxRegionCursor()
 {
 	if (m_rect) {
@@ -134,6 +136,7 @@ MxRegionCursor::~MxRegionCursor()
 }
 
 // FUNCTION: LEGO1 0x100c4140
+// FUNCTION: BETA10 0x10149838
 MxRect32* MxRegionCursor::Head()
 {
 	m_spanListCursor->Head();
@@ -155,6 +158,7 @@ MxRect32* MxRegionCursor::Head()
 }
 
 // FUNCTION: LEGO1 0x100c41d0
+// FUNCTION: BETA10 0x101498d4
 MxRect32* MxRegionCursor::Tail()
 {
 	m_spanListCursor->Tail();
@@ -176,6 +180,7 @@ MxRect32* MxRegionCursor::Tail()
 }
 
 // FUNCTION: LEGO1 0x100c4260
+// FUNCTION: BETA10 0x10149970
 MxRect32* MxRegionCursor::Next()
 {
 	MxSegment* segment;
@@ -201,6 +206,7 @@ MxRect32* MxRegionCursor::Next()
 }
 
 // FUNCTION: LEGO1 0x100c4360
+// FUNCTION: BETA10 0x10149a69
 MxRect32* MxRegionCursor::Prev()
 {
 	MxSegment* segment;
@@ -226,6 +232,7 @@ MxRect32* MxRegionCursor::Prev()
 }
 
 // FUNCTION: LEGO1 0x100c4460
+// FUNCTION: BETA10 0x10149b62
 MxRect32* MxRegionCursor::Head(MxRect32& p_rect)
 {
 	m_spanListCursor->Reset();
@@ -234,6 +241,7 @@ MxRect32* MxRegionCursor::Head(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c4480
+// FUNCTION: BETA10 0x10149b97
 MxRect32* MxRegionCursor::Tail(MxRect32& p_rect)
 {
 	m_spanListCursor->Reset();
@@ -242,6 +250,7 @@ MxRect32* MxRegionCursor::Tail(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c44a0
+// FUNCTION: BETA10 0x10149bcc
 MxRect32* MxRegionCursor::Next(MxRect32& p_rect)
 {
 	MxSegment* segment;
@@ -267,6 +276,7 @@ MxRect32* MxRegionCursor::Next(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c4590
+// FUNCTION: BETA10 0x10149cae
 MxRect32* MxRegionCursor::Prev(MxRect32& p_rect)
 {
 	MxSegment* segment;
@@ -292,6 +302,7 @@ MxRect32* MxRegionCursor::Prev(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c4680
+// FUNCTION: BETA10 0x10149d90
 void MxRegionCursor::Reset()
 {
 	if (m_rect) {
@@ -308,6 +319,7 @@ void MxRegionCursor::Reset()
 }
 
 // FUNCTION: LEGO1 0x100c46c0
+// FUNCTION: BETA10 0x10149e24
 void MxRegionCursor::CreateSegmentListCursor(MxSegmentList* p_segList)
 {
 	if (m_segListCursor) {
@@ -318,6 +330,7 @@ void MxRegionCursor::CreateSegmentListCursor(MxSegmentList* p_segList)
 }
 
 // FUNCTION: LEGO1 0x100c4980
+// FUNCTION: BETA10 0x10149ef1
 void MxRegionCursor::SetRect(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_bottom)
 {
 	if (!m_rect) {
@@ -331,9 +344,11 @@ void MxRegionCursor::SetRect(MxS32 p_left, MxS32 p_top, MxS32 p_right, MxS32 p_b
 }
 
 // FUNCTION: LEGO1 0x100c4a20
+// FUNCTION: BETA10 0x10149fcc
 void MxRegionCursor::NextSpan(MxRect32& p_rect)
 {
 	MxSpan* span;
+	MxSegment* segment;
 	while (m_spanListCursor->Next(span)) {
 		if (p_rect.GetBottom() <= span->GetMin()) {
 			Reset();
@@ -343,7 +358,6 @@ void MxRegionCursor::NextSpan(MxRect32& p_rect)
 		if (p_rect.GetTop() < span->GetMax()) {
 			CreateSegmentListCursor(span->m_segList);
 
-			MxSegment* segment;
 			while (m_segListCursor->Next(segment)) {
 				if (p_rect.GetRight() <= segment->GetMin()) {
 					break;
@@ -362,6 +376,7 @@ void MxRegionCursor::NextSpan(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c4b50
+// FUNCTION: BETA10 0x1014a0fb
 void MxRegionCursor::PrevSpan(MxRect32& p_rect)
 {
 	MxSpan* span;
@@ -393,6 +408,7 @@ void MxRegionCursor::PrevSpan(MxRect32& p_rect)
 }
 
 // FUNCTION: LEGO1 0x100c4c90
+// FUNCTION: BETA10 0x1014a22a
 MxSpan::MxSpan(MxS32 p_min, MxS32 p_max)
 {
 	m_min = p_min;
