@@ -1,7 +1,7 @@
 #include "legopathboundary.h"
 
 #include "decomp.h"
-#include "geom/legoorientededge.h"
+#include "geom/legowegedge.h"
 #include "legoanimpresenter.h"
 #include "legopathactor.h"
 #include "legopathstruct.h"
