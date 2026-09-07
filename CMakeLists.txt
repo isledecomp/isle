@@ -118,10 +118,8 @@ function(add_lego_libraries NAME)
   target_link_libraries(realtime${ARG_SUFFIX} PRIVATE Vec::Vec)
 
   add_library(viewmanager${ARG_SUFFIX} STATIC
-    LEGO1/viewmanager/viewlod.cpp
     LEGO1/viewmanager/viewmanager.cpp
     LEGO1/viewmanager/viewlodlist.cpp
-    LEGO1/viewmanager/viewroi.cpp
   )
   list(APPEND list_targets viewmanager${ARG_SUFFIX})
   set_property(TARGET viewmanager${ARG_SUFFIX} PROPERTY ARCHIVE_OUTPUT_NAME "viewmanager$<$<CONFIG:Debug>:d>${ARG_SUFFIX}")
