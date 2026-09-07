@@ -1,9 +1,7 @@
 #ifndef LEGORACERS_H
 #define LEGORACERS_H
 
-// clang-format off
 #include "legoracespecial.h"
-// clang-format on
 #include "legoracemap.h"
 
 #define LEGORACECAR_NONE 0
@@ -182,7 +180,7 @@ public:
 	// LegoRaceCar::`scalar deleting destructor'
 
 private:
-	MxU8 m_kickState;         // 0x54
+	MxU8 m_userState;         // 0x54
 	float m_kickStart;        // 0x58
 	Mx3DPointFloat m_unk0x5c; // 0x5c
 

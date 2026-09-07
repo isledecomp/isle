@@ -12,15 +12,15 @@ DECOMP_SIZE_ASSERT(Doors, 0x1f8)
 
 // GLOBAL: LEGO1 0x100d8e7c
 // GLOBAL: BETA10 0x101b954c
-MxFloat g_timeMoving = 1000.0f;
+const MxFloat g_timeMoving = 1000.0f;
 
 // GLOBAL: LEGO1 0x100d8e80
 // GLOBAL: BETA10 0x101b9550
-MxFloat g_timeOpened = 4000.0f;
+const MxFloat g_timeOpened = 4000.0f;
 
 // GLOBAL: LEGO1 0x100d8e84
 // GLOBAL: BETA10 0x101b9554
-MxFloat g_totalTime = 6000.0f; // = g_timeMoving + g_totalTime + g_timeMoving
+const MxFloat g_totalTime = 6000.0f; // = g_timeMoving + g_totalTime + g_timeMoving
 
 // FUNCTION: LEGO1 0x10066100
 // FUNCTION: BETA10 0x10026850

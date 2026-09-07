@@ -16,6 +16,8 @@
 #include "mxtransitionmanager.h"
 #include "scripts.h"
 
+#include <assert.h>
+
 DECOMP_SIZE_ASSERT(InfocenterDoor, 0xfc)
 
 // FUNCTION: LEGO1 0x10037730
@@ -117,8 +119,9 @@ MxLong InfocenterDoor::HandleControl(LegoControlManagerNotificationParam& p_para
 			break;
 		case InfodoorScript::c_Door_Ctl:
 			if (GameState()->GetActorId() != LegoActor::e_none) {
-				InfocenterState* state = (InfocenterState*) GameState()->GetState("InfocenterState");
-				if (state->HasRegistered()) {
+				InfocenterState* infocenterState = (InfocenterState*) GameState()->GetState("InfocenterState");
+				assert(infocenterState);
+				if (infocenterState->HasRegistered()) {
 					m_destLocation = LegoGameState::e_infocenterExited;
 				}
 				else {

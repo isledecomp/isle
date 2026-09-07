@@ -33,9 +33,9 @@ BumpBouy::~BumpBouy()
 MxLong BumpBouy::Notify(MxParam& p_param)
 {
 	MxLong result = 0;
+	IslePathActor* user = (IslePathActor*) UserActor();
 	MxNotificationParam& param = (MxNotificationParam&) p_param;
 
-	IslePathActor* user = (IslePathActor*) UserActor();
 	assert(user);
 
 	if (user->IsA("Jetski") && param.GetNotification() == c_notificationClick) {

@@ -94,7 +94,9 @@ PizzeriaState::PizzeriaState()
 	m_playerPlaylists[2] = Playlist((MxU32*) g_papaActions, sizeOfArray(g_papaActions), Playlist::e_once);
 	m_playerPlaylists[3] = Playlist((MxU32*) g_nickActions, sizeOfArray(g_nickActions), Playlist::e_once);
 	m_playerPlaylists[4] = Playlist((MxU32*) g_lauraActions, sizeOfArray(g_lauraActions), Playlist::e_once);
-	memset(m_states, -1, sizeof(m_states));
+	for (MxS32 i = 0; i < 5; i++) {
+		m_states[i] = -1;
+	}
 }
 
 // FUNCTION: LEGO1 0x10017d50

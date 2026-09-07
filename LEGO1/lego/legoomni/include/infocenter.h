@@ -31,7 +31,7 @@ public:
 		// e_9 = 9,
 		// e_10 = 10,
 		e_welcomeAnimation = 11,
-		e_exiting = 12,
+		e_quiting = 12,
 		e_playCredits = 13,
 		e_exitingToIsland = 14,
 		e_backToInfoAct1 = 15,
@@ -91,7 +91,7 @@ public:
 	Playlist m_returnDialogue[3];   // 0x20
 	Playlist m_leaveDialogue[3];    // 0x44
 	Playlist m_bricksterDialogue;   // 0x68
-	MxU32 m_state;                  // 0x74
+	MxU32 m_step;                   // 0x74
 	MxStillPresenter* m_letters[7]; // 0x78
 };
 
@@ -161,7 +161,7 @@ private:
 	void UpdateFrameHot(MxBool p_display);
 	void Reset();
 
-	void PlayCutscene(IntroScript::Script p_entityId, MxBool p_scale);
+	void PlayCutscene(IntroScript::Script p_movieId, MxBool p_scale);
 	void StopCutscene();
 
 	void UpdateEnabledGlowControl(MxS32 p_x, MxS32 p_y);
@@ -177,7 +177,7 @@ private:
 
 	InfomainScript::Script m_currentInfomainScript; // 0xf8
 	MxS16 m_selectedCharacter;                      // 0xfc
-	InfocenterState* m_infocenterState;             // 0x100
+	InfocenterState* m_state;                       // 0x100
 	LegoGameState::Area m_destLocation;             // 0x104
 	IntroScript::Script m_currentCutscene;          // 0x108
 	Radio m_radio;                                  // 0x10c
