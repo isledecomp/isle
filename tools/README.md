@@ -1,68 +1,71 @@
-# LEGO Island Decompilation Tools
+# LEGO Island decompilation tools
 
-Accuracy to the game's original code is the main goal of this project. To facilitate the decompilation effort and maintain overall quality, we have devised a set of annotations, to be embedded in the source code, which allow us to automatically verify the accuracy of re-compiled functions' assembly, virtual tables, variable offsets and more.
+Most shared comparison tooling lives in [reccmp](https://github.com/isledecomp/reccmp). This directory contains the few helpers that are specific to LEGO Island.
 
-The tooling we have developed has been moved to the [reccmp](https://github.com/isledecomp/reccmp) repo to facilitate its use in other decompilation projects.
+- [`patch_smartheap_331.py`](/tools/patch_smartheap_331.py) recreates the exact SmartHeap 3.31 library used by the original game.
+- [`gen_smacker_lib.py`](/tools/gen_smacker_lib.py) recreates the exact Win32 Smacker library used by the original game.
+- [`ncc/`](/tools/ncc/) checks source naming and style in CI.
+- [`patch_c2.py`](/tools/patch_c2.py) patches `C2.EXE` (part of MSVC 4.20) to get rid of a bugged warning.
 
-* See the [README](https://github.com/isledecomp/reccmp?tab=readme-ov-file#getting-started) on how to get started.
-* Familiarize yourself with the available [annotations](https://github.com/isledecomp/reccmp/blob/master/docs/annotations.md) and the [best practices](https://github.com/isledecomp/reccmp/blob/master/docs/recommendations.md) we have established.
+For reccmp setup and source annotations, see the [reccmp getting-started guide](https://github.com/isledecomp/reccmp?tab=readme-ov-file#getting-started), [annotation reference](https://github.com/isledecomp/reccmp/blob/master/docs/annotations.md), and [recommendations](https://github.com/isledecomp/reccmp/blob/master/docs/recommendations.md).
 
-The following scripts are specific to LEGO Island and have thus remained here:
+## Rebuilding SmartHeap and Smacker
 
-* [`patch_c2.py`](/tools/patch_c2.py): Patches `C2.EXE` (part of MSVC 4.20) to get rid of a bugged warning.
+The generated libraries are checked into the repository, so a normal build does not need these commands. Use them to independently reproduce or verify the library files.
 
-## Modules
-
-The following is a list of all the modules found in the annotations (e.g. `// FUNCTION: [module] [address]`) and which binaries they refer to. See also [this list of all known versions of the game](https://www.legoisland.org/wiki/LEGO_Island#Download).
-
-### Retail v1.1.0.0 (v1.1)
-
-* `LEGO1` -> `LEGO1.DLL`
-* `CONFIG`-> `CONFIG.EXE`
-* `ISLE` -> `ISLE.EXE`
-
-These modules are the most important ones and refer to the English retail version 1.1.0.0 (often shortened to v1.1), which is the most widely released one. These are the ones we attempt to decompile and match as best as possible.
-
-### BETA v1.0
-
-* `BETA10` -> `LEGO1D.DLL`
-* `CONFIGD` -> `CONFIG.EXE`
-
-The Beta 1.0 version contains a debug build of the game. While it does not have debug symbols, it still has a number of benefits:
-
-* It is built with less or no optimisation, leading to better decompilations in Ghidra
-* Far fewer functions are inlined by the compiler, so it can be used to recognise inlined functions
-* It contains assertions that tell us original variable names and code file paths
-
-It is therefore advisable to search for the corresponding function in `BETA10` when decompiling a function in `LEGO1`. Finding the correct function can be tricky, but is usually worth it, especially for longer functions.
-
-Unfortunately, some code has been changed after this beta version was created. Therefore, we are not aiming for a perfect binary match of `BETA10`. In case of discrepancies, `LEGO1` (as defined above) is our "gold standard" for matching.
-
-The beta version of the `CONFIG` application has provided some help with matching [MFC handler functions](https://en.wikipedia.org/wiki/Microsoft_Foundation_Class_Library) that are similar to the final version.
-
-### Pre-Alpha
-
-* `ALPHA` -> `LEGO1D.DLL`
-
-This debug build is hardly used since it has little benefit over `BETA10`.
-
-## Re-compiling a beta build
-
-If you want to match the code against `BETA10`, use the following `cmake` setup to create a debug build:
+First install the tool dependencies:
 
 ```bash
-cmake <path-to-source> -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_BUILD_TYPE=Debug -DISLE_USE_SMARTHEAP=OFF -DISLE_BUILD_BETA10=ON -DISLE_BUILD_LEGO1=OFF
+python3 -m pip install -r tools/requirements.txt
 ```
 
-If you can figure out how to make a debug build with SmartHeap enabled, please add it here.
+Place the original retail binaries in `legobin/`, then run:
 
-If you want to run scripts to compare your debug build to `BETA10` (e.g. `reccmp-reccmp`), it is advisable to add a copy of `LEGO1D.DLL` from Beta 1.0 to `/legobin` and rename it to `BETA10.DLL`. Analogously, you can add `LEGO1D.DLL` from the Pre-Alpha and rename it to `ALPHA.DLL`.
+```bash
+python3 tools/patch_smartheap_331.py --check
+python3 tools/gen_smacker_lib.py --check
+```
 
-## Finding matching functions
+The first command needs `legobin/ISLE.EXE`. The second needs `legobin/LEGO1.DLL`; if `legobin/BETA10.DLL` is present, it is used as an additional cross-check. Both commands exit with an error if the generated bytes differ from the checked-in libraries.
 
-This is not a recipe, but rather a list of things you can try.
+To replace a checked-in library with a freshly generated copy, rerun its command without `--check`. SmartHeap uses the known 3.30 library from the repository's history by default; `--input` and `--from-git` are available for an explicit source.
 
-* If you are working on a virtual function in a class, try to find the class' vtable. Many (but not all) classes implement `ClassName()`. These functions are usually easy to find by searching the memory for the string consisting of the class name. Keep in mind that not all child classes overwrite this function, so if the function you found is used in multiple vtables (or if you found multiple `ClassName()`-like functions), make sure you actually have the parent's vtable.
-* If that does not help, you can try to walk up the call tree and try to locate a function that calls the function you are interested in.
-* Assertions can also help you - most `.cpp` file names have already been matched based on `BETA10`, so you can search for the name of your `.cpp` file and check all the assertions in that file. While that does not find all functions in a given source file, it usually finds the more complex ones.
-* _If you have found any other strategies, please add them here._
+## Reference binaries
+
+Source annotations use these short module names:
+
+| Module | Binary | Purpose |
+| --- | --- | --- |
+| `LEGO1` | `LEGO1.DLL` | Retail game library and primary accuracy target |
+| `ISLE` | `ISLE.EXE` | Retail game executable and primary accuracy target |
+| `CONFIG` | `CONFIG.EXE` | Retail configuration program and primary accuracy target |
+| `BETA10` | `LEGO1D.DLL` | Beta 1.0 debug build used as a reference |
+| `CONFIGD` | `CONFIG.EXE` | Beta 1.0 configuration program |
+| `ALPHA` | `LEGO1D.DLL` | Pre-alpha debug build, used only when it adds useful evidence |
+
+The retail 1.1 binaries are the final standard. The beta build can still reveal original names, assertions, source paths, uninlined functions, and code that is easier to understand because it was compiled with fewer optimizations. Some code changed after the beta, so `BETA10` is supporting evidence rather than a second exact-match target.
+
+## Building the beta reference
+
+With an MSVC 4.20 environment active, configure a separate debug build:
+
+```bash
+cmake -S . -B build-beta -G "NMake Makefiles" \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DISLE_USE_SMARTHEAP=OFF \
+  -DISLE_BUILD_BETA10=ON \
+  -DISLE_BUILD_LEGO1=OFF \
+  -DISLE_BUILD_APP=OFF \
+  -DISLE_BUILD_CONFIG=OFF
+cmake --build build-beta
+```
+
+To compare against it with reccmp, copy the original Beta 1.0 `LEGO1D.DLL` to `legobin/BETA10.DLL`.
+
+## Finding code in a reference binary
+
+- Start with a nearby known function and follow its callers or callees.
+- For a virtual function, locating the class name string and its virtual table can narrow the search.
+- Search beta assertions and embedded source filenames; they often identify the original file and nearby functions.
+
+These are starting points, not proof. Confirm every match against the retail binary and the project's annotations.

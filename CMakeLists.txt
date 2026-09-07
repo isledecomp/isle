@@ -86,7 +86,7 @@ if(ISLE_USE_DX5_LIBS)
 endif()
 
 add_library(Smacker::Smacker STATIC IMPORTED)
-set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/3rdparty/smacker/smack.lib")
+set_property(TARGET Smacker::Smacker PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/3rdparty/smacker/smackw32.lib")
 set_property(TARGET Smacker::Smacker PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/3rdparty/smacker")
 
 add_library(Vec::Vec INTERFACE IMPORTED)
