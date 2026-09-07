@@ -7,6 +7,7 @@
 #include "misc.h"
 #include "mxmain.h"
 
+#include <assert.h>
 #include <vec.h>
 
 DECOMP_SIZE_ASSERT(Lego3DSound, 0x30)
@@ -108,6 +109,7 @@ MxResult Lego3DSound::Create(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const char
 }
 
 // FUNCTION: LEGO1 0x10011880
+// FUNCTION: BETA10 0x1003997e
 void Lego3DSound::Destroy()
 {
 	if (m_ds3dBuffer) {
@@ -131,6 +133,8 @@ void Lego3DSound::Destroy()
 // FUNCTION: BETA10 0x10039a2a
 MxU32 Lego3DSound::UpdatePosition(LPDIRECTSOUNDBUFFER p_directSoundBuffer)
 {
+	assert(p_directSoundBuffer);
+
 	MxU32 updated = FALSE;
 
 	if (m_positionROI != NULL) {
@@ -221,6 +225,8 @@ void Lego3DSound::FUN_10011a60(LPDIRECTSOUNDBUFFER p_directSoundBuffer, const ch
 		else {
 			m_positionROI = m_roi;
 		}
+
+		assert(m_positionROI);
 
 		if (m_ds3dBuffer != NULL) {
 			DWORD dwMode;
