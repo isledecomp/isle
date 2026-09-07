@@ -5,6 +5,7 @@
 #include "jukebox_actions.h"
 #include "legoanimationmanager.h"
 #include "legocarbuild.h"
+#include "legoendanimnotificationparam.h"
 #include "legonavcontroller.h"
 #include "legopathboundary.h"
 #include "legoutils.h"
@@ -16,8 +17,64 @@
 #include "scripts.h"
 #include "viewmanager/viewmanager.h"
 
+// SIZE 0x38
+struct SpawnLocation {
+	SpawnLocation() {}
+
+	SpawnLocation(
+		LegoGameState::Area p_area,
+		MxAtomId* p_script,
+		MxS32 p_entityId,
+		const char* p_name,
+		MxS16 p_src,
+		float p_srcScale,
+		MxS16 p_dest,
+		float p_destScale,
+		MxU32 p_location,
+		JukeboxScript::Script p_music
+	)
+	{
+		m_area = p_area;
+		m_script = p_script;
+		m_entityId = p_entityId;
+		strcpy(m_name, p_name);
+		m_src = p_src;
+		m_srcScale = p_srcScale;
+		m_dest = p_dest;
+		m_destScale = p_destScale;
+		m_location = p_location;
+		m_music = p_music;
+	}
+
+	SpawnLocation& operator=(const SpawnLocation& p_location)
+	{
+		m_area = p_location.m_area;
+		m_script = p_location.m_script;
+		m_entityId = p_location.m_entityId;
+		strcpy(m_name, p_location.m_name);
+		m_src = p_location.m_src;
+		m_srcScale = p_location.m_srcScale;
+		m_dest = p_location.m_dest;
+		m_destScale = p_location.m_destScale;
+		m_location = p_location.m_location;
+		m_music = p_location.m_music;
+		return *this;
+	}
+
+	LegoGameState::Area m_area;    // 0x00
+	MxAtomId* m_script;            // 0x04
+	MxS32 m_entityId;              // 0x08
+	char m_name[20];               // 0x0c
+	MxS16 m_src;                   // 0x20
+	float m_srcScale;              // 0x24
+	MxS16 m_dest;                  // 0x28
+	float m_destScale;             // 0x2c
+	MxU32 m_location;              // 0x30
+	JukeboxScript::Script m_music; // 0x34
+};
+
 DECOMP_SIZE_ASSERT(IslePathActor, 0x160)
-DECOMP_SIZE_ASSERT(IslePathActor::SpawnLocation, 0x38)
+DECOMP_SIZE_ASSERT(SpawnLocation, 0x38)
 
 // FUNCTION: LEGO1 0x1001a200
 IslePathActor::IslePathActor()
@@ -117,7 +174,7 @@ void IslePathActor::Exit()
 		m_previousActor->SetUserNavFlag(TRUE);
 		m_previousActor->SetBoundary(m_boundary);
 
-		MxS32 i;
+		MxS32 i, j;
 		for (i = 0; i < m_boundary->GetNumEdges(); i++) {
 			LegoOrientedEdge* e = (LegoOrientedEdge*) m_boundary->GetEdges()[i];
 			assert(e);
@@ -128,7 +185,6 @@ void IslePathActor::Exit()
 			local20 *= m_roi->GetWorldBoundingSphere().Radius();
 			local20 += GetWorldPosition();
 
-			MxS32 j;
 			for (j = 0; j < m_boundary->GetNumEdges(); j++) {
 				Mx4DPointFloat& normal = *m_boundary->GetEdgeNormal(j);
 
@@ -157,7 +213,7 @@ void IslePathActor::Exit()
 }
 
 // GLOBAL: LEGO1 0x10102b28
-IslePathActor::SpawnLocation g_spawnLocations[IslePathActor::c_LOCATIONS_NUM];
+SpawnLocation g_spawnLocations[IslePathActor::c_LOCATIONS_NUM];
 
 // FUNCTION: LEGO1 0x1001a700
 void IslePathActor::RegisterSpawnLocations()
