@@ -16,7 +16,7 @@
 #include "mxtransitionmanager.h"
 #include "realtime/realtime.h"
 #include "roi/legoroi.h"
-#include "tgl/d3drm/impl.h"
+#include "tgl/d3drm/tglimpl.h"
 #include "viewmanager/viewroi.h"
 
 #include <stdio.h>
