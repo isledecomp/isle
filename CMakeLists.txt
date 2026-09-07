@@ -391,7 +391,6 @@ function(add_lego_libraries NAME)
     LEGO1/lego/legoomni/src/actors/jukeboxentity.cpp
     # We need to get rid of / refactor the below units into existing/other ones
     LEGO1/lego/legoomni/src/entity/legolocations.cpp
-    LEGO1/lego/legoomni/src/common/legoactors.cpp
   )
   list(APPEND list_targets ${NAME})
 
