@@ -18,6 +18,9 @@
 #include "mxvariabletable.h"
 #include "mxvideomanager.h"
 
+// GLOBAL: LEGO1 0x101015b0
+MxOmni* MxOmni::g_instance = NULL;
+
 // GLOBAL: LEGO1 0x101015b8
 char g_hdPath[1024] = "";
 
@@ -27,8 +30,8 @@ char g_cdPath[1024] = "E:";
 // GLOBAL: LEGO1 0x10101db8
 MxBool g_use3dSound = FALSE;
 
-// GLOBAL: LEGO1 0x101015b0
-MxOmni* MxOmni::g_instance = NULL;
+DECOMP_SIZE_ASSERT(MxOmniCreateFlags, 0x02)
+DECOMP_SIZE_ASSERT(MxOmniCreateParam, 0x40)
 
 // FUNCTION: LEGO1 0x100aef10
 MxOmni::MxOmni()
@@ -76,6 +79,7 @@ void MxOmni::Init()
 }
 
 // FUNCTION: LEGO1 0x100af0b0
+// FUNCTION: BETA10 0x1012f3e7
 void MxOmni::SetInstance(MxOmni* p_instance)
 {
 	g_instance = p_instance;
@@ -435,4 +439,36 @@ void MxOmni::Resume()
 		m_soundManager->Resume();
 		m_paused = FALSE;
 	}
+}
+
+// FUNCTION: LEGO1 0x100b0a30
+// FUNCTION: BETA10 0x10130a1c
+MxOmniCreateFlags::MxOmniCreateFlags()
+{
+	m_flags1.m_bit0 = TRUE; // CreateObjectFactory
+	m_flags1.m_bit1 = TRUE; // CreateVariableTable
+	m_flags1.m_bit2 = TRUE; // CreateTickleManager
+	m_flags1.m_bit3 = TRUE; // CreateNotificationManager
+	m_flags1.m_bit4 = TRUE; // CreateVideoManager
+	m_flags1.m_bit5 = TRUE; // CreateSoundManager
+	m_flags1.m_bit6 = TRUE; // CreateMusicManager
+	m_flags1.m_bit7 = TRUE; // CreateEventManager
+
+	m_flags2.m_bit1 = TRUE; // CreateTimer
+	m_flags2.m_bit2 = TRUE; // CreateStreamer
+}
+
+// FUNCTION: LEGO1 0x100b0b00
+// FUNCTION: BETA10 0x10130b6b
+MxOmniCreateParam::MxOmniCreateParam(
+	const char* p_mediaPath,
+	struct HWND__* p_windowHandle,
+	MxVideoParam& p_vparam,
+	MxOmniCreateFlags p_flags
+)
+{
+	this->m_mediaPath = p_mediaPath;
+	this->m_windowHandle = (HWND) p_windowHandle;
+	this->m_videoParam = p_vparam;
+	this->m_createFlags = p_flags;
 }
