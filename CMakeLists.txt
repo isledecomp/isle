@@ -118,7 +118,6 @@ function(add_lego_libraries NAME)
 
   add_library(realtime${ARG_SUFFIX} STATIC
     LEGO1/realtime/orientableroi.cpp
-    LEGO1/realtime/realtime.cpp
     LEGO1/realtime/realtimeview.cpp
   )
   list(APPEND list_targets realtime${ARG_SUFFIX})

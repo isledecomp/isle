@@ -1,5 +1,9 @@
 #include "realtimeview.h"
 
+#include "realtime/matrix4d.inl.h"
+#include "realtime/vectorlength.inl.h"
+#include "mxgeometry/mxmatrix.h"
+
 #include <math.h>
 
 // GLOBAL: LEGO1 0x10109598
@@ -26,6 +30,7 @@ RealtimeView::RealtimeView()
 }
 
 // FUNCTION: LEGO1 0x100a5dd0
+// FUNCTION: BETA10 0x1016885e
 RealtimeView::~RealtimeView()
 {
 }
