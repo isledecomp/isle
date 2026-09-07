@@ -25,6 +25,10 @@ CConfigApp::CConfigApp()
 {
 }
 
+// The one and only CConfigApp object
+// GLOBAL: CONFIG 0x00408e50
+CConfigApp g_theApp;
+
 #define MiB (1024 * 1024)
 
 // FUNCTION: CONFIG 0x00402dc0
@@ -51,7 +55,7 @@ BOOL CConfigApp::InitInstance()
 
 	CConfigCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
-	if (_stricmp(afxCurrentAppName, "config") == 0) {
+	if (stricmp(afxCurrentAppName, "config") == 0) {
 		m_run_config_dialog = TRUE;
 	}
 
@@ -105,7 +109,7 @@ BOOL CConfigApp::InitInstance()
 		m_d3dInfo = NULL;
 		char password[256];
 		BOOL read = ReadReg("password", password, sizeof(password));
-		const char* exe = _stricmp("ogel", password) == 0 ? "isled.exe" : "isle.exe";
+		const char* exe = stricmp("ogel", password) == 0 ? "isled.exe" : "isle.exe";
 		char diskpath[1024];
 		read = ReadReg("diskpath", diskpath, sizeof(diskpath));
 		if (read) {
@@ -122,7 +126,7 @@ BOOL CConfigApp::InitInstance()
 BOOL CConfigApp::IsLegoNotRunning()
 {
 	HWND hWnd = FindWindow("Lego Island MainNoM App", "LEGO\xae");
-	if (_stricmp(afxCurrentAppName, "config") == 0 || !hWnd) {
+	if (stricmp(afxCurrentAppName, "config") == 0 || !hWnd) {
 		return TRUE;
 	}
 	if (SetForegroundWindow(hWnd)) {
@@ -478,6 +482,3 @@ int CConfigApp::ExitInstance()
 	}
 	return CWinApp::ExitInstance();
 }
-
-// GLOBAL: CONFIG 0x00408e50
-CConfigApp g_theApp;
