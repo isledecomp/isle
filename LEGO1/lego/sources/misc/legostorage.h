@@ -2,6 +2,7 @@
 #define __LEGOSTORAGE_H
 
 #include "legotypes.h"
+#include "realtime/vector3d.inl.h"
 #include "mxgeometry/mxgeometry3d.h"
 #include "mxstring.h"
 

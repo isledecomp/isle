@@ -3,6 +3,7 @@
 
 #include "decomp.h"
 #include "mxstring.h"
+#include "roi/legoroi.h"
 
 class LegoTextureInfo;
 

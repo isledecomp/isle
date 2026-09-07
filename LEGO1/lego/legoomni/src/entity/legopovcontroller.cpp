@@ -1,5 +1,6 @@
 #include "3dmanager/lego3dview.h"
 #include "legoentity.h"
+#include "realtime/matrix4d.inl.h"
 #include "legomain.h"
 #include "legonavcontroller.h"
 #include "legopointofviewcontroller.h"

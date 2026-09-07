@@ -4,6 +4,7 @@
 #include "extra.h"
 #include "legomain.h"
 #include "legoutils.h"
+#include "realtime/matrix4d.inl.h"
 #include "mxcompositepresenter.h"
 #include "mxdssubscriber.h"
 #include "mxmediapresenter.h"

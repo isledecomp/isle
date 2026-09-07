@@ -2,6 +2,7 @@
 #define LEGOSOUNDMANAGER_H
 
 #include "mxsoundmanager.h"
+#include "roi/legoroi.h"
 
 class LegoCacheSoundManager;
 
