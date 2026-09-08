@@ -21,9 +21,8 @@ LegoCacheSoundManager::~LegoCacheSoundManager()
 	}
 
 	while (!m_list.empty()) {
-		sound = (*m_list.begin()).GetSound();
-		// TODO: LegoCacheSoundEntry::~LegoCacheSoundEntry should not be inlined here
-		m_list.erase(m_list.begin());
+		sound = m_list.front().GetSound();
+		m_list.pop_front();
 		sound->Stop();
 		delete sound;
 	}
