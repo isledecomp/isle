@@ -211,7 +211,7 @@ LegoChar* LegoAnimPresenter::GetActorName(const LegoChar* p_name)
 	else {
 		LegoChar buffer[32];
 		sprintf(buffer, "%d", m_action->GetUnknown24());
-		str = new LegoChar[strlen(p_name) + strlen(buffer) + strlen(GetActionObjectName()) + 1];
+		str = new LegoChar[strlen(buffer) + strlen(p_name) + strlen(GetActionObjectName()) + 1];
 
 		if (str != NULL) {
 			strcpy(str, p_name);
@@ -477,7 +477,7 @@ void LegoAnimPresenter::UpdateStructMapAndROIIndex(LegoAnimStructMap& p_map, Leg
 			name = und2 = GetActorName(name);
 		}
 
-		und = GetVariableOrIdentity(name, p_roi != NULL ? p_roi->GetName() : NULL);
+		und = GetVariableOrIdentity(name, roi != NULL ? roi->GetName() : NULL);
 
 		if (p_roi == NULL) {
 			roi = FindROI(und);
@@ -740,7 +740,7 @@ MxResult LegoAnimPresenter::CopyTransform(LegoROI* p_roi)
 	MxMatrix inverse;
 	const Matrix4& local2world = p_roi->GetLocal2World();
 	MxMatrix* roiTransforms;
-	MxU32 i;
+	MxS32 i;
 
 	if (GetTransforms(roiTransforms, 0.0f) != SUCCESS) {
 		goto done;
