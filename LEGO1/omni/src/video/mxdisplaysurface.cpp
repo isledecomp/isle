@@ -557,7 +557,7 @@ void MxDisplaySurface::VTable0x30(
 
 			MxLong length = -p_width + ddsd.lPitch;
 			for (MxS32 i = 0; i < p_height; i++) {
-				for (MxS32 j = 0; j < p_width; j++) {
+				for (MxS32 j = 0; p_width > j; j++) {
 					if (*data != 0) {
 						*surface = *data;
 					}
@@ -584,7 +584,7 @@ void MxDisplaySurface::VTable0x30(
 			MxLong length = -2 * p_width + ddsd.lPitch;
 			MxS32 j;
 			for (MxS32 i = 0; i < p_height; i++) {
-				for (j = 0; j < p_width; j++) {
+				for (j = 0; p_width > j; j++) {
 					if (*data != 0) {
 						*(MxU16*) surface = m_16bitPal[*data];
 					}
