@@ -92,6 +92,12 @@
 // LIBRARY: ISLE 0x409430
 // __exit
 
+// LIBRARY: ISLE 0x409510
+// __lockexit
+
+// LIBRARY: ISLE 0x409520
+// __unlockexit
+
 // LIBRARY: ISLE 0x409550
 // __XcptFilter
 
@@ -200,6 +206,15 @@
 // LIBRARY: ISLE 0x40c340
 // ___doserrno
 
+// LIBRARY: ISLE 0x40c350
+// __onexit
+
+// LIBRARY: ISLE 0x40c3e0
+// _atexit
+
+// LIBRARY: ISLE 0x40c590
+// __flushall
+
 // LIBRARY: ISLE 0x40c710
 // __get_osfhandle
 
@@ -226,6 +241,12 @@
 
 // GLOBAL: ISLE 0x410018
 // ___xi_z
+
+// GLOBAL: ISLE 0x41001c
+// ___xp_a
+
+// GLOBAL: ISLE 0x410024
+// ___xp_z
 
 // GLOBAL: ISLE 0x41068c
 // __NLG_Destination
