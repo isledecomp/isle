@@ -1058,16 +1058,15 @@ void LegoAnimPresenter::ParseExtra()
 				m_ptAtCamROI = NULL;
 			}
 
-			char* token = strtok(output, g_parseExtraTokens);
-			while (token != NULL) {
+			for (char* token = strtok(output, g_parseExtraTokens); token != NULL;
+				 token = strtok(NULL, g_parseExtraTokens)) {
 				char* valueCopy = new char[strlen(token) + 1];
 				strcpy(valueCopy, token);
 				tokens.push_back(valueCopy);
-				token = strtok(NULL, g_parseExtraTokens);
 			}
 
 			m_ptAtCamCount = tokens.size();
-			if (m_ptAtCamCount != 0) {
+			if (m_ptAtCamCount > 0) {
 				m_ptAtCamROI = new LegoROI*[m_ptAtCamCount];
 				m_ptAtCamNames = new char*[m_ptAtCamCount];
 				memset(m_ptAtCamROI, 0, sizeof(*m_ptAtCamROI) * m_ptAtCamCount);

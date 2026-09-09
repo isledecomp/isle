@@ -83,9 +83,13 @@ MxVideoPresenter::AlphaMask::~AlphaMask()
 // FUNCTION: LEGO1 0x100b26f0
 MxS32 MxVideoPresenter::AlphaMask::IsHit(MxU32 p_x, MxU32 p_y)
 {
-	if (p_x < m_width && p_y < m_height) {
-		MxS32 pos = p_y * m_width + p_x;
-		return m_bitmask[pos / 8] & (1 << (pos % 8)) ? 1 : 0;
+	if (p_x < m_width) {
+		MxS32 y = p_y;
+
+		if (p_y < m_height) {
+			MxS32 pos = y * m_width + p_x;
+			return m_bitmask[pos / 8] & (1 << (pos % 8)) ? 1 : 0;
+		}
 	}
 
 	return 0;

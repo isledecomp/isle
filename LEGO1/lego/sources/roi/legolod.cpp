@@ -281,6 +281,7 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 			break;
 		default:
 			shadingModel = Tgl::Gouraud;
+			break;
 		}
 
 		m_numVertices += numVertices;
@@ -289,11 +290,11 @@ LegoResult LegoLOD::Read(Tgl::Renderer* p_renderer, LegoTextureContainer* p_text
 		materialName = legoMesh->GetMaterialName();
 
 		if (HasInhPrefix(textureName) || HasInhPrefix(materialName)) {
+			local4c = 1;
 			meshIndex = indexBackwards;
 			indexBackwards--;
 		}
 		else {
-			local4c = 1;
 			meshIndex = indexForwards;
 			indexForwards++;
 		}
