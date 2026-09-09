@@ -140,6 +140,12 @@
 // LIBRARY: ISLE 0x40a440
 // __unlock
 
+// LIBRARY: ISLE 0x40a460
+// __lock_file
+
+// LIBRARY: ISLE 0x40a4d0
+// __unlock_file
+
 // LIBRARY: ISLE 0x40a540
 // __flsbuf
 
@@ -212,8 +218,17 @@
 // LIBRARY: ISLE 0x40c3e0
 // _atexit
 
+// LIBRARY: ISLE 0x40c440
+// __fcloseall
+
+// LIBRARY: ISLE 0x40c520
+// __flush
+
 // LIBRARY: ISLE 0x40c590
 // __flushall
+
+// LIBRARY: ISLE 0x40c670
+// __free_osfhnd
 
 // LIBRARY: ISLE 0x40c710
 // __get_osfhandle
@@ -226,6 +241,21 @@
 
 // LIBRARY: ISLE 0x40c810
 // __fptrap
+
+// LIBRARY: ISLE 0x40c820
+// _fclose
+
+// LIBRARY: ISLE 0x40c860
+// __fclose_lk
+
+// LIBRARY: ISLE 0x40d9d0
+// __close
+
+// LIBRARY: ISLE 0x40da40
+// __close_lk
+
+// LIBRARY: ISLE 0x40dad0
+// __freebuf
 
 // GLOBAL: ISLE 0x40f448
 // ___lookuptable
@@ -295,6 +325,9 @@
 
 // GLOBAL: ISLE 0x410914
 // __pgmptr
+
+// GLOBAL: ISLE 0x41091c
+// __exitflag
 
 // GLOBAL: ISLE 0x410928
 // __XcptActTab
