@@ -261,6 +261,7 @@ jobs:
           set -euo pipefail
           files=(
             build/CONFIG.EXE build/ISLE.EXE build/LEGO1.DLL
+            build/CONFIG.PDB build/ISLE.PDB build/LEGO1.PDB
             ./*PROGRESS.json ./*PROGRESS.SVG
             reprobit-report/report.html reprobit-report/report.json
             ReproBit-Debug-Companion.zip
