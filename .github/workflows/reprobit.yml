@@ -127,8 +127,11 @@ jobs:
           name: ReproBit-Win32
           path: |
             build/CONFIG.EXE
+            build/CONFIG.PDB
             build/ISLE.EXE
+            build/ISLE.PDB
             build/LEGO1.DLL
+            build/LEGO1.PDB
           if-no-files-found: error
           retention-days: 14
 
