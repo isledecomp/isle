@@ -45,12 +45,12 @@ public:
 
 	MxBool GetUnk0xc4() const { return m_unk0xc4; }
 
-	MxResult FUN_100c7890(MxDSStreamingAction* p_action);
-	void FUN_100c7cb0(MxDSStreamingAction* p_action);
-	void FUN_100c7f40(MxDSStreamingAction* p_streamingaction);
-	void FUN_100c8120(MxDSAction* p_action);
+	MxResult AddRestartAction(MxDSStreamingAction* p_action);
+	void DeleteStreamingAction(MxDSStreamingAction* p_action);
+	void AddLoadedAction(MxDSStreamingAction* p_streamingaction);
+	void CancelAction(MxDSAction* p_action);
 	void InsertToList74(MxDSBuffer* p_buffer);
-	void FUN_100c8670(MxDSStreamingAction* p_streamingAction);
+	void AddPendingDelete(MxDSStreamingAction* p_streamingAction);
 
 private:
 	MxDSObjectList m_list0x64;      // 0x64
@@ -64,13 +64,13 @@ private:
 	MxBool m_unk0xc4;               // 0xc4
 
 	void FUN_100c7970();
-	void FUN_100c7ce0(MxDSBuffer* p_buffer);
-	MxResult FUN_100c7d10();
-	void FUN_100c7980();
-	MxDSStreamingAction* FUN_100c7db0();
-	MxResult FUN_100c8360(MxDSStreamingAction* p_action);
-	void FUN_100c8540();
-	void FUN_100c8720();
+	void ReleaseBuffer(MxDSBuffer* p_buffer);
+	MxResult ProcessNextReadyAction();
+	void StartPendingReads();
+	MxDSStreamingAction* FindNextReadyAction();
+	MxResult ProcessLoadedAction(MxDSStreamingAction* p_action);
+	void ReleaseUnreferencedBuffers();
+	void FlushPendingDeletes();
 };
 
 // TEMPLATE: LEGO1 0x100c14d0 SYMBOL

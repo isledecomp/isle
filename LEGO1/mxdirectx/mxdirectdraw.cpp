@@ -211,7 +211,7 @@ void MxDirectDraw::Destroy()
 {
 	DestroyButNotDirectDraw();
 
-	FUN_1009d920();
+	ExitExclusiveMode();
 
 	RELEASE(m_pDirectDraw);
 
@@ -247,7 +247,7 @@ void MxDirectDraw::DestroyButNotDirectDraw()
 
 // FUNCTION: LEGO1 0x1009d920
 // FUNCTION: BETA10 0x10120b9e
-void MxDirectDraw::FUN_1009d920()
+void MxDirectDraw::ExitExclusiveMode()
 {
 	RestoreOriginalPaletteEntries();
 	if (m_pDirectDraw != NULL) {

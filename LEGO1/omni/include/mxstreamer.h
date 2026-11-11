@@ -72,11 +72,11 @@ public:
 
 	virtual MxResult Create(); // vtable+0x14
 
-	MxBool FUN_100b9b30(MxDSObject& p_dsObject);
+	MxBool IsStoped(MxDSObject& p_dsObject);
 	MxStreamController* GetOpenStream(const char* p_name);
-	void FUN_100b98f0(MxDSAction* p_action);
+	void CancelAction(MxDSAction* p_action);
 	MxResult AddStreamControllerToOpenList(MxStreamController* p_stream);
-	MxResult FUN_100b99b0(MxDSAction* p_action);
+	MxResult StartAction(MxDSAction* p_action);
 	MxResult DeleteObject(MxDSAction* p_dsAction);
 
 	// FUNCTION: BETA10 0x10158db0

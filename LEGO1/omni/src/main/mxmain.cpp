@@ -236,7 +236,7 @@ MxResult MxOmni::Start(MxDSAction* p_dsAction)
 {
 	MxResult result = FAILURE;
 	if (p_dsAction->GetAtomId().GetInternal() != NULL && p_dsAction->GetObjectId() != -1 && m_streamer != NULL) {
-		result = m_streamer->FUN_100b99b0(p_dsAction);
+		result = m_streamer->StartAction(p_dsAction);
 	}
 
 	return result;
@@ -263,7 +263,7 @@ MxResult MxOmni::CreatePresenter(MxStreamController* p_controller, MxDSAction& p
 		if (object->AddToManager() == SUCCESS) {
 			MxPresenter* sender = p_action.GetUnknown28();
 			if (!sender) {
-				sender = p_controller->FUN_100c1e70(p_action);
+				sender = p_controller->GetOriginPresenter(p_action);
 			}
 
 			if (sender) {
@@ -411,7 +411,7 @@ void MxOmni::SetSound3D(MxBool p_use3dSound)
 // FUNCTION: BETA10 0x101309f5
 MxBool MxOmni::DoesEntityExist(MxDSAction& p_dsAction)
 {
-	if (m_streamer->FUN_100b9b30(p_dsAction)) {
+	if (m_streamer->IsStoped(p_dsAction)) {
 		MxNotificationPtrList* notifications = m_notificationManager->GetQueue();
 
 		if (!notifications || notifications->size() == 0) {

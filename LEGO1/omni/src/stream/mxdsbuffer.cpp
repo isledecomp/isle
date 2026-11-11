@@ -97,7 +97,7 @@ MxResult MxDSBuffer::SetBufferPointer(MxU8* p_buffer, MxU32 p_size)
 
 // FUNCTION: LEGO1 0x100c67b0
 // FUNCTION: BETA10 0x10157295
-MxResult MxDSBuffer::FUN_100c67b0(
+MxResult MxDSBuffer::ProcessBuffer(
 	MxStreamController* p_controller,
 	MxDSAction* p_action,
 	MxDSStreamingAction** p_streamingAction
@@ -130,7 +130,7 @@ MxResult MxDSBuffer::FUN_100c67b0(
 						(*p_streamingAction)->ClearUnknowna0();
 					}
 
-					((MxDiskStreamController*) p_controller)->FUN_100c7cb0(*p_streamingAction);
+					((MxDiskStreamController*) p_controller)->DeleteStreamingAction(*p_streamingAction);
 					*p_streamingAction = NULL;
 				}
 				else {
@@ -294,7 +294,7 @@ MxResult MxDSBuffer::ParseChunk(
 							data->SetData(m_parentRequest->GetBufferOffset());
 						}
 
-						m_parentRequest->FUN_100cd2d0();
+						m_parentRequest->AdvanceToNextLoop();
 					}
 
 					delete p_header;
@@ -452,7 +452,7 @@ MxResult MxDSBuffer::CalcBytesRemaining(MxU8* p_data)
 }
 
 // FUNCTION: LEGO1 0x100c6f80
-void MxDSBuffer::FUN_100c6f80(MxU32 p_writeOffset)
+void MxDSBuffer::Seek(MxU32 p_writeOffset)
 {
 	if (p_writeOffset < m_writeOffset) {
 		m_pIntoBuffer2 = m_pBuffer + p_writeOffset;
@@ -462,7 +462,7 @@ void MxDSBuffer::FUN_100c6f80(MxU32 p_writeOffset)
 
 // FUNCTION: LEGO1 0x100c6fa0
 // FUNCTION: BETA10 0x101582f2
-MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
+MxU8* MxDSBuffer::FindNextChunk(MxU8* p_data)
 {
 	MxU8* current = p_data ? p_data : m_pBuffer;
 
@@ -499,7 +499,7 @@ MxU8* MxDSBuffer::FUN_100c6fa0(MxU8* p_data)
 
 // FUNCTION: LEGO1 0x100c7090
 // FUNCTION: BETA10 0x1015842d
-MxResult MxDSBuffer::FUN_100c7090(MxDSBuffer* p_buf)
+MxResult MxDSBuffer::CopyFrom(MxDSBuffer* p_buf)
 {
 	MxResult result = FAILURE;
 

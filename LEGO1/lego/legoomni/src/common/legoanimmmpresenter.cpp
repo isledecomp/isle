@@ -521,7 +521,7 @@ void LegoAnimMMPresenter::FUN_1004b840()
 
 #ifndef BETA10
 	if (action != NULL) {
-		Streamer()->FUN_100b98f0(action);
+		Streamer()->CancelAction(action);
 	}
 #endif
 }
