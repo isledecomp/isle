@@ -273,7 +273,7 @@ BOOL CConfigApp::ReadRegisterSettings()
 	}
 
 	if (r < 0) {
-		m_dxInfo->FUN_1009d210();
+		m_dxInfo->FilterUnsupportedDevices();
 		r = m_dxInfo->GetBestDevice();
 		is_modified = TRUE;
 		assert(r >= 0);

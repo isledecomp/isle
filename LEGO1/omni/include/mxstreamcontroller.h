@@ -62,10 +62,10 @@ public:
 
 	void AddSubscriber(MxDSSubscriber* p_subscriber);
 	void RemoveSubscriber(MxDSSubscriber* p_subscriber);
-	MxResult FUN_100c1800(MxDSAction* p_action, MxU32 p_val);
-	MxResult FUN_100c1a00(MxDSAction* p_action, MxU32 p_offset);
-	MxPresenter* FUN_100c1e70(MxDSAction& p_action);
-	MxResult FUN_100c1f00(MxDSAction* p_action);
+	MxResult AddNextActionDataStart(MxDSAction* p_action, MxU32 p_val);
+	MxResult AddStreamingAction(MxDSAction* p_action, MxU32 p_offset);
+	MxPresenter* GetOriginPresenter(MxDSAction& p_action);
+	MxResult SendDoneChunk(MxDSAction* p_action);
 	MxBool IsStoped(MxDSObject* p_obj);
 	MxResult InsertActionToList54(MxDSAction* p_action);
 	MxNextActionDataStart* FindNextActionDataStartFromStreamingAction(MxDSStreamingAction* p_action);

@@ -120,7 +120,7 @@ BOOL CMainDialog::OnInitDialog()
 	LegoDeviceEnumerate* info = currentConfigApp->m_dxInfo;
 	assert(info);
 
-	info->FUN_1009d210();
+	info->FilterUnsupportedDevices();
 	m_modified = currentConfigApp->ReadRegisterSettings();
 	CListBox* list_3d_devices = (CListBox*) GetDlgItem(IDC_LIST_3DDEVICES);
 	int device_i = 0;

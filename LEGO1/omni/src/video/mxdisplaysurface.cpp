@@ -1391,7 +1391,7 @@ void MxDisplaySurface::VTable0x2c(
 }
 
 // FUNCTION: LEGO1 0x100bc8b0
-LPDIRECTDRAWSURFACE MxDisplaySurface::FUN_100bc8b0(MxS32 p_width, MxS32 p_height)
+LPDIRECTDRAWSURFACE MxDisplaySurface::CreateOffscreenSurface(MxS32 p_width, MxS32 p_height)
 {
 	LPDIRECTDRAWSURFACE surface = NULL;
 

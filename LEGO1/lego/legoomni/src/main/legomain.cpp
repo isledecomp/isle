@@ -459,7 +459,7 @@ void LegoOmni::DeleteObject(MxDSAction& p_dsAction)
 				m_currentWorld->Remove(entity);
 
 				if (entity->IsA("MxPresenter")) {
-					Streamer()->FUN_100b98f0(((MxPresenter*) entity)->GetAction());
+					Streamer()->CancelAction(((MxPresenter*) entity)->GetAction());
 					((MxPresenter*) entity)->EndAction();
 				}
 				else {
