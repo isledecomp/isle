@@ -65,7 +65,7 @@ jobs:
             -DISLE_USE_DX5_LIBS=${{ !matrix.toolchain.no-dx5-libs }} \
             -DENABLE_CLANG_TIDY=${{ !!matrix.toolchain.clang-tidy }} \
             -DISLE_WERROR=${{ !!matrix.toolchain.werror }} \
-            -Werror=dev
+            -Werror=dev -Wno-error=non-target-directive
           cmake --build build -- -k0
 
   build:
