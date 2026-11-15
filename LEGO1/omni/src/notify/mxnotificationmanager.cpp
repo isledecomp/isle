@@ -79,7 +79,9 @@ MxResult MxNotificationManager::Send(MxCore* p_listener, const MxNotificationPar
 
 	MxIdList::iterator it = find(m_listenerIds.begin(), m_listenerIds.end(), p_listener->GetId());
 	if (it == m_listenerIds.end()) {
+#ifdef BETA10
 		assert("Post notification recipient not found!" == NULL);
+#endif
 		return FAILURE;
 	}
 
