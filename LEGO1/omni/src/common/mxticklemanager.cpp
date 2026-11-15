@@ -122,6 +122,8 @@ MxTime MxTickleManager::GetClientTickleInterval(MxCore* p_client)
 		it++;
 	}
 
+#ifdef BETA10
 	assert("Tickle Manager client is not registered!" == NULL);
+#endif
 	return TICKLE_MANAGER_NOT_FOUND;
 }

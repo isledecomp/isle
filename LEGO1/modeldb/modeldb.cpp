@@ -183,7 +183,9 @@ MxResult ModelDbPart::Read(FILE* p_file)
 MxResult ReadModelDbWorlds(FILE* dbf, ModelDbWorld*& newworld, MxS32& p_numWorlds)
 {
 	assert(dbf);
+#ifdef BETA10
 	assert(newworld);
+#endif
 
 	newworld = NULL;
 	p_numWorlds = 0;
