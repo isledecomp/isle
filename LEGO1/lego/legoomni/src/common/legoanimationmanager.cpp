@@ -2994,9 +2994,9 @@ AnimState::~AnimState()
 // FUNCTION: BETA10 0x1004635c
 void AnimState::CopyToAnims(MxU32 p_numAnims, AnimInfo* p_anims, MxU32& p_outExtraCharacterId)
 {
-	assert(p_numAnims == m_numAnims);
-
 	if (m_animSaveInfo != NULL) {
+		assert(p_numAnims == m_numAnims);
+
 		for (MxS32 i = 0; i < m_numAnims; i++) {
 			p_anims[i].m_unk0x22 = m_animSaveInfo[i];
 		}

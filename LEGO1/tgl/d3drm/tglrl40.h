@@ -202,8 +202,8 @@ inline Result RendererImpl::Create()
 inline void RendererDestroy(IDirect3DRM2* pRenderer)
 {
 	int refCount = pRenderer->Release();
-	assert(refCount == 0);
 	if (refCount <= 0) {
+		assert(refCount == 0);
 		g_pTheRenderer = NULL;
 	}
 }

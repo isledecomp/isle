@@ -156,11 +156,11 @@ MxResult LegoExtraActor::SwitchDirection()
 		m_boundary = (LegoPathBoundary*) m_destEdge->m_faceA;
 	}
 
-	assert(m_destEdge && m_boundary);
-
 	if (!m_boundary) {
 		m_boundary = oldEdge;
 	}
+
+	assert(m_destEdge && m_boundary);
 
 	LegoPathActor::CalculateSpline();
 	return SUCCESS;
