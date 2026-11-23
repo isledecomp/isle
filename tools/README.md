@@ -21,7 +21,7 @@ The command needs `legobin/LEGO1.DLL`; if `legobin/BETA10.DLL` is present, it is
 
 To replace the checked-in library with a freshly generated copy, rerun the command without `--check`.
 
-SmartHeap needs no generator: `3rdparty/smartheap/SHLW32MT.LIB` is the original SmartHeap 3.31 library from MicroQuill's 1997 distribution disk.
+SmartHeap needs no generator: the library and headers in `3rdparty/smartheap/` are the original files from MicroQuill's SmartHeap 3.31 for Win32 distribution disk, and a copy of that disk is kept next to them as [`SmartHeap-3.31.img`](/3rdparty/smartheap/SmartHeap-3.31.img).
 
 ## Reference binaries
 

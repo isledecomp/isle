@@ -1,7 +1,7 @@
 // smrtheap.hpp -- SmartHeap public C++ header file
 // Professional Memory Management Library
 //
-// Copyright (C) 1991-1996 by Arthur D. Applegate
+// Copyright (C) 1991-1997 Compuware Corporation.
 // All Rights Reserved.
 //
 // No part of this source code may be copied, modified or reproduced
@@ -114,8 +114,10 @@ inline void MEM_FAR *operator new[](size_t new_sz, void MEM_FAR *lpMem,
 
 // new_handler prototypes: note that MSC/C++ prototype differs from the
 // protosed ANSI standard prototype for set_new_handler
-#ifdef __MWERKS__
+#if defined(__MWERKS__)
 #define MEM_CPP_THROW throw()
+#elif defined(_MSC_VER) && _MSC_VER >= 1100
+#define MEM_CPP_THROW _THROW0()
 #else
 #define MEM_CPP_THROW
 #endif // __MWERKS__

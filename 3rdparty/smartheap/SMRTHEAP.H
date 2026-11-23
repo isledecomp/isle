@@ -1,7 +1,7 @@
 /* smrtheap.h -- SmartHeap (tm) public C header file
  * Professional Memory Management Library
  *
- * Copyright (C) 1991-1997 by Arthur D. Applegate.  All Rights Reserved.
+ * Copyright (C) 1991-1997 Compuware Corporation.  All Rights Reserved.
  * All Rights Reserved.
  *
  * No part of this source code may be copied, modified or reproduced
@@ -198,7 +198,7 @@ typedef unsigned MEM_VERSION;
 #if !defined(MEM_DEBUG) || !(defined(MEM_WIN16) || defined(MEM_WIN32))
 #define SHI_MAJOR_VERSION 3
 #define SHI_MINOR_VERSION 3
-#define SHI_UPDATE_LEVEL 0
+#define SHI_UPDATE_LEVEL 1
 #endif /* !WINDOWS */
 
 #ifndef MEM_DEBUG
