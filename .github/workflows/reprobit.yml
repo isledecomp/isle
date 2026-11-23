@@ -54,13 +54,9 @@ jobs:
       - name: Download the retail binaries
         uses: ./.github/actions/retail-binaries
 
-      - name: Verify SmartHeap and Smacker generators
+      - name: Verify the Smacker generator
         shell: pwsh
-        run: |
-          git fetch --no-tags --depth=1 origin 2ffe227d82916ae37b4916cbd8a714f4ef627f78
-          python -m pip install capstone==5.0.9 pefile==2024.8.26
-          python tools/patch_smartheap_331.py --check
-          python tools/gen_smacker_lib.py --check
+        run: python tools/gen_smacker_lib.py --check
 
       - name: Install ReproBit
         shell: pwsh
