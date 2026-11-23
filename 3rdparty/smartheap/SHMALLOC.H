@@ -1,7 +1,7 @@
 /* shmalloc.h -- SmartHeap ANSI Standard C memory API
  * Professional Memory Management Library
  *
- * Copyright (C) 1991-1996 by Arthur D. Applegate.  All Rights Reserved.
+ * Copyright (C) 1991-1997 Compuware Corporation.  All Rights Reserved.
  * All Rights Reserved.
  *
  * No part of this source code may be copied, modified or reproduced
